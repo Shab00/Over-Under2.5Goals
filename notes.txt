@@ -1,0 +1,79 @@
+# Data Cleaning & Feature Engineering Notes (2025-08-20)
+
+## Goals for Today
+- Audit and validate recent form features (`HomeRecentGF`, `HomeRecentGA`, `HomeRecentPts`, `AwayRecentGF`, `AwayRecentGA`, `AwayRecentPts`)
+- Ensure missing values are correctly handled (team mean, then global mean)
+- Add missing value flag columns for each recent form feature
+- Fix one-hot encoding issues for team columns
+- Prepare a model-ready dataset for further analysis
+
+---
+
+## Steps Completed
+
+### 1. **Recent Form Feature Audit & Imputation**
+- Reviewed the calculation of all recent form features for home and away teams.
+- Used a function (`impute_recent_form`) to:
+  - Add `_missing` indicator columns for each recent form feature.
+  - Impute missing values using the team's mean first, then the column's global mean.
+- After running, confirmed **no missing values** remain in these columns.
+
+### 2. **One-Hot Encoding Fixes**
+- OCD data checks revealed extra columns (`mean_FTHG`, `mean_FTAG`) included in the team one-hot encoding.
+- Dropped these columns so that the number of one-hot columns matches the number of actual teams (46 each for HomeTeam and AwayTeam).
+- Confirmed that each row now has **exactly one '1'** in both the HomeTeam and AwayTeam one-hot groups.
+
+### 3. **Comprehensive Data Quality Checks**
+- Ran OCD Data Check Report:
+  - No missing values in any column.
+  - No duplicate rows.
+  - Date range is valid, no future dates.
+  - Bookmaker odds columns have valid, positive values.
+  - Recent form features have no missing or negative values, with realistic ranges.
+  - HomeTeam/AwayTeam string columns match the one-hot encoded columns exactly, with 46 unique teams each.
+
+### 4. **Dataset is Now Model-Ready**
+- All checks pass.
+- Feature set is clean, with no missing data and no one-hot encoding issues.
+- Ready to proceed with feature integration, modeling, and further analysis.
+
+---
+
+## Next Steps
+- Integrate recent form features and missing flags with existing predictors (bookmaker odds, team means, etc.)
+- Build and validate a baseline model (e.g., Random Forest).
+- Document modeling results and feature importances.
+
+---
+
+**Summary:**  
+Dataset is clean and all recent form engineering issues are resolved. The data is now ready for modeling.
+
+
+(2025-08-20)
+
+1. **Add More Betting Odds Features**
+
+    - Select a few additional reliable bookmaker odds columns (as discussed).
+    - Optionally, create consensus/aggregate odds features (average, max, min, spread).
+
+2. **Head to Head Features**
+
+    - Engineer statistics from recent head-to-head matchups (e.g., goals, results, over/under frequencies, etc.).
+    - Use only pre-match data (no leakage from the current match!).
+
+3. **Team Strength and League Position**
+
+    - Add features like current league position, points, goal difference, recent form.
+    - Consider Elo ratings or similar “team strength” metrics if available.
+
+---
+
+**You’ll get:**
+
+- More informative pre-match features
+- A model that should increase in predictive power (if engineered well)
+- A flexible setup, ready for automation
+
+---
+
