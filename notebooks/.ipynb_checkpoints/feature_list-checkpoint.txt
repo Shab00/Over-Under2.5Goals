@@ -1,0 +1,127 @@
+Date
+FTHG
+FTAG
+FTR
+HTHG
+HTAG
+HTR
+Referee
+HS
+AS
+HST
+AST
+HC
+AC
+HF
+AF
+HY
+AY
+HR
+AR
+IWH
+IWD
+IWA
+WHH
+WHD
+WHA
+Year
+Month
+DayOfWeek
+TotalGoals
+GoalsOver2_5
+HomeTeam_mean_FTHG
+AwayTeam_mean_FTAG
+HomeTeam
+AwayTeam
+HomeTeam_Arsenal
+HomeTeam_Aston Villa
+HomeTeam_Birmingham
+HomeTeam_Blackburn
+HomeTeam_Blackpool
+HomeTeam_Bolton
+HomeTeam_Bournemouth
+HomeTeam_Bradford
+HomeTeam_Brentford
+HomeTeam_Brighton
+HomeTeam_Burnley
+HomeTeam_Cardiff
+HomeTeam_Charlton
+HomeTeam_Chelsea
+HomeTeam_Coventry
+HomeTeam_Crystal Palace
+HomeTeam_Derby
+HomeTeam_Everton
+HomeTeam_Fulham
+HomeTeam_Huddersfield
+HomeTeam_Hull
+HomeTeam_Ipswich
+HomeTeam_Leeds
+HomeTeam_Leicester
+HomeTeam_Liverpool
+HomeTeam_Luton
+HomeTeam_Man City
+HomeTeam_Man United
+HomeTeam_Middlesbrough
+HomeTeam_Newcastle
+HomeTeam_Norwich
+HomeTeam_Nott'm Forest
+HomeTeam_Portsmouth
+HomeTeam_QPR
+HomeTeam_Reading
+HomeTeam_Sheffield United
+HomeTeam_Southampton
+HomeTeam_Stoke
+HomeTeam_Sunderland
+HomeTeam_Swansea
+HomeTeam_Tottenham
+HomeTeam_Watford
+HomeTeam_West Brom
+HomeTeam_West Ham
+HomeTeam_Wigan
+HomeTeam_Wolves
+AwayTeam_Arsenal
+AwayTeam_Aston Villa
+AwayTeam_Birmingham
+AwayTeam_Blackburn
+AwayTeam_Blackpool
+AwayTeam_Bolton
+AwayTeam_Bournemouth
+AwayTeam_Bradford
+AwayTeam_Brentford
+AwayTeam_Brighton
+AwayTeam_Burnley
+AwayTeam_Cardiff
+AwayTeam_Charlton
+AwayTeam_Chelsea
+AwayTeam_Coventry
+AwayTeam_Crystal Palace
+AwayTeam_Derby
+AwayTeam_Everton
+AwayTeam_Fulham
+AwayTeam_Huddersfield
+AwayTeam_Hull
+AwayTeam_Ipswich
+AwayTeam_Leeds
+AwayTeam_Leicester
+AwayTeam_Liverpool
+AwayTeam_Luton
+AwayTeam_Man City
+AwayTeam_Man United
+AwayTeam_Middlesbrough
+AwayTeam_Newcastle
+AwayTeam_Norwich
+AwayTeam_Nott'm Forest
+AwayTeam_Portsmouth
+AwayTeam_QPR
+AwayTeam_Reading
+AwayTeam_Sheffield United
+AwayTeam_Southampton
+AwayTeam_Stoke
+AwayTeam_Sunderland
+AwayTeam_Swansea
+AwayTeam_Tottenham
+AwayTeam_Watford
+AwayTeam_West Brom
+AwayTeam_West Ham
+AwayTeam_Wigan
+AwayTeam_Wolves

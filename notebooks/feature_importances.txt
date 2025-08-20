@@ -1,0 +1,107 @@
+IWH                          0.051775
+IWD                          0.046344
+IWA                          0.055277
+WHH                          0.055340
+WHD                          0.045337
+WHA                          0.056122
+Year                         0.052726
+Month                        0.047171
+DayOfWeek                    0.029179
+HomeTeam_Arsenal             0.004465
+HomeTeam_Aston Villa         0.005142
+HomeTeam_Birmingham          0.002233
+HomeTeam_Blackburn           0.003293
+HomeTeam_Blackpool           0.000786
+HomeTeam_Bolton              0.003226
+HomeTeam_Bournemouth         0.002379
+HomeTeam_Bradford            0.000334
+HomeTeam_Brentford           0.000919
+HomeTeam_Brighton            0.002258
+HomeTeam_Burnley             0.002824
+HomeTeam_Cardiff             0.000668
+HomeTeam_Charlton            0.001756
+HomeTeam_Chelsea             0.004538
+HomeTeam_Coventry            0.000385
+HomeTeam_Crystal Palace      0.003584
+HomeTeam_Derby               0.000886
+HomeTeam_Everton             0.006383
+HomeTeam_Fulham              0.004720
+HomeTeam_Huddersfield        0.000611
+HomeTeam_Hull                0.001776
+HomeTeam_Ipswich             0.000810
+HomeTeam_Leeds               0.002001
+HomeTeam_Leicester           0.003910
+HomeTeam_Liverpool           0.004472
+HomeTeam_Luton               0.000189
+HomeTeam_Man City            0.004463
+HomeTeam_Man United          0.004169
+HomeTeam_Middlesbrough       0.003046
+HomeTeam_Newcastle           0.005581
+HomeTeam_Norwich             0.002124
+HomeTeam_Nott'm Forest       0.000771
+HomeTeam_Portsmouth          0.002229
+HomeTeam_QPR                 0.001508
+HomeTeam_Reading             0.001299
+HomeTeam_Sheffield United    0.001469
+HomeTeam_Southampton         0.004178
+HomeTeam_Stoke               0.002918
+HomeTeam_Sunderland          0.004149
+HomeTeam_Swansea             0.002411
+HomeTeam_Tottenham           0.005393
+HomeTeam_Watford             0.002333
+HomeTeam_West Brom           0.004054
+HomeTeam_West Ham            0.005545
+HomeTeam_Wigan               0.002626
+HomeTeam_Wolves              0.003158
+AwayTeam_Arsenal             0.004704
+AwayTeam_Aston Villa         0.005537
+AwayTeam_Birmingham          0.001959
+AwayTeam_Blackburn           0.003303
+AwayTeam_Blackpool           0.000430
+AwayTeam_Bolton              0.003656
+AwayTeam_Bournemouth         0.002406
+AwayTeam_Bradford            0.000365
+AwayTeam_Brentford           0.001117
+AwayTeam_Brighton            0.002330
+AwayTeam_Burnley             0.002469
+AwayTeam_Cardiff             0.000754
+AwayTeam_Charlton            0.002245
+AwayTeam_Chelsea             0.004132
+AwayTeam_Coventry            0.000336
+AwayTeam_Crystal Palace      0.003366
+AwayTeam_Derby               0.001038
+AwayTeam_Everton             0.005777
+AwayTeam_Fulham              0.004842
+AwayTeam_Huddersfield        0.000749
+AwayTeam_Hull                0.002062
+AwayTeam_Ipswich             0.000961
+AwayTeam_Leeds               0.002345
+AwayTeam_Leicester           0.003511
+AwayTeam_Liverpool           0.004455
+AwayTeam_Luton               0.000221
+AwayTeam_Man City            0.004739
+AwayTeam_Man United          0.004066
+AwayTeam_Middlesbrough       0.003102
+AwayTeam_Newcastle           0.005377
+AwayTeam_Norwich             0.002118
+AwayTeam_Nott'm Forest       0.000447
+AwayTeam_Portsmouth          0.002200
+AwayTeam_QPR                 0.001519
+AwayTeam_Reading             0.001318
+AwayTeam_Sheffield United    0.001503
+AwayTeam_Southampton         0.004362
+AwayTeam_Stoke               0.003218
+AwayTeam_Sunderland          0.003492
+AwayTeam_Swansea             0.002345
+AwayTeam_Tottenham           0.005696
+AwayTeam_Watford             0.002447
+AwayTeam_West Brom           0.003884
+AwayTeam_West Ham            0.005969
+AwayTeam_Wigan               0.002588
+AwayTeam_Wolves              0.003332
+HomeRecentGF                 0.052165
+HomeRecentGA                 0.050230
+HomeRecentPts                0.048478
+AwayRecentGF                 0.050900
+AwayRecentGA                 0.052525
+AwayRecentPts                0.049671
