@@ -76,4 +76,33 @@ Dataset is clean and all recent form engineering issues are resolved. The data i
 - A flexible setup, ready for automation
 
 ---
+# Project Notes — 2025-08-21
+
+## Today’s Progress
+
+- **Feature Engineering**
+    - Added more betting odds features (including consensus/aggregate odds).
+    - Created head-to-head statistics features (using only pre-match data).
+    - Added team strength and league position features (current position, points, goal difference, recent form, etc.).
+- Discovered and debugged major data loss (2004–2014 seasons) during cleaning/feature engineering.
+    - Identified likely causes: merges with incomplete data, over-aggressive filtering/dropping, missing values.
+    - Plan to recover by redoing cleaning steps with careful checks after each operation.
+- Model metrics improved slightly (accuracy, f1-score, recall), but performance still only modestly above random.
+
+---
+
+## Next Steps (for tomorrow)
+
+1. **Figure out and fix the missing data issue first**
+    - Carefully retrace the data cleaning and feature engineering steps to identify where and how seasons (2004–2014) were dropped.
+    - Restore the full dataset with all seasons, ensuring no unintentional data loss.
+    - Add checks after every cleaning/merge/filtering step (e.g. print row/season counts).
+
+2. **Add Match Context Feature**
+    - Engineer features that capture the context of each match (e.g., home/away, rest days, fixture congestion, weather, etc.).
+
+3. **Explore External Data**
+    - Identify and integrate external data sources to enrich the feature set (could include advanced stats, player info, injuries, weather, etc.).
+
+---
 
