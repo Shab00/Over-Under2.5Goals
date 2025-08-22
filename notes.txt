@@ -98,11 +98,107 @@ Dataset is clean and all recent form engineering issues are resolved. The data i
     - Restore the full dataset with all seasons, ensuring no unintentional data loss.
     - Add checks after every cleaning/merge/filtering step (e.g. print row/season counts).
 
-2. **Add Match Context Feature**
-    - Engineer features that capture the context of each match (e.g., home/away, rest days, fixture congestion, weather, etc.).
+| Engineered Feature     | Use for Prediction? | Notes/How to Calculate                                 |
+|----------------------- |:------------------:|--------------------------------------------------------|
+| FormDiff              | ✅                 | Rolling average/points from matches prior to prediction|
+| RecentGoalDiff        | ✅                 | Rolling goal difference from prior matches             |
+| PosDiff               | ✅                 | League position before the match                       |
+| ImpliedProb           | ✅                 | From odds                                              |
+| OddsMargin            | ✅                 | From odds                                              |
+| OverUnderRatio        | ✅                 | From odds                                              |
+| Weekend               | ✅                 | From DayOfWeek                                         |
+| RefereeAggression     | ✅                 | From historic referee data only                        |
+| Seasonality           | ✅                 | From Season/Month/Year                                 |
 
-3. **Explore External Data**
-    - Identify and integrate external data sources to enrich the feature set (could include advanced stats, player info, injuries, weather, etc.).
 
 ---
+
+# Project Notes — 2025-08-22
+
+Pivoting from Categorical to Linear (Regression) Prediction
+
+Originally, our model focused on categorical prediction, such as predicting the outcome of a football match as Win/Draw/Loss or Over/Under goals (i.e., classification tasks). In this approach, the model outputs a discrete label, and evaluation metrics include accuracy, F1-score, etc.
+
+We are now pivoting to linear (regression) prediction, where the model predicts the actual number of goals scored by each team in a match (continuous values). This enables us to:
+
+    Directly estimate expected goal counts (e.g., 1.3 goals for Home, 0.9 for Away).
+    Use these predictions to derive probabilities for different outcomes (like over/under lines, correct scores) via Poisson models.
+    Evaluate performance using regression metrics such as Mean Absolute Error (MAE) and Root Mean Squared Error (RMSE).
+
+In summary:
+We’re moving from predicting categorical outcomes to predicting continuous goal counts, making our model more flexible and valuable for deeper football analytics and probability-based predictions.
+
+# Goal Count Regression – Plan & Current Status
+
+## **Objective**
+Predict the number of goals scored by each team in a football match using pre-match, leakage-free engineered features.
+
+---
+
+## **Current Model Score**
+
+- **Home Goals MAE:** 0.98  
+- **Home Goals RMSE:** 1.23  
+- **Away Goals MAE:** 0.87  
+- **Away Goals RMSE:** 1.09  
+
+> These metrics indicate that, on average, predictions are off by around 0.9–1.0 goals per team per match, which is competitive for football regression with pre-match features.
+
+---
+
+## **Features to Use**
+
+| Engineered Feature     | Use for Prediction? | Notes/How to Calculate                                 |
+|----------------------- |:------------------:|--------------------------------------------------------|
+| FormDiff              | ✅                 | Rolling average/points from matches prior to prediction|
+| RecentGoalDiff        | ✅                 | Rolling goal difference from prior matches             |
+| PosDiff               | ✅                 | League position before the match                       |
+| ImpliedProb           | ✅                 | From odds                                              |
+| OddsMargin            | ✅                 | From odds                                              |
+| OverUnderRatio        | ✅                 | From odds                                              |
+| Weekend               | ✅                 | From DayOfWeek                                         |
+| RefereeAggression     | ✅                 | From historic referee data only                        |
+| Seasonality           | ✅                 | From Season/Month/Year                                 |
+
+---
+
+## **How We Will Predict Goal Count Regression**
+
+1. **Data Preparation**
+    - Ensure all seasons (2000–2024 and beyond) are included.
+    - Check for and fix missing data issues.
+    - After each data cleaning/feature engineering step, output row/season counts.
+    - Use only leakage-free, pre-match engineered features (see table above).
+
+2. **Feature Selection**
+    - Use the features marked ✅ above and any other safe, relevant pre-match features.
+    - Drop all columns that leak match outcomes (e.g., full-time/half-time goals, cards, post-match stats).
+
+3. **Model Target**
+    - Regression targets:  
+        - `FTHG` (Full Time Home Goals)
+        - `FTAG` (Full Time Away Goals)
+
+4. **Modeling Approach**
+    - Use a regression algorithm (Random Forest Regressor, XGBoost, etc.).
+    - Train separate models for home and away goals, or use multi-output regression if desired.
+    - Split data chronologically (train on past, test on future).
+
+5. **Evaluation**
+    - Metrics:  
+        - Mean Absolute Error (MAE)
+        - Root Mean Squared Error (RMSE)
+    - Compare to naive baseline (predicting league average goals).
+
+6. **(Optional) Probability Modeling**
+    - Use predicted means as λ in a Poisson distribution to estimate probabilities for over/under lines and correct scores.
+
+---
+
+## **Notes**
+- Only use features available before the match (no leakage).
+- Document each data cleaning and engineering step for reproducibility.
+- Once the model is finalized, consider packaging it as a portfolio-ready project with clear README and visualizations.
+
+
 
