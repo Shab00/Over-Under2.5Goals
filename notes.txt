@@ -195,10 +195,155 @@ Predict the number of goals scored by each team in a football match using pre-ma
 
 ---
 
-## **Notes**
-- Only use features available before the match (no leakage).
-- Document each data cleaning and engineering step for reproducibility.
-- Once the model is finalized, consider packaging it as a portfolio-ready project with clear README and visualizations.
+
+# Project Sprint Plan – 2025-08-23
+
+## **Goal:** 
+Make significant progress on the regression pipeline and project polish so you can take tomorrow off with peace of mind.
+
+---
+
+## **1. Data Integrity & Feature Engineering**
+- [x] **Restore all seasons** (confirm 2000–2024+ included; investigate any missing years).
+
+    Expected: Most top European football leagues have 380 matches per season (20 teams, double round robin).
+    Your data:
+        Some seasons are well below 380:
+            2002-03: 347
+            2003-04: 329
+            2004-05: 332
+            2007-08: 271
+            2023-24: 196 (probably incomplete/current season)
+        Others are close to or at 380.
+
+
+- [x] **Trace and fix missing data issues** (print row/season counts after each cleaning/merge/filter).
+Interpretation
+ Total rows: 7,901 — this is the total number of matches currently in your cleaned dataset.
+    Season breakdown:
+        Most recent seasons (2012–13 onward) are nearly full (376–380), which is good.
+        Early seasons (2002–2009) have fewer matches (some as low as 271).
+        2023–24 is likely in-progress, so it’s expected to be incomplete.
+    Unique teams: 43 — this likely means you have data from multiple divisions or some seasons with more than 20 teams (e.g., league expansions, relegation/promotion).
+
+- [x] **Finalize engineered features** (FormDiff, RecentGoalDiff, etc.) and ensure they are leakage-free.
+- [x] **Check for nulls or weird outliers** in all engineered features.
+
+    The columns B365>2.5 and B365<2.5 (Bet365 over/under 2.5 odds) are missing in about 67% of matches (as you saw in your percentage summary).
+        This is common for older seasons or leagues/datasets where over/under odds weren’t available.
+    All other features are complete—you won’t have to impute or drop anything else.
+
+- [x] **Save a “clean” processed dataframe** for easy re-use.
+df.to_csv("premier_league_clean.csv", index=False)
+
+## **2. Modeling Pipeline**
+- [x] **Set up train/test split** (chronological, if possible).
+- [x] **Train Random Forest Regressor** on home and away goals.
+- [x] **Calculate and log MAE/RMSE** for both targets.
+- [x] **Compare to naive baseline** (predict league average goals).
+For football goal prediction, a naive baseline is usually:
+
+    Predicting the same value for every match:
+    For home goals, always predict the average number of home goals in your training data;
+    For away goals, always predict the average number of away goals in your training data.
+
+This is the "league average" approach.
+Naive Baseline - Home Goals MAE: 1.0606633790713922
+Naive Baseline - Home Goals RMSE: 1.7171701571557516
+Naive Baseline - Away Goals MAE: 0.9089054922689527
+Naive Baseline - Away Goals RMSE: 1.3263902142865214
+
+- [x] **(Optional) Try a second model** (e.g., XGBoost or multioutput regression).
+Random Forest 
+Home Goals MAE: 0.9794792973651192
+Home Goals RMSE: 1.228174145426087
+Away Goals MAE: 0.8931179422835633
+Away Goals RMSE: 1.1223772438626765
+MultiOutput Random Forest:
+Home Goals MAE: 0.9794792973651192
+Home Goals RMSE: 1.228174145426087
+Away Goals MAE: 0.8931179422835633
+Away Goals RMSE: 1.122377243862676
+XGBoost	
+
+MultiOutput XGBoost
+MultiOutput XGBoost Results:
+Home Goals MAE: 1.0112534591991225
+Home Goals RMSE: 1.275935144049399
+Away Goals MAE: 0.9181231129488007
+Away Goals RMSE: 1.169430539852095
+
+Model	Home MAE	Home RMSE	Away MAE	Away RMSE
+Random Forest	0.98	1.23	0.89	1.12
+MultiOutput RF	0.98	1.23	0.89	1.12
+MultiOutput XGBoost	1.01	1.28	0.92	1.17
+
+## **3. Probability Outputs**
+- [ ] **Implement Poisson probability calculation** for over/under 2.5 goals (use predicted means).
+ Predicted Means
+
+For each match in your test set, you have:
+
+    Model-predicted home goals: mu_home (from e.g. y_pred_multi[:, 0])
+    Model-predicted away goals: mu_away (from e.g. y_pred_multi[:, 1])
+    Total predicted goals: mu_total = mu_home + mu_away
+
+2. Poisson Probabilities
+
+The probability that total goals is exactly k is:
+P ( K = k ) = λ k e − λ k !
+where λ = μ h o m e + μ a w a y .
+
+    Under 2.5 goals = Probability of 0, 1, or 2 total goals.
+    Over 2.5 goals = 1 - (probability of 0, 1, or 2 goals).
+pproach	What it predicts	Your accuracy	Why it failed/worked
+Regression + Poisson	Exact goals, then over/under	~10%	Model was indecisive, Poisson probabilities were uninformative
+Classifier	Directly over/under 2.5	~53%	Model learns the right patterns for the actual task
+
+- [x] **Output probabilities** for all matches in your test set (add to dataframe or CSV).
+   actual_over_2_5  pred_proba_over_2_5  pred_class_over_2_5
+0                1                 0.64                    1
+1                0                 0.70                    1
+2                0                 0.59                    1
+3                0                 0.41                    0
+4                1                 0.19                    
+- [x] **Check calibration** (are your predicted probabilities reasonable?).
+0.178      0.26362069 0.36196911 0.45605664 0.55410256 0.64604478
+ 0.74467391 0.84947368] [0.5        0.34482759 0.48648649 0.49237473 0.51748252 0.58955224
+ 0.55434783 0.78947368
+
+## **4. Reporting & Visualization**
+- [x] **Plot predicted vs. actual goals** (scatter, histograms).
+- [x] **Plot feature importances** (for both home and away models).
+- [x] **Create a notebook section** explaining your results in plain English.
+- [x] **Save all key plots** for your README/portfolio.
+
+---
+## Sprint Plan – 2025-08-24
+
+### 1. Finalize Probability & Poisson Approach
+- [ ] Refactor Poisson probability code into a function.
+- [ ] Plot and compare Poisson vs. classifier probabilities.
+- [ ] Summarize findings in markdown.
+
+### 1b. Model Refinement
+- [ ] Define hyperparameter grids for main models.
+- [ ] Run GridSearchCV/RandomizedSearchCV.
+- [ ] Record best parameters and update results table.
+- [ ] (Optional) Tune classifier as well as regression models.
+
+### 2. Model Comparison & Insights
+- [ ] Create table/plot of all model results (regression and classification).
+- [ ] Add “Model Selection Rationale” section.
+
+### 3. Portfolio & SaaS Prep
+- [ ] Write “Limitations and Next Steps” markdown.
+- [ ] Outline MVP SaaS features.
+- [ ] Organize code and saved plots.
+
+### 4. (Optional) Deployment/Engineering
+- [ ] Add “How to run” to README.
+- [ ] Sketch AWS SaaS architecture in markdown
 
 
 
