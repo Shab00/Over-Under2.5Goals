@@ -1,129 +1,130 @@
-IWH                          0.024410
-IWD                          0.023636
-IWA                          0.025573
-WHH                          0.027123
-WHD                          0.022250
-WHA                          0.026024
-B365H                        0.024524
-B365D                        0.022224
-B365A                        0.025846
-B365>2.5                     0.008768
-B365<2.5                     0.010143
-Year                         0.024466
-Month                        0.022257
-DayOfWeek                    0.014086
-HomeTeam_mean_FTHG           0.025857
-AwayTeam_mean_FTAG           0.027044
-HomeTeam_Arsenal             0.001777
-HomeTeam_Aston Villa         0.001912
-HomeTeam_Birmingham          0.001152
-HomeTeam_Blackburn           0.001448
-HomeTeam_Blackpool           0.000158
-HomeTeam_Bolton              0.001666
-HomeTeam_Bournemouth         0.001009
-HomeTeam_Brentford           0.000282
-HomeTeam_Brighton            0.000938
-HomeTeam_Burnley             0.000981
-HomeTeam_Cardiff             0.000465
-HomeTeam_Charlton            0.000785
-HomeTeam_Chelsea             0.001788
-HomeTeam_Crystal Palace      0.001624
-HomeTeam_Derby               0.000133
-HomeTeam_Everton             0.002292
-HomeTeam_Fulham              0.001985
-HomeTeam_Huddersfield        0.000231
-HomeTeam_Hull                0.000859
-HomeTeam_Leeds               0.000725
-HomeTeam_Leicester           0.001333
-HomeTeam_Liverpool           0.001710
-HomeTeam_Luton               0.000060
-HomeTeam_Man City            0.001926
-HomeTeam_Man United          0.001310
-HomeTeam_Middlesbrough       0.000900
-HomeTeam_Newcastle           0.002413
-HomeTeam_Norwich             0.001231
-HomeTeam_Nott'm Forest       0.000254
-HomeTeam_Portsmouth          0.001048
-HomeTeam_QPR                 0.000549
-HomeTeam_Reading             0.000465
-HomeTeam_Sheffield United    0.000537
-HomeTeam_Southampton         0.001774
-HomeTeam_Stoke               0.001693
-HomeTeam_Sunderland          0.001624
-HomeTeam_Swansea             0.001039
-HomeTeam_Tottenham           0.002059
-HomeTeam_Watford             0.001097
-HomeTeam_West Brom           0.001817
-HomeTeam_West Ham            0.002348
-HomeTeam_Wigan               0.000973
-HomeTeam_Wolves              0.001198
-AwayTeam_Arsenal             0.001684
-AwayTeam_Aston Villa         0.002267
-AwayTeam_Birmingham          0.000976
-AwayTeam_Blackburn           0.001358
-AwayTeam_Blackpool           0.000161
-AwayTeam_Bolton              0.001562
-AwayTeam_Bournemouth         0.000900
-AwayTeam_Brentford           0.000296
-AwayTeam_Brighton            0.000756
-AwayTeam_Burnley             0.001233
-AwayTeam_Cardiff             0.000323
-AwayTeam_Charlton            0.000610
-AwayTeam_Chelsea             0.001588
-AwayTeam_Crystal Palace      0.001634
-AwayTeam_Derby               0.000069
-AwayTeam_Everton             0.002667
-AwayTeam_Fulham              0.001905
-AwayTeam_Huddersfield        0.000322
-AwayTeam_Hull                0.000831
-AwayTeam_Leeds               0.000546
-AwayTeam_Leicester           0.001541
-AwayTeam_Liverpool           0.001812
-AwayTeam_Luton               0.000023
-AwayTeam_Man City            0.002010
-AwayTeam_Man United          0.001418
-AwayTeam_Middlesbrough       0.001073
-AwayTeam_Newcastle           0.002272
-AwayTeam_Norwich             0.000640
-AwayTeam_Nott'm Forest       0.000098
-AwayTeam_Portsmouth          0.000983
-AwayTeam_QPR                 0.000695
-AwayTeam_Reading             0.000665
-AwayTeam_Sheffield United    0.000483
-AwayTeam_Southampton         0.001692
-AwayTeam_Stoke               0.001010
-AwayTeam_Sunderland          0.001516
-AwayTeam_Swansea             0.001051
-AwayTeam_Tottenham           0.002246
-AwayTeam_Watford             0.001238
-AwayTeam_West Brom           0.002063
-AwayTeam_West Ham            0.002482
-AwayTeam_Wigan               0.001399
+IWH                          0.023038
+IWD                          0.020700
+IWA                          0.026133
+WHH                          0.025326
+WHD                          0.021790
+WHA                          0.025126
+B365H                        0.024682
+B365D                        0.021985
+B365A                        0.023816
+B365>2.5                     0.008434
+B365<2.5                     0.009323
+Year                         0.022316
+Month                        0.021893
+DayOfWeek                    0.013139
+HomeTeam_mean_FTHG           0.024091
+AwayTeam_mean_FTAG           0.026365
+HomeTeam_Arsenal             0.001441
+HomeTeam_Aston Villa         0.002111
+HomeTeam_Birmingham          0.001139
+HomeTeam_Blackburn           0.001469
+HomeTeam_Blackpool           0.000173
+HomeTeam_Bolton              0.001416
+HomeTeam_Bournemouth         0.000961
+HomeTeam_Brentford           0.000250
+HomeTeam_Brighton            0.000926
+HomeTeam_Burnley             0.000883
+HomeTeam_Cardiff             0.000402
+HomeTeam_Charlton            0.000770
+HomeTeam_Chelsea             0.001553
+HomeTeam_Crystal Palace      0.001421
+HomeTeam_Derby               0.000087
+HomeTeam_Everton             0.002297
+HomeTeam_Fulham              0.001983
+HomeTeam_Huddersfield        0.000260
+HomeTeam_Hull                0.000715
+HomeTeam_Leeds               0.000428
+HomeTeam_Leicester           0.001290
+HomeTeam_Liverpool           0.001476
+HomeTeam_Luton               0.000072
+HomeTeam_Man City            0.001812
+HomeTeam_Man United          0.001326
+HomeTeam_Middlesbrough       0.001054
+HomeTeam_Newcastle           0.002316
+HomeTeam_Norwich             0.000935
+HomeTeam_Nott'm Forest       0.000331
+HomeTeam_Portsmouth          0.000968
+HomeTeam_QPR                 0.000481
+HomeTeam_Reading             0.000394
+HomeTeam_Sheffield United    0.000586
+HomeTeam_Southampton         0.001738
+HomeTeam_Stoke               0.001553
+HomeTeam_Sunderland          0.001277
+HomeTeam_Swansea             0.001083
+HomeTeam_Tottenham           0.002323
+HomeTeam_Watford             0.000917
+HomeTeam_West Brom           0.001593
+HomeTeam_West Ham            0.002423
+HomeTeam_Wigan               0.000988
+HomeTeam_Wolves              0.001218
+AwayTeam_Arsenal             0.001696
+AwayTeam_Aston Villa         0.002320
+AwayTeam_Birmingham          0.000917
+AwayTeam_Blackburn           0.001443
+AwayTeam_Blackpool           0.000116
+AwayTeam_Bolton              0.001336
+AwayTeam_Bournemouth         0.000790
+AwayTeam_Brentford           0.000365
+AwayTeam_Brighton            0.000601
+AwayTeam_Burnley             0.001159
+AwayTeam_Cardiff             0.000270
+AwayTeam_Charlton            0.000722
+AwayTeam_Chelsea             0.001563
+AwayTeam_Crystal Palace      0.001330
+AwayTeam_Derby               0.000059
+AwayTeam_Everton             0.002709
+AwayTeam_Fulham              0.002079
+AwayTeam_Huddersfield        0.000263
+AwayTeam_Hull                0.000652
+AwayTeam_Leeds               0.000500
+AwayTeam_Leicester           0.001370
+AwayTeam_Liverpool           0.001967
+AwayTeam_Luton               0.000064
+AwayTeam_Man City            0.001779
+AwayTeam_Man United          0.001489
+AwayTeam_Middlesbrough       0.001307
+AwayTeam_Newcastle           0.001864
+AwayTeam_Norwich             0.000874
+AwayTeam_Nott'm Forest       0.000104
+AwayTeam_Portsmouth          0.000962
+AwayTeam_QPR                 0.000570
+AwayTeam_Reading             0.000507
+AwayTeam_Sheffield United    0.000475
+AwayTeam_Southampton         0.001574
+AwayTeam_Stoke               0.001176
+AwayTeam_Sunderland          0.001383
+AwayTeam_Swansea             0.001115
+AwayTeam_Tottenham           0.002152
+AwayTeam_Watford             0.000832
+AwayTeam_West Brom           0.001928
+AwayTeam_West Ham            0.002165
+AwayTeam_Wigan               0.001259
 AwayTeam_Wolves              0.001200
-has_ou_odds                  0.002149
-HomeRecentGF                 0.025964
-HomeRecentGA                 0.025054
-HomeRecentPts                0.024016
-AwayRecentGF                 0.025903
-AwayRecentGA                 0.026493
-AwayRecentPts                0.024439
-B365>2.5_missing             0.002361
-B365<2.5_missing             0.002202
-h2h_home_wins_last5          0.010374
-home_league_position         0.026716
-away_league_position         0.026691
-position_diff                0.029190
-HomePts                      0.031130
-AwayPts                      0.030580
-HomeRecentGoalDiff           0.028292
-AwayRecentGoalDiff           0.027816
-RecentGoalDiff               0.029330
-PosDiff                      0.029334
-B365>2.5_implied_prob        0.008801
-B365<2.5_implied_prob        0.009592
-OddsMargin                   0.032504
-OU_OddsMargin                0.010305
-OverUnderRatio               0.009864
-Weekend                      0.005060
-RefereeAggression            0.033683
-EarlySeason                  0.005059
+has_ou_odds                  0.002339
+HomeRecentGF                 0.025727
+HomeRecentGA                 0.025175
+HomeRecentPts                0.023387
+AwayRecentGF                 0.024664
+AwayRecentGA                 0.026288
+AwayRecentPts                0.024034
+B365>2.5_missing             0.002351
+B365<2.5_missing             0.002326
+h2h_home_wins_last5          0.010298
+home_league_position         0.026572
+away_league_position         0.026343
+position_diff                0.028398
+HomeRecentGoalDiff           0.027170
+AwayRecentGoalDiff           0.026839
+RecentGoalDiff               0.028619
+HomeRecentShotsOnTarget      0.032011
+AwayRecentShotsOnTarget      0.030520
+RecentShotsOnTargetDiff      0.031899
+PosDiff                      0.028336
+B365>2.5_implied_prob        0.008319
+B365<2.5_implied_prob        0.009430
+OddsMargin                   0.031228
+OU_OddsMargin                0.009186
+OverUnderRatio               0.010042
+Weekend                      0.005185
+RefereeAggression            0.032645
+EarlySeason                  0.004673
