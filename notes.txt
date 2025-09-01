@@ -319,31 +319,83 @@ Classifier	Directly over/under 2.5	~53%	Model learns the right patterns for the 
 - [x] **Save all key plots** for your README/portfolio.
 
 ---
-## Sprint Plan – 2025-08-24
+02/09/2025
+# Game Plan for Tomorrow: Football Modeling Project
 
-### 1. Finalize Probability & Poisson Approach
-- [ ] Refactor Poisson probability code into a function.
-- [ ] Plot and compare Poisson vs. classifier probabilities.
-- [ ] Summarize findings in markdown.
+## Morning/Afternoon: 2–3 Hours of Focused Work
 
-### 1b. Model Refinement
-- [ ] Define hyperparameter grids for main models.
-- [ ] Run GridSearchCV/RandomizedSearchCV.
-- [ ] Record best parameters and update results table.
-- [ ] (Optional) Tune classifier as well as regression models.
+### 1. Quick Project Review (15–20 min)
+- Skim your notebook/code to reacquaint yourself with the pipeline and last steps.
+- Check your final processed dataset (`final_football_model_data.csv` or similar):
+    - Run `.head()`, `.info()`, and `.describe()` in a notebook cell.
+- Read your last model results to recall strengths/weaknesses.
 
-### 2. Model Comparison & Insights
-- [ ] Create table/plot of all model results (regression and classification).
-- [ ] Add “Model Selection Rationale” section.
+---
 
-### 3. Portfolio & SaaS Prep
-- [ ] Write “Limitations and Next Steps” markdown.
-- [ ] Outline MVP SaaS features.
-- [ ] Organize code and saved plots.
+### 2. Modeling “2+ Goals” and BTTS (60–90 min)
+- Define your modeling targets:  
+    - `Home_2plus`, `Away_2plus`, `BTTS`
+- Set up your features:
+    - Use your clean, leakage-free dataset.
+    - Double-check you are not including any target or post-match columns.
+- Train/test split:
+    - Use `random_state=42` for reproducibility.
+- Run Random Forest with `class_weight="balanced"` for each target.
+- Print and save:
+    - `classification_report`
+    - ROC-AUC score
+    - Confusion matrix for each target.
+- Save each model’s results in a markdown or text cell for analysis.
 
-### 4. (Optional) Deployment/Engineering
-- [ ] Add “How to run” to README.
-- [ ] Sketch AWS SaaS architecture in markdown
+---
+
+### 3. Quick Feature Importance Analysis (20–30 min)
+- For each target, plot and save the **top 15–20 feature importances**.
+- Note which features are most influential for each prediction.
+
+---
+
+### 4. Short Write-Up / Reflection (15–30 min)
+- In a markdown cell or doc, write:
+    - Key findings from your model results (accuracy, recall, what’s working, what isn’t).
+    - Thoughts on data quality, ideas for further improvement, next steps.
+- This helps you re-engage quickly next time and track your progress.
+
+---
+
+## If you have extra 30–45 minutes…
+- Try threshold tuning for higher recall on class 1, or
+- Test another model (e.g., XGBoost), or
+- Write a summary for your README or project documentation.
+
+---
+
+## What **NOT** to Do Tomorrow
+- Don’t start major new feature engineering unless you spot a glaring issue.
+- Don’t obsess over hyperparameter tuning; get solid results first.
+
+---
+
+## Summary Table
+
+| Task                | Goal/Outcome                         | Time (min) |
+|---------------------|--------------------------------------|------------|
+| Project Review      | Get re-oriented, spot next tasks     | 15–20      |
+| Modeling            | Run, evaluate, and save results      | 60–90      |
+| Feature Importances | Visualize top predictors             | 20–30      |
+| Short Write-Up      | Reflection and next steps            | 15–30      |
+| **Total**           | **~2–3 hours**                       |            |
+
+---
+
+**Tip:**  
+Set a timer for each step and don’t get stuck perfecting code—focus on making incremental progress and documenting as you go.  
+After your session, you’ll have:
+- Clean models/results for your main targets,
+- Feature insights,
+- A clear sense of your project’s next phase.
+
+
 
 
 
