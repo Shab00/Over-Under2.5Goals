@@ -388,8 +388,6 @@ Classifier	Directly over/under 2.5	~53%	Model learns the right patterns for the 
 
 ---
 
-**Tip:**  
-Set a timer for each step and don’t get stuck perfecting code—focus on making incremental progress and documenting as you go.  
 After your session, you’ll have:
 - Clean models/results for your main targets,
 - Feature insights,
