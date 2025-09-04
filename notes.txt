@@ -651,6 +651,37 @@ weighted avg       0.51      0.51      0.51      1581
   - Compare to your validation/test set results.
   - Note any differences or surprises in the performance.
 
+HOME TEAM:
+Accuracy: 0.64
+AUC: 0.680623973727422
+Confusion Matrix:
+ [[20  9]
+ [ 9 12]]
+              precision    recall  f1-score   support
+
+           0       0.69      0.69      0.69        29
+           1       0.57      0.57      0.57        21
+
+    accuracy                           0.64        50
+   macro avg       0.63      0.63      0.63        50
+weighted avg       0.64      0.64      0.64        50
+
+
+AWAY TEAM:
+Accuracy: 0.6
+AUC: 0.6316666666666667
+Confusion Matrix:
+ [[26  4]
+ [16  4]]
+              precision    recall  f1-score   support
+
+           0       0.62      0.87      0.72        30
+           1       0.50      0.20      0.29        20
+
+    accuracy                           0.60        50
+   macro avg       0.56      0.53      0.50        50
+weighted avg       0.57      0.60      0.55        50
+
 ## 2. **Document Real-World Generalization**
 - Write a short summary of how well your model performed on the new season's data.
 - Highlight strengths and weaknesses (“Model generalizes well to new games”, “Recall for 2+ goals drops slightly”, etc.).
@@ -658,16 +689,56 @@ weighted avg       0.51      0.51      0.51      1581
   - Out-of-sample confusion matrix.
   - Out-of-sample ROC or accuracy plot.
 
-## 3. **Update README/Report**
-- Add a section on out-of-sample testing.
-- Briefly explain what this means for real-world use (e.g. reliability, next steps).
-- If possible, add a screenshot or output example.
+Summary / What Are We Saying?
 
-## 4. **(Optional/Bonus) Quick Improvements**
-- Feature importance: Check if the top features are similar in the new data.
-- Write a few bullet points about what you’d do next with more time (e.g. feature engineering, new data sources, improved automation).
+    Both models are a little better than random, but neither is strong.
+    HOME model is somewhat balanced, but only moderately accurate at both classes.
+    AWAY model is heavily biased toward predicting "no 2+ goals" for away teams; it misses most cases where the away team does score 2+.
+    Recall for 2+ goals (class 1) is low for away: many "true positives" are not caught.
 
 ---
+5/09/2025
+
+# Betting Odds Feature Engineering & Evaluation Checklist
+
+## 1. Identify All Betting Odds Columns
+- Review your dataframe columns for all odds-related features (e.g., `B365H`, `B365D`, `B365A`, `AvgH`, `AvgD`, `AvgA`, `MaxH`, `MaxD`, `MaxA`, `B365>2.5`, `B365<2.5`, etc.).
+- Include both win/draw/lose odds and over/under odds from all available bookmakers.
+
+## 2. Create Derived Features (Optional but Powerful)
+- Calculate implied probabilities: `implied_prob = 1 / odds`
+- Calculate bookmaker margin: For 1X2, sum of implied probabilities minus 1.
+- Create ratios and spreads, e.g. over/under odds ratio, home/away odds ratio.
+
+## 3. Update Your Feature List
+- Add all selected odds columns and engineered features to your feature list.
+- Make sure you include them for both home and away models as appropriate.
+
+## 4. Handle Missing Data
+- Fill missing odds values with sensible defaults:
+    - Impute with median/mean from your training data, or
+    - Use a placeholder (e.g. -1 or 0) if suitable for your modeling pipeline.
+
+## 5. Align Features Across Data Splits
+- Ensure your train/test/eval dataframes all have the same columns (order and names).
+- Use your alignment function to enforce this.
+
+## 6. Preprocess the Data
+- Fill missing values after alignment.
+- Optionally scale/normalize odds features (not strictly needed for Random Forests).
+
+## 7. Train Your Random Forest Model
+- Fit the Random Forest model on your training set with the expanded feature set.
+
+## 8. Make Predictions on Evaluation Data
+- Predict class and probabilities for both home and away 2+ goals (as before).
+
+## 9. Evaluate Performance
+- Use metrics: accuracy, AUC, confusion matrix, classification report.
+- Compare results before and after adding odds features.
+
+## 10. Analyze Feature Importances
+- Check which odds features are most important in your model (`rf_home.feature_importances_`).
 
 
 
