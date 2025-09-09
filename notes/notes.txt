@@ -807,6 +807,55 @@ Lowering the threshold boosts recall:
 - **Model Tuning:**  
   Experiment with ensemble methods like XGBoost or LightGBM, and explore more advanced feature engineering to potentially boost model performance.
 
+concentrate on home 2+ goals?
+
+    Model performance is better:
+    Your CV F1-score and test F1 are higher for target_home_plus_two than for away, especially after threshold tuning.
+    Recall for positives is much higher:
+    At optimal threshold, recall for home 2+ is 0.90 (vs. 0.65 for away).
+    More actionable predictions:
+    Higher recall means you’re catching more matches where the home team is likely to score 2+.
+    Feature importance is clearer:
+    You’ll get more reliable insights for betting, prediction, or further analysis.
+    Simplifies workflow:
+    Faster iteration and deeper focus on feature engineering, model tuning, and explainability for one target.
+
+
+
+10/09/2025
 - **Calibration:**  
   Check if predicted probabilities are well-calibrated (e.g., using calibration curves). If not, apply probability calibration to improve reliability of your probability estimates.
+
+# Calibration Workflow: Home 2+ Goals Model
+
+## Objectives
+- Assess if the predicted probabilities from the tuned RandomForest model for `target_home_plus_two` are well-calibrated.
+- If calibration is poor, apply probability calibration (e.g., isotonic, Platt scaling) to improve reliability.
+
+---
+
+## Steps
+
+### 1. Plot Calibration Curve
+- Use `calibration_curve` from `sklearn.calibration`.
+- Compare predicted probabilities vs. fraction of positives.
+- Plot "perfect calibration" line for reference.
+
+### 2. Quantitative Assessment
+- Optionally compute Brier score (`sklearn.metrics.brier_score_loss`).
+- Look for deviations in the calibration plot: overconfidence, underconfidence, etc.
+
+### 3. Calibration Methods
+- If calibration is poor, fit a `CalibratedClassifierCV` (method: `'isotonic'` or `'sigmoid'`).
+- Retrain calibrated model on training data.
+- Plot calibration curve for calibrated model.
+
+### 4. Evaluation
+- Compare pre- and post-calibration curves.
+- Recompute classification metrics (F1, precision, recall) at optimal threshold.
+- Note any changes in threshold or performance.
+
+### 5. Save/Export
+- Save calibration plots and key metrics for reporting.
+
 
