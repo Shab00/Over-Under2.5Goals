@@ -841,21 +841,194 @@ concentrate on home 2+ goals?
 - Compare predicted probabilities vs. fraction of positives.
 - Plot "perfect calibration" line for reference.
 
+
+    Mean predicted probabilities:
+    These are the average probabilities your model predicts within each bin (e.g., 0.17, 0.24, …, 0.91).
+    Fraction of positives:
+    These are the actual percentages of matches where the home team scored 2+ goals in each bin (e.g., 0.17, 0.27, …, 0.85).
+
+
+    If the numbers in each pair are close (e.g., 0.17 predicted, 0.17 actual), your model’s confidence matches reality.
+    If the actual is higher than predicted:
+    Your model is underconfident (being “too cautious”).
+    If the actual is lower than predicted:
+    Your model is overconfident (being “too bold”).
+
+Mean Predicted Probability	Actual Fraction of Positives	Interpretation
+0.18	0.18	Very well calibrated
+0.24	0.27	Slightly underconfident
+0.36	0.34	Well calibrated
+0.44	0.46	Well calibrated
+0.53	0.53	Perfect calibration
+0.66	0.66	Perfect calibration
+0.74	0.69	Slightly overconfident
+0.84	0.85	Well calibrated
+0.91	0.00	Badly overconfident (but likely very few samples in this bin)
+
+
+
+    For most probabilities, the model’s predictions match what actually happened.
+    When the model predicts, say, a 66% chance, it really happens about 66% of the time.
+    This means you can trust the model’s probability estimates, except maybe for very high values (above 90%), which look unreliable (possibly too few examples).
+
+
+
 ### 2. Quantitative Assessment
 - Optionally compute Brier score (`sklearn.metrics.brier_score_loss`).
 - Look for deviations in the calibration plot: overconfidence, underconfidence, etc.
+
+For sport outcome models, anything in the 0.15–0.22 range is considered pretty good unless you have a highly imbalanced dataset. Calibration can sometimes lower this further, but your model already performs well.
+
+score (0.2233) is better than random guessing:
+This shows that your probability predictions for “home team scores 2+ goals” are meaningful and useful.
+
+The Brier score tells us how close our model’s confidence matches what actually happens.
+Our score is 0.22 (on a scale where 0 is perfect and 0.25 is “just guessing”), which means our predictions are much better than random and can be trusted for decision-making.
 
 ### 3. Calibration Methods
 - If calibration is poor, fit a `CalibratedClassifierCV` (method: `'isotonic'` or `'sigmoid'`).
 - Retrain calibrated model on training data.
 - Plot calibration curve for calibrated model.
 
+Mean Predicted Probability	Actual Fraction of Positives	Interpretation
+0.09	0.00	Very few positives (likely small bin), possibly underconfident or just not enough data.
+0.16	0.15	Well calibrated.
+0.26	0.27	Well calibrated.
+0.35	0.36	Well calibrated.
+0.44	0.44	Perfect calibration.
+0.54	0.54	Perfect calibration.
+0.65	0.67	Slight underconfidence.
+0.74	0.68	Slight overconfidence.
+0.85	0.76	Slight overconfidence.
+0.94	0.73	Model is overconfident at very high probabilities (may have few samples in this bin).
+
+Summary
+
+    Most bins: Your calibrated probabilities match the actual fraction of positives closely.
+    Low and mid probabilities: Model is well calibrated.
+    High probabilities (0.85+, especially 0.94): Model tends to be a bit overconfident. This is common, especially if there are only a few samples in these bins.
+    First bin (0.09): No positives at all, but again, likely very few samples in this bin.
+
+    For most predictions, your model’s confidence is trustworthy.
+    For the highest confidence predictions, you may want to be a little cautious.
+    If you have very few samples in those bins, this is expected and not a big problem.
+    Overall: Calibration has worked well and improved reliability of your probability outputs!
+
+
 ### 4. Evaluation
 - Compare pre- and post-calibration curves.
 - Recompute classification metrics (F1, precision, recall) at optimal threshold.
-- Note any changes in threshold or performance.
+- Note any changes in threshold or performance
+
+
+    Uncalibrated Model:
+        Mean predicted probabilities and actual fractions of positives are generally close, but you have some bins (especially the highest probability bin) with zero positives—a sign of overconfidence in rare events.
+    Calibrated Model:
+        After isotonic calibration, the mean predicted probabilities track the actual outcome fractions even better across bins.
+        Calibration is improved, especially in mid-range probabilities. The highest bin still shows overconfidence, but this is often due to very few samples.
+
+Conclusion:
+Calibration improved the reliability of your probability outputs, especially in the lower and medium bins.
+
+Metric	Uncalibrated	Calibrated
+Threshold	0.32	0.30
+F1 Score	0.639	0.640
+Precision	0.496	0.496
+Recall	0.898	0.899
+
+    Threshold Shift:
+    Calibration shifted the optimal threshold slightly lower (from 0.32 to 0.30), which is expected as calibration often "spreads out" probabilities.
+    Performance:
+    F1, Precision, and Recall are essentially unchanged. This means your model’s ability to classify positives and negatives is stable, but the probabilities are now more trustworthy for decision-making.
+
+
+    Calibration improved the interpretability of the probabilities (good for downstream tasks like risk assessment or betting).
+    Classification accuracy did not change much, which is normal—calibration doesn’t make your model more accurate, just more honest about confidence.
+    You can now use thresholds and probabilities with greater trust in their meaning.
+
+
+
+    After calibration, my model’s probability estimates better match observed outcomes. The optimal threshold for classification shifted slightly, but accuracy metrics (F1, precision, recall) are unchanged. Overall, calibration has made the model’s outputs more reliable for probability-based decisions.
+
 
 ### 5. Save/Export
 - Save calibration plots and key metrics for reporting.
+saved
+
+12/09/2025
+
+# 🏆 Game Plan: Turning Model Probabilities into Business Value
+
+## 1. Define Your Scenario
+
+Pick one (or more) to focus your simulation:
+
+- **Betting Strategy:** Simulate placing bets based on your model’s predicted probabilities.
+- **Risk Scoring:** Flag matches/events as “high risk” based on probability thresholds.
+- **Decision Support:** Show when/why a user should take certain actions (bet, invest, avoid, etc).
+
+---
+
+## 2. Prepare Your Data
+
+- Use your test set (`X_test`, `y_test`, predicted probabilities).
+- (Optional) Gather additional match info to make simulation more interesting (e.g., team names, odds).
+
+---
+
+## 3. Set up Simulation Logic
+
+### For Betting:
+
+- Decide a rule:  
+  _E.g., Bet £10 if the model predicts P(goal 2+) > 0.7_
+- Assign a “win” if the actual outcome matches your prediction.
+- Track profits/losses over all test samples.
+
+### For Risk Scoring:
+
+- Set threshold(s):  
+  _E.g., Flag as “high risk” if P(goal 2+) > 0.8_
+- Count/visualize flagged events.
+
+### For Decision Support:
+
+- For each sample, output model probability and a suggested action.
+
+---
+
+## 4. Visualize & Analyze Results
+
+- Plot cumulative profit/loss (for betting).
+- Show distribution of “risk scores.”
+- Compare results with/without calibration.
+- Summarize key findings:  
+  _“Calibrated model led to X% better ROI / flagged X more high-risk matches.”_
+
+---
+
+## 5. Communicate Your Value
+
+- Write up results:  
+  _How could a business use this simulation? What’s the impact of calibration?_
+- Add example code snippets and plots to your notes.
+
+---
+
+## 6. Optional: Build a Simple App/Dashboard
+
+- Use Streamlit, Dash, or Jupyter widgets for interactivity.
+- Allow users to play with thresholds or see simulated decision outcomes.
+
+---
+
+## Checklist for Tomorrow
+
+- [ ] Pick your scenario (betting, risk, decision support)
+- [ ] Prepare your test data and probabilities
+- [ ] Implement simulation logic (betting rules, risk flagging, etc)
+- [ ] Visualize your results
+- [ ] Write up findings and business impact
+- [ ] (Optional) Build a demo/app
 
 
