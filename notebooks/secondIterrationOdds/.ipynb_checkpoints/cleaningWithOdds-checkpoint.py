@@ -1,0 +1,649 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+import pandas as pd
+import numpy as np
+import re
+import matplotlib.pyplot as plt
+import seaborn as sns
+pd.set_option('display.max_columns', None)
+
+
+# In[2]:
+
+
+filePath = '../../data/processed/combinedWithOdds.csv'
+df = pd.read_csv(filePath)
+
+
+# In[3]:
+
+
+df
+
+
+# In[4]:
+
+
+columns_to_keep = [
+    'Div', 'Date', 'Time', 'HomeTeam', 'AwayTeam', 'FTHG', 'FTAG', 'FTR',
+    'HTHG', 'HTAG', 'HTR', 'Attendance', 'Referee', 'HS', 'AS', 'HST', 'AST',
+    'HHW', 'AHW', 'HC', 'AC', 'HF', 'AF', 'HFKC', 'AFKC', 'HO', 'AO', 'HY', 'AY',
+    'HR', 'AR', '1XBH', '1XBD', '1XBA', 'B365H', 'B365D', 'B365A', 'B365>2.5', 'B365<2.5', 'B365AHH', 'B365AHA', 'B365AH',
+    'BFH', 'BFD', 'BFA', 'BFEH', 'BFED', 'BFEA', 'BFDH', 'BFDD', 'BFDA',
+    'BMGMH', 'BMGMD', 'BMGMA', 'BVH', 'BVD', 'BVA', 'VCH', 'VCD', 'VCA',
+    'BSH', 'BSD', 'BSA', 'BWH', 'BWD', 'BWA', 'CLH', 'CLD', 'CLA',
+    'GBH', 'GBD', 'GBA', 'GB>2.5', 'GB<2.5', 'GBAHH', 'GBAHA', 'GBAH',
+    'IWH', 'IWD', 'IWA', 'LBH', 'LBD', 'LBA', 'LBAHH', 'LBAHA', 'LBAH',
+    'PSH', 'PH', 'PSD', 'PD', 'PSA', 'PA', 'P>2.5', 'P<2.5', 'PAHH', 'PAHA',
+    'SOH', 'SOD', 'SOA', 'SBH', 'SBD', 'SBA', 'SJH', 'SJD', 'SJA',
+    'SYH', 'SYD', 'SYA', 'WHH', 'WHD', 'WHA',
+    'Bb1X2', 'BbMxH', 'BbAvH', 'BbMxD', 'BbAvD', 'BbMxA', 'BbAvA',
+    'BbOU', 'BbMx>2.5', 'BbAv>2.5', 'BbMx<2.5', 'BbAv<2.5',
+    'BbAH', 'BbAHh', 'BbMxAHH', 'BbAvAHH', 'BbMxAHA', 'BbAvAHA',
+    'MaxH', 'MaxD', 'MaxA', 'AvgH', 'AvgD', 'AvgA',
+    'Max>2.5', 'Max<2.5', 'Avg>2.5', 'Avg<2.5',
+    'MaxAHH', 'MaxAHA', 'AvgAHH', 'AvgAHA', 'AHh'
+]
+
+df = df[[col for col in columns_to_keep if col in df.columns]]
+
+
+# In[5]:
+
+
+drop_cols = ['Time', 'Attendance', 'HHW', 'AHW', 'HO', 'AO', 'Div']
+df = df.drop(columns=[c for c in drop_cols if c in df.columns], errors='ignore')
+
+
+# In[6]:
+
+
+def date_format_type(date_str):
+    if not isinstance(date_str, str):
+        return "not_a_string"
+    patterns = {
+        "%d/%m/%y": r"^\d{2}/\d{2}/\d{2}$",
+        "%d/%m/%Y": r"^\d{2}/\d{2}/\d{4}$",
+        "%Y-%m-%d": r"^\d{4}-\d{2}-\d{2}$",
+        "%m-%d-%Y": r"^\d{2}-\d{2}-\d{4}$",
+        "%Y/%m/%d": r"^\d{4}/\d{2}/\d{2}$",
+    }
+    for fmt, pat in patterns.items():
+        if re.match(pat, date_str):
+            return fmt
+    return "unknown"
+
+
+# In[7]:
+
+
+df['DateFormat'] = df['Date'].apply(date_format_type)
+def parse_dates(row):
+    date_str = row['Date']
+    if isinstance(date_str, str):
+        try:
+            return pd.to_datetime(date_str, format='%d/%m/%y')
+        except ValueError:
+            try:
+                return pd.to_datetime(date_str, format='%d/%m/%Y')
+            except ValueError:
+                return pd.NaT
+    else:
+        return pd.NaT
+
+df['Date'] = df.apply(parse_dates, axis=1)
+df = df.drop(columns=['DateFormat'], errors='ignore')
+df = df[df['Date'] >= pd.Timestamp('2000-08-18')]
+df = df.reset_index(drop=True)
+
+def get_season(date):
+    if pd.isnull(date):
+        return np.nan
+    year = date.year
+    month = date.month
+    if month >= 8: 
+        return f"{year}-{str(year+1)[-2:]}"
+    else:
+        return f"{year-1}-{str(year)[-2:]}"
+df['Season'] = df['Date'].apply(get_season)
+df['Year'] = df['Date'].dt.year
+df['Month'] = df['Date'].dt.month
+df['DayOfWeek'] = df['Date'].dt.dayofweek
+
+
+# In[8]:
+
+
+df
+
+
+# In[9]:
+
+
+odds_cols = [
+    'B365H', 'B365D', 'B365A', 'B365>2.5', 'B365<2.5', 'B365AHH', 'B365AHA', 'B365AH',
+    'IWH', 'IWD', 'IWA',
+    'WHH', 'WHD', 'WHA',
+    'PSH', 'PSD', 'PSA', 'PH', 'PD', 'PA', 'P>2.5', 'P<2.5', 'PAHH', 'PAHA',
+    'LBH', 'LBD', 'LBA', 'LBAHH', 'LBAHA', 'LBAH',
+    'GBH', 'GBD', 'GBA', 'GB>2.5', 'GB<2.5', 'GBAHH', 'GBAHA', 'GBAH',
+    'BVH', 'BVD', 'BVA', 'VCH', 'VCD', 'VCA',
+    '1XBH', '1XBD', '1XBA',
+    'BWH', 'BWD', 'BWA',
+    'SOH', 'SOD', 'SOA',
+    'SBH', 'SBD', 'SBA',
+    'CLH', 'CLD', 'CLA',
+    'BMGMH', 'BMGMD', 'BMGMA',
+    'BFDH', 'BFDD', 'BFDA',
+    'BFH', 'BFD', 'BFA', 'BFEH', 'BFED', 'BFEA',
+    'SYH', 'SYD', 'SYA',
+    'SJH', 'SJD', 'SJA',
+    'BSH', 'BSD', 'BSA',
+    'BbMxH', 'BbAvH', 'BbMxD', 'BbAvD', 'BbMxA', 'BbAvA', 'BbOU', 'BbMx>2.5', 'BbAv>2.5', 'BbMx<2.5', 'BbAv<2.5',
+    'BbAH', 'BbAHh', 'BbMxAHH', 'BbAvAHH', 'BbMxAHA', 'BbAvAHA',
+    'MaxH', 'MaxD', 'MaxA', 'AvgH', 'AvgD', 'AvgA',
+    'Max>2.5', 'Max<2.5', 'Avg>2.5', 'Avg<2.5',
+    'MaxAHH', 'MaxAHA', 'AvgAHH', 'AvgAHA', 'AHh'
+]
+
+score_cols = [
+    'FTHG', 'FTAG', 'HTHG', 'HTAG', 'HS', 'AS', 'HST', 'AST',  
+    'HC', 'AC', 'HF', 'AF', 'HY', 'AY', 'HR', 'AR'
+]
+
+
+# In[10]:
+
+
+for col in odds_cols + score_cols:
+    if col in df.columns:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+
+df = df.drop_duplicates()
+
+
+# In[11]:
+
+
+df
+
+
+# In[12]:
+
+
+essential_odds = ['B365H', 'B365D', 'B365A', 'WHH', 'WHD', 'WHA', 'IWH', 'IWD', 'IWA']
+
+core_odds = [
+    'B365H', 'B365D', 'B365A', 'B365>2.5', 'B365<2.5', 'B365AHH', 'B365AHA', 'B365AH',
+    'IWH', 'IWD', 'IWA',
+    'WHH', 'WHD', 'WHA',
+    'PSH', 'PSD', 'PSA', 'PH', 'PD', 'PA', 'P>2.5', 'P<2.5', 'PAHH', 'PAHA',
+    'LBH', 'LBD', 'LBA', 'LBAHH', 'LBAHA', 'LBAH',
+    'GBH', 'GBD', 'GBA', 'GB>2.5', 'GB<2.5', 'GBAHH', 'GBAHA', 'GBAH',
+    'BVH', 'BVD', 'BVA', 'VCH', 'VCD', 'VCA',
+    '1XBH', '1XBD', '1XBA',
+    'BWH', 'BWD', 'BWA',
+    'SOH', 'SOD', 'SOA',
+    'SBH', 'SBD', 'SBA',
+    'CLH', 'CLD', 'CLA',
+    'BMGMH', 'BMGMD', 'BMGMA',
+    'BFDH', 'BFDD', 'BFDA',
+    'BFH', 'BFD', 'BFA', 'BFEH', 'BFED', 'BFEA',
+    'SYH', 'SYD', 'SYA',
+    'SJH', 'SJD', 'SJA',
+    'BSH', 'BSD', 'BSA',
+    'BbMxH', 'BbAvH', 'BbMxD', 'BbAvD', 'BbMxA', 'BbAvA', 'BbOU', 'BbMx>2.5', 'BbAv>2.5', 'BbMx<2.5', 'BbAv<2.5',
+    'BbAH', 'BbAHh', 'BbMxAHH', 'BbAvAHH', 'BbMxAHA', 'BbAvAHA',
+    'MaxH', 'MaxD', 'MaxA', 'AvgH', 'AvgD', 'AvgA',
+    'Max>2.5', 'Max<2.5', 'Avg>2.5', 'Avg<2.5',
+    'MaxAHH', 'MaxAHA', 'AvgAHH', 'AvgAHA', 'AHh'
+]
+
+def clean_odds_dataframe(df, essential_odds, core_odds, fill_method='mean'):
+    essentials = [col for col in essential_odds if col in df.columns]
+    df = df.dropna(subset=essentials).reset_index(drop=True)
+   
+    for col in core_odds:
+        if col in df.columns:
+            if fill_method == 'mean':
+                fill_value = df[col].mean()
+            elif fill_method == 'median':
+                fill_value = df[col].median()
+            elif fill_method == 'zero':
+                fill_value = 0
+            elif fill_method == 'negone':
+                fill_value = -1
+            else:
+                fill_value = None
+            if fill_value is not None:
+                df[col] = df[col].fillna(fill_value)
+    return df
+
+df = clean_odds_dataframe(df, essential_odds, core_odds, fill_method='mean')
+df = df.reset_index(drop=True)
+
+
+# In[13]:
+
+
+df
+
+
+# In[14]:
+
+
+df['TotalGoals'] = df['FTHG'] + df['FTAG']
+df['GoalsOver2_5'] = (df['TotalGoals'] > 2.5).astype(int)
+df['BTTS'] = ((df['FTHG'] > 0) & (df['FTAG'] > 0)).astype(int)
+df['Home_2plus'] = (df['FTHG'] >= 2).astype(int)
+df['Away_2plus'] = (df['FTAG'] >= 2).astype(int)
+
+
+# In[15]:
+
+
+df = df.sort_values('Date')
+df['HomeTeam_mean_FTHG'] = (
+    df.groupby('HomeTeam')['FTHG'].transform(lambda x: x.shift(1).expanding().mean())
+)
+df['AwayTeam_mean_FTAG'] = (
+    df.groupby('AwayTeam')['FTAG'].transform(lambda x: x.shift(1).expanding().mean())
+)
+
+
+# In[16]:
+
+
+df['HomeTeam_str'] = df['HomeTeam']
+df['AwayTeam_str'] = df['AwayTeam']
+df = pd.get_dummies(df, columns=['HomeTeam', 'AwayTeam'])
+df = df.rename(columns={'HomeTeam_str': 'HomeTeam', 'AwayTeam_str': 'AwayTeam'})
+
+
+# In[17]:
+
+
+df
+
+
+# In[18]:
+
+
+def add_recent_form_features(df, n_matches=5):
+    base = df.copy()
+    base = base.sort_values('Date')
+    home_df = base[['Date', 'HomeTeam', 'FTHG', 'FTAG']].rename(
+        columns={'HomeTeam': 'Team', 'FTHG': 'GoalsFor', 'FTAG': 'GoalsAgainst'})
+    away_df = base[['Date', 'AwayTeam', 'FTAG', 'FTHG']].rename(
+        columns={'AwayTeam': 'Team', 'FTAG': 'GoalsFor', 'FTHG': 'GoalsAgainst'})
+    results = pd.concat([home_df, away_df], ignore_index=True)
+    results = results.sort_values(['Team', 'Date'])
+   
+    def get_points(row):
+        return 3 if row['GoalsFor'] > row['GoalsAgainst'] else (1 if row['GoalsFor'] == row['GoalsAgainst'] else 0)
+    results['Points'] = results.apply(get_points, axis=1)
+    results['RollingGF'] = results.groupby('Team')['GoalsFor'].transform(lambda x: x.shift(1).rolling(n_matches, min_periods=1).mean())
+    results['RollingGA'] = results.groupby('Team')['GoalsAgainst'].transform(lambda x: x.shift(1).rolling(n_matches, min_periods=1).mean())
+    results['RollingPoints'] = results.groupby('Team')['Points'].transform(lambda x: x.shift(1).rolling(n_matches, min_periods=1).sum())
+  
+    def get_form(row, team_col):
+        team = row[team_col]
+        date = row['Date']
+        row_form = results[(results['Team'] == team) & (results['Date'] < date)].sort_values('Date').tail(1)
+        if row_form.empty:
+            return pd.Series([np.nan, np.nan, np.nan])
+        return row_form[['RollingGF', 'RollingGA', 'RollingPoints']].values[0]
+    base[['HomeRecentGF', 'HomeRecentGA', 'HomeRecentPts']] = base.apply(
+        lambda row: get_form(row, 'HomeTeam'), axis=1, result_type='expand')
+    base[['AwayRecentGF', 'AwayRecentGA', 'AwayRecentPts']] = base.apply(
+        lambda row: get_form(row, 'AwayTeam'), axis=1, result_type='expand')
+    return base
+
+df = add_recent_form_features(df, n_matches=5)
+df = df.dropna(subset=['HomeRecentGF', 'AwayRecentGF'])
+
+
+# In[19]:
+
+
+df
+
+
+# In[20]:
+
+
+df = df.sort_values('Date')
+h2h_home_wins = []
+team_stats = {}
+home_positions = []
+away_positions = []
+for idx, row in df.iterrows():
+    home = row['HomeTeam']
+    away = row['AwayTeam']
+    match_date = row['Date']
+    prev_matches = df[
+        (((df['HomeTeam'] == home) & (df['AwayTeam'] == away)) |
+         ((df['HomeTeam'] == away) & (df['AwayTeam'] == home)))
+        & (df['Date'] < match_date)
+    ].sort_values('Date', ascending=False).head(5)
+    home_wins = ((prev_matches['HomeTeam'] == home) & (prev_matches['FTHG'] > prev_matches['FTAG'])).sum()
+    h2h_home_wins.append(home_wins)
+
+    league_table = []
+    for team, stats in team_stats.items():
+        league_table.append({
+            'team': team,
+            'points': stats['points'],
+            'gd': stats['gd'],
+            'scored': stats['scored']
+        })
+    table_df = pd.DataFrame(league_table)
+    if not table_df.empty:
+        table_df = table_df.sort_values(['points', 'gd', 'scored'], ascending=[False, False, False])
+        table_df['position'] = range(1, len(table_df) + 1)
+        home_pos = table_df[table_df['team'] == home]['position'].values[0] if home in table_df['team'].values else len(table_df) + 1
+        away_pos = table_df[table_df['team'] == away]['position'].values[0] if away in table_df['team'].values else len(table_df) + 1
+    else:
+        home_pos = away_pos = 1
+    home_positions.append(home_pos)
+    away_positions.append(away_pos)
+  
+    home_goals = row['FTHG']
+    away_goals = row['FTAG']
+    for team in [home, away]:
+        if team not in team_stats:
+            team_stats[team] = {'points': 0, 'gd': 0, 'scored': 0}
+    if home_goals > away_goals:
+        team_stats[home]['points'] += 3
+    elif home_goals < away_goals:
+        team_stats[away]['points'] += 3
+    else:
+        team_stats[home]['points'] += 1
+        team_stats[away]['points'] += 1
+    team_stats[home]['gd'] += home_goals - away_goals
+    team_stats[away]['gd'] += away_goals - home_goals
+    team_stats[home]['scored'] += home_goals
+    team_stats[away]['scored'] += away_goals
+
+df['h2h_home_wins_last5'] = h2h_home_wins
+df['home_league_position'] = home_positions
+df['away_league_position'] = away_positions
+df['position_diff'] = df['home_league_position'] - df['away_league_position']
+
+
+# In[21]:
+
+
+df
+
+
+# In[22]:
+
+
+N = 5
+df['HomePts'] = np.where(df['FTHG'] > df['FTAG'], 3, np.where(df['FTHG'] == df['FTAG'], 1, 0))
+df['AwayPts'] = np.where(df['FTAG'] > df['FTHG'], 3, np.where(df['FTAG'] == df['FTHG'], 1, 0))
+df['HomeRecentPts'] = (
+    df.groupby('HomeTeam')['HomePts'].transform(lambda x: x.shift(1).rolling(N, min_periods=1).sum())
+)
+df['AwayRecentPts'] = (
+    df.groupby('AwayTeam')['AwayPts'].transform(lambda x: x.shift(1).rolling(N, min_periods=1).sum())
+)
+df['HomeGoalDiff'] = df['FTHG'] - df['FTAG']
+df['AwayGoalDiff'] = df['FTAG'] - df['FTHG']
+df['HomeRecentGoalDiff'] = (
+    df.groupby('HomeTeam')['HomeGoalDiff'].transform(lambda x: x.shift(1).rolling(N, min_periods=1).sum())
+)
+df['AwayRecentGoalDiff'] = (
+    df.groupby('AwayTeam')['AwayGoalDiff'].transform(lambda x: x.shift(1).rolling(N, min_periods=1).sum())
+)
+df['RecentGoalDiff'] = df['HomeRecentGoalDiff'] - df['AwayRecentGoalDiff']
+df['HomeRecentShotsOnTarget'] = (
+    df.groupby('HomeTeam')['HST'].transform(lambda x: x.shift(1).rolling(N, min_periods=1).sum())
+)
+df['AwayRecentShotsOnTarget'] = (
+    df.groupby('AwayTeam')['AST'].transform(lambda x: x.shift(1).rolling(N, min_periods=1).sum())
+)
+df['RecentShotsOnTargetDiff'] = df['HomeRecentShotsOnTarget'] - df['AwayRecentShotsOnTarget']
+df['PosDiff'] = df['home_league_position'] - df['away_league_position']
+
+for col in ['B365>2.5', 'B365<2.5']:
+    median = df[col].median()
+    df[f'{col}_missing'] = df[col].isna().astype(int)
+    df[col] = df[col].fillna(median)
+
+df['B365>2.5_implied_prob'] = 1 / df['B365>2.5']
+df['B365<2.5_implied_prob'] = 1 / df['B365<2.5']
+df['OddsMargin'] = df['B365H'] / df['B365A']
+df['OU_OddsMargin'] = df['B365>2.5'] / df['B365<2.5']
+df['OverUnderRatio'] = df['B365>2.5'] / df['B365<2.5']
+
+df['Weekend'] = df['DayOfWeek'].isin([5, 6]).astype(int)
+df['EarlySeason'] = (df['Month'] <= 3).astype(int)
+
+
+# In[23]:
+
+
+df
+
+
+# In[24]:
+
+
+def rolling_ref_aggression(subdf):
+    agg = subdf[['HY', 'AY', 'HR', 'AR']].shift(1).sum(axis=1)
+    return agg.rolling(10, min_periods=1).mean()
+df = df.sort_values('Date')
+df['RefereeAggression'] = (
+    df.groupby('Referee').apply(lambda subdf: rolling_ref_aggression(subdf)).reset_index(level=0, drop=True)
+)
+
+df = df.replace([np.inf, -np.inf], np.nan)
+for col in df.select_dtypes(include=['number']):
+    df[col] = df[col].fillna(df[col].median())
+for col in df.select_dtypes(include=['object', 'category']):
+    df[col] = df[col].fillna(df[col].mode()[0])
+
+df = df.drop_duplicates().reset_index(drop=True)
+
+
+# In[25]:
+
+
+df
+
+
+# In[26]:
+
+
+threshold = 0.95 
+df = df.loc[:, df.isnull().mean() < threshold]
+
+
+# In[27]:
+
+
+df
+
+
+# In[28]:
+
+
+#pd.set_option('display.max_rows', None)
+pd.reset_option('display.max_rows')
+print("Shape of df:", df.shape)
+
+missing_counts = df.isnull().sum().sort_values(ascending=False)
+print("\nMissing values per column:")
+print(missing_counts)
+
+missing_perc = (df.isnull().mean() * 100).sort_values(ascending=False)
+print("\nPercentage missing per column:")
+print(missing_perc)
+
+high_nan_cols = missing_perc[missing_perc > 95].index.tolist()
+print("\nColumns with >95% missing values:", high_nan_cols)
+
+print(f"\nTotal columns: {df.shape[1]}")
+print(f"Columns with no missing: {(missing_counts==0).sum()}")
+print(f"Columns with >50% missing: {(missing_perc > 50).sum()}")
+
+
+# In[29]:
+
+
+print("All columns in df:")
+print(df.columns.tolist())
+
+
+# In[30]:
+
+
+odds_key = [
+    "1XBH", "1XBD", "1XBA", "B365H", "B365D", "B365A", "BFH", "BFD", "BFA", "BFDH", "BFDD", "BFDA", "BMGMH", "BMGMD", "BMGMA",
+    "BVH", "BVD", "BVA", "BSH", "BSD", "BSA", "BWH", "BWD", "BWA", "CLH", "CLD", "CLA", "GBH", "GBD", "GBA", "IWH", "IWD", "IWA",
+    "LBH", "LBD", "LBA", "PSH", "PSD", "PSA", "PH", "PD", "PA", "SOH", "SOD", "SOA", "SBH", "SBD", "SBA", "SJH", "SJD", "SJA",
+    "SYH", "SYD", "SYA", "VCH", "VCD", "VCA", "WHH", "WHD", "WHA", "Bb1X2", "BbMxH", "BbAvH", "BbMxD", "BbAvD", "BbMxA", "BbAvA",
+    "MaxH", "MaxD", "MaxA", "AvgH", "AvgD", "AvgA", "BFEH", "BFED", "BFEA",
+    "BbOU", "BbMx>2.5", "BbAv>2.5", "BbMx<2.5", "BbAv<2.5", "GB>2.5", "GB<2.5", "B365>2.5", "B365<2.5", "P>2.5", "P<2.5",
+    "Max>2.5", "Max<2.5", "Avg>2.5", "Avg<2.5",
+    "BbAH", "BbAHh", "AHh", "BbMxAHH", "BbAvAHH", "BbMxAHA", "BbAvAHA", "GBAHH", "GBAHA", "GBAH",
+    "LBAHH", "LBAHA", "LBAH", "B365AHH", "B365AHA", "B365AH", "PAHH", "PAHA", "MaxAHH", "MaxAHA", "AvgAHH", "AvgAHA"
+]
+
+odds_in_df = [col for col in odds_key if col in df.columns]
+print("Betting odds columns present in your DataFrame:")
+print(odds_in_df)
+
+odds_missing = [col for col in odds_key if col not in df.columns]
+print("\nBetting odds columns missing from your DataFrame:")
+print(odds_missing)
+
+
+# In[31]:
+
+
+df = df.copy()
+
+if 'B365H_prob' not in df.columns:
+    df.loc[:, 'B365H_prob'] = 1 / df['B365H']
+if 'B365D_prob' not in df.columns:
+    df.loc[:, 'B365D_prob'] = 1 / df['B365D']
+if 'B365A_prob' not in df.columns:
+    df.loc[:, 'B365A_prob'] = 1 / df['B365A']
+
+if not all(col in df.columns for col in ['B365H_prob_norm', 'B365D_prob_norm', 'B365A_prob_norm']):
+    prob_sum = df['B365H_prob'] + df['B365D_prob'] + df['B365A_prob']
+    df.loc[:, 'B365H_prob_norm'] = df['B365H_prob'] / prob_sum
+    df.loc[:, 'B365D_prob_norm'] = df['B365D_prob'] / prob_sum
+    df.loc[:, 'B365A_prob_norm'] = df['B365A_prob'] / prob_sum
+
+home_win_cols = ['B365H', 'BSH', 'BWH', 'GBH', 'IWH', 'LBH', 'PSH', 'SOH', 'SBH', 'SJH', 'VCH', 'WHH']
+draw_cols = ['B365D', 'BSD', 'BWD', 'GBD', 'IWD', 'LBD', 'PSD', 'SOD', 'SBD', 'SJD', 'VCD', 'WHD']
+away_win_cols = ['B365A', 'BSA', 'BWA', 'GBA', 'IWA', 'LBA', 'PSA', 'SOA', 'SBA', 'SJA', 'VCA', 'WHA']
+
+for feat, cols in zip(['cons_mean_home', 'cons_mean_draw', 'cons_mean_away'], [home_win_cols, draw_cols, away_win_cols]):
+    if feat not in df.columns:
+        df.loc[:, feat] = df[cols].mean(axis=1)
+
+for feat, cols in zip(['cons_min_home', 'cons_min_draw', 'cons_min_away'], [home_win_cols, draw_cols, away_win_cols]):
+    if feat not in df.columns:
+        df.loc[:, feat] = df[cols].min(axis=1)
+
+for feat, cols in zip(['cons_max_home', 'cons_max_draw', 'cons_max_away'], [home_win_cols, draw_cols, away_win_cols]):
+    if feat not in df.columns:
+        df.loc[:, feat] = df[cols].max(axis=1)
+
+if 'home_odds_spread' not in df.columns:
+    df.loc[:, 'home_odds_spread'] = df['cons_max_home'] - df['cons_min_home']
+if 'draw_odds_spread' not in df.columns:
+    df.loc[:, 'draw_odds_spread'] = df['cons_max_draw'] - df['cons_min_draw']
+if 'away_odds_spread' not in df.columns:
+    df.loc[:, 'away_odds_spread'] = df['cons_max_away'] - df['cons_min_away']
+
+if 'B365_overround' not in df.columns:
+    df.loc[:, 'B365_overround'] = (1 / df['B365H']) + (1 / df['B365D']) + (1 / df['B365A'])
+if 'cons_overround' not in df.columns:
+    df.loc[:, 'cons_overround'] = (1 / df['cons_mean_home']) + (1 / df['cons_mean_draw']) + (1 / df['cons_mean_away'])
+
+ou_cols_over = ['BbMx>2.5', 'BbAv>2.5', 'GB>2.5', 'B365>2.5', 'P>2.5', 'Max>2.5', 'Avg>2.5']
+ou_cols_under = ['BbMx<2.5', 'BbAv<2.5', 'GB<2.5', 'B365<2.5', 'P<2.5', 'Max<2.5', 'Avg<2.5']
+
+if 'cons_mean_over2.5' not in df.columns:
+    df.loc[:, 'cons_mean_over2.5'] = df[ou_cols_over].mean(axis=1)
+if 'cons_mean_under2.5' not in df.columns:
+    df.loc[:, 'cons_mean_under2.5'] = df[ou_cols_under].mean(axis=1)
+if 'cons_over2.5_prob' not in df.columns:
+    df.loc[:, 'cons_over2.5_prob'] = 1 / df['cons_mean_over2.5']
+if 'cons_under2.5_prob' not in df.columns:
+    df.loc[:, 'cons_under2.5_prob'] = 1 / df['cons_mean_under2.5']
+
+ah_home_cols = ['BbMxAHH', 'BbAvAHH', 'GBAHH', 'LBAHH', 'B365AHH', 'PAHH', 'MaxAHH', 'AvgAHH']
+ah_away_cols = ['BbMxAHA', 'BbAvAHA', 'GBAHA', 'LBAHA', 'B365AHA', 'PAHA', 'MaxAHA', 'AvgAHA']
+if all(col in df.columns for col in ah_home_cols) and 'mean_AH_home' not in df.columns:
+    df.loc[:, 'mean_AH_home'] = df[ah_home_cols].mean(axis=1)
+if all(col in df.columns for col in ah_away_cols) and 'mean_AH_away' not in df.columns:
+    df.loc[:, 'mean_AH_away'] = df[ah_away_cols].mean(axis=1)
+if 'AHh' in df.columns and 'market_AHh' not in df.columns:
+    df.loc[:, 'market_AHh'] = df['AHh']
+
+if 'target_home_plus_two' not in df.columns and 'FTHG' in df.columns:
+    df.loc[:, 'target_home_plus_two'] = (df['FTHG'] >= 2).astype(int)
+if 'target_away_plus_two' not in df.columns and 'FTAG' in df.columns:
+    df.loc[:, 'target_away_plus_two'] = (df['FTAG'] >= 2).astype(int)
+
+if 'home_away_odds_ratio' not in df.columns:
+    df.loc[:, 'home_away_odds_ratio'] = df['cons_mean_home'] / df['cons_mean_away']
+
+
+# In[32]:
+
+
+df
+
+
+# In[33]:
+
+
+#pd.set_option('display.max_rows', None)
+pd.reset_option('display.max_rows')
+print("Shape of df:", df.shape)
+
+missing_counts = df.isnull().sum().sort_values(ascending=False)
+print("\nMissing values per column:")
+print(missing_counts)
+
+missing_perc = (df.isnull().mean() * 100).sort_values(ascending=False)
+print("\nPercentage missing per column:")
+print(missing_perc)
+
+high_nan_cols = missing_perc[missing_perc > 95].index.tolist()
+print("\nColumns with >95% missing values:", high_nan_cols)
+
+print(f"\nTotal columns: {df.shape[1]}")
+print(f"Columns with no missing: {(missing_counts==0).sum()}")
+print(f"Columns with >50% missing: {(missing_perc > 50).sum()}")
+
+
+# In[35]:
+
+
+df.to_csv("../../data/processed/engineered_betting_features.csv", index=False)
+
+
+# In[36]:
+
+
+df.columns.tolist()
+
+
+# In[ ]:
+
+
+
+
