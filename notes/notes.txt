@@ -955,7 +955,7 @@ Recall	0.898	0.899
 - Save calibration plots and key metrics for reporting.
 saved
 
-12/09/2025 - 21/09/2025
+12/09/2025 - 23/09/2025
 
 # 🏆 Game Plan: Turning Model Probabilities into Business Value
 
@@ -972,7 +972,6 @@ Bet £10 if P(goal 2+) > 0.7
 ## 2. Prepare Your Data
 
 - Use your test set (`X_test`, `y_test`, predicted probabilities).
-- (Optional) Gather additional match info to make simulation more interesting (e.g., team names, odds).
 
 ---
 
@@ -1006,29 +1005,86 @@ Bet £10 if P(goal 2+) > 0.7
   _“Calibrated model led to X% better ROI / flagged X more high-risk matches.”_
 
 ---
+## Checklist for Tomorrow
+
+- [x] Pick your scenario (betting, risk, decision support)
+- [x] Prepare your test data and probabilities
+- [x] Implement simulation logic (betting rules, risk flagging, etc)
+- [x] Visualize your results
+
+
+24-09-2025 -> 26-09-2025
+## 1. Define Your Scenario
+
+**Chosen Focus:**  
+- [x] **Betting Strategy:** Simulate placing bets based on model-predicted probabilities for "Home 2+ goals".
+- [ ] Risk Scoring
+- [ ] Decision Support
+
+**Betting Rule:**  
+- Bet £10 if model predicts P(Home scores 2+) > 0.7
+
+---
+
+## 2. Prepare Your Data
+
+- Use your evaluation/test set (e.g. `eval_df_clean` or `X_test`, `y_test`) **with predicted probabilities** from your Random Forest model.
+- Ensure you have the actual outcome column (e.g., `Home_2plus_actual` or similar).
+
+---
+
+## 3. Set up Simulation Logic
+
+### Betting Simulation Steps
+
+1. **Select Bets:**  
+   - For each row, if `Home_2plus_prob > 0.7`, place a £10 bet.
+
+2. **Determine Outcome:**  
+   - If actual outcome is `1` (home team scores 2+), you win.  
+   - If actual outcome is `0`, you lose the stake.
+
+3. **Calculate Profit/Loss:**
+   - For a win: profit = bet amount × (odds - 1)
+   - For a loss: profit = -bet amount  
+   - Use bookmaker odds if available (e.g., `B365>2.5`), otherwise assume even odds for simulation.
+
+4. **Track Total and Cumulative Profit/Loss.**
 
 ## 5. Communicate Your Value
 
-- Write up results:  
-  _How could a business use this simulation? What’s the impact of calibration?_
-- Add example code snippets and plots to your notes.
+- **Key Questions to Address:**
+  - How profitable is this strategy?
+  - How many bets were placed? What was the win rate?
+  - What’s the average return per bet?
+  - **Business Implications:** Could a bookmaker, bettor, or analyst use this to improve decisions?
+
+- **Write up findings:**  
+  _“Using a threshold of 0.7, our model placed X bets, won Y, and achieved a total profit/loss of £Z over the period. This demonstrates [potential value/business impact].”_
 
 ---
 
-## 6. Optional: Build a Simple App/Dashboard
+## 6. (Optional) Build a Simple App/Dashboard
 
-- Use Streamlit, Dash, or Jupyter widgets for interactivity.
-- Allow users to play with thresholds or see simulated decision outcomes.
+- Use Streamlit, Dash, or Jupyter widgets to:
+  - Adjust the probability threshold
+  - See live results and profit curves
 
 ---
 
-## Checklist for Tomorrow
+## Checklist (for Tomorrow)
 
-- [ ] Pick your scenario (betting, risk, decision support)
-- [ ] Prepare your test data and probabilities
-- [ ] Implement simulation logic (betting rules, risk flagging, etc)
-- [ ] Visualize your results
+- [x] Pick your scenario (betting, risk, decision support)
+- [x] Prepare your test data and probabilities
+- [x] Implement simulation logic (betting rules, risk flagging, etc)
+- [x] Visualize your results
 - [ ] Write up findings and business impact
 - [ ] (Optional) Build a demo/app
 
+---
 
+## Next Steps
+
+- [ ] Try different thresholds (e.g., >0.6, >0.8) and compare results.
+- [ ] Test with calibrated probabilities if available.
+- [ ] Prepare a business summary and visuals for presentation.
