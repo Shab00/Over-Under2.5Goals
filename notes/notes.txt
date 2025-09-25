@@ -1013,7 +1013,19 @@ Bet £10 if P(goal 2+) > 0.7
 - [x] Visualize your results
 
 
-24-09-2025 -> 26-09-2025
+VFG# 🏆 Game Plan: Model Probabilities to Business Value  
+**Project Sprint: 26-09-2025 → 05-10-2025 (8 days, working every third day due to holiday)**
+
+---
+
+## 📆 Schedule
+
+- **Holiday period:** 26 Sept – 5 Oct 2025
+- **Work days:** Every third day (e.g., 26th, 29th, 2nd, 5th)
+- **Goal:** Progress with focused sprints, keep momentum without burning out.
+
+---
+
 ## 1. Define Your Scenario
 
 **Chosen Focus:**  
@@ -1033,7 +1045,7 @@ Bet £10 if P(goal 2+) > 0.7
 
 ---
 
-## 3. Set up Simulation Logic
+## 3. Set up Simulation Logic (on working days)
 
 ### Betting Simulation Steps
 
@@ -1050,6 +1062,15 @@ Bet £10 if P(goal 2+) > 0.7
    - Use bookmaker odds if available (e.g., `B365>2.5`), otherwise assume even odds for simulation.
 
 4. **Track Total and Cumulative Profit/Loss.**
+
+---
+
+## 4. Visualize & Analyze Results (whenever you work)
+
+- Plot cumulative profit/loss.
+- Show summary stats (number of bets, win rate, ROI).
+
+---
 
 ## 5. Communicate Your Value
 
@@ -1072,7 +1093,7 @@ Bet £10 if P(goal 2+) > 0.7
 
 ---
 
-## Checklist (for Tomorrow)
+## Checklist (for Working Days)
 
 - [x] Pick your scenario (betting, risk, decision support)
 - [x] Prepare your test data and probabilities
@@ -1088,3 +1109,10 @@ Bet £10 if P(goal 2+) > 0.7
 - [ ] Try different thresholds (e.g., >0.6, >0.8) and compare results.
 - [ ] Test with calibrated probabilities if available.
 - [ ] Prepare a business summary and visuals for presentation.
+- [ ] Optional: Use working days to review, reflect, and iterate after each session.
+
+---
+
+**Tip:**  
+- Use your off days to recharge, but jot down any ideas or insights if they pop up!
+- On working days, focus on one or two checklist items to ensure meaningful progress.
