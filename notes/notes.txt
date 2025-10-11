@@ -1099,20 +1099,90 @@ VFG# 🏆 Game Plan: Model Probabilities to Business Value
 - [x] Prepare your test data and probabilities
 - [x] Implement simulation logic (betting rules, risk flagging, etc)
 - [x] Visualize your results
-- [ ] Write up findings and business impact
-- [ ] (Optional) Build a demo/app
+
+# 🏆 Game Plan: HomeWin Model—Final Pivot & Business Simulation
+
+**Sprint Period:** 11-10-2025 → 21-10-2025 (last push to maximize HomeWin predictive power)
 
 ---
 
-## Next Steps
+## 1. **Final Pivot: HomeWin Prediction**
 
-- [ ] Try different thresholds (e.g., >0.6, >0.8) and compare results.
-- [ ] Test with calibrated probabilities if available.
-- [ ] Prepare a business summary and visuals for presentation.
-- [ ] Optional: Use working days to review, reflect, and iterate after each session.
+- **Objective:**  
+  - Refocus all modeling and business simulation on predicting "HomeWin" (home team wins) for football matches.
+  - Use all engineered features, market odds, team encoding, recent form, and contextual variables.
+
+- **Key Goal:**  
+  - Push model accuracy as close to **70%** as possible for HomeWin.
+  - Benchmark against previous iterations and market odds.
 
 ---
 
-**Tip:**  
-- Use your off days to recharge, but jot down any ideas or insights if they pop up!
-- On working days, focus on one or two checklist items to ensure meaningful progress.
+## 2. **Modeling & Optimization Tasks**
+
+- [x] Train Random Forest on "HomeWin" (done; current accuracy ~67%).
+- [ ] **Threshold Optimization:**  
+  - Tune decision threshold for maximum accuracy (not just F1).
+- [ ] **Feature Engineering:**  
+  - Experiment with consensus odds, bookmaker spreads, odds ratios.
+  - Remove noisy features, highlight top predictors.
+- [ ] **Model Tuning:**  
+  - Try XGBoost, LightGBM, or model stacking for marginal gains.
+  - Use stratified cross-validation for robust accuracy.
+- [ ] **Calibration:**  
+  - Calibrate predicted probabilities (isotonic, Platt scaling).
+- [ ] **Error Analysis:**  
+  - Review misclassified matches, check for potential improvements.
+
+---
+
+## 3. **Business Scenario Simulation**
+
+**Betting Strategy:**
+- Bet £10 if model predicts P(HomeWin) > chosen threshold (e.g., 0.7).
+- Use bookmaker odds (e.g., `B365H`) for payout calculation.
+- Track win/loss, cumulative profit, ROI, number of bets placed.
+
+**Analysis:**
+- Compare profit curves at different thresholds.
+- Summarize win rate, average return per bet.
+- Benchmark against naive strategies (e.g., always bet on home, always bet favorite).
+
+---
+
+## 4. **Visualization & Communication**
+
+- [ ] Plot cumulative profit/loss and accuracy over time.
+- [ ] Display distribution of predicted probabilities vs. actual outcomes.
+- [ ] Report key business metrics:
+    - Total number of bets
+    - Win rate
+    - ROI
+    - "Best threshold" for business value
+
+---
+
+## 5. **Final Write-Up & Recommendations**
+
+- **Key Findings:**  
+  - "With tuned threshold and optimized model, HomeWin prediction reached XX% accuracy (aim: 70%) over the evaluation period."
+  - "Simulated betting strategy yielded [profit/loss], demonstrating [potential/business impact]."
+  - "Next steps: deploy as decision support or betting tool, test in live environment."
+
+---
+
+## **Checklist for Sprint (11-10-2025 → 21-10-2025)**
+
+- [x] Pivot all modeling to HomeWin
+- [x] Train and tune RF/XGB models
+- [x] Optimize threshold for best accuracy
+- [x] Run business simulations (betting, profit/loss, win rate)
+- [x] Visualize results
+- [x] Summarize findings and business implications
+
+---
+
+**Sprint Focus:**  
+- Push for 70%+ accuracy on HomeWin.
+- Demonstrate clear business value from model predictions.
+- Document all findings, ready for presentation or deployment.
