@@ -1,0 +1,45 @@
+# Football Prediction Project Roadmap
+
+| **Stage**         | **Must Include?** | **Notes**                                                      |
+|-------------------|:-----------------:|----------------------------------------------------------------|
+| Data pipeline     |       ✅          | Ingestion, cleaning, feature creation                          |
+| Model building    |       ✅          | Baselines, tuning, explainability                              |
+| Evaluation        |       ✅          | Metrics, threshold tuning, business insight                    |
+| Deployment (API)  |       ✅          | Flask/FastAPI or notebook demo, at least                       |
+| Integration (Bot) |       ⬜️         | Great bonus, but not required for all roles                    |
+| Cloud hosting     |       ✅          | AWS/Heroku/Render, at least one example                        |
+| Docs & demo       |       ✅          | Clear README, report, and demo screens/videos                  |
+
+---
+
+## Expanded Checklist
+
+1. **Data Pipeline**
+    - Gather and clean historical football match data.
+    - Engineer relevant features (recent form, team stats, etc.).
+
+2. **Model Building**
+    - Train and compare baseline models (RandomForest, XGBoost).
+    - Tune model hyperparameters.
+    - Analyze and visualize feature importances.
+
+3. **Evaluation**
+    - Assess model with metrics (accuracy, ROC-AUC, etc.).
+    - Adjust and document threshold tuning.
+    - Apply model to new, unseen data for real-world validation.
+
+4. **Deployment (API)**
+    - Package model as a REST API (Flask or FastAPI).
+    - Provide an example notebook or script for local testing.
+
+5. **Cloud Hosting**
+    - Deploy the API to AWS, Heroku, or Render.
+    - Ensure reliability and document deployment steps.
+
+6. **Integration (Optional Bonus)**
+    - Connect your API to a WhatsApp bot or simple web UI.
+
+7. **Docs & Demo**
+    - Write a clear README with setup, usage, and findings.
+    - Include a brief technical report.
+    - Add screenshots, tables, or a short demo video.

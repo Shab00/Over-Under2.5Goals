@@ -1,45 +1,59 @@
-# Football Prediction Project Roadmap
+# Football Prediction Project Roadmap (Final Sprint: HomeWin Model)
 
-| **Stage**         | **Must Include?** | **Notes**                                                      |
-|-------------------|:-----------------:|----------------------------------------------------------------|
-| Data pipeline     |       ✅          | Ingestion, cleaning, feature creation                          |
-| Model building    |       ✅          | Baselines, tuning, explainability                              |
-| Evaluation        |       ✅          | Metrics, threshold tuning, business insight                    |
-| Deployment (API)  |       ✅          | Flask/FastAPI or notebook demo, at least                       |
-| Integration (Bot) |       ⬜️         | Great bonus, but not required for all roles                    |
-| Cloud hosting     |       ✅          | AWS/Heroku/Render, at least one example                        |
-| Docs & demo       |       ✅          | Clear README, report, and demo screens/videos                  |
+| **Stage**         | **Must Include?** | **Notes**                                                                |
+|-------------------|:-----------------:|--------------------------------------------------------------------------|
+| Data pipeline     |       ✅          | Ingestion, cleaning, feature creation; completed and robust              |
+| Model building    |       ✅          | Baselines, tuning, explainability; focus on HomeWin, RF/XGBoost          |
+| Evaluation        |       ✅          | Metrics, threshold tuning, business insight; threshold optimization done |
+| Deployment (API)  |       ✅          | Flask/FastAPI or notebook demo; working prototype required               |
+| Integration (Bot) |       ⬜️         | Optional bonus; not required for sprint completion                       |
+| Cloud hosting     |       ✅          | AWS/Heroku/Render, at least one example; demo for stakeholders           |
+| Docs & demo       |       ✅          | Clear README, report, and demo screens/videos; to be finalized           |
 
 ---
 
-## Expanded Checklist
+## Expanded Checklist (Reflecting Current Progress & Goals)
 
 1. **Data Pipeline**
-    - Gather and clean historical football match data.
-    - Engineer relevant features (recent form, team stats, etc.).
+    - ✔️ Gathered and cleaned historical football match data.
+    - ✔️ Engineered features (odds, recent form, team stats, contextual variables).
+    - **Ready for production use.**
 
 2. **Model Building**
-    - Train and compare baseline models (RandomForest, XGBoost).
-    - Tune model hyperparameters.
-    - Analyze and visualize feature importances.
+    - ✔️ Trained and compared baseline models (RandomForest, XGBoost).
+    - ✔️ Tuned RF for HomeWin; XGBoost optional for marginal gains.
+    - ✔️ Analyzed feature importances.
+    - **Final focus:** HomeWin prediction, pushing accuracy toward 70%.
 
 3. **Evaluation**
-    - Assess model with metrics (accuracy, ROC-AUC, etc.).
-    - Adjust and document threshold tuning.
-    - Apply model to new, unseen data for real-world validation.
+    - ✔️ Assessed model with metrics (accuracy, F1, recall, threshold tuning).
+    - ✔️ Optimized threshold for business goals (betting/decision support).
+    - ✔️ Validated on unseen evaluation set.
+    - **Business simulation:** Betting strategy and value analysis complete.
 
 4. **Deployment (API)**
-    - Package model as a REST API (Flask or FastAPI).
-    - Provide an example notebook or script for local testing.
+    - 🔜 Package final HomeWin model as REST API (Flask/FastAPI preferred).
+    - 🔜 Provide notebook/script demo for local testing and stakeholder review.
+    - **Priority:** Reliable, easy-to-use interface for predictions.
 
 5. **Cloud Hosting**
-    - Deploy the API to AWS, Heroku, or Render.
-    - Ensure reliability and document deployment steps.
+    - 🔜 Deploy API to AWS, Heroku, or Render.
+    - 🔜 Document steps and ensure reliability (uptime, basic monitoring).
+    - **Goal:** Accessible for demo and/or real usage.
 
 6. **Integration (Optional Bonus)**
-    - Connect your API to a WhatsApp bot or simple web UI.
+    - ⬜️ Connect API to WhatsApp bot or simple web UI, if time allows.
+    - ⬜️ Not required for sprint completion, but adds engagement value.
 
 7. **Docs & Demo**
-    - Write a clear README with setup, usage, and findings.
-    - Include a brief technical report.
-    - Add screenshots, tables, or a short demo video.
+    - 🔜 Write/update README with setup, usage, and findings.
+    - 🔜 Finalize technical report: methodology, results, business impact.
+    - 🔜 Add screenshots, tables, or a short demo video for presentation.
+    - **Goal:** Clear communication for stakeholders and users.
+
+---
+
+## **Sprint Focus—October 2025**
+- Push HomeWin model accuracy as close to 70% as possible.
+- Demonstrate business value via betting simulation and decision support.
+- Package, deploy, and document for stakeholder review/presentation.
