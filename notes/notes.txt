@@ -1109,8 +1109,8 @@ VFG# 🏆 Game Plan: Model Probabilities to Business Value
 ## 1. **Final Pivot: HomeWin Prediction**
 
 - **Objective:**  
-  - Refocus all modeling and business simulation on predicting "HomeWin" (home team wins) for football matches.
-  - Use all engineered features, market odds, team encoding, recent form, and contextual variables.
+  - Refocused all modeling and business simulation on predicting "HomeWin" (home team wins) for football matches.
+  - Used all engineered features, market odds, team encoding, recent form, and contextual variables.
 
 - **Key Goal:**  
   - Push model accuracy as close to **70%** as possible for HomeWin.
@@ -1120,41 +1120,47 @@ VFG# 🏆 Game Plan: Model Probabilities to Business Value
 
 ## 2. **Modeling & Optimization Tasks**
 
-- [x] Train Random Forest on "HomeWin" (done; current accuracy ~67%).
-- [ ] **Threshold Optimization:**  
-  - Tune decision threshold for maximum accuracy (not just F1).
-- [ ] **Feature Engineering:**  
-  - Experiment with consensus odds, bookmaker spreads, odds ratios.
-  - Remove noisy features, highlight top predictors.
-- [ ] **Model Tuning:**  
-  - Try XGBoost, LightGBM, or model stacking for marginal gains.
-  - Use stratified cross-validation for robust accuracy.
+- [x] **Train Random Forest on "HomeWin"** (done; current accuracy ~67%).
+- [x] **Train and evaluate Gradient Boosting on "HomeWin"** (done; current accuracy ~65.3%; F1-score highest at 0.6025).
+- [x] **Run and compare alternative algorithms:**  
+  - Compared Random Forest, Gradient Boosting, Logistic Regression, and MLP Neural Network.
+- [x] **Error analysis:**  
+  - Reviewed misclassified matches (false positives/negatives) and examined key feature importances.
+- [x] **Business simulation logic:**  
+  - Set up betting simulation with profit/loss, win rate, and ROI tracking based on model probabilities.
+- [x] **Threshold Optimization:**  
+  - Performed threshold sweep for best accuracy and F1.
+  - **Best accuracy achieved:** 0.6660 at threshold: 0.50 (documented).
+- [ ] **Try XGBoost and LightGBM:**  
+  - *To Do:* Train and evaluate XGBoost and LightGBM models for possible incremental performance gains over standard Gradient Boosting.
+- [ ] **Feature Engineering (Advanced):**  
+  - *To Do:* Further experimentation with consensus odds, bookmaker spreads, odds ratios, and feature selection for potential marginal gains.
+- [ ] **Model Tuning (Advanced):**  
+  - *To Do:* Try model stacking/ensembles, additional hyperparameter sweeps, or stratified CV for robustness.
 - [ ] **Calibration:**  
-  - Calibrate predicted probabilities (isotonic, Platt scaling).
-- [ ] **Error Analysis:**  
-  - Review misclassified matches, check for potential improvements.
+  - *To Do:* Calibrate predicted probabilities (isotonic or Platt scaling) and analyze calibration curves.
 
 ---
 
 ## 3. **Business Scenario Simulation**
 
 **Betting Strategy:**
-- Bet £10 if model predicts P(HomeWin) > chosen threshold (e.g., 0.7).
-- Use bookmaker odds (e.g., `B365H`) for payout calculation.
-- Track win/loss, cumulative profit, ROI, number of bets placed.
+- [x] Simulated betting £10 when P(HomeWin) > threshold (e.g., 0.7), using bookmaker odds.
+- [x] Tracked win/loss, cumulative profit, ROI, and number of bets placed.
 
 **Analysis:**
-- Compare profit curves at different thresholds.
-- Summarize win rate, average return per bet.
-- Benchmark against naive strategies (e.g., always bet on home, always bet favorite).
+- [x] Benchmarked strategy against naive alternatives.
+- [ ] *To Do:* Compare profit curves at different thresholds.
+- [ ] *To Do:* Summarize win rate, average return per bet, and identify the best business threshold.
 
 ---
 
 ## 4. **Visualization & Communication**
 
-- [ ] Plot cumulative profit/loss and accuracy over time.
-- [ ] Display distribution of predicted probabilities vs. actual outcomes.
-- [ ] Report key business metrics:
+- [x] Plotted and analyzed classification reports and feature importances.
+- [ ] *To Do:* Plot cumulative profit/loss and accuracy over time.
+- [ ] *To Do:* Display distribution of predicted probabilities vs. actual outcomes.
+- [ ] *To Do:* Report key business metrics:
     - Total number of bets
     - Win rate
     - ROI
@@ -1164,21 +1170,23 @@ VFG# 🏆 Game Plan: Model Probabilities to Business Value
 
 ## 5. **Final Write-Up & Recommendations**
 
-- **Key Findings:**  
-  - "With tuned threshold and optimized model, HomeWin prediction reached XX% accuracy (aim: 70%) over the evaluation period."
-  - "Simulated betting strategy yielded [profit/loss], demonstrating [potential/business impact]."
-  - "Next steps: deploy as decision support or betting tool, test in live environment."
+- [ ] *To Do:* Complete final summary of findings.
+    - "With tuned threshold and optimized Gradient Boosting/XGBoost/LightGBM model, HomeWin prediction reached XX% accuracy (aim: 70%) over the evaluation period."
+    - "Simulated betting strategy yielded [profit/loss], demonstrating [potential/business impact]."
+    - "Next steps: deploy as decision support or betting tool, test in live environment."
 
 ---
 
 ## **Checklist for Sprint (11-10-2025 → 21-10-2025)**
 
 - [x] Pivot all modeling to HomeWin
-- [x] Train and tune RF/XGB models
-- [x] Optimize threshold for best accuracy
+- [x] Train and evaluate RF/Gradient Boosting/other models
+- [ ] Train and evaluate XGBoost and LightGBM models
 - [x] Run business simulations (betting, profit/loss, win rate)
-- [x] Visualize results
-- [x] Summarize findings and business implications
+- [x] Visualize key results and model feature importances
+- [x] Optimize threshold for best accuracy and business value
+- [ ] Visualize cumulative business metrics and calibration
+- [ ] Summarize findings and business implications in final report
 
 ---
 
@@ -1186,3 +1194,7 @@ VFG# 🏆 Game Plan: Model Probabilities to Business Value
 - Push for 70%+ accuracy on HomeWin.
 - Demonstrate clear business value from model predictions.
 - Document all findings, ready for presentation or deployment.
+
+**Progress:**  
+Most core modeling, simulation, benchmarking, and threshold optimization tasks are complete, including Gradient Boosting.  
+**Next:** Try XGBoost and LightGBM, finish advanced feature/model tuning, complete business/reporting visualizations, and finalize the report.
