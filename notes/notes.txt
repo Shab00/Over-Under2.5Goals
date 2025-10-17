@@ -1131,8 +1131,10 @@ VFG# 🏆 Game Plan: Model Probabilities to Business Value
 - [x] **Threshold Optimization:**  
   - Performed threshold sweep for best accuracy and F1.
   - **Best accuracy achieved:** 0.6660 at threshold: 0.50 (documented).
-- [ ] **Try XGBoost and LightGBM:**  
-  - *To Do:* Train and evaluate XGBoost and LightGBM models for possible incremental performance gains over standard Gradient Boosting.
+- [x] **Train and evaluate XGBoost and LightGBM models:**  
+  - XGBoost: Accuracy=0.6515, F1=0.6073 (best threshold F1=0.651, recall=0.882)
+  - **LightGBM:** Accuracy=0.6578, F1=0.6138 (best threshold F1=0.667, recall=0.830)
+  - Identified LightGBM as the leading model for both accuracy and F1.
 - [ ] **Feature Engineering (Advanced):**  
   - *To Do:* Further experimentation with consensus odds, bookmaker spreads, odds ratios, and feature selection for potential marginal gains.
 - [ ] **Model Tuning (Advanced):**  
@@ -1171,7 +1173,7 @@ VFG# 🏆 Game Plan: Model Probabilities to Business Value
 ## 5. **Final Write-Up & Recommendations**
 
 - [ ] *To Do:* Complete final summary of findings.
-    - "With tuned threshold and optimized Gradient Boosting/XGBoost/LightGBM model, HomeWin prediction reached XX% accuracy (aim: 70%) over the evaluation period."
+    - "With tuned threshold and optimized LightGBM model, HomeWin prediction reached XX% accuracy (aim: 70%) over the evaluation period."
     - "Simulated betting strategy yielded [profit/loss], demonstrating [potential/business impact]."
     - "Next steps: deploy as decision support or betting tool, test in live environment."
 
@@ -1181,7 +1183,7 @@ VFG# 🏆 Game Plan: Model Probabilities to Business Value
 
 - [x] Pivot all modeling to HomeWin
 - [x] Train and evaluate RF/Gradient Boosting/other models
-- [ ] Train and evaluate XGBoost and LightGBM models
+- [x] Train and evaluate XGBoost and LightGBM models
 - [x] Run business simulations (betting, profit/loss, win rate)
 - [x] Visualize key results and model feature importances
 - [x] Optimize threshold for best accuracy and business value
@@ -1196,5 +1198,5 @@ VFG# 🏆 Game Plan: Model Probabilities to Business Value
 - Document all findings, ready for presentation or deployment.
 
 **Progress:**  
-Most core modeling, simulation, benchmarking, and threshold optimization tasks are complete, including Gradient Boosting.  
-**Next:** Try XGBoost and LightGBM, finish advanced feature/model tuning, complete business/reporting visualizations, and finalize the report.
+Core modeling, simulation, benchmarking, threshold optimization and model comparison (including LightGBM) are complete.  
+**Next:** Focus business simulation and reporting on LightGBM, undertake advanced feature/model tuning, complete business/reporting visualizations, and finalize the report.
