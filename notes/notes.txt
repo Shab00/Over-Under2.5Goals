@@ -1200,3 +1200,63 @@ VFG# 🏆 Game Plan: Model Probabilities to Business Value
 **Progress:**  
 Core modeling, simulation, benchmarking, threshold optimization and model comparison (including LightGBM) are complete.  
 **Next:** Focus business simulation and reporting on LightGBM, undertake advanced feature/model tuning, complete business/reporting visualizations, and finalize the report.
+
+# 🏁 Catch-Up Game Plan — HomeWin Model (LightGBM focus)
+
+Date: 2025-11-03  
+Status: Returning from two weeks out sick (Crohn’s flare). This sprint is a focused catch-up to finish the remaining work for the HomeWin pivot while keeping scope small and manageable.
+
+Short note
+- I was unwell for two weeks and am now catching up. Core modeling and simulations are complete; remaining work is documentation, business visualizations, light tuning, calibration, and a concise final report. Prioritising high-impact, low-effort tasks so we can finish cleanly by the original sprint close date.
+
+Goal
+- Finalize the HomeWin deliverables with LightGBM as the production model and produce clear business visualizations + a 1-page summary for stakeholders.
+
+Timeframe
+- Today → 2025-11-07 (4 working days). Short, focused sessions (30–120 minutes each) to avoid burnout while recovering.
+
+Priority checklist (what we'll finish first)
+1. Status & repo housekeeping (today, 15–30 min)
+   - Add “Status / Catch-up” note to README (one sentence).
+   - Commit a small TODO file listing next steps.
+   - Why: communicates progress quickly and reduces context-switch overhead.
+
+2. Snapshot predictions (today/tonight, 15–30 min)
+   - Save test/evaluation predictions CSV for LightGBM:
+     - columns: match_id, date, home, away, prob_home, pred_label, odds_B365H (if available), actual
+   - Why: makes simulations reproducible without retraining.
+
+3. Business visualizations (day 2, 45–90 min)
+   - Plot cumulative profit/loss for thresholds: 0.50, 0.60, 0.70.
+   - Plot (#bets, win rate, ROI) vs threshold (grid from 0.3→0.8).
+   - Save PNGs to results/ or data/processed/.
+   - Why: immediate business insight and clear charts for the final report.
+
+4. Calibration + compare (day 3, 60–120 min)
+   - Run Platt / isotonic calibration on validation set; save calibration plot and Brier score.
+   - Re-run betting simulation using calibrated probabilities and compare profit/ROI vs uncalibrated.
+   - Why: calibration can improve probability-based decisions and business outcomes.
+
+5. Small model polish (optional / day 4, 60–120 min)
+   - Quick LightGBM hyperparameter sweep (randomized small search: learning_rate, n_estimators, max_depth) — 1–2 hours maximum.
+   - Try a simple ensemble (average probs LightGBM + Logistic Regression) only if time permits.
+   - Why: small chance to squeeze a bit more performance; optional if you feel up to it.
+
+6. Final write-up & deliverables (day 4, 45–90 min)
+   - Produce a one-page summary (final_report.md) with:
+     - Best model and metrics (accuracy, F1), best threshold for business, total profit/ROI for simulation, recommended next steps.
+   - Update README with links to results, key plots, and the final_report.
+   - Why: makes the work presentable and reproducible for stakeholders.
+
+Minimal deliverables by completion
+- README: status + one-line TODO
+- predictions_lightgbm_snapshot.csv (data/processed/)
+- Plots: cumulative profit (3 thresholds), threshold vs metrics, calibration plot
+- final_report.md (1 page)
+- Optional: small tuned LightGBM model artifact and short note about it
+
+Suggested session plan (pick what fits your energy)
+- Session A (today, 30–60 min): README update + snapshot predictions + commit
+- Session B (next day, 60–90 min): Generate profit plots at 3 thresholds + save summary CSV
+- Session C (next day, 60–90 min): Calibration + re-run sims, save calibration plot
+- Session D (final day, 45–90 min): Final report, README links, lightweight polish (if any)
