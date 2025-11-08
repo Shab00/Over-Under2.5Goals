@@ -1213,7 +1213,7 @@ Goal
 - Finalize the HomeWin deliverables with LightGBM as the production model and produce clear business visualizations + a 1-page summary for stakeholders.
 
 Timeframe
-- Today → 2025-11-07 (4 working days). Short, focused sessions (30–120 minutes each) to avoid burnout while recovering.
+- Today → 2025-11-11 (4 working days). Short, focused sessions (30–120 minutes each) to avoid burnout while recovering.
 
 Priority checklist (what we'll finish first)
 1. Status & repo housekeeping (today, 15–30 min)
