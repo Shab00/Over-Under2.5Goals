@@ -1,0 +1,22 @@
+{
+  "created_at": "20251109T124027Z",
+  "python": "3.12.12 (main, Oct 10 2025, 08:52:57) [GCC 11.4.0]",
+  "platform": "Linux-6.6.105+-x86_64-with-glibc2.35",
+  "numpy": "2.0.2",
+  "pandas": "2.2.2",
+  "feature_list_file": "/content/models/saved/feature_list_20251109T124027Z.pkl",
+  "models": {
+    "XGBoost": "/content/models/saved/xgboost_homewin_20251109T124027Z.pkl",
+    "LightGBM": "/content/models/saved/lightgbm_homewin_20251109T124027Z.pkl"
+  },
+  "training_metrics": {
+    "XGBoost": {
+      "accuracy": 0.6514864010120177,
+      "f1": 0.6072701354240913
+    },
+    "LightGBM": {
+      "accuracy": 0.6578115117014548,
+      "f1": 0.6138472519628837
+    }
+  }
+}
