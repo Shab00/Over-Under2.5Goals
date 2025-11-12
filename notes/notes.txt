@@ -1260,3 +1260,16 @@ Suggested session plan (pick what fits your energy)
 - Session B (next day, 60–90 min): Generate profit plots at 3 thresholds + save summary CSV
 - Session C (next day, 60–90 min): Calibration + re-run sims, save calibration plot
 - Session D (final day, 45–90 min): Final report, README links, lightweight polish (if any)
+
+# HomeWin — Iteration 3 (short) — 2025-11-12  
+I finalized the HomeWin pivot with LightGBM as the production model. Core modeling and simulations are complete and I produced a snapshot of test predictions, calibration experiments (sigmoid & isotonic), business-facing profit/ROI plots (thresholds 0.50/0.60/0.70 and grid 0.3→0.8), a small hyperparameter sweep, and a one-page final_report.md.
+
+Artifacts are saved for reproducibility: data/processed/predictions_lightgbm_snapshot.csv, results/plots/ (cumulative profit + threshold_vs_metrics + calibration_plot.png), models/ (lightgbm_final.pkl, tuned/calibrated variants), and final_report.md. Metrics and Brier scores are recorded in results/metrics/ and results/calibration/ respectively — fill in any remaining numeric placeholders in the report.
+
+# Next: Subscription prediction app — add date when ready bro
+
+I will build a simple subscription app that delivers curated future-game predictions (probabilities + recommended stake/threshold) to paying users over WhatsApp and via a companion website that shows previous subscriptions and provides a clear subscribe flow. The core value remains timely, calibrated probabilities from the LightGBM snapshot plus business metrics (expected ROI, win rate). Start with a closed beta to validate demand and model-led bankroll performance before widening access.
+
+MVP: a lightweight API that returns tomorrow's matches with prob_home and suggested action, a WhatsApp delivery pipeline (WhatsApp Business API / Twilio) for daily digests or triggers, and a small site (React) with subscription history (past plans/payments, delivery history) and a one-step subscribe page. Include Stripe for payments, basic analytics/dashboard (delivery rate, open/CTR if available, conversion, model ROI), and admin views for monitoring subscribers and message logs. Tech stack: FastAPI + Docker for inference, PostgreSQL for users/subscriptions/audit, Redis + Celery for scheduling/notifications, simple hosting (AWS/GCP), and joblib-served model or snapshot-based feeds.
+
+Next steps: prototype the API + WhatsApp opt-in and the site pages (history + subscribe) in 1–2 weeks, run a closed beta (2–4 weeks) to collect feedback and real-money results, and ensure compliance for betting-related messaging and WhatsApp policies (opt-in, templates, regional legal requirements). Instrument logging, monitoring, and A/B tests for thresholds and message formats; iterate on messaging, frequency, and pricing based on retention and ROI signals.
