@@ -1273,3 +1273,140 @@ I will build a simple subscription app that delivers curated future-game predict
 MVP: a lightweight API that returns tomorrow's matches with prob_home and suggested action, a WhatsApp delivery pipeline (WhatsApp Business API / Twilio) for daily digests or triggers, and a small site (React) with subscription history (past plans/payments, delivery history) and a one-step subscribe page. Include Stripe for payments, basic analytics/dashboard (delivery rate, open/CTR if available, conversion, model ROI), and admin views for monitoring subscribers and message logs. Tech stack: FastAPI + Docker for inference, PostgreSQL for users/subscriptions/audit, Redis + Celery for scheduling/notifications, simple hosting (AWS/GCP), and joblib-served model or snapshot-based feeds.
 
 Next steps: prototype the API + WhatsApp opt-in and the site pages (history + subscribe) in 1–2 weeks, run a closed beta (2–4 weeks) to collect feedback and real-money results, and ensure compliance for betting-related messaging and WhatsApp policies (opt-in, templates, regional legal requirements). Instrument logging, monitoring, and A/B tests for thresholds and message formats; iterate on messaging, frequency, and pricing based on retention and ROI signals.
+
+# Subscription prediction app — Implementation plan (raw notes)  
+Date: 2025-11-16
+
+## Goal
+Build an MVP that serves tomorrow’s calibrated match predictions to subscribers via WhatsApp and a companion website (subscribe + history). Run a closed beta to validate demand and model-led ROI before wider rollout.
+
+## Constraints & context
+- Core model and prediction snapshots already exist (LightGBM / RF artifacts + predictions snapshot).
+- You’ll be on holiday 2025-11-21 → 2025-11-30; keep holiday tasks light (docs, templates, console setup, small edits).
+- Priority: minimal, reproducible MVP; prefer snapshot-based feeds during beta for repeatability.
+
+---
+
+## High-level timeline (compact)
+- 2025-11-16 → 2025-11-20: Prep & quick wins (repo, accounts, snapshots, architecture note)
+- 2025-11-21 → 2025-11-30: Holiday — light tasks only (templates, account setup, docs)
+- 2025-12-01 → 2025-12-07: Finish MVP (API, delivery pipeline, site skeleton), deploy test instance
+- 2025-12-08 → 2025-12-21: Closed beta (onboard 5–20 users, instrument metrics, iterate)
+- Post‑beta: Harden, legal review, production rollout plan
+
+---
+
+## Phase 0 — Prep & quick wins (Today → 2025‑11‑20)
+Effort: 4–8 hours across short sessions
+- Create branch `feature/mvp-whatsapp` and add one-line README status + TODO.
+- Confirm accounts: Twilio/WhatsApp sandbox, Stripe test, hosting (AWS/GCP/Heroku). Record credentials in password manager.
+- Export/pin model snapshot + feature_list + predictions CSV into repo/data.
+- Write ARCHITECTURE.md describing components and endpoints (FastAPI, DB, worker, site).
+
+Deliverables: branch + README, account access notes, timestamped model snapshot, ARCHITECTURE.md.
+
+---
+
+## Phase 1 — MVP core (target complete by Dec 7)
+Effort: ~1–2 full dev days split across sessions
+
+A. API & model serving
+- FastAPI service with endpoints:
+  - GET /predictions/tomorrow → JSON: match_id, date, home, away, prob_home, suggested_action, odds_B365H
+  - Auth: simple API key header
+- Load joblib model and feature_list; for reproducibility use saved snapshot feed initially.
+- Dockerize service.
+
+B. Subscription backend
+- Postgres schema: users, subscriptions, deliveries.
+- Endpoints: POST /subscribe (phone + payment token), GET /history (authenticated).
+- Stripe test integration + webhook handler (test mode).
+
+C. WhatsApp delivery
+- Delivery worker (Celery + Redis) or simple cron:
+  - Pull predictions, format message, send via Twilio/WhatsApp sandbox, store delivery status.
+- Test to personal sandbox number.
+
+D. Minimal website
+- Pages:
+  - Subscribe (phone, plan selection, stripe checkout)
+  - History (list of past deliveries for logged-in/test users)
+- Simple React app or static templates.
+
+Acceptance: authenticated API returns predictions; test WhatsApp message arrives; can subscribe in test mode and see a history record.
+
+---
+
+## Holiday-friendly tasks (21–30 Nov)
+Effort: S (15–60m) tasks that can be done on phone or short sessions:
+- Draft 3 WhatsApp templates (daily digest, single pick, premium pick).
+- Draft opt-in / consent text and short privacy notice (WhatsApp and GDPR).
+- Create Stripe test plans and Twilio sandbox templates in their consoles.
+- Write README setup steps and a small runbook for on-call tests.
+- Quick sanity checks: confirm model snapshot loads and sample JSON outputs.
+
+---
+
+## Phase 2 — Beta & instrumentation (Dec 1 → Dec 21)
+Effort: 1–2 weeks part-time
+- Harden API: logging, error handling, rate limiting, retries, idempotency for sends.
+- Persist and apply calibrators (joblib) before sending probabilities.
+- Compliance: finalize opt-in language, TOS, check regional restrictions for betting messaging.
+- Beta onboarding: invite 5–20 users, monitor deliveries and ROI signals.
+- A/B tests: message format A/B, threshold A vs B, premium vs free picks.
+
+Beta acceptance criteria:
+- ≥90% delivery success to sandbox/test subscribers,
+- All deliveries logged with timestamps and statuses,
+- Usable initial ROI signal (even if noisy) and qualitative feedback collected.
+
+---
+
+## Phase 3 — Post‑beta (iterate & scale)
+- Refine pricing, cadence, and thresholds based on beta.
+- Productionize hosting, secrets management, backups, monitoring (Prometheus/Datadog).
+- Complete legal review and WhatsApp business verification / template approvals.
+- Build customer dashboard and recurring billing handling for production.
+
+---
+
+## Minimal technical stack (MVP)
+- Inference API: FastAPI + Uvicorn (Docker)
+- Delivery worker: Redis + Celery (or simple cron initially)
+- DB: PostgreSQL (users/subscriptions/deliveries)
+- Payments: Stripe (test → production)
+- WhatsApp: Twilio WhatsApp API (sandbox → verified business)
+- Frontend: React or static site for subscribe + history
+- Hosting: AWS / GCP / Heroku (minimal instance + Docker)
+
+---
+
+## Risks & mitigations
+- WhatsApp approval & business verification can take days: start early (holiday task).
+- Legal/regulatory risk for betting: include explicit opt-in and a compliance checklist; consult counsel before scaling.
+- Small sample sizes → noisy ROI: simulate on saved historical snapshots and report confidence intervals.
+
+---
+
+## Checklist / Runbook (short)
+- [x] Create branch + README status line  
+- [x] Confirm Twilio WhatsApp sandbox + Stripe test account  
+- [ ] Pin model snapshot & feature_list to repo/data  
+- [ ] Write ARCHITECTURE.md  
+- [ ] Build FastAPI endpoint + Dockerfile  
+- [ ] Build subscription endpoints + DB migrations  
+- [ ] Implement delivery worker and Twilio send tests  
+- [ ] Site: subscribe + history pages  
+- [ ] Draft opt-in / privacy / TOS copy  
+- [ ] Prepare closed beta invite list + feedback form  
+- [ ] Instrument logging & basic metrics (deliveries, ROI estimate)
+
+---
+
+## Immediate next actions (today)
+- Create/update branch and README status line (15–30m).  
+- Create Twilio sandbox & Stripe test account (30–60m).  
+- Export/confirm model snapshot + feature_list in repo/data (15–30m).  
+- Draft two WhatsApp message templates and opt‑in copy (15–30m).
+
+---
