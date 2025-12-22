@@ -114,8 +114,8 @@ Short checklist (copy into repo as a TODO)
 - [x] Create recovery checkpoint (tag/branch)
 - [x] Run smoke test: load snapshot and show first 5 rows
 - [x] Add README status block and commit
-- [ ] Build FastAPI snapshot endpoint (GET /predictions/latest)
-- [ ] Create Telegram bot and test send script
+- [x] Build FastAPI snapshot endpoint (GET /predictions/latest)
+- [x] Create Telegram bot and test send script
 - [ ] Simple subscribe page (save emails/phones to CSV)
 - [ ] Persist calibrators and save calibrated snapshot
 - [ ] Implement delivery recording (SQLite) and history view
