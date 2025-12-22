@@ -1,3 +1,145 @@
+# Subscription prediction app — Updated game plan (2025-12-07)
+
+Context
+- Today is 2025-12-07. I paused work for a while and want a small set of low-effort tasks to get back into the project, plus a trimmed, realistic plan to carry the MVP to closed beta without heavy upfront commitments.
+- Goal: make measurable progress with short focused sessions. Prioritise reproducibility, a snapshot-driven API, and cheap delivery channels (Telegram/email) so you can validate demand before paying for WhatsApp.
+
+Top-level approach (practical)
+1. Minimal recovery work today (30–90 minutes) — checkpoints and tiny wins so the repo is not in an unknown state.
+2. Short 1–2 week sprint to restore basic MVP capability (snapshot API, delivery via Telegram/email, simple subscribe flow).
+3. Closed beta roll-out (2–4 weeks) once the core flow is stable and instrumented.
+4. Later: add WhatsApp and payments after validation.
+
+Immediate — Today (2025-12-07): 30–90 minutes (do only what you feel like)
+- A: Make a safe repo checkpoint (5–10m)
+  - If you want a safety copy of current repo: run
+    - git add -A
+    - git commit -m "checkpoint: 2025-12-07 recovery snapshot"
+    - git tag -a snapshot-20251207 -m "checkpoint before MVP restart"
+    - git push origin main && git push origin snapshot-20251207
+  - Or just create a backup branch:
+    - git checkout -b backup-before-restart-20251207
+    - git push -u origin backup-before-restart-20251207
+    - git checkout main
+
+- B: Quick sanity checks (15–30m)
+  - Confirm model & snapshot presence:
+    - ls models/thirdIterration/
+    - ls data/processed/
+  - Quick smoke test to load model & show a few preds:
+    - python - <<'PY'
+      import joblib, pandas as pd
+      m='models/thirdIterration/lightgbm_homewin_20251109T124027Z.pkl'
+      s='data/processed/predictions_snapshot_20251109T143856Z.csv'
+      print('model exists:', __import__('pathlib').Path(m).exists())
+      print('snapshot exists:', __import__('pathlib').Path(s).exists())
+      if __import__('pathlib').Path(s).exists():
+          df=pd.read_csv(s); print(df[['date','home','away','prob_home']].head())
+      PY
+
+- C: Update README status (10–20m)
+  - Paste the short status block at the top of README.md so anyone opening the repo sees the current snapshot & metrics.
+  - Commit the change.
+
+If you only do one thing today: run the smoke test and commit a tiny README status update.
+
+Week 1 (next 7 days): restore an MVP skeleton (focus ~3–6 hours total, split)
+Goal: produce a reproducible snapshot API and a free delivery channel (Telegram/email).
+
+1) Snapshot API (Fast win — 2–4 hours)
+- Implement a tiny FastAPI app that returns the pinned snapshot (no live model needed yet).
+  - Endpoint: GET /predictions/latest
+  - Returns JSON rows from data/processed/predictions_snapshot_<ts>.csv
+  - Keep model loading code commented for later; snapshot is deterministic and easier to debug.
+- Dockerfile + README run instructions.
+- Acceptance: curl http://localhost:8000/predictions/latest returns JSON.
+
+2) Delivery via Telegram Bot (1–2 hours)
+- Create a Telegram bot (free) and get a BOT_TOKEN.
+- Implement a small script to send a daily digest to one test chat id using the snapshot:
+  - scripts/send_telegram_digest.py
+  - Reads snapshot, formats 1–5 top picks, sends to your chat id.
+- Acceptance: you receive a bot message with predictions.
+
+3) Minimal subscribe flow (1–2 hours)
+- Simple static site (or a single HTML form) to collect phone/email for beta invites:
+  - Save to a CSV or SQLite (no Stripe yet).
+  - Add opt-in language (short).
+- Acceptance: you can add a subscriber and see them in stored CSV/DB.
+
+Week 2 (next 7–14 days): stabilize, calibration and metrics
+Goal: add calibration, logging, and a basic history view.
+
+1) Apply calibrated probs (Platt/Isotonic) to snapshot
+- Persist calibrators (joblib) and add prob_platt/prob_isotonic columns to the snapshot.
+- Acceptance: snapshot_with_calibrated_probs.csv saved to results/.
+
+2) Recording deliveries & history
+- Add a small deliveries table (SQLite or Postgres) with: subscriber_id, match_id, delivered_at, channel, status, message_id.
+- Update Telegram sender to write delivery records and provide a /history page that shows past deliveries for a test user.
+
+3) Basic metrics export
+- Export simple CSV: deliveries, predictions, actuals (when available), realized PnL per subscriber.
+- Acceptance: you can compute ROI (from historical actuals) and export to results/roi_by_threshold.csv.
+
+Closed beta (2–4 weeks after core is stable)
+- Invite 5–20 trusted users (use Telegram/email).
+- Run daily deliveries and collect:
+  - delivery success rate, replies, unsubscribes
+  - realized outcomes, ROI simulations per subscriber
+  - qualitative feedback
+- Run simple A/B tests: message format, threshold levels.
+- Acceptance criteria to consider beta successful:
+  - steady delivery success > 90%,
+  - clear instrumentation recording deliveries & outcomes,
+  - initial ROI signal and qualitative feedback to iterate.
+
+Phase to add WhatsApp & payments (post-beta)
+- If beta validates demand:
+  - Choose delivery provider (WhatsApp Cloud API or Twilio) and budget for messages.
+  - Add Stripe integration for paid subscribers; restrict WhatsApp to paying users to offset messaging cost.
+
+Minimal deliverables & acceptance criteria (summary)
+- Day 0 (today): README checkpoint + smoke test output committed
+- Week 1: snapshot API (Docker) + Telegram digest + static subscribe page
+- Week 2: calibrated snapshot saved + delivery recording + basic history view
+- Beta: invite cohort, collect metrics, iterate on messaging and threshold
+
+Risks & mitigations
+- WhatsApp costs/approval: prototype with Telegram/email first.
+- Data leakage: keep snapshot-based workflow until model inference & feature alignment are fully tested.
+- Small sample noise: prefer thresholds that give sufficient bet counts and always report sample sizes with ROI.
+
+Short checklist (copy into repo as a TODO)
+- [x] Create recovery checkpoint (tag/branch)
+- [x] Run smoke test: load snapshot and show first 5 rows
+- [x] Add README status block and commit
+- [ ] Build FastAPI snapshot endpoint (GET /predictions/latest)
+- [ ] Create Telegram bot and test send script
+- [ ] Simple subscribe page (save emails/phones to CSV)
+- [ ] Persist calibrators and save calibrated snapshot
+- [ ] Implement delivery recording (SQLite) and history view
+- [ ] Invite small beta group and start daily deliveries
+
+Helpful commands (one-liners)
+- Create safe checkpoint branch:
+  git checkout -b backup-before-restart-20251207 && git push -u origin backup-before-restart-20251207
+- Quick smoke test (python snippet in shell):
+  python - <<'PY'
+  import pandas as pd
+  print(pd.read_csv("data/processed/predictions_snapshot_20251109T143856Z.csv").head(3))
+  PY
+- Run FastAPI locally:
+  uvicorn src.api.main:app --reload --port 8000
+
+Notes / tone
+- Keep sessions short (30–90m) and aim for a single tangible deliverable per session.
+- Prefer reproducible snapshot flows early — they make debugging and QA much easier.
+- Use free delivery (Telegram/email) to validate proposition before spending on WhatsApp.
+
+VVVVVVVVVVVVVVVV
+# Model creation
+VVVVVVVVVVVVVVVV
 # Data Cleaning & Feature Engineering Notes (2025-08-20)
 
 ## Goals for Today
@@ -1293,120 +1435,5 @@ Build an MVP that serves tomorrow’s calibrated match predictions to subscriber
 - 2025-12-01 → 2025-12-07: Finish MVP (API, delivery pipeline, site skeleton), deploy test instance
 - 2025-12-08 → 2025-12-21: Closed beta (onboard 5–20 users, instrument metrics, iterate)
 - Post‑beta: Harden, legal review, production rollout plan
-
----
-
-## Phase 0 — Prep & quick wins (Today → 2025‑11‑20)
-Effort: 4–8 hours across short sessions
-- Create branch `feature/mvp-whatsapp` and add one-line README status + TODO.
-- Confirm accounts: Twilio/WhatsApp sandbox, Stripe test, hosting (AWS/GCP/Heroku). Record credentials in password manager.
-- Export/pin model snapshot + feature_list + predictions CSV into repo/data.
-- Write ARCHITECTURE.md describing components and endpoints (FastAPI, DB, worker, site).
-
-Deliverables: branch + README, account access notes, timestamped model snapshot, ARCHITECTURE.md.
-
----
-
-## Phase 1 — MVP core (target complete by Dec 7)
-Effort: ~1–2 full dev days split across sessions
-
-A. API & model serving
-- FastAPI service with endpoints:
-  - GET /predictions/tomorrow → JSON: match_id, date, home, away, prob_home, suggested_action, odds_B365H
-  - Auth: simple API key header
-- Load joblib model and feature_list; for reproducibility use saved snapshot feed initially.
-- Dockerize service.
-
-B. Subscription backend
-- Postgres schema: users, subscriptions, deliveries.
-- Endpoints: POST /subscribe (phone + payment token), GET /history (authenticated).
-- Stripe test integration + webhook handler (test mode).
-
-C. WhatsApp delivery
-- Delivery worker (Celery + Redis) or simple cron:
-  - Pull predictions, format message, send via Twilio/WhatsApp sandbox, store delivery status.
-- Test to personal sandbox number.
-
-D. Minimal website
-- Pages:
-  - Subscribe (phone, plan selection, stripe checkout)
-  - History (list of past deliveries for logged-in/test users)
-- Simple React app or static templates.
-
-Acceptance: authenticated API returns predictions; test WhatsApp message arrives; can subscribe in test mode and see a history record.
-
----
-
-## Holiday-friendly tasks (21–30 Nov)
-Effort: S (15–60m) tasks that can be done on phone or short sessions:
-- Draft 3 WhatsApp templates (daily digest, single pick, premium pick).
-- Draft opt-in / consent text and short privacy notice (WhatsApp and GDPR).
-- Create Stripe test plans and Twilio sandbox templates in their consoles.
-- Write README setup steps and a small runbook for on-call tests.
-- Quick sanity checks: confirm model snapshot loads and sample JSON outputs.
-
----
-
-## Phase 2 — Beta & instrumentation (Dec 1 → Dec 21)
-Effort: 1–2 weeks part-time
-- Harden API: logging, error handling, rate limiting, retries, idempotency for sends.
-- Persist and apply calibrators (joblib) before sending probabilities.
-- Compliance: finalize opt-in language, TOS, check regional restrictions for betting messaging.
-- Beta onboarding: invite 5–20 users, monitor deliveries and ROI signals.
-- A/B tests: message format A/B, threshold A vs B, premium vs free picks.
-
-Beta acceptance criteria:
-- ≥90% delivery success to sandbox/test subscribers,
-- All deliveries logged with timestamps and statuses,
-- Usable initial ROI signal (even if noisy) and qualitative feedback collected.
-
----
-
-## Phase 3 — Post‑beta (iterate & scale)
-- Refine pricing, cadence, and thresholds based on beta.
-- Productionize hosting, secrets management, backups, monitoring (Prometheus/Datadog).
-- Complete legal review and WhatsApp business verification / template approvals.
-- Build customer dashboard and recurring billing handling for production.
-
----
-
-## Minimal technical stack (MVP)
-- Inference API: FastAPI + Uvicorn (Docker)
-- Delivery worker: Redis + Celery (or simple cron initially)
-- DB: PostgreSQL (users/subscriptions/deliveries)
-- Payments: Stripe (test → production)
-- WhatsApp: Twilio WhatsApp API (sandbox → verified business)
-- Frontend: React or static site for subscribe + history
-- Hosting: AWS / GCP / Heroku (minimal instance + Docker)
-
----
-
-## Risks & mitigations
-- WhatsApp approval & business verification can take days: start early (holiday task).
-- Legal/regulatory risk for betting: include explicit opt-in and a compliance checklist; consult counsel before scaling.
-- Small sample sizes → noisy ROI: simulate on saved historical snapshots and report confidence intervals.
-
----
-
-## Checklist / Runbook (short)
-- [x] Create branch + README status line  
-- [x] Confirm Twilio WhatsApp sandbox + Stripe test account  
-- [ ] Pin model snapshot & feature_list to repo/data  
-- [ ] Write ARCHITECTURE.md  
-- [ ] Build FastAPI endpoint + Dockerfile  
-- [ ] Build subscription endpoints + DB migrations  
-- [ ] Implement delivery worker and Twilio send tests  
-- [ ] Site: subscribe + history pages  
-- [ ] Draft opt-in / privacy / TOS copy  
-- [ ] Prepare closed beta invite list + feedback form  
-- [ ] Instrument logging & basic metrics (deliveries, ROI estimate)
-
----
-
-## Immediate next actions (today)
-- Create/update branch and README status line (15–30m).  
-- Create Twilio sandbox & Stripe test account (30–60m).  
-- Export/confirm model snapshot + feature_list in repo/data (15–30m).  
-- Draft two WhatsApp message templates and opt‑in copy (15–30m).
 
 ---
