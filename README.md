@@ -1,20 +1,28 @@
-Progress update (16 Nov): Currently I’m building the MVP subscription stack: a FastAPI inference endpoint that serves calibrated LightGBM probabilities from the saved snapshot, a WhatsApp delivery pipeline (Twilio sandbox) to push daily picks, and a small site with a simple subscribe flow and delivery history (Stripe test integration). The focus is reproducible snapshot‑based feeds for the closed beta, lightweight deployment (Docker + simple worker scheduler), and instrumentation — delivery logs, per‑user pick history, and ROI tracking so we can A/B test thresholds and message formats. I’m also finalizing opt‑in/privacy copy and basic compliance checks for betting/WhatsApp policies; work is being done in short sessions to avoid burnout and to keep the scope small and testable before the beta.
-
-Progress update (10 Nov): Today's run produced a reproducible LightGBM prediction snapshot for 269 prospective matches with feature alignment verified and Platt/isotonic calibration applied. The model flagged 49 positive‑edge opportunities with a theoretical sum EV of ≈ +15.48 units, but realized historical PnL on those bets was −9.17 units, so we observed overconfidence or problematic top edges. Calibration improved the Brier score (raw 0.238 → Platt 0.233 → Isotonic 0.222).
-
 # Football Match Outcome Prediction
 
 ## Overview
 
+Recent work — Telegram & delivery
+- Implemented a Dockerized FastAPI snapshot endpoint that serves calibrated model probabilities from reproducible CSV snapshots.
+- Implemented a Telegram digest pipeline (scripts/send_telegram_digest.py) that fetches picks from the API, delivers them to a Telegram chat, and logs every delivery to deliveries.db (message_id, chat_id, sent_at, match rows). This pipeline has been tested end‑to‑end locally and in Docker.
+
 This project utilizes data analysis and machine learning to predict football match outcomes, with a current focus on **HomeWin** (whether the home team wins). The repository includes code, data processing pipelines, and business simulation tools to evaluate and deploy predictive models for football analytics.
 
 ## Project Evolution
+
+Recent work — Telegram & delivery
+- Delivery logs (deliveries.db) now enable per‑user delivery history and basic ROI tracking so we can A/B test thresholds and message formats.
+- The API + delivery pipeline is packaged for lightweight deployment in Docker/Colima.
 
 Originally focused on predicting over/under 2.5 goals in Premier League matches, the project has pivoted to maximize predictive accuracy for the "HomeWin" outcome across a large football dataset, leveraging advanced feature engineering and multiple modeling approaches.
 
 ---
 
 ## Features
+
+Recent work — Telegram & delivery
+- The API exposes endpoints (/predictions/latest and /predictions/info) that the sender uses to assemble digests.
+- Delivery logging supports simple A/B testing: threshold and prob_col used for a run are recorded alongside message metadata.
 
 - **Data Pipeline**:  
   - Ingestion, cleaning, and comprehensive feature engineering (market odds, team encoding, recent form, contextual variables).
@@ -27,7 +35,7 @@ Originally focused on predicting over/under 2.5 goals in Premier League matches,
   - Simulated betting strategies using model probabilities and bookmaker odds.
   - ROI, win rate, and profit/loss tracked and visualized.
 - **Deployment Ready**:  
-  - Model packaging for API deployment (Flask/FastAPI), with cloud hosting instructions.
+  - Model packaging for API deployment (FastAPI), with Docker instructions and a run helper script.
 - **Documentation & Demo**:  
   - Clear README, technical report, and visualizations for stakeholders.
 
@@ -35,12 +43,19 @@ Originally focused on predicting over/under 2.5 goals in Premier League matches,
 
 ## Current Focus
 
+Recent work — Telegram & delivery
+- Focused on snapshot‑based reproducibility: predictions are saved to CSV snapshots which are loaded by the API and used by the sender to ensure the exact rows sent are logged.
+- Lightweight deployment: Docker + simple worker scheduler approach; sender can be run locally or as a one‑off Docker job.
+
 - **Target Variable**: HomeWin (home team wins)
 - **Key Goal**: Push predictive accuracy as close to 70% as possible; demonstrate real-world business value via simulation and decision support.
 
 ---
 
 ## Usage
+
+Recent work — Telegram & delivery
+- The README below includes exact commands to run the API, build the Docker image, and run the Telegram sender. The sender writes to deliveries.db in the repo so you have an auditable delivery history.
 
 Quick start — get the project running and reproduce key results.
 
@@ -92,8 +107,9 @@ Quick start — get the project running and reproduce key results.
 
 8. Running locally (optional)
    - If you have a small API (deployment code), run it locally with:
-     - uvicorn deployment.api:app --reload
-   - (If no API provided, skip this step.)
+     - python -m uvicorn src.api.main:APP --reload --port 8000
+   - Or use the helper:
+     - ./run_api.sh <conda-env-name>
 
 Where to look for results
 - Models: models/
@@ -110,13 +126,28 @@ Short troubleshooting
 
 ## Results
 
-- **Best Model**: Random Forest, XGBoost, and Logistic Regression all reach ~65–67% accuracy on the HomeWin task.
-- **Top Features**: Market odds (B365H, WHA, IWA, VCH, VCA), team performance metrics.
-- **Business Simulation**: Model-based betting strategies are benchmarked against naive approaches. Profit/loss, ROI, and win rates are clearly reported.
+Recent work — Telegram & delivery
+- We validated the end‑to‑end flow: snapshot → API → Telegram digest → deliveries.db logging. Example run produced 5 picks delivered in a single digest and recorded with a message_id in deliveries.db.
+- Deliveries logging enables per‑user ROI tracking and A/B experiments on thresholds and message formats.
+
+Summary of modeling/evaluation results
+- Snapshot from 10 Nov produced 269 prospective matches with feature alignment verified and Platt/isotonic calibration applied.
+- Calibration and observed performance:
+  - Raw Brier score: 0.238
+  - Platt calibration Brier: 0.233
+  - Isotonic calibration Brier: 0.222
+- Business simulation (example run):
+  - The model flagged 49 positive‑edge opportunities (theoretical sum EV ≈ +15.48 units).
+  - Realized historical PnL on those bets in the test snapshot was ≈ −9.17 units (indicating overconfidence or problematic top edges).
+- Best model family: Random Forest / XGBoost / Logistic Regression all in the ~65–67% accuracy range on HomeWin.
 
 ---
 
 ## Next Steps
+
+Recent work — Telegram & delivery
+- Use deliveries.db to set up A/B tests: e.g., compare threshold 0.50 vs 0.55 across user cohorts, and track per‑user ROI.
+- Add a small admin UI to inspect deliveries and re‑send picks if needed; this will improve auditability for the closed beta.
 
 - Continue model calibration and deployment.
 - Explore live-data integration for real-time predictions.
