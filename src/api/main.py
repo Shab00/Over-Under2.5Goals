@@ -1,7 +1,8 @@
-from fastapi import FastAPI, HTTPException, Query, Header, Depends
+from fastapi import FastAPI, HTTPException, Query, Header, Depends, Body
 from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.encoders import jsonable_encoder
-from typing import Optional
+from pydantic import BaseModel, validator
+from typing import Optional, List
 from pathlib import Path
 import os
 import glob
@@ -126,3 +127,58 @@ def predictions_latest(
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Failed to encode response: {e}")
+
+class IngestRow(BaseModel):
+    match_id: int
+    prob: Optional[float] = None
+    home: Optional[str] = None
+    away: Optional[str] = None
+    odds_B365H: Optional[float] = None
+    model_source: Optional[str] = None
+    snapshot_created_at: Optional[str] = None
+
+    @validator("prob")
+    def prob_must_be_0_1(cls, v):
+        if v is None:
+            return v
+        if not (0.0 <= v <= 1.0):
+            raise ValueError("prob must be between 0.0 and 1.0")
+        return v
+
+class IngestPayload(BaseModel):
+    rows: List[IngestRow]
+    source: Optional[str] = None
+
+@APP.post("/ingest")
+def ingest(
+    payload: IngestPayload = Body(...),
+    _auth=Depends(require_api_key),
+):
+    """
+    Accept an envelope {"rows": [...], "source": "..."} from ETL jobs.
+
+    Validation performed by Pydantic:
+      - each row must include `match_id` (int)
+      - if `prob` is provided it must be 0.0 <= prob <= 1.0
+
+    Additional checks:
+      - payload.rows must be non-empty
+      - no duplicate match_id values within the payload
+
+    NOTE: This handler currently accepts and validates the payload and returns a count.
+    TODO: persist ingested rows to a server-side DB or deliveries table for auditing and idempotency.
+    """
+    rows = payload.rows
+    if not rows or len(rows) == 0:
+        raise HTTPException(status_code=400, detail="payload.rows must be a non-empty list")
+
+    seen = set()
+    for r in rows:
+        if r.match_id in seen:
+            raise HTTPException(status_code=400, detail=f"duplicate match_id in payload: {r.match_id}")
+        seen.add(r.match_id)
+
+    received = len(rows)
+
+
+    return JSONResponse(status_code=200, content={"received": received, "source": payload.source})
