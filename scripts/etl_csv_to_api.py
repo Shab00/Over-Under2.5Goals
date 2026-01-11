@@ -14,8 +14,8 @@ from urllib3.util.retry import Retry
 
 DEFAULT_BATCH_SIZE = 100
 DEFAULT_RETRY_TOTAL = 5
-DEFAULT_RETRY_BACKOFF = 1.0
-CHECKPOINT_DB = "etl_checkpoints.db" 
+DEFAULT_RETRY_BACKOFF = 1.0  # base backoff in seconds
+CHECKPOINT_DB = "etl_checkpoints.db"  # local checkpointing for idempotency/resume
 
 logging.basicConfig(
     level=logging.INFO,
@@ -88,6 +88,7 @@ def normalize_row(row: Dict[str, str]) -> Dict:
     """
     out = {}
     out["match_id"] = int(row.get("match_id")) if row.get("match_id") else None
+    out["date"] = row.get("date")  # TODO: parse and timezone-normalize if needed
     out["home"] = row.get("home")
     out["away"] = row.get("away")
     if row.get("prob_platt"):
@@ -96,11 +97,12 @@ def normalize_row(row: Dict[str, str]) -> Dict:
         out["prob"] = float(row["prob_home"])
     else:
         out["prob"] = None
+    # add other relevant fields (odds, model_source, snapshot_created_at)
     out["odds_B365H"] = float(row["odds_B365H"]) if row.get("odds_B365H") else None
     out["model_source"] = row.get("model_source")
     out["snapshot_created_at"] = row.get("snapshot_created_at")
+    # TODO: add any engineered features required by the API payload
     return out
-
 def post_batch(session: requests.Session, api_url: str, api_key: Optional[str], batch: List[Dict], timeout: int = 30):
     """
     Post a single batch to the API.
@@ -112,12 +114,13 @@ def post_batch(session: requests.Session, api_url: str, api_key: Optional[str], 
     if api_key:
         headers["X-API-KEY"] = api_key
 
-    payload = {"rows": batch, "source": "snapshot_etl"}
+    payload = {"rows": batch, "source": "snapshot_etl"}  # example envelope
     try:
         resp = session.post(api_url, json=payload, headers=headers, timeout=timeout)
         resp.raise_for_status()
         return True, resp.json()
     except requests.HTTPError as e:
+        # Non-2xx: log and bubble up for retry/backoff by caller
         logger.error("HTTP error posting batch: %s %s", resp.status_code if 'resp' in locals() else None, getattr(resp, "text", ""))
         return False, getattr(e, "response", None)
     except Exception as e:
@@ -133,7 +136,8 @@ def etl_csv_to_api(csv_path: str,
     """
     Orchestrate reading CSV, normalizing, batching and posting to API.
     """
-    logger.info("ETL start: csv=%s api=%s batch_size=%d dry_run=%s", csv_path, api_url, batch_size, dry_run)
+    logger.info("ETL start: csv=%s api=%s batch_size=%d dry_run=%s checkpoint_db=%s",
+                csv_path, api_url, batch_size, dry_run, checkpoint_db)
     session = build_session()
 
     conn = init_checkpoint_db(checkpoint_db) if checkpoint_db else None
@@ -153,6 +157,7 @@ def etl_csv_to_api(csv_path: str,
             logger.exception("Skipping row %d due to normalization error: %s", current_index, e)
             continue
 
+        # TODO: add dedup/idempotency logic here (e.g., skip if match_id already delivered)
         batch.append(row)
 
         if len(batch) >= batch_size:
@@ -174,6 +179,8 @@ def etl_csv_to_api(csv_path: str,
             else:
                 failed_batches += 1
                 logger.error("Batch failed to post at index %d. failed_batches=%d", current_index, failed_batches)
+                # TODO: decide on failure policy: retry loop, exponential backoff, or abort run
+                # For now: sleep and retry once, then continue (simple backoff)
                 time.sleep(5)
                 ok2, resp2 = post_batch(session, api_url, api_key, batch)
                 if ok2:
@@ -218,18 +225,32 @@ def parse_args():
     p.add_argument("--dry-run", action="store_true", help="Run without actually posting to the API")
     p.add_argument("--checkpoint-db", default=CHECKPOINT_DB, help="Path to local sqlite checkpoint DB")
     p.add_argument("--start", type=int, default=0, help="CSV start row (for manual resume)")
+    p.add_argument("--no-checkpoint", action="store_true", help="Do not use checkpoint DB (process from start and do not persist progress)")
+    p.add_argument("--force", action="store_true", help="Reset checkpoint for this CSV to 0 before running (use with checkpointing)")
     return p.parse_args()
 
 def main():
     args = parse_args()
     api_key = args.api_key or os.environ.get("API_KEY")
+
+    if args.no_checkpoint:
+        checkpoint_db = None
+    else:
+        checkpoint_db = args.checkpoint_db
+
+    if args.force and checkpoint_db:
+        logger.info("Force reset: initializing checkpoint DB %s and setting last_row_index=0 for %s", checkpoint_db, args.csv)
+        conn = init_checkpoint_db(checkpoint_db)
+        set_last_index(conn, args.csv, 0)
+        conn.close()
+
     result = etl_csv_to_api(
         csv_path=args.csv,
         api_url=args.api_url,
         api_key=api_key,
         batch_size=args.batch_size,
         dry_run=args.dry_run,
-        checkpoint_db=args.checkpoint_db,
+        checkpoint_db=checkpoint_db,
     )
     logger.info("Result: %s", result)
 
