@@ -8,6 +8,9 @@ import os
 import glob
 import pandas as pd
 import time
+import sqlite3
+
+from .db import init_deliveries_db, insert_delivery, query_deliveries
 
 APP = FastAPI(title="Predictions Snapshot API", version="0.1")
 
@@ -64,16 +67,25 @@ def require_api_key(x_api_key: Optional[str] = Header(None)):
             raise HTTPException(status_code=401, detail="Invalid X-API-KEY")
     return True
 
+DEFAULT_DB_PATH = os.environ.get("DELIVERIES_DB") or str(Path(__file__).resolve().parents[2] / "data" / "deliveries.db")
+
+_deliveries_conn: Optional[sqlite3.Connection] = None
+
+def get_deliveries_conn():
+    global _deliveries_conn
+    if _deliveries_conn is None:
+        # ensure parent folder exists
+        db_path = Path(DEFAULT_DB_PATH)
+        db_path.parent.mkdir(parents=True, exist_ok=True)
+        _deliveries_conn = init_deliveries_db(str(db_path))
+    return _deliveries_conn
+
 @APP.get("/health")
 def health():
     return {"status": "ok"}
 
 @APP.get("/predictions/info")
 def predictions_info(_auth=Depends(require_api_key)):
-    """
-    Lightweight info endpoint to confirm which snapshot was loaded,
-    how many rows it contains and which columns are present.
-    """
     try:
         df = load_snapshot()
     except FileNotFoundError as e:
@@ -155,18 +167,8 @@ def ingest(
     _auth=Depends(require_api_key),
 ):
     """
-    Accept an envelope {"rows": [...], "source": "..."} from ETL jobs.
-
-    Validation performed by Pydantic:
-      - each row must include `match_id` (int)
-      - if `prob` is provided it must be 0.0 <= prob <= 1.0
-
-    Additional checks:
-      - payload.rows must be non-empty
-      - no duplicate match_id values within the payload
-
-    NOTE: This handler currently accepts and validates the payload and returns a count.
-    TODO: persist ingested rows to a server-side DB or deliveries table for auditing and idempotency.
+    Accept payload and persist each validated row into deliveries DB.
+    Returns: {received, persisted, skipped, source}
     """
     rows = payload.rows
     if not rows or len(rows) == 0:
@@ -178,7 +180,36 @@ def ingest(
             raise HTTPException(status_code=400, detail=f"duplicate match_id in payload: {r.match_id}")
         seen.add(r.match_id)
 
+    conn = get_deliveries_conn()
+    persisted = 0
+    skipped = 0
+    for r in rows:
+        row_dict = r.dict()
+        try:
+            ok = insert_delivery(conn, r.match_id, row_dict, payload.source)
+            if ok:
+                persisted += 1
+            else:
+                skipped += 1
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"DB error: {e}")
+
     received = len(rows)
+    return JSONResponse(status_code=200, content={"received": received, "persisted": persisted, "skipped": skipped, "source": payload.source})
 
-
-    return JSONResponse(status_code=200, content={"received": received, "source": payload.source})
+@APP.get("/deliveries")
+def deliveries(
+    limit: int = Query(100, ge=1, le=1000),
+    match_id: Optional[int] = Query(None),
+    since: Optional[str] = Query(None, description="ISO timestamp filter (ingested_at > since)"),
+    _auth=Depends(require_api_key)
+):
+    """
+    Return recent persisted deliveries for auditing. Protected by API key.
+    """
+    conn = get_deliveries_conn()
+    try:
+        rows = query_deliveries(conn, limit=limit, since=since, match_id=match_id)
+        return {"count": len(rows), "rows": rows}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to query deliveries: {e}")
