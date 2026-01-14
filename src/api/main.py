@@ -9,8 +9,9 @@ import glob
 import pandas as pd
 import time
 import sqlite3
+import json
 
-from .db import init_deliveries_db, insert_delivery, query_deliveries
+from .db import init_deliveries_db, insert_delivery, query_deliveries, exists_match_id
 
 APP = FastAPI(title="Predictions Snapshot API", version="0.1")
 
@@ -68,13 +69,11 @@ def require_api_key(x_api_key: Optional[str] = Header(None)):
     return True
 
 DEFAULT_DB_PATH = os.environ.get("DELIVERIES_DB") or str(Path(__file__).resolve().parents[2] / "data" / "deliveries.db")
-
 _deliveries_conn: Optional[sqlite3.Connection] = None
 
 def get_deliveries_conn():
     global _deliveries_conn
     if _deliveries_conn is None:
-        # ensure parent folder exists
         db_path = Path(DEFAULT_DB_PATH)
         db_path.parent.mkdir(parents=True, exist_ok=True)
         _deliveries_conn = init_deliveries_db(str(db_path))
@@ -168,7 +167,8 @@ def ingest(
 ):
     """
     Accept payload and persist each validated row into deliveries DB.
-    Returns: {received, persisted, skipped, source}
+    Application-level idempotency: skip any row if match_id already exists in deliveries (regardless of source).
+    Returns: {received, persisted, skipped, errors, source}
     """
     rows = payload.rows
     if not rows or len(rows) == 0:
@@ -183,33 +183,44 @@ def ingest(
     conn = get_deliveries_conn()
     persisted = 0
     skipped = 0
-    for r in rows:
+    errors = []
+
+    for idx, r in enumerate(rows):
         row_dict = r.dict()
         try:
+            if exists_match_id(conn, r.match_id):
+                skipped += 1
+                continue
+
             ok = insert_delivery(conn, r.match_id, row_dict, payload.source)
             if ok:
                 persisted += 1
             else:
                 skipped += 1
         except Exception as e:
-            raise HTTPException(status_code=500, detail=f"DB error: {e}")
+            errors.append({"index": idx, "match_id": getattr(r, "match_id", None), "error": str(e)})
 
     received = len(rows)
-    return JSONResponse(status_code=200, content={"received": received, "persisted": persisted, "skipped": skipped, "source": payload.source})
+    response = {"received": received, "persisted": persisted, "skipped": skipped, "errors": errors, "source": payload.source}
+    return JSONResponse(status_code=200, content=response)
 
 @APP.get("/deliveries")
 def deliveries(
     limit: int = Query(100, ge=1, le=1000),
+    offset: int = Query(0, ge=0),
     match_id: Optional[int] = Query(None),
+    source: Optional[str] = Query(None),
     since: Optional[str] = Query(None, description="ISO timestamp filter (ingested_at > since)"),
+    include_payload: bool = Query(True, description="Include full payload JSON in results"),
     _auth=Depends(require_api_key)
 ):
     """
-    Return recent persisted deliveries for auditing. Protected by API key.
+    Return persisted deliveries with pagination and filters.
+    Protected by API key.
     """
     conn = get_deliveries_conn()
     try:
-        rows = query_deliveries(conn, limit=limit, since=since, match_id=match_id)
-        return {"count": len(rows), "rows": rows}
+        rows = query_deliveries(conn, limit=limit, offset=offset, since=since, match_id=match_id, source=source, include_payload=include_payload)
+        return {"count": len(rows), "rows": rows, "limit": limit, "offset": offset}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to query deliveries: {e}")
