@@ -161,6 +161,15 @@ This project is for educational and sports analytics purposes only. Data sources
 
 ---
 
+## Demo
+
+[![CI](https://github.com/Shab00/Over-Under2.5Goals/actions/workflows/ci.yml/badge.svg)](https://github.com/Shab00/Over-Under2.5Goals/actions)
+
+Try the ingest endpoint (replace <URL> with the deployed URL):
+
+```bash
+curl -X POST '<URL>/ingest' -H 'Content-Type: application/json' -H 'X-API-KEY: choose-a-secret' -d '{"rows":[{"match_id":12345,"prob":0.5}],"source":"demo"}'
+```
 ## License
 
 [MIT License](LICENSE)
