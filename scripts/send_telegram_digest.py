@@ -2,6 +2,7 @@ import os
 import sqlite3
 import requests
 import argparse
+import json
 from datetime import datetime
 
 API_URL = os.environ.get("API_URL", "http://127.0.0.1:8000")
@@ -12,6 +13,7 @@ CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 DB_PATH = os.environ.get("DELIVERIES_DB", "deliveries.db")
 
 def init_db(conn):
+    # per-pick deliveries table (existing)
     conn.execute(
         """
         CREATE TABLE IF NOT EXISTS deliveries (
@@ -23,6 +25,24 @@ def init_db(conn):
             prob REAL,
             message_id INTEGER,
             chat_id TEXT
+        )
+        """
+    )
+    # summary table: one row per Telegram send / ETL run
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS deliveries_summary (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            message_id INTEGER,
+            chat_id TEXT,
+            sent_at TEXT NOT NULL,
+            source TEXT,
+            total_sent INTEGER DEFAULT 0,
+            persisted_count INTEGER DEFAULT 0,
+            skipped_count INTEGER DEFAULT 0,
+            ingest_status_code INTEGER,
+            ingest_response_json TEXT,
+            payload_json TEXT
         )
         """
     )
@@ -80,16 +100,59 @@ def main():
     rows = fetch_picks(limit=args.limit, threshold=args.threshold, prob_col=args.prob_col)
     text = format_picks_text(rows)
 
+    # POST rows to /ingest to get persisted counts
+    ingest_payload = {"rows": rows, "source": "telegram-sender"}
+    ingest_headers = {"Content-Type": "application/json"}
+    if API_KEY:
+        ingest_headers["X-API-KEY"] = API_KEY
+
+    try:
+        ingest_resp = requests.post(f"{API_URL}/ingest", json=ingest_payload, headers=ingest_headers, timeout=10)
+        ingest_status = ingest_resp.status_code
+        try:
+            ingest_json = ingest_resp.json()
+        except Exception:
+            ingest_json = {"error": "invalid-json"}
+    except Exception as e:
+        ingest_status = None
+        ingest_json = {"error": f"ingest-failed: {str(e)}"}
+
+    persisted = int(ingest_json.get("persisted", 0))
+    total_sent = len(rows)
+    skipped = max(0, total_sent - persisted)
+
+    # Send Telegram message
     res = send_telegram_message(text)
     message_id = res.get("result", {}).get("message_id")
     chat_id = str(res.get("result", {}).get("chat", {}).get("id"))
 
+    # Log per-pick deliveries (existing behaviour)
     conn = sqlite3.connect(DB_PATH)
     init_db(conn)
     log_deliveries(conn, rows, message_id, chat_id)
+
+    # Log summary row with persisted/skipped and ingest response
+    now = datetime.utcnow().isoformat() + "Z"
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO deliveries_summary (message_id, chat_id, sent_at, source, total_sent, persisted_count, skipped_count, ingest_status_code, ingest_response_json, payload_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        (
+            message_id,
+            chat_id,
+            now,
+            "telegram-sender",
+            total_sent,
+            persisted,
+            skipped,
+            ingest_status,
+            json.dumps(ingest_json),
+            json.dumps(rows),
+        ),
+    )
+    conn.commit()
     conn.close()
 
-    print(f"Sent {len(rows)} picks, message_id={message_id}, chat_id={chat_id}")
+    print(f"Sent {len(rows)} picks, message_id={message_id}, chat_id={chat_id}, persisted={persisted}, skipped={skipped}")
 
 if __name__ == "__main__":
     main()
