@@ -1,1 +1,12 @@
 data/deliveries.db
+# local DBs and backups
+deliveries.db
+data/deliveries.db
+*.db.bak*
+*.bak
+# temp payload/ingest files created during testing
+payload.json
+ingest.json
+test_payload.json
+# editor / script backups
+scripts/*.bak
