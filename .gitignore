@@ -10,3 +10,9 @@ ingest.json
 test_payload.json
 # editor / script backups
 scripts/*.bak
+.venv/
+uvicorn.log
+tmp/
+.pytest_cache/
+*.pyc
+__pycache__/
