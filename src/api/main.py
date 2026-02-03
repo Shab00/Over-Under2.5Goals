@@ -22,7 +22,6 @@ def require_api_key(x_api_key: Optional[str] = Header(None)):
 
 APP = FastAPI(title="Predictions Snapshot API", version="0.1")
 
-# Simple health endpoint
 @APP.get("/health")
 def health():
     return {"status": "ok"}
