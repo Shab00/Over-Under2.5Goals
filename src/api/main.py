@@ -7,13 +7,15 @@ import os
 import sqlite3
 from datetime import datetime
 
-from .db import init_deliveries_db, insert_delivery, query_deliveries, exists_match_id, simple_query_deliveries
+from .db import (
+    init_deliveries_db,
+    insert_delivery,
+    query_deliveries,
+    exists_match_id,
+    simple_query_deliveries,
+)
 
 def require_api_key(x_api_key: Optional[str] = Header(None)):
-    """
-    If API_KEY env var is set, require a matching X-API-KEY header.
-    If API_KEY is not set, the API is open.
-    """
     api_key = os.environ.get("API_KEY")
     if api_key:
         if x_api_key != api_key:
@@ -22,12 +24,13 @@ def require_api_key(x_api_key: Optional[str] = Header(None)):
 
 APP = FastAPI(title="Predictions Snapshot API", version="0.1")
 
-# Simple health endpoint
 @APP.get("/health")
 def health():
     return {"status": "ok"}
 
-DEFAULT_DB_PATH = os.environ.get("DELIVERIES_DB") or str(Path(__file__).resolve().parents[2] / "data" / "deliveries.db")
+DEFAULT_DB_PATH = os.environ.get("DELIVERIES_DB") or str(
+    Path(__file__).resolve().parents[2] / "data" / "deliveries.db"
+)
 _deliveries_conn: Optional[sqlite3.Connection] = None
 
 def get_deliveries_conn():
@@ -85,14 +88,23 @@ def ingest(
 
     received_at_now = datetime.utcnow().isoformat() + "Z"
 
+    # default source used when payload.source is omitted
+    default_source = "api-ingest"
+    # value we'll report back in the response
+    response_source = payload.source or default_source
+
     for idx, r in enumerate(rows):
         row_dict = r.dict()
         try:
-            if exists_match_id(conn, r.match_id):
+            exists = exists_match_id(conn, r.match_id)
+            if exists:
                 skipped += 1
                 continue
 
-            ok = insert_delivery(conn, r.match_id, row_dict, payload.source, received_at=received_at_now)
+            source_to_use = payload.source or default_source
+
+            ok = insert_delivery(conn, r.match_id, row_dict, source_to_use, received_at=received_at_now)
+
             if ok:
                 persisted += 1
             else:
@@ -101,7 +113,7 @@ def ingest(
             errors.append({"index": idx, "match_id": getattr(r, "match_id", None), "error": str(e)})
 
     received = len(rows)
-    response = {"received": received, "persisted": persisted, "skipped": skipped, "errors": errors, "source": payload.source}
+    response = {"received": received, "persisted": persisted, "skipped": skipped, "errors": errors, "source": response_source}
     return JSONResponse(status_code=200, content=response)
 
 @APP.get("/deliveries")
@@ -115,10 +127,6 @@ def deliveries(
     simple: bool = Query(False, description="Return a compact, fast listing (id,match_id,source,received_at)"),
     _auth=Depends(require_api_key)
 ):
-    """
-    Return persisted deliveries with pagination and filters.
-    If simple=true returns compact records (fast).
-    """
     conn = get_deliveries_conn()
     try:
         if simple:
