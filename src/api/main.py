@@ -15,9 +15,6 @@ from .db import (
     simple_query_deliveries,
 )
 
-# Diagnostic: print when this module is imported (helps confirm running process)
-
-
 def require_api_key(x_api_key: Optional[str] = Header(None)):
     api_key = os.environ.get("API_KEY")
     if api_key:
@@ -25,30 +22,24 @@ def require_api_key(x_api_key: Optional[str] = Header(None)):
             raise HTTPException(status_code=401, detail="Invalid X-API-KEY")
     return True
 
-
 APP = FastAPI(title="Predictions Snapshot API", version="0.1")
-
 
 @APP.get("/health")
 def health():
     return {"status": "ok"}
-
 
 DEFAULT_DB_PATH = os.environ.get("DELIVERIES_DB") or str(
     Path(__file__).resolve().parents[2] / "data" / "deliveries.db"
 )
 _deliveries_conn: Optional[sqlite3.Connection] = None
 
-
 def get_deliveries_conn():
     global _deliveries_conn
     if _deliveries_conn is None:
         db_path = Path(DEFAULT_DB_PATH)
         db_path.parent.mkdir(parents=True, exist_ok=True)
-        # Diagnostic: print which DB path we open
         _deliveries_conn = init_deliveries_db(str(db_path))
     return _deliveries_conn
-
 
 class IngestRow(BaseModel):
     match_id: int
@@ -67,11 +58,9 @@ class IngestRow(BaseModel):
             raise ValueError("prob must be between 0.0 and 1.0")
         return v
 
-
 class IngestPayload(BaseModel):
     rows: List[IngestRow]
     source: Optional[str] = None
-
 
 @APP.post("/ingest")
 def ingest(
@@ -107,38 +96,25 @@ def ingest(
     for idx, r in enumerate(rows):
         row_dict = r.dict()
         try:
-            print(f"[INGEST] idx={idx} match_id={r.match_id} - checking exists...", flush=True)
             exists = exists_match_id(conn, r.match_id)
-            print(f"[INGEST] idx={idx} match_id={r.match_id} - exists_match_id -> {exists}", flush=True)
             if exists:
                 skipped += 1
-                print(f"[INGEST] idx={idx} match_id={r.match_id} - skipped because exists", flush=True)
                 continue
 
             source_to_use = payload.source or default_source
-            if payload.source is None:
-                print(f"[INGEST] idx={idx} match_id={r.match_id} - payload.source omitted; using default '{source_to_use}'", flush=True)
 
-            print(f"[INGEST] idx={idx} match_id={r.match_id} - attempting insert with source={source_to_use}", flush=True)
             ok = insert_delivery(conn, r.match_id, row_dict, source_to_use, received_at=received_at_now)
-            print(f"[INGEST] idx={idx} match_id={r.match_id} - insert_delivery returned: {ok}", flush=True)
 
             if ok:
                 persisted += 1
-                print(f"[INGEST] idx={idx} match_id={r.match_id} - persisted", flush=True)
             else:
                 skipped += 1
-                print(f"[INGEST] idx={idx} match_id={r.match_id} - insert treated as duplicate/skip", flush=True)
         except Exception as e:
             errors.append({"index": idx, "match_id": getattr(r, "match_id", None), "error": str(e)})
-            import traceback as _tb
-            print(f"[INGEST] idx={idx} match_id={getattr(r, 'match_id', None)} - exception: {e}", flush=True)
-            _tb.print_exc()
 
     received = len(rows)
     response = {"received": received, "persisted": persisted, "skipped": skipped, "errors": errors, "source": response_source}
     return JSONResponse(status_code=200, content=response)
-
 
 @APP.get("/deliveries")
 def deliveries(
