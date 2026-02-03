@@ -16,7 +16,6 @@ from .db import (
 )
 
 # Diagnostic: print when this module is imported (helps confirm running process)
-print("[MODULE LOAD] src.api.main imported", flush=True)
 
 
 def require_api_key(x_api_key: Optional[str] = Header(None)):
@@ -47,7 +46,6 @@ def get_deliveries_conn():
         db_path = Path(DEFAULT_DB_PATH)
         db_path.parent.mkdir(parents=True, exist_ok=True)
         # Diagnostic: print which DB path we open
-        print(f"[DB PATH] opening deliveries DB at: {db_path}", flush=True)
         _deliveries_conn = init_deliveries_db(str(db_path))
     return _deliveries_conn
 
@@ -140,20 +138,6 @@ def ingest(
     received = len(rows)
     response = {"received": received, "persisted": persisted, "skipped": skipped, "errors": errors, "source": response_source}
     return JSONResponse(status_code=200, content=response)
-
-
-@APP.get("/_debug/exists/{match_id}")
-def _debug_exists(match_id: int):
-    """
-    Debug endpoint — returns the server's DEFAULT_DB_PATH and whether the server
-    believes a given match_id exists in the deliveries DB.
-    """
-    conn = get_deliveries_conn()
-    try:
-        exists = exists_match_id(conn, match_id)
-        return {"DEFAULT_DB_PATH": DEFAULT_DB_PATH, "match_id": match_id, "exists": exists}
-    except Exception as e:
-        return {"DEFAULT_DB_PATH": DEFAULT_DB_PATH, "match_id": match_id, "error": str(e)}
 
 
 @APP.get("/deliveries")
