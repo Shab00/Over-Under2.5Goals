@@ -3,7 +3,6 @@ import json
 from typing import Optional, List, Dict
 from datetime import datetime
 
-# Core table creation (omits received_at to allow ALTER later)
 CORE_TABLE_DDL = """
 CREATE TABLE IF NOT EXISTS deliveries (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,29 +25,23 @@ def init_deliveries_db(path: str) -> sqlite3.Connection:
     conn = sqlite3.connect(path, isolation_level=None, check_same_thread=False)
     cur = conn.cursor()
 
-    # Ensure core table exists
     cur.execute(CORE_TABLE_DDL)
 
-    # Inspect existing columns
     cur.execute("PRAGMA table_info(deliveries);")
     existing_cols = {row[1] for row in cur.fetchall()}
 
-    # Add received_at if missing
     if "received_at" not in existing_cols:
         try:
             cur.execute("ALTER TABLE deliveries ADD COLUMN received_at TEXT;")
         except sqlite3.OperationalError:
-            # Ignore if another process added it concurrently or other edge case
             pass
 
-    # Add ingested_at if missing (defensive)
     if "ingested_at" not in existing_cols:
         try:
             cur.execute("ALTER TABLE deliveries ADD COLUMN ingested_at TEXT DEFAULT CURRENT_TIMESTAMP;")
         except sqlite3.OperationalError:
             pass
 
-    # Create indexes (IF NOT EXISTS is safe). Also create unique index on match_id.
     cur.execute("CREATE INDEX IF NOT EXISTS idx_deliveries_received_at ON deliveries(received_at);")
     cur.execute("CREATE INDEX IF NOT EXISTS idx_deliveries_ingested_at ON deliveries(ingested_at);")
     cur.execute("CREATE INDEX IF NOT EXISTS idx_deliveries_match_id ON deliveries(match_id);")
@@ -76,7 +69,6 @@ def insert_delivery(conn: sqlite3.Connection,
         )
         return True
     except sqlite3.IntegrityError:
-        # duplicate (match_id or match_id+source) => skip
         return False
 
 def exists_match_id(conn: sqlite3.Connection, match_id: int) -> bool:
