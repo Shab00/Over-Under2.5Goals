@@ -16,3 +16,9 @@ tmp/
 .pytest_cache/
 *.pyc
 __pycache__/
+
+# ignore virtual environments and python compiled files
+.venv/
+source/
+__pycache__/
+*.pyc
