@@ -5,21 +5,30 @@ try:
     from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
     _HAS_PROM = True
 except Exception:
-    # fallback no-op implementations
+    # prometheus_client not available — provide no-op replacements compatible
     _HAS_PROM = False
-
-    class _NoopMetric:
-        def labels(self, *a, **k):
-            return self
-        def inc(self, n=1):
-            return None
-        def observe(self, v):
-            return None
 
     def generate_latest():
         return b""
 
     CONTENT_TYPE_LATEST = "text/plain; version=0.0.4; charset=utf-8"
+
+    class _NoopMetric:
+        def __init__(self, *args, **kwargs):
+            # accept same constructor signature as real metrics
+            pass
+
+        def labels(self, *a, **k):
+            return self
+
+        def inc(self, n=1):
+            # no-op
+            return None
+
+        def observe(self, v):
+            # no-op
+            return None
+
     Counter = _NoopMetric
     Histogram = _NoopMetric
 
