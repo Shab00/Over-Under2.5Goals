@@ -1,0 +1,49 @@
+name: staging-smoke
+
+on:
+  workflow_dispatch:
+  # Optionally run after your staging deploy job; modify to your deploy event
+  # deployment_status:
+  #   types: [created]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Start API (background)
+        run: |
+          source .venv/bin/activate
+          nohup python -m uvicorn src.api.main:APP --host 127.0.0.1 --port 8000 &> uvicorn.log & echo $! > uvicorn.pid
+          sleep 3
+          tail -n 200 uvicorn.log || true
+
+      - name: Run smoke script
+        env:
+          TARGET: http://127.0.0.1:8000
+          SQLITE_DB: data/deliveries.db
+        run: |
+          chmod +x scripts/smoke_test.sh
+          ./scripts/smoke_test.sh
+
+      - name: Collect logs (always)
+        if: failure() || success()
+        run: |
+          echo "=== uvicorn.log ==="
+          tail -n 200 uvicorn.log || true
+          echo "=== deliveries DB counts ==="
+          sqlite3 -header -csv data/deliveries.db "SELECT COUNT(*) AS total, source FROM deliveries GROUP BY source;" || true

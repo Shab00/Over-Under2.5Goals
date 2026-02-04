@@ -1,6 +1,8 @@
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # Distribution / packaging
 .Python
@@ -19,10 +21,22 @@ var/
 .installed.cfg
 *.egg
 
+# Local DBs and test artifacts
+deliveries.db
+data/deliveries.db
+*.db.bak*
+payload.json
+ingest.json
+test_payload.json
+
 # Virtualenvs and runtime files
 .venv/
 source/
 uvicorn.pid
+uvicorn.log
+
+# temp / runtime
+tmp/
 
 # Editor and OS files
 *.swp
@@ -44,7 +58,3 @@ pip-log.txt
 
 # Logs
 *.log
-uvicorn.log
-
-# compiled assets
-*.pyc
