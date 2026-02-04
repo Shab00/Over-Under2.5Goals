@@ -1,24 +1,50 @@
-data/deliveries.db
-# local DBs and backups
-deliveries.db
-data/deliveries.db
-*.db.bak*
-*.bak
-# temp payload/ingest files created during testing
-payload.json
-ingest.json
-test_payload.json
-# editor / script backups
-scripts/*.bak
-.venv/
-uvicorn.log
-tmp/
-.pytest_cache/
-*.pyc
 __pycache__/
+*.py[cod]
+*$py.class
 
-# ignore virtual environments and python compiled files
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtualenvs and runtime files
 .venv/
 source/
-__pycache__/
+uvicorn.pid
+
+# Editor and OS files
+*.swp
+*.swo
+*.bak
+*.tmp
+*.orig
+*.save
+*~
+.vscode/
+.idea/
+.DS_Store
+
+# Python packaging
+pip-log.txt
+
+# pytest
+.cache/
+
+# Logs
+*.log
+uvicorn.log
+
+# compiled assets
 *.pyc
