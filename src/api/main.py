@@ -6,6 +6,7 @@ from pathlib import Path
 import os
 import sqlite3
 from datetime import datetime
+from src.metrics import add_prometheus_metrics
 
 from .db import (
     init_deliveries_db,
@@ -23,7 +24,7 @@ def require_api_key(x_api_key: Optional[str] = Header(None)):
     return True
 
 APP = FastAPI(title="Predictions Snapshot API", version="0.1")
-
+add_prometheus_metrics(APP)
 @APP.get("/health")
 def health():
     return {"status": "ok"}
