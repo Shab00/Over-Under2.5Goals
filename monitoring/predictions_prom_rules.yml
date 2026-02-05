@@ -2,20 +2,20 @@ groups:
 - name: predictions-api.rules
   rules:
   - alert: PredictionsIngestionErrorRateHigh
-    expr: rate(api_ingestion_total{result="error"}[5m]) > 0.05
+    expr: rate(ingest_requests_total{result="error"}[5m]) > 0.05
     for: 2m
     labels:
       severity: critical
     annotations:
       summary: "High ingestion error rate for Predictions API"
-      description: "Ingestion error rate for the Predictions API is high (rate(api_ingestion_total{result=\"error\"}[5m]) > 0.05). Investigate application logs and recent deploys."
+      description: "Ingestion error rate for the Predictions API is high (rate(ingest_requests_total{result=\"error\"}[5m]) > 0.05). Investigate application logs and recent deploys."
 
   - alert: PredictionsHighSkippedRatio
     expr: (
-      rate(api_ingestion_total{result="skipped"}[5m])
+      rate(ingest_requests_total{result="skipped"}[5m])
       /
-      (rate(api_ingestion_total[5m]) or 1)
-    ) > 0.5 and rate(api_ingestion_total[5m]) > 0.1
+      (rate(ingest_requests_total[5m]) or 1)
+    ) > 0.5 and rate(ingest_requests_total[5m]) > 0.1
     for: 5m
     labels:
       severity: warning
