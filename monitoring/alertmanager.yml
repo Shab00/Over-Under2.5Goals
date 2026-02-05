@@ -2,6 +2,15 @@ global:
   resolve_timeout: 5m
 
 route:
-  receiver: 'console'
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 1h
+  receiver: "dev-null"
+
 receivers:
-  - name: 'console'
+- name: "dev-null"
+  # For now: silent receiver (no integrations). Replace with email/slack/webhook in prod.
+  webhook_configs: []
+
+# optionally define inhibition rules, templates, etc.

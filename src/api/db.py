@@ -20,16 +20,19 @@ def init_deliveries_db(path: str) -> sqlite3.Connection:
     Safe-migration behavior:
       - Creates table if missing.
       - Adds missing columns with ALTER TABLE if needed.
-      - Creates indexes (including UNIQUE on match_id) if possible.
+      - Creates indexes conditionally (only when columns exist).
     """
     conn = sqlite3.connect(path, isolation_level=None, check_same_thread=False)
     cur = conn.cursor()
 
+    # Ensure base table exists (won't modify an existing different schema)
     cur.execute(CORE_TABLE_DDL)
 
+    # Inspect current columns
     cur.execute("PRAGMA table_info(deliveries);")
     existing_cols = {row[1] for row in cur.fetchall()}
 
+    # Add historically-added columns if missing (guarded)
     if "received_at" not in existing_cols:
         try:
             cur.execute("ALTER TABLE deliveries ADD COLUMN received_at TEXT;")
@@ -38,14 +41,48 @@ def init_deliveries_db(path: str) -> sqlite3.Connection:
 
     if "ingested_at" not in existing_cols:
         try:
-            cur.execute("ALTER TABLE deliveries ADD COLUMN ingested_at TEXT DEFAULT CURRENT_TIMESTAMP;")
+            # Can't add a column with non-constant default in ALTER, add plain column
+            cur.execute("ALTER TABLE deliveries ADD COLUMN ingested_at TEXT;")
         except sqlite3.OperationalError:
             pass
 
-    cur.execute("CREATE INDEX IF NOT EXISTS idx_deliveries_received_at ON deliveries(received_at);")
-    cur.execute("CREATE INDEX IF NOT EXISTS idx_deliveries_ingested_at ON deliveries(ingested_at);")
-    cur.execute("CREATE INDEX IF NOT EXISTS idx_deliveries_match_id ON deliveries(match_id);")
-    cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_match_id ON deliveries(match_id);")
+    # Add payload_json if missing on older DB snapshots
+    if "payload_json" not in existing_cols:
+        try:
+            cur.execute("ALTER TABLE deliveries ADD COLUMN payload_json TEXT;")
+            try:
+                cur.execute("UPDATE deliveries SET payload_json = '{}' WHERE payload_json IS NULL;")
+            except Exception:
+                pass
+        except sqlite3.OperationalError:
+            pass
+
+    # Re-read columns after attempting ALTER TABLE to see what actually exists now
+    cur.execute("PRAGMA table_info(deliveries);")
+    existing_cols = {row[1] for row in cur.fetchall()}
+
+    # Create indexes only if the corresponding columns exist. Wrap in try/except for extra safety.
+    try:
+        if "received_at" in existing_cols:
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_deliveries_received_at ON deliveries(received_at);")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        if "ingested_at" in existing_cols:
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_deliveries_ingested_at ON deliveries(ingested_at);")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cur.execute("CREATE INDEX IF NOT EXISTS idx_deliveries_match_id ON deliveries(match_id);")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_match_id ON deliveries(match_id);")
+    except sqlite3.OperationalError:
+        pass
 
     return conn
 
@@ -57,24 +94,37 @@ def insert_delivery(conn: sqlite3.Connection,
     """
     Insert a delivery row. Returns True if persisted; False if duplicate (skipped).
     received_at: ISO timestamp string. If None, we set it to current UTC time.
+
+    Backwards-compatible with legacy schemas that include a NOT NULL 'sent_at'.
     """
     cur = conn.cursor()
     payload_json = json.dumps(payload, ensure_ascii=False)
     if received_at is None:
         received_at = datetime.utcnow().isoformat() + "Z"
+
     try:
-        cur.execute(
-            "INSERT INTO deliveries (match_id, source, payload_json, received_at) VALUES (?, ?, ?, ?)",
-            (match_id, source, payload_json, received_at)
-        )
+        # detect historic 'sent_at' column and include it if present
+        cur.execute("PRAGMA table_info(deliveries);")
+        cols = {row[1] for row in cur.fetchall()}
+        if "sent_at" in cols:
+            sent_at_val = received_at  # use received_at as sensible sent_at
+            cur.execute(
+                "INSERT INTO deliveries (sent_at, match_id, source, payload_json, received_at) VALUES (?, ?, ?, ?, ?)",
+                (sent_at_val, match_id, source, payload_json, received_at)
+            )
+        else:
+            cur.execute(
+                "INSERT INTO deliveries (match_id, source, payload_json, received_at) VALUES (?, ?, ?, ?)",
+                (match_id, source, payload_json, received_at)
+            )
         return True
     except sqlite3.IntegrityError:
+        # duplicate/constraint failure -> treated as skipped by caller
         return False
 
 def exists_match_id(conn: sqlite3.Connection, match_id: int) -> bool:
     """
     Return True if any delivery exists with this match_id (regardless of source).
-    Application-level idempotency check.
     """
     cur = conn.cursor()
     cur.execute("SELECT 1 FROM deliveries WHERE match_id = ? LIMIT 1", (match_id,))

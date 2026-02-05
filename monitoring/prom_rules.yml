@@ -1,17 +1,4 @@
 groups:
-- name: test.rules
-  rules:
-  # Always-firing test rule (for quick local testing; remove or disable in staging/prod)
-  - alert: AlwaysFiringTest
-    expr: vector(1)
-    for: 0s
-    labels:
-      severity: info
-      team: eng
-    annotations:
-      summary: "Always firing test alert"
-      description: "This alert fires constantly while the rule file is loaded; remove after testing."
-
 - name: over_under_ingestion.rules
   rules:
   - alert: HighIngestionErrorRate
