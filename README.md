@@ -8,20 +8,24 @@ Recent work — Telegram & delivery (see "Recent work" section below)
 
 This project utilizes data analysis and machine learning to predict football match outcomes, with a current focus on **HomeWin** (whether the home team wins). The repository includes code, data processing pipelines, and business simulation tools to evaluate and deploy predictive models for football analytics.
 
-## Recent work — Telegram, delivery, idempotency & CI
+## Recent work — Telegram, delivery, idempotency, CI and Codespaces
 
 - Delivery & auditability
   - End‑to‑end flow validated: snapshot → API → Telegram digest → `deliveries.db` logging.
   - Delivery logs include metadata (threshold, prob_col) so we can run per‑user A/B tests and measure ROI.
 - Database hardening (idempotency)
   - Added `scripts/migrate_make_match_id_unique.sh` to dedupe existing rows and create a UNIQUE index on `match_id`.
-  - Ingestion now enforces idempotency at the DB-level (prevents duplicates even if requests are retried or arrive concurrently).
+  - Ingestion enforces idempotency at the application and DB level (prevents duplicates even if requests are retried or arrive concurrently).
 - Tests & CI
   - Added `tests/test_idempotency.py` — integration smoke test that posts the same `match_id` twice and asserts the second is skipped.
   - Added `.github/workflows/ci.yml` — minimal GitHub Actions workflow that runs pytest on pushes and PRs.
+- Observability & local testing (Codespace-validated)
+  - Added Makefile convenience targets to simplify local testing: `run-alertmanager` and `run-webhook`.
+  - Included a tiny local webhook receiver (`monitoring/webhook_receiver.py`) to validate Alertmanager notification delivery during development.
+  - Validated Alertmanager → webhook delivery flow from a Codespace environment (rendered Alertmanager config, used `host.docker.internal` / `--add-host=host-gateway` as needed).
 - Repo hygiene & demo
   - Stopped tracking runtime DB (`data/deliveries.db`) and added it to `.gitignore`.
-  - Demo snippet and CI badge added to README for easier review and demoing.
+  - Demo snippet and CI badge remain in the README for easier review and demoing.
 
 > If you ran the migration locally: `./scripts/migrate_make_match_id_unique.sh` will create a backup and index; local smoke tests and pytest passed on the release branch.
 
@@ -49,13 +53,13 @@ Originally focused on predicting over/under 2.5 goals in Premier League matches,
 - **Deployment Ready**:  
   - Model packaging for API deployment (FastAPI), with Docker instructions and a run helper script.
 - **Documentation & Demo**:  
-  - Clear README, technical report, and visualizations for stakeholders.
+  - Clear README, technical notes, and visualizations for stakeholders.
 
 ---
 
 ## Current Focus
 
-- Focused on snapshot‑based reproducibility: predictions are saved to CSV snapshots which are loaded by the API and used by the sender to ensure the exact rows sent are logged.
+- Snapshot‑based reproducibility: predictions are saved to CSV snapshots which are loaded by the API and used by the sender to ensure the exact rows sent are logged.
 - Lightweight deployment: Docker + simple worker scheduler approach; sender can be run locally or as a one‑off Docker job.
 
 - **Target Variable**: HomeWin (home team wins)
@@ -64,8 +68,6 @@ Originally focused on predicting over/under 2.5 goals in Premier League matches,
 ---
 
 ## Usage
-
-- The README includes exact commands to run the API, build the Docker image, and run the Telegram sender. The sender writes to `deliveries.db` in the repo so you have an auditable delivery history.
 
 Quick start — get the project running and reproduce key results.
 
@@ -101,8 +103,11 @@ Quick start — get the project running and reproduce key results.
    - `notebooks/thirdIterration` — boosting experiments and final pipeline
 
 8. Running locally
-   - `API_KEY="choose-a-secret" uvicorn src.api.main:APP --reload --port 8000`
-   - Or use `./run_api.sh <conda-env-name>` if available.
+   - Start the API (foreground):
+     API_KEY="choose-a-secret" uvicorn src.api.main:APP --reload --port 8000
+   - Background (writes pid/log):
+     DELIVERIES_DB=/tmp/pytest_deliveries.db python -m uvicorn src.api.main:APP --host 0.0.0.0 --port 8000 &> uvicorn.log & echo $! > uvicorn.pid
+   - Or use `make dev` (if present).
 
 Where to look for results
 - Models: `models/`
@@ -133,6 +138,7 @@ Summary of modeling/evaluation results
 - Add a small admin UI to inspect deliveries and re‑send picks (improves auditability).
 - Continue model calibration and explore live-data integration.
 - Extend models to other targets (over/under, away win, draw).
+- Add the short Developer guide (DEVELOPER.md) with local observability/run notes (Makefile targets and Alertmanager testing) — this will be added in a follow-up commit.
 
 ---
 
@@ -150,7 +156,3 @@ Try the ingest endpoint (replace <URL> with the deployed URL):
 
 ```bash
 curl -X POST '<URL>/ingest' -H 'Content-Type: application/json' -H 'X-API-KEY: choose-a-secret' -d '{"rows":[{"match_id":12345,"prob":0.5}],"source":"demo"}'
-```
-## License
-
-[MIT License](LICENSE)
