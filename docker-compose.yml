@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prom_rules.yml:/etc/prometheus/prom_rules.yml:ro
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    network_mode: "host"
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    volumes:
+      - ./monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    network_mode: "host"
