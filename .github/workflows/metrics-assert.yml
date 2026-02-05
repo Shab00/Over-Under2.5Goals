@@ -1,0 +1,49 @@
+name: metrics-assert
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'monitoring/**'
+      - '.github/workflows/**'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  assert-metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install requirements (if any)
+        run: |
+          if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
+
+      - name: Create legacy sqlite DB and start app
+        run: |
+          DB=/tmp/test_deliveries.db
+          rm -f "$DB"
+          sqlite3 "$DB" "CREATE TABLE IF NOT EXISTS deliveries (id INTEGER PRIMARY KEY AUTOINCREMENT, sent_at TEXT NOT NULL, match_id INTEGER, source TEXT, received_at TEXT, UNIQUE(match_id, source));"
+          DELIVERIES_DB="$DB" nohup python -m uvicorn src.api.main:APP --host 127.0.0.1 --port 8000 &> uvicorn.log & echo $! > uvicorn.pid
+          for i in $(seq 1 25); do
+            if curl -sS http://127.0.0.1:8000/metrics >/dev/null 2>&1; then break; fi
+            sleep 1
+          done
+
+      - name: Assert ingest metric present and has labels
+        run: |
+          sleep 1
+          METRICS="$(curl -s http://127.0.0.1:8000/metrics || true)"
+          echo "$METRICS" | grep -E '^# HELP ingest_requests_total' || (echo "ingest_requests_total HELP missing" && tail -n 200 uvicorn.log && exit 1)
+          echo "$METRICS" | grep -q '^ingest_requests_total{.*result=' || (echo "ingest_requests_total samples missing result label" && tail -n 200 uvicorn.log && exit 1)
+          echo "ingest_requests_total present with result label"
+
+      - name: Teardown
+        if: always()
+        run: |
+          pkill -f "uvicorn src.api.main" || true
+          rm -f uvicorn.pid || true
