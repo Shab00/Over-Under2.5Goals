@@ -34,13 +34,28 @@ jobs:
             sleep 1
           done
 
+      - name: Seed ingest metric (create labeled samples)
+        run: |
+          # perform a small ingest so counters with labels appear
+          curl -s -XPOST http://127.0.0.1:8000/ingest -H 'Content-Type: application/json' -d '{"rows":[{"match_id":9999999,"prob":0.5}]}' || true
+          sleep 1
+
       - name: Assert ingest metric present and has labels
         run: |
-          sleep 1
-          METRICS="$(curl -s http://127.0.0.1:8000/metrics || true)"
-          echo "$METRICS" | grep -E '^# HELP ingest_requests_total' || (echo "ingest_requests_total HELP missing" && tail -n 200 uvicorn.log && exit 1)
-          echo "$METRICS" | grep -q '^ingest_requests_total{.*result=' || (echo "ingest_requests_total samples missing result label" && tail -n 200 uvicorn.log && exit 1)
-          echo "ingest_requests_total present with result label"
+          # poll metrics a few times to wait for labeled sample
+          for i in 1 2 3 4 5; do
+            METRICS="$(curl -s http://127.0.0.1:8000/metrics || true)"
+            echo "$METRICS" | grep -E '^# HELP ingest_requests_total' || (echo "ingest_requests_total HELP missing"; tail -n 200 uvicorn.log; exit 1)
+            if echo "$METRICS" | grep -q '^ingest_requests_total{.*result='; then
+              echo "ingest_requests_total present with result label"
+              exit 0
+            fi
+            echo "waiting for labeled sample (attempt $i)..."
+            sleep 1
+          done
+          echo "ingest_requests_total samples missing result label" >&2
+          tail -n 200 uvicorn.log || true
+          exit 1
 
       - name: Teardown
         if: always()
