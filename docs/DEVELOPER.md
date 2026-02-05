@@ -1,26 +1,14 @@
-# Developer quick checks
+# Developer notes — Running, smoke tests, observability & rollback
 
-Start dev server (background):
-```
-make run
-```
+## Run locally (Codespace / dev machine)
+Start the app (no autoreload recommended for repeatable tests):
+```bash
+# stop any existing instance first
+[ -f uvicorn.pid ] && kill "$(cat uvicorn.pid)" 2>/dev/null || true
+rm -f uvicorn.pid uvicorn.log || true
 
-Check /metrics (after hitting the API to generate traffic):
-```
-curl -s http://127.0.0.1:8000/metrics | head -n 40
-```
-
-Run smoke test (uses data/deliveries.db):
-```
-make smoke
-```
-
-View logs:
-```
-make logs
-```
-
-Stop server:
-```
-make stop
-```
+# start the app using a test DB
+export DELIVERIES_DB=/tmp/pytest_deliveries.db
+python -m uvicorn src.api.main:APP --host 127.0.0.1 --port 8000 &> uvicorn.log & echo $! > uvicorn.pid
+sleep 1
+tail -n 80 uvicorn.log

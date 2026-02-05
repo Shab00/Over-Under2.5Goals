@@ -1,27 +1,56 @@
 groups:
-- name: over-under-alerts
+- name: test.rules
   rules:
-  - alert: HighRequestErrorRate
+  # Always-firing test rule (for quick local testing; remove or disable in staging/prod)
+  - alert: AlwaysFiringTest
+    expr: vector(1)
+    for: 0s
+    labels:
+      severity: info
+      team: eng
+    annotations:
+      summary: "Always firing test alert"
+      description: "This alert fires constantly while the rule file is loaded; remove after testing."
+
+- name: over_under_ingestion.rules
+  rules:
+  - alert: HighIngestionErrorRate
     expr: |
       (
-        sum(rate(http_requests_total{http_status=~"5.."}[5m]))
-        /
-        sum(rate(http_requests_total[5m]))
-      ) > 0.01
+        sum(increase(ingest_requests_total{result="error"}[5m]))
+      )
+      /
+      (
+        sum(increase(ingest_requests_total[5m]))
+      )
+      > 0.05
     for: 5m
     labels:
       severity: critical
+      team: eng
     annotations:
-      summary: "High 5xx error rate (>1%)"
-      description: "5xx error rate > 1% for 5 minutes."
+      summary: "High ingestion error rate (>5%)"
+      description: "Investigate application logs and DB errors. Runbook: https://your.runbook/url"
 
-  - alert: HighP95Latency
+  - alert: HighIngestionLatency
     expr: |
-      histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, endpoint))
-      > 0.5
+      histogram_quantile(0.95,
+        sum(rate(http_request_duration_seconds_bucket{endpoint="/ingest"}[5m])) by (le)
+      ) > 1
     for: 5m
     labels:
       severity: warning
+      team: eng
     annotations:
-      summary: "High p95 latency"
-      description: "p95 request latency > 500ms for 5 minutes."
+      summary: "High 95th percentile ingestion latency"
+      description: "95th percentile latency for /ingest > 1s over 5m."
+
+  - alert: NoIngestActivity
+    expr: increase(ingest_requests_total[10m]) == 0
+    for: 10m
+    labels:
+      severity: info
+      team: eng
+    annotations:
+      summary: "No ingestion activity in last 10m"
+      description: "Confirm traffic or scheduled jobs."
