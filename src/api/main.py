@@ -6,7 +6,7 @@ from pathlib import Path
 import os
 import sqlite3
 from datetime import datetime
-from src.metrics import add_prometheus_metrics
+from src.metrics import add_prometheus_metrics, INGESTION_COUNTER
 
 from .db import (
     init_deliveries_db,
@@ -25,6 +25,7 @@ def require_api_key(x_api_key: Optional[str] = Header(None)):
 
 APP = FastAPI(title="Predictions Snapshot API", version="0.1")
 add_prometheus_metrics(APP)
+
 @APP.get("/health")
 def health():
     return {"status": "ok"}
@@ -100,6 +101,11 @@ def ingest(
             exists = exists_match_id(conn, r.match_id)
             if exists:
                 skipped += 1
+                # increment metric for skipped
+                try:
+                    INGESTION_COUNTER.labels(result="skipped", source=payload.source or default_source).inc()
+                except Exception:
+                    pass
                 continue
 
             source_to_use = payload.source or default_source
@@ -108,10 +114,24 @@ def ingest(
 
             if ok:
                 persisted += 1
+                # increment metric for persisted
+                try:
+                    INGESTION_COUNTER.labels(result="persisted", source=source_to_use).inc()
+                except Exception:
+                    pass
             else:
                 skipped += 1
+                try:
+                    INGESTION_COUNTER.labels(result="skipped", source=source_to_use).inc()
+                except Exception:
+                    pass
         except Exception as e:
             errors.append({"index": idx, "match_id": getattr(r, "match_id", None), "error": str(e)})
+            # increment metric for error
+            try:
+                INGESTION_COUNTER.labels(result="error", source=payload.source or default_source).inc()
+            except Exception:
+                pass
 
     received = len(rows)
     response = {"received": received, "persisted": persisted, "skipped": skipped, "errors": errors, "source": response_source}
