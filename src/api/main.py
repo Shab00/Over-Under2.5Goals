@@ -6,7 +6,18 @@ from pathlib import Path
 import os
 import sqlite3
 from datetime import datetime
+import logging
+
 from src.metrics import add_prometheus_metrics, INGESTION_COUNTER
+
+# basic logger
+logger = logging.getLogger("api")
+if not logger.handlers:
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 from .db import (
     init_deliveries_db,
@@ -26,20 +37,25 @@ def require_api_key(x_api_key: Optional[str] = Header(None)):
 APP = FastAPI(title="Predictions Snapshot API", version="0.1")
 add_prometheus_metrics(APP)
 
-@APP.get("/health")
-def health():
-    return {"status": "ok"}
-
-DEFAULT_DB_PATH = os.environ.get("DELIVERIES_DB") or str(
-    Path(__file__).resolve().parents[2] / "data" / "deliveries.db"
+# Prefer explicit DELIVERIES_DB, fall back to SQLITE_DB, then to repo data/deliveries.db
+DEFAULT_DB_PATH = (
+    os.environ.get("DELIVERIES_DB")
+    or os.environ.get("SQLITE_DB")
+    or str(Path(__file__).resolve().parents[2] / "data" / "deliveries.db")
 )
+
 _deliveries_conn: Optional[sqlite3.Connection] = None
 
 def get_deliveries_conn():
+    """
+    Return a cached sqlite3.Connection for the deliveries DB.
+    The connection is initialized lazily and created with init_deliveries_db(path).
+    """
     global _deliveries_conn
     if _deliveries_conn is None:
         db_path = Path(DEFAULT_DB_PATH)
         db_path.parent.mkdir(parents=True, exist_ok=True)
+        logger.info("Opening deliveries DB at %s", str(db_path))
         _deliveries_conn = init_deliveries_db(str(db_path))
     return _deliveries_conn
 

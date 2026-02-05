@@ -1,23 +1,47 @@
-.PHONY: run smoke k6 logs stop clean
+.PHONY: help up down restart reload status run dev smoke migrate
+
+help:
+	@echo "Targets:"
+	@echo "  make up        - docker compose up -d"
+	@echo "  make down      - docker compose down"
+	@echo "  make restart   - restart prometheus stack"
+	@echo "  make reload    - reload prometheus config (requires lifecycle flag)"
+	@echo "  make status    - show prometheus targets & alerts"
+	@echo "  make run       - run uvicorn in foreground (set DELIVERIES_DB)"
+	@echo "  make dev       - run uvicorn in background (writes uvicorn.pid)"
+	@echo "  make smoke     - run local smoke test against server"
+	@echo "  make migrate   - apply SQL migrations to DELIVERIES_DB (local only)"
+
+up:
+	docker compose up -d
+
+down:
+	docker compose down
+
+restart:
+	docker compose restart prometheus || (docker compose down && docker compose up -d)
+
+reload:
+	# Requires --web.enable-lifecycle in Prometheus command
+	curl -s -XPOST http://127.0.0.1:9090/-/reload || true
+
+status:
+	curl -s 'http://127.0.0.1:9090/api/v1/targets' | jq '.data.activeTargets[] | {scrapeUrl:.scrapeUrl,health:.health,lastError:.lastError}'
+	curl -s 'http://127.0.0.1:9090/api/v1/alerts' | jq .
 
 run:
-	# run the app in background and capture logs/pid
-	uvicorn src.api.main:APP --host 127.0.0.1 --port 8000 &> uvicorn.log & echo $$! > uvicorn.pid
+	# Run uvicorn in foreground (set DELIVERIES_DB or SQLITE_DB env var)
+	DELIVERIES_DB=${DELIVERIES_DB} python -m uvicorn src.api.main:APP --host 0.0.0.0 --port 8000
+
+dev:
+	# start in background and write pid/log
+	DELIVERIES_DB=${DELIVERIES_DB:-/tmp/pytest_deliveries.db} python -m uvicorn src.api.main:APP --host 0.0.0.0 --port 8000 &> uvicorn.log & echo $$! > uvicorn.pid
 
 smoke:
-	# run the existing smoke script against the repo DB
-	TARGET=http://127.0.0.1:8000 SQLITE_DB=data/deliveries.db ./scripts/smoke_test.sh
+	# run smoke test (expects scripts/smoke_test.sh)
+	TARGET=${TARGET:-http://127.0.0.1:8000} SQLITE_DB=${SQLITE_DB:-/tmp/pytest_deliveries.db} ./scripts/smoke_test.sh
 
-k6:
-	# example small k6 run (requires docker + network host)
-	# VUS and DURATION can be set in environment, e.g. VUS=5 DURATION=15s make k6
-	docker run --rm -i --network host -e VUS -e DURATION -e TARGET grafana/k6 run - < scripts/load_ingest.js
-
-logs:
-	@tail -n 200 uvicorn.log || true
-
-stop:
-	@if [ -f uvicorn.pid ]; then kill $$(cat uvicorn.pid) 2>/dev/null || true; fi
-
-clean:
-	rm -f uvicorn.pid uvicorn.log /tmp/sanity_deliveries.db || true
+migrate:
+	# apply migrations to DELIVERIES_DB (LOCAL USE)
+	test -n "${DELIVERIES_DB}" || (echo "Set DELIVERIES_DB env var" && exit 1)
+	for f in migrations/*.sql; do echo "Applying $$f"; sqlite3 "${DELIVERIES_DB}" < "$$f"; done
