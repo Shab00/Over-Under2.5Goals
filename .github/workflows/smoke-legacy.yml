@@ -1,0 +1,63 @@
+name: smoke-legacy-db
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'migrations/**'
+      - 'scripts/**'
+  pull_request:
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install requirements (if any)
+        run: |
+          if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
+
+      - name: Create legacy sqlite DB (pre-payload_json/ingested_at schema)
+        run: |
+          DB=/tmp/test_deliveries.db
+          rm -f "$DB"
+          # Old/legacy schema simulation: has sent_at but not payload_json/ingested_at
+          sqlite3 "$DB" <<'SQL'
+CREATE TABLE IF NOT EXISTS deliveries (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  sent_at TEXT NOT NULL,
+  match_id INTEGER,
+  source TEXT,
+  received_at TEXT,
+  UNIQUE(match_id, source)
+);
+SQL
+          ls -l /tmp/test_deliveries.db
+
+      - name: Start app pointing to the legacy DB
+        run: |
+          DB=/tmp/test_deliveries.db
+          DELIVERIES_DB="$DB" nohup python -m uvicorn src.api.main:APP --host 127.0.0.1 --port 8000 &> uvicorn.log & echo $! > uvicorn.pid
+          # wait for server to be ready
+          for i in $(seq 1 15); do
+            if curl -sS http://127.0.0.1:8000/metrics >/dev/null 2>&1; then
+              echo "server ready"; break
+            fi
+            sleep 1
+          done
+          tail -n 200 uvicorn.log || true
+
+      - name: Run smoke test against legacy DB
+        run: |
+          DB=/tmp/test_deliveries.db
+          TARGET=http://127.0.0.1:8000 SQLITE_DB="$DB" ./scripts/smoke_test.sh
+
+      - name: Tear down server
+        if: always()
+        run: |
+          pkill -f "uvicorn src.api.main" || true
+          rm -f uvicorn.pid || true

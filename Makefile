@@ -10,7 +10,7 @@ help:
 	@echo "  make run       - run uvicorn in foreground (set DELIVERIES_DB)"
 	@echo "  make dev       - run uvicorn in background (writes uvicorn.pid)"
 	@echo "  make smoke     - run local smoke test against server"
-	@echo "  make migrate   - apply SQL migrations to DELIVERIES_DB (local only)"
+	@echo "  make migrate   - apply migrations to DELIVERIES_DB (local only)"
 
 up:
 	docker compose up -d
@@ -42,6 +42,8 @@ smoke:
 	TARGET=${TARGET:-http://127.0.0.1:8000} SQLITE_DB=${SQLITE_DB:-/tmp/pytest_deliveries.db} ./scripts/smoke_test.sh
 
 migrate:
-	# apply migrations to DELIVERIES_DB (LOCAL USE)
+	# apply shell migrations first (idempotent)
 	test -n "${DELIVERIES_DB}" || (echo "Set DELIVERIES_DB env var" && exit 1)
-	for f in migrations/*.sql; do echo "Applying $$f"; sqlite3 "${DELIVERIES_DB}" < "$$f"; done
+	for f in migrations/*.sh; do echo "Running $$f"; bash "$$f" "${DELIVERIES_DB}"; done
+	# apply any remaining SQL migrations (best-effort, ignore parse errors)
+	for f in migrations/*.sql; do echo "Applying $$f"; sqlite3 "${DELIVERIES_DB}" < "$$f" || echo "SQL migration $$f failed or already applied; continuing"; done
