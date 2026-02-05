@@ -47,3 +47,19 @@ migrate:
 	for f in migrations/*.sh; do echo "Running $$f"; bash "$$f" "${DELIVERIES_DB}"; done
 	# apply any remaining SQL migrations (best-effort, ignore parse errors)
 	for f in migrations/*.sql; do echo "Applying $$f"; sqlite3 "${DELIVERIES_DB}" < "$$f" || echo "SQL migration $$f failed or already applied; continuing"; done
+
+# Local helpers for observability testing (non-destructive additions)
+
+# Start Alertmanager for local testing; maps Alertmanager UI to host port 19093
+# Use host.docker.internal on Docker Desktop if the webhook receiver runs on the host.
+# This target maps Alertmanager UI to 19093 to avoid colliding with local 9093 instances.
+run-alertmanager:
+	docker run --rm -p 19093:9093 \
+	  -v "$(PWD)/monitoring/alertmanager:/etc/alertmanager" \
+	  -e SLACK_WEBHOOK_URL='http://host.docker.internal:9000' \
+	  prom/alertmanager:latest \
+	  --config.file=/etc/alertmanager/alertmanager.yml
+
+# Start the tiny webhook receiver (forwards POST body to stdout) — runs in foreground
+run-webhook:
+	python3 monitoring/webhook_receiver.py
