@@ -4,3 +4,5 @@ pandas
 python-dateutil
 requests
 prometheus_client
+prometheus_client
+flask

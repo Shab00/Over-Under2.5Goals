@@ -2,32 +2,15 @@ global:
   resolve_timeout: 5m
 
 route:
-  receiver: oncall
-  group_wait: 30s
-  group_interval: 5m
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 1m
   repeat_interval: 1h
+  receiver: "dev-null"
 
 receivers:
-  - name: "oncall"
-    # Configure your integration by setting an environment variable or using secret management.
-    # DO NOT commit the real webhook / API key into the repo.
-    slack_configs:
-      - api_url: "${SLACK_WEBHOOK_URL}"    # set this at runtime (env / secret manager)
-        channel: '#alerts-predictions'
-        title: '{{ template "slack.default.title" . }}'
-        send_resolved: true
-    # Example PagerDuty config (uncomment and set PAGERSERVICE_KEY via env/secret manager)
-    # pagerduty_configs:
-    #   - routing_key: "${PAGERDUTY_ROUTING_KEY}"
-    #     severity: '{{ .CommonLabels.severity }}'
-    #     send_resolved: true
+- name: "dev-null"
+  # For now: silent receiver (no integrations). Replace with email/slack/webhook in prod.
+  webhook_configs: []
 
-inhibit_rules:
-  - source_match:
-      severity: 'critical'
-    target_match:
-      severity: 'warning'
-    equal:
-      - alertname
-
-templates: []
+# optionally define inhibition rules, templates, etc.

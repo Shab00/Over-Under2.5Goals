@@ -1,0 +1,38 @@
+groups:
+- name: ingest.rules
+  rules:
+  - alert: IngestErrorRateHigh
+    expr: |
+      sum(increase(ingest_requests_total{result="error"}[5m]))
+      /
+      max(sum(increase(ingest_requests_total[5m])), 1)
+      > 0.05
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High ingestion error rate (>5% over 5m)"
+      description: "Error rate for ingestion is {{ $value }} over 5m — check upstream source and ingestion service."
+
+  - alert: IngestSkippedRatioHigh
+    expr: |
+      sum(increase(ingest_requests_total{result="skipped"}[5m]))
+      /
+      max(sum(increase(ingest_requests_total[5m])), 1)
+      > 0.20
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High skipped ingestion ratio (>20% over 10m)"
+      description: "High proportion of ingest requests are being skipped. Investigate upstream data, dedupe logic and schema mismatches."
+
+  - alert: DeliveryFailuresHigh
+    expr: |
+      increase(alertmanager_notifications_failed_total[5m]) > 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Alertmanager delivery failures detected"
+      description: "Alertmanager has failed to deliver notifications in the last 5m. Check Alertmanager logs and webhook receiver availability."
