@@ -6,11 +6,14 @@ route:
   group_wait: 10s
   group_interval: 1m
   repeat_interval: 1h
-  receiver: "dev-null"
+  receiver: "webhook"    # make webhook the default receiver
 
 receivers:
-- name: "dev-null"
-  # For now: silent receiver (no integrations). Replace with email/slack/webhook in prod.
-  webhook_configs: []
+- name: "webhook"
+  webhook_configs:
+  - url: "http://host.docker.internal:9000/"   # webhook_receiver.py listens on 0.0.0.0:9000
+    send_resolved: true
 
-# optionally define inhibition rules, templates, etc.
+- name: "dev-null"
+  # silent fallback receiver
+  webhook_configs: []
