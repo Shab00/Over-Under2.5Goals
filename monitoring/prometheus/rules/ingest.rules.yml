@@ -5,7 +5,7 @@ groups:
     expr: |
       sum(increase(ingest_requests_total{result="error"}[5m]))
       /
-      max(sum(increase(ingest_requests_total[5m])), 1)
+      clamp_min(sum(increase(ingest_requests_total[5m])), 1)
       > 0.05
     for: 5m
     labels:
@@ -13,12 +13,11 @@ groups:
     annotations:
       summary: "High ingestion error rate (>5% over 5m)"
       description: "Error rate for ingestion is {{ $value }} over 5m — check upstream source and ingestion service."
-
   - alert: IngestSkippedRatioHigh
     expr: |
       sum(increase(ingest_requests_total{result="skipped"}[5m]))
       /
-      max(sum(increase(ingest_requests_total[5m])), 1)
+      clamp_min(sum(increase(ingest_requests_total[5m])), 1)
       > 0.20
     for: 10m
     labels:
@@ -26,7 +25,6 @@ groups:
     annotations:
       summary: "High skipped ingestion ratio (>20% over 10m)"
       description: "High proportion of ingest requests are being skipped. Investigate upstream data, dedupe logic and schema mismatches."
-
   - alert: DeliveryFailuresHigh
     expr: |
       increase(alertmanager_notifications_failed_total[5m]) > 0
