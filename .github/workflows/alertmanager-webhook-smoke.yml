@@ -1,0 +1,17 @@
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke-test:
+    name: Alertmanager webhook smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run smoke test script
+        # needs Docker available on runner (ubuntu-latest has docker)
+        run: |
+          chmod +x monitoring/ci/run_alertmanager_webhook_smoke.sh
+          monitoring/ci/run_alertmanager_webhook_smoke.sh
