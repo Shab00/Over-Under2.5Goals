@@ -1,5 +1,29 @@
 # Football Match Outcome Prediction
 
+## 2026-02-13 — Added Alertmanager webhook smoke test & CI
+
+What we did today
+-----------------
+Added a lightweight, self-contained smoke test that validates the end-to-end Alertmanager → webhook receiver → Prometheus scrape flow and wired it into CI. The smoke test runs isolated inside Docker (no host port mapping by default) and fails if the metric `alertmanager_webhook_deliveries_total` is not observed. On failure it prints container logs and Prometheus target state to aid debugging.
+
+Why this matters
+----------------
+- Detects regressions in notification delivery and scraping early (PRs / manual runs).
+- Provides a repeatable, network-isolated test suitable for CI.
+- Avoids local port conflicts and prints helpful debug output on failure.
+
+Quick local run
+---------------
+```bash
+chmod +x monitoring/ci/run_alertmanager_webhook_smoke.sh
+monitoring/ci/run_alertmanager_webhook_smoke.sh
+# If CI runner is slow:
+WAIT_SEC=30 monitoring/ci/run_alertmanager_webhook_smoke.sh
+```
+
+Status
+------
+- PR #12 (feat/grafana-ingest-dashboard) added the smoke test and workflow; checks passed and the branch was merged.
 ## Overview
 
 Recent work — Telegram & delivery (see "Recent work" section below)
