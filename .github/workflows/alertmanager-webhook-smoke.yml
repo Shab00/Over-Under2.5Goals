@@ -1,17 +1,111 @@
+name: Alertmanager Webhook Smoke Test
+
 on:
   pull_request:
+  push:
+    branches: [main, master]
   workflow_dispatch:
+    inputs:
+      wait_sec:
+        description: 'Seconds to wait for delivery (default 20)'
+        required: false
+        default: '20'
 
 jobs:
   smoke-test:
     name: Alertmanager webhook smoke test
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Python (for artifact parsing)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Run smoke test script
-        # needs Docker available on runner (ubuntu-latest has docker)
+        id: smoke_test
+        env:
+          WAIT_SEC: ${{ github.event.inputs.wait_sec || '25' }}
+          ARTIFACT_DIR: ${{ runner.temp }}/smoke-artifacts
         run: |
+          set -x
           chmod +x monitoring/ci/run_alertmanager_webhook_smoke.sh
+          
+          # Run the smoke test
           monitoring/ci/run_alertmanager_webhook_smoke.sh
+        continue-on-error: true
+
+      - name: Check test result
+        id: check_result
+        run: |
+          if [ "${{ steps.smoke_test.outcome }}" != "success" ]; then
+            echo "test_failed=true" >> $GITHUB_OUTPUT
+            echo "::error::Smoke test failed - see artifacts for details"
+            exit 1
+          else
+            echo "test_failed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload debug artifacts on failure
+        if: failure() && steps.smoke_test.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-debug-${{ github.run_id }}
+          path: ${{ runner.temp }}/smoke-artifacts/
+          retention-days: 7
+          if-no-files-found: warn
+
+      - name: Upload debug artifacts on success (for validation)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-success-logs-${{ github.run_id }}
+          path: ${{ runner.temp }}/smoke-artifacts/smoke-debug-summary.log
+          retention-days: 3
+          if-no-files-found: ignore
+
+      - name: Comment on PR with failure info
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const artifactPath = '${{ runner.temp }}/smoke-artifacts/smoke-debug-summary.log';
+            let summary = '❌ Smoke test failed. ';
+            
+            try {
+              if (fs.existsSync(artifactPath)) {
+                const content = fs.readFileSync(artifactPath, 'utf8');
+                const lines = content.split('\n').slice(0, 30).join('\n');
+                summary += `\n\n<details><summary>Debug Summary (first 30 lines)</summary>\n\n\`\`\`\n${lines}\n\`\`\`\n</details>`;
+              }
+            } catch (e) {
+              summary += 'Could not read debug summary.';
+            }
+            
+            summary += `\n\n📦 [Download full debug artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Smoke Test Results" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.smoke_test.outcome }}" = "success" ]; then
+            echo "✅ **PASSED** - Alertmanager → webhook → Prometheus flow validated" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **FAILED** - Check artifacts for debug logs" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Debug artifacts uploaded:** smoke-test-debug-${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**WAIT_SEC:** ${{ env.WAIT_SEC }}" >> $GITHUB_STEP_SUMMARY
