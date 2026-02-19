@@ -1,0 +1,81 @@
+groups:
+- name: saas_observability.rules
+  interval: 15s
+  rules:
+  # Alert: High ingestion error rate (>10% errors over 5m)
+  - alert: IngestionErrorRateHigh
+    expr: |
+      (
+        sum(rate(ingest_requests_total{result="error"}[5m]))
+        /
+        clamp_min(sum(rate(ingest_requests_total[5m])), 0.01)
+      ) > 0.10
+    for: 3m
+    labels:
+      severity: critical
+      team: eng
+      component: ingestion
+    annotations:
+      summary: "Ingestion error rate exceeds 10%"
+      description: "{{ $value | humanizePercentage }} of ingestion requests are failing over the last 5 minutes. Check application logs and database connectivity."
+      runbook_url: "https://github.com/Shab00/Over-Under2.5Goals/blob/main/RUNBOOK.md#ingestion-error-rate"
+
+  # Alert: High skipped ratio (>70% skipped over 5m)
+  - alert: IngestionSkippedRatioHigh
+    expr: |
+      (
+        sum(rate(ingest_requests_total{result="skipped"}[5m]))
+        /
+        clamp_min(sum(rate(ingest_requests_total[5m])), 0.01)
+      ) > 0.70 and sum(rate(ingest_requests_total[5m])) > 0.1
+    for: 5m
+    labels:
+      severity: warning
+      team: eng
+      component: ingestion
+    annotations:
+      summary: "Ingestion skipped ratio exceeds 70%"
+      description: "{{ $value | humanizePercentage }} of ingestion requests are being skipped (likely duplicates). This may indicate schema issues or excessive retries."
+      runbook_url: "https://github.com/Shab00/Over-Under2.5Goals/blob/main/RUNBOOK.md#high-skipped-ratio"
+
+  # Alert: Alertmanager delivery failures
+  - alert: AlertmanagerDeliveryFailureSpike
+    expr: |
+      rate(alertmanager_notifications_failed_total[5m]) > 0.1
+    for: 2m
+    labels:
+      severity: critical
+      team: eng
+      component: alerting
+    annotations:
+      summary: "Alertmanager delivery failures detected"
+      description: "Alertmanager is failing to deliver {{ $value | humanize }} notifications/sec. Check webhook endpoint health and network connectivity."
+      runbook_url: "https://github.com/Shab00/Over-Under2.5Goals/blob/main/RUNBOOK.md#delivery-failures"
+
+  # Alert: Smoke test metric is stale (canary for observability health)
+  - alert: SmokeTestMetricStale
+    expr: |
+      (time() - alertmanager_webhook_deliveries_created) > 3600
+    for: 5m
+    labels:
+      severity: info
+      team: eng
+      component: observability
+    annotations:
+      summary: "Smoke test webhook receiver metric is stale"
+      description: "The webhook receiver hasn't been scraped or updated in over 1 hour. Observability pipeline may be degraded."
+      runbook_url: "https://github.com/Shab00/Over-Under2.5Goals/blob/main/RUNBOOK.md#smoke-test-stale"
+
+  # Alert: Smoke test delivery failures (webhook receiver not receiving alerts)
+  - alert: SmokeTestDeliveryNotIncreasing
+    expr: |
+      increase(alertmanager_webhook_deliveries_total[10m]) == 0
+    for: 15m
+    labels:
+      severity: warning
+      team: eng
+      component: observability
+    annotations:
+      summary: "Webhook receiver has not received deliveries in 10m"
+      description: "The webhook receiver metric has not increased. Alertmanager may not be sending webhooks."
+      runbook_url: "https://github.com/Shab00/Over-Under2.5Goals/blob/main/RUNBOOK.md#webhook-not-receiving"

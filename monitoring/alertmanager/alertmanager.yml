@@ -11,7 +11,7 @@ route:
 receivers:
 - name: "webhook"
   webhook_configs:
-  - url: "http://host.docker.internal:9000/"   # webhook_receiver.py listens on 0.0.0.0:9000
+  - url: "http://localhost:9000/"   # Use localhost since network_mode: host
     send_resolved: true
 
 - name: "dev-null"
