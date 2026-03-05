@@ -17,13 +17,17 @@ Quick local run
 ```bash
 chmod +x monitoring/ci/run_alertmanager_webhook_smoke.sh
 monitoring/ci/run_alertmanager_webhook_smoke.sh
+
 # If CI runner is slow:
 WAIT_SEC=30 monitoring/ci/run_alertmanager_webhook_smoke.sh
 ```
 
 Status
 ------
-- PR #12 (feat/grafana-ingest-dashboard) added the smoke test and workflow; checks passed and the branch was merged.
+- Smoke test + CI workflow added and merged; CI validates Alertmanager → webhook receiver → Prometheus scrape end-to-end.
+
+---
+
 ## Overview
 
 Recent work — Telegram & delivery (see "Recent work" section below)
@@ -31,6 +35,19 @@ Recent work — Telegram & delivery (see "Recent work" section below)
 - Implemented a Telegram digest pipeline (`scripts/send_telegram_digest.py`) that fetches picks from the API, delivers them to a Telegram chat, and logs every delivery to `deliveries.db` (message_id, chat_id, sent_at, match rows). This pipeline has been tested end‑to‑end locally and in Docker.
 
 This project utilizes data analysis and machine learning to predict football match outcomes, with a current focus on **HomeWin** (whether the home team wins). The repository includes code, data processing pipelines, and business simulation tools to evaluate and deploy predictive models for football analytics.
+
+## Development
+
+For local run/debug recipes (server, migrations, smoke tests) and observability notes (Prometheus metrics, Alertmanager + webhook testing), see [`DEVELOPER.md`](DEVELOPER.md).
+
+Quick commands:
+```bash
+# start dev server (writes to a local test DB)
+DELIVERIES_DB=/tmp/pytest_deliveries.db make dev
+
+# run smoke tests
+make smoke
+```
 
 ## Recent work — Telegram, delivery, idempotency, CI and Codespaces
 
@@ -47,6 +64,7 @@ This project utilizes data analysis and machine learning to predict football mat
   - Added Makefile convenience targets to simplify local testing: `run-alertmanager` and `run-webhook`.
   - Included a tiny local webhook receiver (`monitoring/webhook_receiver.py`) to validate Alertmanager notification delivery during development.
   - Validated Alertmanager → webhook delivery flow from a Codespace environment (rendered Alertmanager config, used `host.docker.internal` / `--add-host=host-gateway` as needed).
+  - Added a Grafana dashboard JSON for ingestion/observability (importable into Grafana).
 - Repo hygiene & demo
   - Stopped tracking runtime DB (`data/deliveries.db`) and added it to `.gitignore`.
   - Demo snippet and CI badge remain in the README for easier review and demoing.
@@ -64,19 +82,19 @@ Originally focused on predicting over/under 2.5 goals in Premier League matches,
 - The API exposes endpoints (`/predictions/latest` and `/predictions/info`) that the sender uses to assemble digests.
 - Delivery logging supports simple A/B testing: threshold and prob_col used for a run are recorded alongside message metadata.
 
-- **Data Pipeline**:  
+- **Data Pipeline**:
   - Ingestion, cleaning, and comprehensive feature engineering (market odds, team encoding, recent form, contextual variables).
-- **Modeling**:  
+- **Modeling**:
   - Multiple classifiers tested, including Random Forest, Gradient Boosting, Logistic Regression, and MLP Neural Networks.
   - Hyperparameter tuning and feature importance analysis.
-- **Evaluation**:  
+- **Evaluation**:
   - Robust cross-validation, threshold tuning for business objectives (accuracy/F1), and error analysis.
-- **Business Simulation**:  
+- **Business Simulation**:
   - Simulated betting strategies using model probabilities and bookmaker odds.
   - ROI, win rate, and profit/loss tracked and visualized.
-- **Deployment Ready**:  
+- **Deployment Ready**:
   - Model packaging for API deployment (FastAPI), with Docker instructions and a run helper script.
-- **Documentation & Demo**:  
+- **Documentation & Demo**:
   - Clear README, technical notes, and visualizations for stakeholders.
 
 ---
@@ -99,7 +117,7 @@ Quick start — get the project running and reproduce key results.
    - `pip install -r requirements.txt`
 
 2. Prepare data
-   - Raw CSVs are in `data/raw/csvFiles`.  
+   - Raw CSVs are in `data/raw/csvFiles`.
    - Run the cleaning/feature pipeline from the notebooks or scripts to produce processed data in `data/processed/`. Example (notebook):
      - Open `notebooks/firstIterration/dataCleaning.ipynb` or `notebooks/secondIterrationOdds/cleaningWithOdds-evaluation.ipynb` and run the preprocessing cells.
    - Or run your processing script to generate:
@@ -128,9 +146,13 @@ Quick start — get the project running and reproduce key results.
 
 8. Running locally
    - Start the API (foreground):
+     ```bash
      API_KEY="choose-a-secret" uvicorn src.api.main:APP --reload --port 8000
+     ```
    - Background (writes pid/log):
+     ```bash
      DELIVERIES_DB=/tmp/pytest_deliveries.db python -m uvicorn src.api.main:APP --host 0.0.0.0 --port 8000 &> uvicorn.log & echo $! > uvicorn.pid
+     ```
    - Or use `make dev` (if present).
 
 Where to look for results
@@ -162,7 +184,7 @@ Summary of modeling/evaluation results
 - Add a small admin UI to inspect deliveries and re‑send picks (improves auditability).
 - Continue model calibration and explore live-data integration.
 - Extend models to other targets (over/under, away win, draw).
-- Add the short Developer guide (DEVELOPER.md) with local observability/run notes (Makefile targets and Alertmanager testing) — this will be added in a follow-up commit.
+- Keep [`DEVELOPER.md`](DEVELOPER.md) up to date with local observability/run notes and smoke-test recipes.
 
 ---
 
@@ -179,4 +201,8 @@ This project is for educational and sports analytics purposes only. Data sources
 Try the ingest endpoint (replace <URL> with the deployed URL):
 
 ```bash
-curl -X POST '<URL>/ingest' -H 'Content-Type: application/json' -H 'X-API-KEY: choose-a-secret' -d '{"rows":[{"match_id":12345,"prob":0.5}],"source":"demo"}'
+curl -X POST '<URL>/ingest' \
+  -H 'Content-Type: application/json' \
+  -H 'X-API-KEY: choose-a-secret' \
+  -d '{"rows":[{"match_id":12345,"prob":0.5}],"source":"demo"}'
+```
