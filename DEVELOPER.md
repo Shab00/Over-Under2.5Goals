@@ -146,15 +146,4 @@ make run-alertmanager          # runs Alertmanager on host:19093
 # Prevent committing rendered.yml
 echo "monitoring/alertmanager/rendered.yml" >> .git/info/exclude
 
-# Create and apply migrations (example)
-DELIVERIES_DB=/tmp/pytest_deliveries.db make migrate
-
-## Where to look
-- API: `src/api/`
-- Metrics: `src/metrics.py`
-- Ingest handler & tests: `src/api/main.py`, `tests/`
-- Observability tooling: `monitoring/`, `monitoring/alertmanager/`, `monitoring/webhook_receiver.py`
-
-If you want, I can:
-- Add this file to your current branch and open the PR (squash-merge + delete branch), or
-- Give you the exact `git` commands to add & push it locally.
+# Create and apply migrations
