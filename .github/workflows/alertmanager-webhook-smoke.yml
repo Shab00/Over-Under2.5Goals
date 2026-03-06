@@ -16,7 +16,7 @@ jobs:
     name: Alertmanager webhook smoke test
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
         run: |
           set -x
           chmod +x monitoring/ci/run_alertmanager_webhook_smoke.sh
-          
+
           # Run the smoke test
           monitoring/ci/run_alertmanager_webhook_smoke.sh
         continue-on-error: true
@@ -51,7 +51,7 @@ jobs:
           fi
 
       - name: Upload debug artifacts on failure
-        if: failure() && steps.smoke_test.outcome != 'success'
+        if: steps.smoke_test.outcome != 'success'
         uses: actions/upload-artifact@v4
         with:
           name: smoke-test-debug-${{ github.run_id }}
@@ -60,7 +60,7 @@ jobs:
           if-no-files-found: warn
 
       - name: Upload debug artifacts on success (for validation)
-        if: success()
+        if: steps.smoke_test.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: smoke-test-success-logs-${{ github.run_id }}
@@ -69,14 +69,14 @@ jobs:
           if-no-files-found: ignore
 
       - name: Comment on PR with failure info
-        if: failure() && github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.smoke_test.outcome != 'success'
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
             const artifactPath = '${{ runner.temp }}/smoke-artifacts/smoke-debug-summary.log';
             let summary = '❌ Smoke test failed. ';
-            
+
             try {
               if (fs.existsSync(artifactPath)) {
                 const content = fs.readFileSync(artifactPath, 'utf8');
@@ -86,9 +86,9 @@ jobs:
             } catch (e) {
               summary += 'Could not read debug summary.';
             }
-            
+
             summary += `\n\n📦 [Download full debug artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
