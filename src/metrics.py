@@ -5,7 +5,6 @@ try:
     from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
     _HAS_PROM = True
 except Exception:
-    # prometheus_client not available — provide no-op replacements compatible
     _HAS_PROM = False
 
     def generate_latest():
@@ -15,7 +14,6 @@ except Exception:
 
     class _NoopMetric:
         def __init__(self, *args, **kwargs):
-            # accept same constructor signature as real metrics
             pass
 
         def labels(self, *a, **k):
@@ -32,7 +30,6 @@ except Exception:
     Counter = _NoopMetric
     Histogram = _NoopMetric
 
-# Counters & histogram (use real or noop impls)
 HTTP_REQUESTS = Counter(
     "http_requests_total",
     "Total HTTP requests",
@@ -51,6 +48,11 @@ INGESTION_COUNTER = Counter(
     ["result", "source"],
 )
 
+SMOKE_TEST_RUNS = Counter(
+    "smoke_test_runs_total",
+    "Total smoke test runs (lightweight health checks)",
+    ["kind", "result"],
+)
 
 async def metrics_endpoint() -> Response:
     # Return empty body when prometheus_client missing, otherwise return generate_latest()
