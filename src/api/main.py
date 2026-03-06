@@ -8,7 +8,7 @@ import sqlite3
 from datetime import datetime
 import logging
 
-from src.metrics import add_prometheus_metrics, INGESTION_COUNTER
+from src.metrics import add_prometheus_metrics, INGESTION_COUNTER, SMOKE_TEST_RUNS
 
 # basic logger
 logger = logging.getLogger("api")
@@ -37,7 +37,19 @@ def require_api_key(x_api_key: Optional[str] = Header(None)):
 APP = FastAPI(title="Predictions Snapshot API", version="0.1")
 add_prometheus_metrics(APP)
 
-# Prefer explicit DELIVERIES_DB, fall back to SQLITE_DB, then to repo data/deliveries.db
+@APP.get("/smoke/ok")
+def smoke_ok():
+    """
+    Lightweight smoke endpoint for quick health checks.
+    Increments a Prometheus counter so we can verify scrape + basic request path.
+    """
+    try:
+        SMOKE_TEST_RUNS.labels(kind="api", result="success").inc()
+    except Exception:
+        # metrics should never break the endpoint
+        pass
+    return {"ok": True}
+
 DEFAULT_DB_PATH = (
     os.environ.get("DELIVERIES_DB")
     or os.environ.get("SQLITE_DB")
