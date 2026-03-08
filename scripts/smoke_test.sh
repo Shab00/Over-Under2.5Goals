@@ -2,10 +2,11 @@
 set -euo pipefail
 
 # Usage:
-# TARGET=http://127.0.0.1:8000 SQLITE_DB=data/deliveries.db ./scripts/smoke_test.sh
+# TARGET=http://127.0.0.1:8000 SQLITE_DB=data/deliveries.db API_KEY=choose-a-secret ./scripts/smoke_test.sh
 
 TARGET=${TARGET:-http://127.0.0.1:8000}
 SQLITE_DB=${SQLITE_DB:-}
+API_KEY=${API_KEY:-}
 RETRIES=${RETRIES:-3}
 SLEEP_BETWEEN=${SLEEP_BETWEEN:-1}
 
@@ -39,7 +40,10 @@ fi
 
 echo "POST payload: $PAYLOAD"
 
-RESP=$(curl -s -w "\n%{http_code}" -X POST "$TARGET/ingest" -H "Content-Type: application/json" -d "$PAYLOAD")
+RESP=$(curl -s -w "\n%{http_code}" -X POST "$TARGET/ingest" \
+  -H "Content-Type: application/json" \
+  -H "X-API-KEY: $API_KEY" \
+  -d "$PAYLOAD")
 BODY=$(echo "$RESP" | sed '$d')
 HTTP=$(echo "$RESP" | tail -n1)
 
@@ -83,7 +87,10 @@ if [ -n "$SQLITE_DB" ]; then
 fi
 
 echo "Testing idempotency: re-POST same payload"
-RESP2=$(curl -s -w "\n%{http_code}" -X POST "$TARGET/ingest" -H "Content-Type: application/json" -d "$PAYLOAD")
+RESP2=$(curl -s -w "\n%{http_code}" -X POST "$TARGET/ingest" \
+  -H "Content-Type: application/json" \
+  -H "X-API-KEY: $API_KEY" \
+  -d "$PAYLOAD")
 BODY2=$(echo "$RESP2" | sed '$d')
 HTTP2=$(echo "$RESP2" | tail -n1)
 

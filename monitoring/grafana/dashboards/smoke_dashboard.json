@@ -1,0 +1,64 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Smoke runs (success) — last 1h",
+      "id": 1,
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "sum(increase(smoke_test_runs_total{kind=\"api\",result=\"success\"}[1h]))", "refId": "A" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "short", "decimals": 0 }, "overrides": [] },
+      "options": { "reduceOptions": { "values": false, "calcs": ["lastNotNull"], "fields": "" }, "graphMode": "none" },
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 0 }
+    },
+    {
+      "type": "stat",
+      "title": "Smoke runs (success) — total",
+      "id": 2,
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "sum(smoke_test_runs_total{kind=\"api\",result=\"success\"})", "refId": "A" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "short", "decimals": 0 }, "overrides": [] },
+      "options": { "reduceOptions": { "values": false, "calcs": ["lastNotNull"], "fields": "" }, "graphMode": "none" },
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 0 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Smoke run rate (success)",
+      "id": 3,
+      "datasource": "Prometheus",
+      "targets": [
+        { "expr": "sum(rate(smoke_test_runs_total{kind=\"api\",result=\"success\"}[5m]))", "legendFormat": "success", "refId": "A" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "ops" }, "overrides": [] },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 6 }
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["smoke", "api"],
+  "title": "Smoke Test — MVP",
+  "timezone": "utc",
+  "version": 1
+}
