@@ -1,5 +1,53 @@
 # Football Match Outcome Prediction
 
+## 2026-03-08 — Smoke test hardening + /ingest metrics + Grafana dashboard (Codespaces-validated)
+
+What we did today
+-----------------
+- Verified and hardened the API smoke test flow (`scripts/smoke_test.sh`) to POST `/ingest` and validate:
+  - HTTP 200 response shape (`received/persisted/skipped/errors/source`)
+  - idempotency behavior (second POST of same `match_id` is skipped)
+- Updated the FastAPI API so successful `/ingest` requests increment the Prometheus counter:
+  - `smoke_test_runs_total{kind="api",result="success"}`
+  - (and increments `result="error"` for bad ingest requests like empty rows / duplicate match_id)
+- Added/updated an importable Grafana dashboard JSON:
+  - `monitoring/grafana/dashboards/smoke_dashboard.json`
+  - Panels show: total smoke runs, smoke runs over the last hour, and a smoke run rate.
+- Confirmed end-to-end observability locally:
+  - Prometheus query returns the series
+  - Grafana panels render data (no longer "No data")
+
+Quick local run (API + monitoring)
+----------------------------------
+1) Start monitoring stack:
+```bash
+docker compose up -d
+```
+
+Grafana:
+- http://127.0.0.1:3001 (admin / admin)
+
+2) Run the API (in another terminal):
+```bash
+API_KEY="choose-a-secret" uvicorn src.api.main:APP --host 0.0.0.0 --port 8000
+```
+
+3) Run the API smoke test:
+```bash
+API_KEY="choose-a-secret" bash scripts/smoke_test.sh
+```
+
+4) Verify metric is present:
+```bash
+curl -s http://127.0.0.1:8000/metrics | grep -i smoke_test_runs_total
+```
+
+Status
+------
+- Smoke test passes locally; Prometheus sees `smoke_test_runs_total`; Grafana dashboard panels render data.
+
+---
+
 ## 2026-02-13 — Added Alertmanager webhook smoke test & CI
 
 What we did today
@@ -27,7 +75,6 @@ Status
 - Smoke test + CI workflow added and merged; CI validates Alertmanager → webhook receiver → Prometheus scrape end-to-end.
 
 ---
-
 ## Overview
 
 Recent work — Telegram & delivery (see "Recent work" section below)
