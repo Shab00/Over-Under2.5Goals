@@ -1,5 +1,32 @@
 # Football Match Outcome Prediction
 
+## 2026-03-12 — Weekly Pipeline Skeleton: Scrape, Dedupe, Feature Engineering, Model Training, Artifacts, Fixture Output
+
+**What we did today**
+- Implemented a modular weekly pipeline:
+  - Robust EPL match data scrape/upsert with deduplication and canonical keys (`jobs/scrape_matches.py`)
+  - Engineer features and train a LightGBM HomeWin model (only on played matches, no leakage)
+  - Save reproducible model, feature list, and metadata artifacts to `models/weekly/homewin/`
+  - Produce weekly fixture snapshot for upcoming predictions (`data/processed/fixtures_next7d.csv`)
+  - Modular orchestrator and Makefile targets for single-command weekly operation
+- Validated idempotency, dedupe, data correctness, and stable row counts
+- Integrated squash merge and branch hygiene into the CI/CD workflow
+
+**Quick weekly pipeline run**
+```bash
+python3 jobs/scrape_matches.py --in-place
+python3 jobs/train_homewin_weekly.py
+ls data/processed/fixtures_next7d.csv
+ls models/weekly/homewin/
+```
+
+Artifacts:
+- Canonical match data: `data/processed/combinedWithOdds.csv`
+- Model artifacts: `models/weekly/homewin/lightgbm_homewin_<ts>.pkl`, `feature_list_<ts>.pkl`, `metadata_<ts>.json`
+- Weekly fixture predictions: `data/processed/fixtures_next7d.csv`
+
+---
+
 ## 2026-03-08 — Smoke test hardening + /ingest metrics + Grafana dashboard (Codespaces-validated)
 
 What we did today
