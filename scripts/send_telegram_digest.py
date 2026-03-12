@@ -12,6 +12,42 @@ CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
 DB_PATH = os.environ.get("DELIVERIES_DB", "deliveries.db")
 
+DELIVERIES_EXCLUDE_SOURCES = set(
+    s.strip()
+    for s in os.environ.get("DELIVERIES_EXCLUDE_SOURCES", "telegram-sender").split(",")
+    if s.strip()
+)
+
+REQUIRE_MODEL_MARKERS = os.environ.get("REQUIRE_MODEL_MARKERS", "1") == "1"
+
+
+def _filter_delivery_rows_for_digest(rows):
+    """
+    /deliveries rows look like:
+      {id, match_id, source, payload:{...}, received_at, ingested_at}
+
+    We want "model-generated" rows and we want to avoid recursion where the telegram sender
+    keeps re-sending (and re-ingesting) its own rows.
+    """
+    out = []
+    for r in rows or []:
+        if not isinstance(r, dict):
+            continue
+
+        src = r.get("source")
+        if src in DELIVERIES_EXCLUDE_SOURCES:
+            continue
+
+        payload = r.get("payload") if isinstance(r.get("payload"), dict) else {}
+
+        if REQUIRE_MODEL_MARKERS:
+            if not (payload.get("model_source") or payload.get("snapshot_created_at")):
+                continue
+
+        out.append(r)
+    return out
+
+
 def normalize_row(r):
     if not isinstance(r, dict):
         return None
@@ -41,6 +77,7 @@ def normalize_row(r):
         out["away"] = away
     return out
 
+
 def normalize_rows(rows):
     normalized = []
     for r in rows:
@@ -50,37 +87,31 @@ def normalize_rows(rows):
     return normalized
 
 def fetch_picks(limit=5, threshold=None, prob_col="prob_platt"):
-    params = {"limit": limit}
-    if threshold is not None:
-        params.update({"threshold": threshold, "prob_col": prob_col})
+    """
+    Fetch from /deliveries only, over-fetch then filter locally.
+
+    This avoids returning 0 when the newest rows are from telegram-sender/smoke etc.
+    """
     headers = {}
     if API_KEY:
         headers["X-API-KEY"] = API_KEY
-    candidate_urls = [
-        f"{API_URL}/predictions/latest",
-        f"{API_URL}/predictions",
-        f"{API_URL}/deliveries",
-    ]
-    for url in candidate_urls:
-        try:
-            resp = requests.get(url, params=params, headers=headers, timeout=5)
-            if resp.status_code != 200:
-                continue
-            payload = resp.json()
-            if isinstance(payload, dict) and "rows" in payload and isinstance(payload["rows"], list):
-                return payload["rows"][:limit]
-            if isinstance(payload, dict) and "data" in payload and isinstance(payload["data"], list):
-                return payload["data"][:limit]
-            if isinstance(payload, list):
-                return payload[:limit]
-            if isinstance(payload, dict) and ("match_id" in payload or "prob" in payload):
-                return [payload]
-        except Exception:
-            continue
-    return [
-        {"match_id": 99990001, "home": "TestHome", "away": "TestAway", "prob_platt": 0.55},
-        {"match_id": 99990002, "home": "Foo", "away": "Bar", "prob_platt": 0.60},
-    ]
+
+    local_limit = int(os.environ.get("DELIVERIES_FETCH_LIMIT", "400"))
+
+    params = {"limit": local_limit}
+    _ = (threshold, prob_col)
+
+    url = f"{API_URL}/deliveries"
+    resp = requests.get(url, params=params, headers=headers, timeout=10)
+    resp.raise_for_status()
+
+    payload = resp.json()
+    if not (isinstance(payload, dict) and isinstance(payload.get("rows"), list)):
+        return []
+
+    rows = payload["rows"]
+    rows = _filter_delivery_rows_for_digest(rows)
+    return rows[:limit]
 
 def init_db(conn):
     conn.execute(
@@ -116,6 +147,7 @@ def init_db(conn):
     )
     conn.commit()
 
+
 def send_telegram_message(text):
     if not BOT_TOKEN or not CHAT_ID:
         raise RuntimeError("TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must be set in environment.")
@@ -124,6 +156,7 @@ def send_telegram_message(text):
     r = requests.post(url, json=payload, timeout=10)
     r.raise_for_status()
     return r.json()
+
 
 def format_picks_text(rows):
     if not rows:
@@ -141,6 +174,7 @@ def format_picks_text(rows):
         lines.append(f"- {home} vs {away} — prob {prob_f:.3f} (id:{mid})")
     lines.append(f"\nSent at {datetime.utcnow().isoformat()}Z")
     return "\n".join(lines)
+
 
 def filter_existing_rows(rows):
     """
@@ -178,12 +212,21 @@ def filter_existing_rows(rows):
             filtered.append(r)
     return filtered
 
+
 def log_deliveries(conn, rows, message_id, chat_id):
     now = datetime.utcnow().isoformat() + "Z"
     for r in rows:
         conn.execute(
             "INSERT INTO deliveries (sent_at, match_id, home, away, prob, message_id, chat_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (now, r.get("match_id"), r.get("home"), r.get("away"), float(r.get("prob") or r.get("prob_platt") or 0.0), message_id, chat_id),
+            (
+                now,
+                r.get("match_id"),
+                r.get("home"),
+                r.get("away"),
+                float(r.get("prob") or r.get("prob_platt") or 0.0),
+                message_id,
+                chat_id,
+            ),
         )
     conn.commit()
 
@@ -195,7 +238,6 @@ def main():
     args = parser.parse_args()
 
     rows = fetch_picks(limit=args.limit, threshold=args.threshold, prob_col=args.prob_col)
-
     normalized_rows = normalize_rows(rows)
 
     if os.environ.get("TEST_MODE") == "1":
@@ -212,30 +254,58 @@ def main():
     print("DEBUG: normalized_rows:", json.dumps(normalized_rows, indent=2))
 
     filtered_rows = filter_existing_rows(normalized_rows)
+    skip_exists_filter = os.environ.get("SKIP_EXISTS_FILTER", "1") == "1"
+    if skip_exists_filter:
+        filtered_rows = normalized_rows
+        filtered_out = 0
+    else:
+        filtered_rows = filter_existing_rows(normalized_rows)
+        filtered_out = len(normalized_rows) - len(filtered_rows)
+
     filtered_out = len(normalized_rows) - len(filtered_rows)
     print(f"DEBUG: filtered_out={filtered_out} (will send {len(filtered_rows)} rows)")
 
     text = format_picks_text(filtered_rows)
 
-    ingest_payload = {"rows": filtered_rows, "source": "telegram-sender"}
-    ingest_headers = {"Content-Type": "application/json"}
-    if API_KEY:
-        ingest_headers["X-API-KEY"] = API_KEY
+    # ----------------------------
+    # NEW: disable ingest by default to avoid recursion / DB flooding.
+    # Set ENABLE_INGEST=1 only when you explicitly want to write to /ingest.
+    # ----------------------------
+    enable_ingest = os.environ.get("ENABLE_INGEST", "0") == "1"
 
-    try:
-        ingest_resp = requests.post(f"{API_URL}/ingest", json=ingest_payload, headers=ingest_headers, timeout=10)
-        ingest_status = ingest_resp.status_code
+    if enable_ingest:
+        ingest_payload = {"rows": filtered_rows, "source": "telegram-sender"}
+        ingest_headers = {"Content-Type": "application/json"}
+        if API_KEY:
+            ingest_headers["X-API-KEY"] = API_KEY
+
         try:
-            ingest_json = ingest_resp.json()
-        except Exception:
-            ingest_json = {"error": "invalid-json"}
-    except Exception as e:
+            ingest_resp = requests.post(
+                f"{API_URL}/ingest",
+                json=ingest_payload,
+                headers=ingest_headers,
+                timeout=10,
+            )
+            ingest_status = ingest_resp.status_code
+            try:
+                ingest_json = ingest_resp.json()
+            except Exception:
+                ingest_json = {"error": "invalid-json"}
+        except Exception as e:
+            ingest_status = None
+            ingest_json = {"error": f"ingest-failed: {str(e)}"}
+    else:
         ingest_status = None
-        ingest_json = {"error": f"ingest-failed: {str(e)}"}
+        ingest_json = {"skipped": True, "reason": "ENABLE_INGEST!=1"}
 
-    persisted = int(ingest_json.get("persisted", 0))
     total_sent = len(filtered_rows)
-    skipped = max(0, total_sent - persisted)
+
+    if ingest_json.get("skipped") is True:
+        persisted = 0
+        skipped = 0
+    else:
+        persisted = int(ingest_json.get("persisted", 0))
+        skipped = max(0, total_sent - persisted)
 
     if os.environ.get("SKIP_TELEGRAM") == "1":
         res = {"result": {"message_id": None, "chat": {"id": None}}}
@@ -274,7 +344,10 @@ def main():
     conn.commit()
     conn.close()
 
-    print(f"Sent {len(filtered_rows)} picks, message_id={message_id}, chat_id={chat_id}, persisted={persisted}, skipped={skipped + filtered_out}")
+    print(
+        f"Sent {len(filtered_rows)} picks, message_id={message_id}, chat_id={chat_id}, "
+        f"persisted={persisted}, skipped={skipped + filtered_out}"
+    )
 
 if __name__ == "__main__":
     main()
