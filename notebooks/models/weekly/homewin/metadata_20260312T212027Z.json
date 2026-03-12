@@ -1,0 +1,19 @@
+{
+  "created_at_utc": "20260312T212027Z",
+  "train_csv": "../data/processed/combinedWithOdds.csv",
+  "rows_used": 7901,
+  "features": 183,
+  "test_size": 0.2,
+  "random_state": 42,
+  "n_matches_form": 5,
+  "metrics": {
+    "accuracy": 0.6451612903225806,
+    "f1": 0.5961123110151187
+  },
+  "model_path": "models/weekly/homewin/lightgbm_homewin_20260312T212027Z.pkl",
+  "feature_list_path": "models/weekly/homewin/feature_list_20260312T212027Z.pkl",
+  "teams_count": 43,
+  "python": "3.10.18 | packaged by conda-forge | (main, Jun  4 2025, 14:46:00) [Clang 18.1.8 ]",
+  "numpy": "2.2.6",
+  "pandas": "2.3.3"
+}

@@ -58,3 +58,6 @@ pip-log.txt
 
 # Logs
 *.log
+
+# Local env
+.env
