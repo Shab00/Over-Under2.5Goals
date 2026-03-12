@@ -1,0 +1,22 @@
+{
+  "created_at": "20260312T205516Z",
+  "python": "3.10.18 | packaged by conda-forge | (main, Jun  4 2025, 14:46:00) [Clang 18.1.8 ]",
+  "platform": "macOS-26.3-arm64-arm-64bit",
+  "numpy": "2.2.6",
+  "pandas": "2.3.3",
+  "feature_list_file": "/Users/bashaardhoot/Documents/GitHub/Over-Under2.5Goals/notebooks/thirdIterration/models/saved/feature_list_20260312T205516Z.pkl",
+  "models": {
+    "XGBoost": "/Users/bashaardhoot/Documents/GitHub/Over-Under2.5Goals/notebooks/thirdIterration/models/saved/xgboost_homewin_20260312T205516Z.pkl",
+    "LightGBM": "/Users/bashaardhoot/Documents/GitHub/Over-Under2.5Goals/notebooks/thirdIterration/models/saved/lightgbm_homewin_20260312T205516Z.pkl"
+  },
+  "training_metrics": {
+    "XGBoost": {
+      "accuracy": 0.6299810246679317,
+      "f1": 0.5923344947735192
+    },
+    "LightGBM": {
+      "accuracy": 0.6426312460468058,
+      "f1": 0.5984363894811656
+    }
+  }
+}
