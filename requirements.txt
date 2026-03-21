@@ -6,3 +6,7 @@ requests
 prometheus_client
 prometheus_client
 flask
+joblib
+numpy
+scikit-learn
+lightgbm
