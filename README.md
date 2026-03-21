@@ -1,5 +1,38 @@
 # Football Match Outcome Prediction
 
+## 2026-03-21 — Week Wrap-up: HomeWin Pipeline, Artifacts, and Odds Dependency Planning
+
+**What we did today**
+- Completed a robust weekly HomeWin model training pipeline:
+  - End-to-end data normalization, deduplication, and canonical repeatable keys
+  - Idempotent fetch and upsert, validated correctness and safe re-runs
+  - Modular LightGBM training script producing versioned model, features, and metadata artifacts
+  - Train report artifact is always symlinked/copied as `artifacts/train_report.json` for easy CI/CD and reporting
+- Improved development workflow:
+  - Adopted squash and merge workflow with proper branch hygiene, all steps reproducible from command line (including `gh` CLI PR workflow)
+- Carefully audited all model training features used for inference
+  - Printed required columns—now totally clear which inputs must be scraped/provided for effective future prediction snapshots
+- Traced and planned for future games odds column dependency:
+  - Identified that critical bookmaker odds (Bet365, Pinnacle, William Hill, etc.) are required for sharp HomeWin predictions
+  - Mapped each model feature column prefix to its respective bookmaker/aggregator. [See: Odds Column Prefix Table]
+- Wrote/validated workflow for branch management:
+  - Branch create → commit → push → PR → squash merge → branch delete, all scripted or via CLI
+
+**Snag discovered**
+- **No source table for unplayed ("future") games in current pipeline**  
+  - Realised that while model can run on historical/canonical data, meaningful future predictions demand actual upcoming fixtures *with* market odds.
+  - **Odds problem:** Market odds features are among the model's most powerful, and must be scraped or sourced for each new fixture in order to run snapshot predictions with full accuracy.
+
+**Next week's plan**
+- Build or integrate a fixture + odds scraper:  
+  - Scrape upcoming EPL fixture list (HomeTeam, AwayTeam, Date)
+  - Scrape bookmaker odds (minimum: Bet365, William Hill, Pinnacle; ideally using an aggregator like OddsPortal or Betbrain for max/avg/market odds columns)
+  - Create a pipeline to output a fully-populated fixture DataFrame for use in snapshot predictions
+  - Automate weekly odds snapshot process, making predictions generation possible for next week's games
+- Review or write a notebook/script for scraping/aggregating fixture and odds data, with a recipe for quick extension
+- (Optional) Plan enhancements to model reporting, batch artifact retention, and prediction API deployment
+
+---
 ## 2026-03-12 — Weekly Pipeline Skeleton: Scrape, Dedupe, Feature Engineering, Model Training, Artifacts, Fixture Output
 
 **What we did today**
