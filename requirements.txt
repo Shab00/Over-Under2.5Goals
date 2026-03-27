@@ -10,3 +10,6 @@ joblib
 numpy
 scikit-learn
 lightgbm
+bs4
+selenium
+webdriver-manager
