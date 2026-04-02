@@ -1,4 +1,4 @@
-MatchWeek,HomeTeam,AwayTeam,FTHG,FTAG,Kickoff,Venue,MatchId
+MatchWeek,HomeTeam,AwayTeam,HomeScore,AwayScore,Kickoff,Venue,MatchId
 1,Liverpool,Bournemouth,4,2,2025-08-15 20:00:00,"Anfield, Liverpool",2561895
 1,Aston Villa,Newcastle United,0,0,2025-08-16 12:30:00,"Villa Park, Birmingham",2561896
 1,Brighton and Hove Albion,Fulham,1,1,2025-08-16 15:00:00,"American Express Stadium, Falmer",2561897
@@ -353,12 +353,12 @@ MatchWeek,HomeTeam,AwayTeam,FTHG,FTAG,Kickoff,Venue,MatchId
 36,Burnley,Aston Villa,,,2026-05-09 15:00:00,"Turf Moor, Burnley",2562246
 36,Crystal Palace,Everton,,,2026-05-09 15:00:00,"Selhurst Park, London",2562247
 36,Fulham,Bournemouth,,,2026-05-09 15:00:00,"Craven Cottage, London",2562248
-36,Liverpool,Chelsea,,,2026-05-09 12:30:00,"Anfield, Liverpool",2562249
-36,Manchester City,Brentford,,,2026-05-09 17:30:00,"Etihad Stadium, Manchester",2562250
-36,Nottingham Forest,Newcastle United,,,2026-05-10 14:00:00,"The City Ground, Nottingham",2562251
+36,Liverpool,Chelsea,,,2026-05-09 15:00:00,"Anfield, Liverpool",2562249
+36,Manchester City,Brentford,,,2026-05-09 15:00:00,"Etihad Stadium, Manchester",2562250
+36,Nottingham Forest,Newcastle United,,,2026-05-09 15:00:00,"The City Ground, Nottingham",2562251
 36,Sunderland,Manchester United,,,2026-05-09 15:00:00,"Stadium of Light, Sunderland",2562252
-36,Tottenham Hotspur,Leeds United,,,2026-05-11 20:00:00,"Tottenham Hotspur Stadium, London",2562253
-36,West Ham United,Arsenal,,,2026-05-10 16:30:00,"London Stadium, London",2562254
+36,Tottenham Hotspur,Leeds United,,,2026-05-09 15:00:00,"Tottenham Hotspur Stadium, London",2562253
+36,West Ham United,Arsenal,,,2026-05-09 15:00:00,"London Stadium, London",2562254
 37,Bournemouth,Manchester City,,,2026-05-17 15:00:00,"Vitality Stadium, Bournemouth",2562255
 37,Arsenal,Burnley,,,2026-05-17 15:00:00,"Emirates Stadium, London",2562256
 37,Aston Villa,Liverpool,,,2026-05-17 15:00:00,"Villa Park, Birmingham",2562257
