@@ -118,13 +118,14 @@ def write_csv(df: pd.DataFrame, path: Path) -> None:
     _ensure_parent(path)
     df.to_csv(path, index=False, quoting=csv.QUOTE_MINIMAL)
 
-
 def build_next_fixtures(df: pd.DataFrame, days: int) -> pd.DataFrame:
     today = _utc_today_date()
     end = today + timedelta(days=days)
 
     if "DateParsed" not in df.columns:
         df = ensure_match_key(df)
+    if df["DateParsed"].dtype == object:
+        df["DateParsed"] = pd.to_datetime(df["DateParsed"], errors="coerce").dt.date
 
     mask = (df["DateParsed"].notna()) & (df["DateParsed"] >= today) & (df["DateParsed"] <= end)
     out = df.loc[mask].copy()
@@ -135,7 +136,6 @@ def build_next_fixtures(df: pd.DataFrame, days: int) -> pd.DataFrame:
 
     out = out.sort_values(by=["DateISO", "HomeTeam", "AwayTeam"], kind="stable").reset_index(drop=True)
     return out
-
 
 def backup_file(path: Path) -> Path:
     ts = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
