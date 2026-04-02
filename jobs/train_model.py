@@ -222,7 +222,7 @@ def main():
     df_clean, teams = clean_and_engineer_features(
         df_raw, COLUMNS_TO_KEEP, fit_teams=True, n_matches=args.n_matches_form
     )
-
+    df_clean.to_csv("data/processed/engineered_train_features.csv", index=False)
     target = "HomeWin"
     X = df_clean.drop(columns=COLS_TO_DROP_FOR_X, errors="ignore")
     y = df_clean[target].astype(int)
