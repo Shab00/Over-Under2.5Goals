@@ -1,5 +1,17 @@
 # Football Match Outcome Prediction
 
+## April 2026 Update
+
+We are currently focused on building a robust odds+fixture data pipeline. This work enables high-accuracy HomeWin predictions on future EPL matches by automatically scraping and merging up-to-date fixture lists with live bookmaker odds. _(No odds → no real predictions!)_
+
+- New odds ingestion and merge scripts fully populate required odds columns for model inference, using fallback logic to take best-available market prices for every game.
+- The pipeline filters for only future, unplayed matches so predictions and odds artifacts always reflect upcoming games.
+- Odds mapping covers Bet365, Pinnacle, William Hill, and aggregator columns, and will be extended as more sources are added.
+
+This advances our goal of running fully automated, end-to-end predictions for the coming matchweek, with sharable artifacts and improved odds dependency management!
+
+---
+
 ## 2026-03-21 — Week Wrap-up: HomeWin Pipeline, Artifacts, and Odds Dependency Planning
 
 **What we did today**
