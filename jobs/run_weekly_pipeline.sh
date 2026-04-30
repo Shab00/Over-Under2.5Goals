@@ -10,6 +10,9 @@ python3 jobs/scrape_matches.py
 log "step: train"
 python3 jobs/train_model.py
 
+log "step: build features for prediction"
+python3 jobs/build_upcoming_features.py
+
 log "step: build predictions snapshot"
 python3 jobs/build_predictions_snapshot.py
 
