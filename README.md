@@ -107,7 +107,7 @@ API_KEY="choose-a-secret" uvicorn src.api.main:APP --reload --port 8000
 ### 5. Send a Telegram digest
 
 ```bash
-python scripts/send_telegram_digest.py
+python scripts/deliver_telegram.py
 ```
 
 ---
