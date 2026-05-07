@@ -125,7 +125,7 @@ def build_next_fixtures(df: pd.DataFrame, days: int) -> pd.DataFrame:
 
     if "DateParsed" not in df.columns:
         df = ensure_match_key(df)
-
+    df["DateParsed"] = pd.to_datetime(df["DateParsed"], errors="coerce").dt.date
     mask = (df["DateParsed"].notna()) & (df["DateParsed"] >= today) & (df["DateParsed"] <= end)
     out = df.loc[mask].copy()
 
