@@ -70,6 +70,25 @@ Snapshot CSV  →  FastAPI endpoint  →  Telegram digest
 ```bash
 pip install -r requirements.txt
 ```
+---
+
+## Automation & CI
+
+### 🚀 One-Command Pipeline (Local or CI)
+
+To run the full forecasting pipeline from raw fixtures to Telegram delivery:
+
+```bash
+bash jobs/run_weekly_pipeline.sh
+
+### Environment Required
+
+For full end-to-end pipeline (including API & Telegram delivery), set the following env variables:
+
+    - TELEGRAM_BOT_TOKEN – your Telegram bot token
+    - TELEGRAM_CHAT_ID – your group/channel ID
+    - (optional) API_KEY – for API authentication
+    - (optional) DELIVERIES_DB – for a custom path to the delivery log (defaults as needed)
 
 ### 2. Prepare data
 
