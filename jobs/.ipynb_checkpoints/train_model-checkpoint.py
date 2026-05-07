@@ -17,8 +17,9 @@ from lightgbm import LGBMClassifier
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.model_selection import train_test_split
 
+# ==== Script Args/Config ====
 class Args:
-    train_csv = "data/processed/combinedWithOdds.upserted.csv"
+    train_csv = "data/processed/combinedWithOdds.csv"
     out_dir = "models/weekly/homewin"
     test_size = 0.2
     random_state = 42
@@ -26,6 +27,7 @@ class Args:
 
 args = Args()
 
+# ==== Constants ====
 COLUMNS_TO_KEEP: List[str] = [
     "Div","Date","Time","HomeTeam","AwayTeam","FTHG","FTAG","FTR","HTHG","HTAG","HTR",
     "Attendance","Referee","HS","AS","HST","AST","HHW","AHW","HC","AC","HF","AF","HFKC","AFKC",
@@ -62,11 +64,13 @@ ODDS_COLS: List[str] = [
 SCORE_COLS: List[str] = ["FTHG","FTAG","HTHG","HTAG","HS","AS","HST","AST","HC","AC","HF","AF","HY","AY","HR","AR"]
 ESSENTIAL_ODDS: List[str] = ["B365H","B365D","B365A","WHH","WHD","WHA","IWH","IWD","IWA"]
 
+
 def _parse_dates_series(date_series: pd.Series) -> pd.Series:
     out = pd.to_datetime(date_series, format="%d/%m/%y", errors="coerce")
     mask = out.isna()
     out.loc[mask] = pd.to_datetime(date_series.loc[mask], format="%d/%m/%Y", errors="coerce")
     return out
+
 
 def clean_and_engineer_features(
     df: pd.DataFrame,
@@ -82,20 +86,12 @@ def clean_and_engineer_features(
         if col not in df.columns:
             df[col] = np.nan
     df = df[columns_to_keep].copy()
-#    print("\n[DEBUG] AFTER KEEP COLUMNS")
-#    print("shape:", df.shape)
-#    print("date sample:", df["Date"].head(5).tolist())
-#    print("FTR non-null:", df["FTR"].notna().sum())
+
     df = df[df["FTR"].notna()].copy()
-#    print("\n[DEBUG] AFTER FTR FILTER")
-#    print("shape:", df.shape)
-#    print("max date:", pd.to_datetime(df["Date"], errors="coerce").max())
+
     df["Date"] = _parse_dates_series(df["Date"])
     df = df[df["Date"] >= pd.Timestamp("2000-08-18")].reset_index(drop=True)
-#    print("\n[DEBUG] AFTER DATE PARSE/FILTER")
-#    print("shape:", df.shape)
-#    print("NaT dates:", df["Date"].isna().sum())
-#    print("max date:", df["Date"].max())
+
     df["HomeWin"] = (df["FTR"] == "H").astype(int)
 
     for col in ODDS_COLS + SCORE_COLS:
@@ -105,10 +101,7 @@ def clean_and_engineer_features(
     df = df.drop_duplicates().reset_index(drop=True)
 
     essentials = [c for c in ESSENTIAL_ODDS if c in df.columns]
-    # df = df.dropna(subset=essentials).reset_index(drop=True)
-#    print("\n[DEBUG] AFTER ESSENTIAL ODDS FILTER")
-#    print("shape:", df.shape)
-#    print("max date:", df["Date"].max())
+    df = df.dropna(subset=essentials).reset_index(drop=True)
     for col in ODDS_COLS:
         if col in df.columns:
             df[col] = df[col].fillna(df[col].mean())
@@ -226,18 +219,10 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
 
     df_raw = pd.read_csv(train_path, low_memory=False)
-    #print("\n[DEBUG] RAW DATA CHECK")
-    #print("raw shape:", df_raw.shape)
-    #print("raw max date:", pd.to_datetime(df_raw["Date"], errors="coerce").max())
-    #print("raw FTR non-null:", df_raw["FTR"].notna().sum())
-    #print(df_raw[["Date", "FTR", "HomeTeam", "AwayTeam"]].tail(20))
     df_clean, teams = clean_and_engineer_features(
         df_raw, COLUMNS_TO_KEEP, fit_teams=True, n_matches=args.n_matches_form
     )
-    engineered_path = Path("data/processed/engineered_train_features.csv")
-    engineered_path.parent.mkdir(parents=True, exist_ok=True)
-    df_clean.to_csv(engineered_path, index=False)
-    print(f"saved engineered features -> {engineered_path}")
+
     target = "HomeWin"
     X = df_clean.drop(columns=COLS_TO_DROP_FOR_X, errors="ignore")
     y = df_clean[target].astype(int)
@@ -294,9 +279,9 @@ def main():
     print(f"[train_homewin_weekly] copied metadata      -> artifacts/train_report.json")
 
 
-    #print("\n[train_homewin_weekly] Feature columns used for training (in order):")
-    #for col in X.columns:
-        #print(col)
+    print("\n[train_homewin_weekly] Feature columns used for training (in order):")
+    for col in X.columns:
+        print(col)
 
 if __name__ == "__main__":
     main()
