@@ -1,4 +1,5 @@
 fastapi
+pytest
 uvicorn[standard]
 pandas
 python-dateutil
