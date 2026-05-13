@@ -1,5 +1,6 @@
 fastapi
 pytest
+httpx
 uvicorn[standard]
 pandas
 python-dateutil
