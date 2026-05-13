@@ -1,10 +1,10 @@
+import os
 from fastapi.testclient import TestClient
 import sqlite3
 from src.api.main import APP
 
 client = TestClient(APP)
-HEADERS = {"Content-Type": "application/json", "X-API-KEY": "choose-a-secret"}
-
+HEADERS = {"Content-Type": "application/json", "X-API-KEY": os.getenv("API_KEY", "test-secret")}
 def test_idempotency_smoke():
     mid = 1_234_567_890
 

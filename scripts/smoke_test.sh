@@ -10,7 +10,12 @@ API_KEY=${API_KEY:-}
 RETRIES=${RETRIES:-3}
 SLEEP_BETWEEN=${SLEEP_BETWEEN:-1}
 
-# Check availability of helper tools (jq optional -- fallback used)
+if [ -z "$API_KEY" ]; then
+  echo "ERROR: API_KEY environment variable not set. Usage:"
+  echo "  API_KEY=your-api-key ./scripts/smoke_test.sh"
+  exit 2
+fi
+
 JQ_AVAILABLE=true
 if ! command -v jq >/dev/null 2>&1; then
   echo "Warning: jq not found. The script will use a printf-based fallback to build JSON."
@@ -19,7 +24,6 @@ fi
 
 echo "Running smoke test against $TARGET"
 
-# portable millisecond timestamp (works on macOS and Linux)
 if command -v python3 >/dev/null 2>&1; then
   RANDOM_ID=$(python3 - <<'PY'
 import time
@@ -27,11 +31,9 @@ print(int(time.time() * 1000))
 PY
 )
 else
-  # fallback to seconds*1000 if python3 missing
   RANDOM_ID="$(date +%s)000"
 fi
 
-# construct valid JSON payload using jq (safer quoting) or printf fallback
 if [ "$JQ_AVAILABLE" = true ]; then
   PAYLOAD=$(jq -n --arg id "$RANDOM_ID" --argjson prob 0.5 '{rows:[{match_id:($id|tonumber), prob:$prob}]}')
 else
@@ -55,7 +57,6 @@ if [ "$HTTP" -ne 200 ]; then
   exit 3
 fi
 
-# Accept a few possible response shapes (persisted, skipped, received, error)
 if echo "$BODY" | (jq -e 'has("persisted") or has("skipped") or has("received") or has("error")' >/dev/null 2>&1) ; then
   echo "Response contains expected keys."
 else
@@ -97,7 +98,6 @@ HTTP2=$(echo "$RESP2" | tail -n1)
 echo "HTTP $HTTP2"
 echo "Body: $BODY2"
 
-# Accept idempotency responses where persisted==0, skipped==true/1, or an error indication is present
 if echo "$BODY2" | (jq -e '.persisted == 0 or .skipped == true or .skipped == 1 or has("error")' >/dev/null 2>&1) ; then
   echo "Idempotency behavior OK (second request skipped or returned error indication)."
 else

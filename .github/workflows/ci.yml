@@ -43,9 +43,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest "fastapi[all]" httpx
+          pip install -r requirements.txt
 
       - name: Run tests
         env:
           PYTHONPATH: .
+          API_KEY: test-secret
         run: pytest -q

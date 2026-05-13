@@ -7,7 +7,11 @@ import os
 import sqlite3
 from datetime import datetime
 import logging
+import pandas as pd
+import numpy as np
 
+from dotenv import load_dotenv
+load_dotenv()
 from src.metrics import add_prometheus_metrics, INGESTION_COUNTER, SMOKE_TEST_RUNS
 
 # basic logger
@@ -49,7 +53,6 @@ def smoke_ok():
     try:
         SMOKE_TEST_RUNS.labels(kind="api", result="success").inc()
     except Exception:
-        # metrics should never break the endpoint
         pass
     return {"ok": True}
 
@@ -111,7 +114,6 @@ def ingest(
     """
     rows = payload.rows
     if not rows or len(rows) == 0:
-        # mark a failed smoke run (bad request)
         try:
             SMOKE_TEST_RUNS.labels(kind="api", result="error").inc()
         except Exception:
@@ -121,7 +123,6 @@ def ingest(
     seen = set()
     for r in rows:
         if r.match_id in seen:
-            # mark a failed smoke run (bad request)
             try:
                 SMOKE_TEST_RUNS.labels(kind="api", result="error").inc()
             except Exception:
@@ -136,9 +137,7 @@ def ingest(
 
     received_at_now = datetime.utcnow().isoformat() + "Z"
 
-    # default source used when payload.source is omitted
     default_source = "api-ingest"
-    # value we'll report back in the response
     response_source = payload.source or default_source
 
     for idx, r in enumerate(rows):
@@ -147,7 +146,6 @@ def ingest(
             exists = exists_match_id(conn, r.match_id)
             if exists:
                 skipped += 1
-                # increment metric for skipped
                 try:
                     INGESTION_COUNTER.labels(result="skipped", source=payload.source or default_source).inc()
                 except Exception:
@@ -160,7 +158,6 @@ def ingest(
 
             if ok:
                 persisted += 1
-                # increment metric for persisted
                 try:
                     INGESTION_COUNTER.labels(result="persisted", source=source_to_use).inc()
                 except Exception:
@@ -188,8 +185,6 @@ def ingest(
         "source": response_source,
     }
 
-    # Mark a successful smoke run if request completed with 200.
-    # (We count the smoke "run" per request, not per row.)
     try:
         SMOKE_TEST_RUNS.labels(kind="api", result="success").inc()
     except Exception:
@@ -226,3 +221,24 @@ def deliveries(
         return {"count": len(rows), "rows": rows, "limit": limit, "offset": offset}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to query deliveries: {e}")
+
+PREDICTIONS_CSV = (
+    os.environ.get("PREDICTIONS_LATEST_CSV")
+    or str(Path(__file__).resolve().parents[2] / "artifacts" / "premier_league_2025_26_predictions.csv")
+)
+
+@APP.get("/predictions/latest")
+def get_latest_predictions(_auth=Depends(require_api_key)):
+    """
+    Serve the latest predictions snapshot as JSON.
+    """
+    try:
+        df = pd.read_csv(PREDICTIONS_CSV)
+        df = df.replace([np.nan, np.inf, -np.inf], None)
+        records = df.to_dict(orient="records")
+        mtime = os.path.getmtime(PREDICTIONS_CSV)
+        updated_at = datetime.utcfromtimestamp(mtime).isoformat() + "Z"
+        return {"predictions": records, "updated_at": updated_at}
+    except Exception as e:
+        logger.error(f"Failed to load predictions: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
