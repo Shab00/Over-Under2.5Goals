@@ -11,6 +11,8 @@ on:
 jobs:
   smoke:
     runs-on: ubuntu-latest
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
     steps:
       - uses: actions/checkout@v4
 
