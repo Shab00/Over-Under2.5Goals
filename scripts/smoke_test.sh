@@ -10,6 +10,12 @@ API_KEY=${API_KEY:-}
 RETRIES=${RETRIES:-3}
 SLEEP_BETWEEN=${SLEEP_BETWEEN:-1}
 
+if [ -z "$API_KEY" ]; then
+  echo "ERROR: API_KEY environment variable not set. Usage:"
+  echo "  API_KEY=your-api-key ./scripts/smoke_test.sh"
+  exit 2
+fi
+
 # Check availability of helper tools (jq optional -- fallback used)
 JQ_AVAILABLE=true
 if ! command -v jq >/dev/null 2>&1; then

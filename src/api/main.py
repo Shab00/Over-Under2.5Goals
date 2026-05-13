@@ -7,6 +7,8 @@ import os
 import sqlite3
 from datetime import datetime
 import logging
+import pandas as pd                    # <- needed for csv
+import numpy as np                     # <- needed for NaN/inf replacement
 
 from src.metrics import add_prometheus_metrics, INGESTION_COUNTER, SMOKE_TEST_RUNS
 
@@ -226,3 +228,28 @@ def deliveries(
         return {"count": len(rows), "rows": rows, "limit": limit, "offset": offset}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to query deliveries: {e}")
+
+# ---------------------------
+# /predictions/latest endpoint (with NaN/inf handling)
+# ---------------------------
+PREDICTIONS_CSV = (
+    os.environ.get("PREDICTIONS_LATEST_CSV")
+    or str(Path(__file__).resolve().parents[2] / "artifacts" / "premier_league_2025_26_predictions.csv")
+)
+
+@APP.get("/predictions/latest")
+def get_latest_predictions(_auth=Depends(require_api_key)):
+    """
+    Serve the latest predictions snapshot as JSON.
+    """
+    try:
+        df = pd.read_csv(PREDICTIONS_CSV)
+        # Replace NaN, inf, -inf with None so JSON is valid
+        df = df.replace([np.nan, np.inf, -np.inf], None)
+        records = df.to_dict(orient="records")
+        mtime = os.path.getmtime(PREDICTIONS_CSV)
+        updated_at = datetime.utcfromtimestamp(mtime).isoformat() + "Z"
+        return {"predictions": records, "updated_at": updated_at}
+    except Exception as e:
+        logger.error(f"Failed to load predictions: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
