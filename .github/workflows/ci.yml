@@ -48,4 +48,5 @@ jobs:
       - name: Run tests
         env:
           PYTHONPATH: .
+          API_KEY: test-secret
         run: pytest -q
