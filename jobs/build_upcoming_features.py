@@ -7,13 +7,14 @@ import numpy as np
 import datetime
 import re
 from pathlib import Path
+import sys
 
 # --------- CONFIG ---------
 BASE = Path(".").resolve()
 output_all = BASE / "data/raw/football_data/premier_league_2025_26_fixtures.csv"
 output_upcoming = BASE / "data/processed/premier_league_2025_26_upcoming_prediction_template.csv"
 output_annotated = BASE / "data/processed/premier_league_2025_26_upcoming_with_teams_and_date.csv"
-feature_path = BASE / "models/weekly/homewin/feature_list_20260327T205139Z.pkl"  # Update timestamp as needed!
+feature_path = BASE / "models/weekly/homewin/feature_list_20260327T205139Z.pkl"
 engineered_history_path = BASE / "data/processed/engineered_train_features.csv"
 
 API_KEY = 'f91688b2469810e18dbf6649b7d462fe'
@@ -93,7 +94,7 @@ def add_rolling_features(df, n_matches=5):
         ].sort_values("Date").tail(n_matches)
         away_gf = past_away["FTAG"].mean() if not past_away.empty else np.nan
         away_ga = past_away["FTHG"].mean() if not past_away.empty else np.nan
-        away_pts = past_away.apply(lambda r: 3 if r["FTAG"] > r["FTHG"] else (1 if r["FTAG"] == r["FTHG"] else 0), axis=1).sum() if not past_away.empty else np.nan
+        away_pts = past_away.apply(lambda r: 3 if r["FTAG"] > r["FTHG"] else (1 if r["FTAG"] == r["FTAG"] else 0), axis=1).sum() if not past_away.empty else np.nan
         records.append({
             "HomeRecentGF": home_gf,
             "HomeRecentGA": home_ga,
@@ -170,6 +171,15 @@ def main():
     )
     today_date = pd.Timestamp.today().date()
     df_upcoming = df_all[mask_upcoming & (df_all["Date"].dt.date >= today_date)].copy()
+
+    # ---- OFF-SEASON GUARD: If no upcoming matches, exit gracefully and create empty outputs ----
+    if df_upcoming.empty:
+        print("[upcoming_features][INFO] No upcoming fixtures found (off-season). Exiting cleanly.")
+        output_upcoming.parent.mkdir(parents=True, exist_ok=True)
+        output_annotated.parent.mkdir(parents=True, exist_ok=True)
+        pd.DataFrame().to_csv(output_upcoming, index=False)
+        pd.DataFrame().to_csv(output_annotated, index=False)
+        sys.exit(0)
 
     # --- 6. Fill in odds for upcoming games ---
     df_upcoming = clean_team_names(df_upcoming, cols=["HomeTeam", "AwayTeam"])

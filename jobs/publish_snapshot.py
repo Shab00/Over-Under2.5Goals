@@ -7,15 +7,27 @@ import numpy as np
 ARTIFACT_FILE = Path(os.getenv("ARTIFACT_FILE", "artifacts/premier_league_2025_26_predictions.csv"))
 OUT_LATEST = Path(os.getenv("OUT_LATEST", "snapshots/predictions_latest.csv"))
 
+CANONICAL_HEADER = (
+    "match_id,kickoff_time_utc,home_team,away_team,prob_homewin,pred_label,"
+    "odds_B365H,is_predicted_fixture,generated_at\n"
+)
+
 def main():
     if not ARTIFACT_FILE.exists():
         raise FileNotFoundError(f"[publish] missing input predictions file: {ARTIFACT_FILE}")
 
     OUT_LATEST.parent.mkdir(parents=True, exist_ok=True)
-    df = pd.read_csv(ARTIFACT_FILE)
+
+    try:
+        df = pd.read_csv(ARTIFACT_FILE)
+    except pd.errors.EmptyDataError:
+        print(f"[publish][INFO] predictions artifact is empty (off-season detected): {ARTIFACT_FILE}")
+        OUT_LATEST.write_text(CANONICAL_HEADER)
+        return 0
+
     if df.empty:
-        print(f"[publish] input predictions file is empty: {ARTIFACT_FILE}")
-        OUT_LATEST.write_text("match_id,kickoff_time_utc,home_team,away_team,prob_homewin,pred_label,odds_B365H,is_predicted_fixture,generated_at\n")
+        print(f"[publish][INFO] input predictions file is empty: {ARTIFACT_FILE}")
+        OUT_LATEST.write_text(CANONICAL_HEADER)
         return 0
 
     generated_at = datetime.now(timezone.utc).isoformat()
