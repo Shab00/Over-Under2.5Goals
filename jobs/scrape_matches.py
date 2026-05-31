@@ -11,6 +11,7 @@ from typing import Optional
 
 import pandas as pd
 import requests
+import sys
 
 EPL_2526_URL = "https://www.football-data.co.uk/mmz4281/2526/E0.csv"
 
@@ -172,14 +173,12 @@ def main() -> None:
         fixtures_csv=Path(args.fixtures_csv),
     )
 
-    # Decide where to write combined CSV
     if args.in_place:
         args.backup_input = True
         combined_write_path = paths.input_combined_csv
     else:
         combined_write_path = paths.output_combined_csv
 
-    # Optional backup of canonical input before any work
     if args.backup_input and paths.input_combined_csv.exists():
         bak = backup_file(paths.input_combined_csv)
         print(f"[scrape_matches] backed up input_combined_csv to {bak}")
@@ -200,7 +199,6 @@ def main() -> None:
     df_new = df_new.dropna(how="all")
     df_new = normalize_new_scrape(df_new)
 
-    # Load existing combined (read-only input)
     if paths.input_combined_csv.exists():
         df_existing = pd.read_csv(paths.input_combined_csv)
         df_existing = df_existing.dropna(how="all")
@@ -210,7 +208,6 @@ def main() -> None:
 
     combined = upsert_by_match_key(df_existing, df_new)
 
-    # Write output (staged by default; atomic replace if in-place)
     if args.in_place:
         tmp_path = combined_write_path.with_suffix(combined_write_path.suffix + ".tmp")
         write_csv(combined, tmp_path)
@@ -229,6 +226,12 @@ def main() -> None:
     print(f"[scrape_matches] combined_write_csv={combined_write_path} rows={len(combined)}")
     print(f"[scrape_matches] fixtures_csv={paths.fixtures_csv} window_utc={today.isoformat()}..{end.isoformat()} rows={len(fixtures)}")
 
+    # --- OFF-SEASON GUARD ---
+    if len(fixtures) == 0:
+        print(f"[scrape_matches][INFO] No fixtures found for the current window (off-season likely). Exiting and writing empty fixtures file: {paths.fixtures_csv}")
+        Path(paths.fixtures_csv).parent.mkdir(parents=True, exist_ok=True)
+        pd.DataFrame().to_csv(paths.fixtures_csv, index=False)
+        sys.exit(0)
 
 if __name__ == "__main__":
     main()

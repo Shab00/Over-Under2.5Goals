@@ -84,6 +84,14 @@ def main() -> int:
         raise FileNotFoundError(f"Models directory not found: {models_dir}")
     if not eval_csv.exists():
         raise FileNotFoundError(f"Eval CSV not found: {eval_csv}")
+    
+    try:
+        eval_df = pd.read_csv(eval_csv, low_memory=False)
+    except pd.errors.EmptyDataError:
+        print("[snapshot][INFO] Input CSV is empty (off-season detected). Exiting gracefully – nothing to predict.")
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        pd.DataFrame().to_csv(out_path, index=False)
+        return 0
 
     model_path, feat_path = find_latest_model_and_featurelist(models_dir)
     feature_list_raw = joblib.load(feat_path)
@@ -92,12 +100,14 @@ def main() -> int:
     print("[snapshot] loaded feature_list:", feat_path.name, "len:", len(feature_list_raw))
     print("[snapshot] loaded model:", model_path.name)
 
-    eval_df = pd.read_csv(eval_csv, low_memory=False)
     eval_df["Date"] = parse_dates_safe(eval_df, "Date")
     prospective = eval_df.reset_index(drop=True)
     print("[snapshot] games for prediction:", prospective.shape[0])
     if prospective.shape[0] == 0:
-        raise RuntimeError("No prospective rows found.")
+        print("[snapshot][INFO] No upcoming matches for prediction (off-season). Exiting cleanly.")
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        pd.DataFrame().to_csv(out_path, index=False)
+        return 0
 
     cols_to_drop_local = ["Time", "Attendance", "Div"]
     X_eval = prospective.drop(columns=cols_to_drop_local, errors="ignore").copy()

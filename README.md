@@ -3,6 +3,9 @@
 
 [![CI](https://github.com/Shab00/Over-Under2.5Goals/actions/workflows/ci.yml/badge.svg)](https://github.com/Shab00/Over-Under2.5Goals/actions)
 
+> **Note:**  
+> This project is currently in “off-season mode” and will resume full operation in line with the Premier League’s official 2026–27 fixtures. The pipeline will reactivate automatically at the next season’s kickoff on **22 August 2026** and operate continuously through to the season end on **30 May 2027**. We’ll continue to maintain, monitor, and enhance the system, delivering up-to-date predictions as soon as new matches become available!
+
 ---
 
 ## Table of Contents
