@@ -108,166 +108,6 @@ def add_rolling_features(df, n_matches=5):
         df[col] = roll_df[col].values
     return df
 
-def select_best_ah_line(row, bookmaker_to_prefix):
-    for api_key, prefix in bookmaker_to_prefix.items():
-        ah_cols = [c for c in row.index if c.startswith(f"{api_key}_AH")]
-        if not ah_cols:
-            continue
-        candidates = []
-        for col in ah_cols:
-            parts = col.split('_')
-            if len(parts) != 3:
-                continue
-            side_code = parts[1]   # 'AHH' or 'AHA'
-            side = side_code[2]    # 'H' or 'A'
-            try:
-                point = float(parts[2])
-            except ValueError:
-                continue
-            price = row[col]
-            if pd.notna(price):
-                candidates.append((side, point, price))
-        if not candidates:
-            continue
-
-        points = set(p for _, p, _ in candidates)
-        best_point = -0.5 if -0.5 in points else min(points, key=lambda x: abs(x))
-
-        home_price = next((pr for s, p, pr in candidates if s == 'H' and p == best_point), None)
-        away_price = next((pr for s, p, pr in candidates if s == 'A' and p == best_point), None)
-
-        if home_price is not None and away_price is not None:
-            row[f"{prefix}AHH"] = home_price
-            row[f"{prefix}AHA"] = away_price
-            row[f"{prefix}AH"]  = best_point
-    return row
-
-def fill_all_odds_aggregates(df):
-    # ----- 1X2 home/draw/away -----
-    home_cols = [c for c in df.columns if c.endswith('H') and not any(x in c for x in ('AH','SH','CH','HH')) and c not in ['HomeTeam','FTHG','HTHG']]
-    draw_cols = [c for c in df.columns if c.endswith('D') and not any(x in c for x in ('AD','AHD','WHD')) and c not in ['DayOfWeek']]
-    away_cols = [c for c in df.columns if c.endswith('A') and not any(x in c for x in ('HA','AHA')) and c not in ['AwayTeam','FTAG','HTAG']]
-
-    home_vals = df[home_cols].apply(pd.to_numeric, errors='coerce')
-    draw_vals = df[draw_cols].apply(pd.to_numeric, errors='coerce')
-    away_vals = df[away_cols].apply(pd.to_numeric, errors='coerce')
-
-    if 'MaxH' in df.columns:
-        df['MaxH'] = home_vals.max(axis=1)
-    if 'AvgH' in df.columns:
-        df['AvgH'] = home_vals.mean(axis=1)
-    if 'MaxD' in df.columns:
-        df['MaxD'] = draw_vals.max(axis=1)
-    if 'AvgD' in df.columns:
-        df['AvgD'] = draw_vals.mean(axis=1)
-    if 'MaxA' in df.columns:
-        df['MaxA'] = away_vals.max(axis=1)
-    if 'AvgA' in df.columns:
-        df['AvgA'] = away_vals.mean(axis=1)
-
-    if 'BbMxH' in df.columns:
-        df['BbMxH'] = home_vals.max(axis=1)
-    if 'BbAvH' in df.columns:
-        df['BbAvH'] = home_vals.mean(axis=1)
-    if 'BbMxD' in df.columns:
-        df['BbMxD'] = draw_vals.max(axis=1)
-    if 'BbAvD' in df.columns:
-        df['BbAvD'] = draw_vals.mean(axis=1)
-    if 'BbMxA' in df.columns:
-        df['BbMxA'] = away_vals.max(axis=1)
-    if 'BbAvA' in df.columns:
-        df['BbAvA'] = away_vals.mean(axis=1)
-
-    # ----- Over/Under 2.5 -----
-    over_cols = [c for c in df.columns if '>2.5' in c and not c.startswith('Bb')]
-    under_cols = [c for c in df.columns if '<2.5' in c and not c.startswith('Bb')]
-    over_vals = df[over_cols].apply(pd.to_numeric, errors='coerce')
-    under_vals = df[under_cols].apply(pd.to_numeric, errors='coerce')
-    if 'Max>2.5' in df.columns:
-        df['Max>2.5'] = over_vals.max(axis=1)
-    if 'Avg>2.5' in df.columns:
-        df['Avg>2.5'] = over_vals.mean(axis=1)
-    if 'Max<2.5' in df.columns:
-        df['Max<2.5'] = under_vals.max(axis=1)
-    if 'Avg<2.5' in df.columns:
-        df['Avg<2.5'] = under_vals.mean(axis=1)
-    if 'BbMx>2.5' in df.columns:
-        df['BbMx>2.5'] = over_vals.max(axis=1)
-    if 'BbAv>2.5' in df.columns:
-        df['BbAv>2.5'] = over_vals.mean(axis=1)
-    if 'BbMx<2.5' in df.columns:
-        df['BbMx<2.5'] = under_vals.max(axis=1)
-    if 'BbAv<2.5' in df.columns:
-        df['BbAv<2.5'] = under_vals.mean(axis=1)
-
-    # ----- Asian handicap aggregates from dynamic columns -----
-    ah_home_dyn = [c for c in df.columns if '_AHH_' in c]
-    ah_away_dyn = [c for c in df.columns if '_AHA_' in c]
-
-    if ah_home_dyn:
-        ah_home_vals = df[ah_home_dyn].apply(pd.to_numeric, errors='coerce')
-        if 'MaxAHH' in df.columns:
-            df['MaxAHH'] = df['MaxAHH'].fillna(ah_home_vals.max(axis=1))
-        if 'AvgAHH' in df.columns:
-            df['AvgAHH'] = df['AvgAHH'].fillna(ah_home_vals.mean(axis=1))
-        if 'BbMxAHH' in df.columns:
-            df['BbMxAHH'] = ah_home_vals.max(axis=1)
-        if 'BbAvAHH' in df.columns:
-            df['BbAvAHH'] = ah_home_vals.mean(axis=1)
-    if ah_away_dyn:
-        ah_away_vals = df[ah_away_dyn].apply(pd.to_numeric, errors='coerce')
-        if 'MaxAHA' in df.columns:
-            df['MaxAHA'] = df['MaxAHA'].fillna(ah_away_vals.max(axis=1))
-        if 'AvgAHA' in df.columns:
-            df['AvgAHA'] = df['AvgAHA'].fillna(ah_away_vals.mean(axis=1))
-        if 'BbMxAHA' in df.columns:
-            df['BbMxAHA'] = ah_away_vals.max(axis=1)
-        if 'BbAvAHA' in df.columns:
-            df['BbAvAHA'] = ah_away_vals.mean(axis=1)
-
-    # Cross-fill missing bookmaker-specific AH columns using any available AH data
-    if ah_home_dyn or ah_away_dyn:
-        home_fill = ah_home_vals.max(axis=1) if ah_home_dyn else np.nan
-        away_fill = ah_away_vals.max(axis=1) if ah_away_dyn else np.nan
-
-        # Determine a sensible handicap line to fill (closest to zero)
-        points = set()
-        for col in ah_home_dyn + ah_away_dyn:
-            try:
-                points.add(float(col.split('_')[-1]))
-            except:
-                pass
-        best_line = min(points, key=lambda x: abs(x)) if points else np.nan
-
-        for prefix in ['B365', 'PS', 'WH', 'GB', 'LB']:
-            ahh = f'{prefix}AHH'
-            aha = f'{prefix}AHA'
-            ah  = f'{prefix}AH'
-            if ahh in df.columns:
-                df[ahh] = df[ahh].fillna(home_fill)
-            if aha in df.columns:
-                df[aha] = df[aha].fillna(away_fill)
-            if ah in df.columns:
-                df[ah] = df[ah].fillna(best_line)
-
-    # BbAH and AHh: average handicap line (closest to zero)
-    if 'BbAH' in df.columns or 'AHh' in df.columns:
-        all_ah_cols = ah_home_dyn + ah_away_dyn
-        points = set()
-        for col in all_ah_cols:
-            try:
-                points.add(float(col.split('_')[-1]))
-            except:
-                pass
-        if points:
-            best_line = min(points, key=lambda x: abs(x))
-            if 'BbAH' in df.columns:
-                df['BbAH'] = df['BbAH'].fillna(best_line)
-            if 'AHh' in df.columns:
-                df['AHh'] = df['AHh'].fillna(best_line)
-
-    return df
-
 def main():
     print("[upcoming_features] Start building upcoming fixtures/features with odds")
     # --- 1. Load engineered match data (history) ---
@@ -279,7 +119,7 @@ def main():
 
     # --- 2. Scrape all upcoming fixtures ---
     BASE_URL = "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/matches"
-    competition_id, season_id = 8, 2026
+    competition_id, season_id = 8, 2025
     all_rows = []
     for mw in range(1, 39):
         params = {
@@ -332,7 +172,7 @@ def main():
     today_date = pd.Timestamp.today().date()
     df_upcoming = df_all[mask_upcoming & (df_all["Date"].dt.date >= today_date)].copy()
 
-    # ---- OFF-SEASON GUARD ----
+    # ---- OFF-SEASON GUARD: If no upcoming matches, exit gracefully and create empty outputs ----
     if df_upcoming.empty:
         print("[upcoming_features][INFO] No upcoming fixtures found (off-season). Exiting cleanly.")
         output_upcoming.parent.mkdir(parents=True, exist_ok=True)
@@ -407,7 +247,7 @@ def main():
         suffixes=('', '_odds')
     )
 
-    # --- 7. Odds mapping and fallback (1X2 + totals) ---
+    # --- 7. Odds mapping and fallback ---
     market_map = {
         'B365H': ['bet365_H', 'pinnacle_H', 'williamhill_H', 'betway_H'],
         'B365D': ['bet365_D', 'pinnacle_D', 'williamhill_D', 'betway_D'],
@@ -428,6 +268,7 @@ def main():
         'B365<2.5': ['bet365_<2.5', 'pinnacle_<2.5', 'betway_<2.5'],
         'P>2.5':    ['pinnacle_>2.5', 'bet365_>2.5', 'betway_>2.5'],
         'P<2.5':    ['pinnacle_<2.5', 'bet365_<2.5', 'betway_<2.5'],
+        # etc
     }
 
     for col in df_upcoming.columns:
@@ -469,23 +310,8 @@ def main():
                     merged.loc[mask_empty, col] = merged.loc[mask_empty, col].fillna(merged.loc[mask_empty, fallback])
                     mask_empty = merged[col].isna()
 
-    # ----- Map Asian handicap spreads to existing fixed columns -----
-    bookmaker_to_prefix = {
-        'bet365': 'B365',
-        'pinnacle': 'PS',
-        'williamhill': 'WH',
-        'onexbet': 'ONE',
-        'betonlineag': 'BETONLINE',
-    }
-    merged = merged.apply(select_best_ah_line, axis=1, bookmaker_to_prefix=bookmaker_to_prefix)
-
-    # ----- Compute ALL aggregate market columns (including AH aggregates) -----
-    merged = fill_all_odds_aggregates(merged)
-
-    # Keep only the original columns expected by the model
     final_columns = list(df_upcoming.columns)
     final_df = merged[final_columns]
-
     final_df.to_csv(BASE / "data/processed/updated_fixtures_with_odds.csv", index=False)
 
     # Save model-ready template

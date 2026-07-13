@@ -13,6 +13,7 @@ import pandas as pd
 import requests
 import sys
 
+# Change with site has new Season up.
 EPL_2526_URL = "https://www.football-data.co.uk/mmz4281/2526/E0.csv"
 
 
