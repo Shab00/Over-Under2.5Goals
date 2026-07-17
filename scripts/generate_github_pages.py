@@ -1,10 +1,4 @@
 #!/usr/bin/env python3
-"""
-Generate a static HTML page for football predictions,
-styled to match the Shab00.github.io portfolio.
-Reads the latest prediction snapshot CSV.
-"""
-
 import csv
 import datetime
 from pathlib import Path
@@ -14,6 +8,7 @@ import sys
 SNAPSHOT_CSV = Path("snapshots/predictions_latest.csv")
 OUTPUT_DIR = Path("football")
 OUTPUT_FILE = OUTPUT_DIR / "index.html"
+TELEGRAM_CHANNEL_LINK = "https://t.me/HomeWinPrediction"
 
 # ---------- HTML TEMPLATE ----------
 PAGE_TEMPLATE = """<!DOCTYPE html>
@@ -54,7 +49,32 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     .updated {{
       color: var(--muted);
       font-size: 0.95rem;
-      margin-bottom: 2rem;
+      margin-bottom: 0.25rem;
+    }}
+    .refresh-note {{
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }}
+    .telegram-banner {{
+      background: rgba(56,189,248,0.1);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 0.8rem 1.2rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }}
+    .telegram-banner a {{
+      color: var(--accent);
+      font-weight: 700;
+      text-decoration: none;
+    }}
+    .telegram-banner a:hover {{
+      text-decoration: underline;
     }}
     .predictions-table {{
       width: 100%;
@@ -92,6 +112,35 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     .prob-low {{
       color: #f87171;
     }}
+    .prob-na {{
+      color: var(--muted);
+      font-style: italic;
+    }}
+    .value-star {{
+      color: #fbbf24;
+      font-size: 1.2rem;
+      margin-left: 0.3rem;
+    }}
+    .today-badge {{
+      background: #dc2626;
+      color: white;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }}
+    .locked-badge {{
+      background: #f59e0b;
+      color: #000;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }}
     .footer {{
       margin-top: 2rem;
       color: var(--muted);
@@ -111,6 +160,10 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   <div class="container">
     <h1>⚽ Premier League Home‑Win Predictions</h1>
     <p class="updated">Last updated: {last_updated}</p>
+    <p class="refresh-note">Predictions are refreshed approximately one hour before kick‑off.</p>
+    <div class="telegram-banner">
+      🔔 <a href="{telegram_link}" target="_blank" rel="noopener noreferrer">Get live predictions on Telegram</a>
+    </div>
     <table class="predictions-table">
       <thead>
         <tr>
@@ -119,6 +172,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
           <th>Away</th>
           <th>P(Home Win)</th>
           <th>Best Home Odds</th>
+          <th>Value?</th>
         </tr>
       </thead>
       <tbody>
@@ -134,58 +188,145 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 """
 
 ROW_HTML = """<tr>
-  <td>{date}</td>
+  <td>{date}{badges}</td>
   <td>{home}</td>
   <td>{away}</td>
-  <td class="{prob_class}">{prob:.2%}</td>
-  <td>{odds}</td>
+  <td class="{prob_class}">{prob_display}</td>
+  <td>{odds_display}</td>
+  <td>{value_star}</td>
 </tr>"""
+
 
 def generate_page(snapshot_path: Path, output_path: Path) -> None:
     if not snapshot_path.exists():
         print(f"Snapshot file not found: {snapshot_path}")
         sys.exit(1)
 
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
+    today_utc = now_utc.date()
     rows_data = []
+    last_generated = None
+
     with open(snapshot_path, newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            date = row.get("kickoff_time_utc", "")[:10]
-            home = row.get("home_team", "")
-            away = row.get("away_team", "")
-            prob_str = row.get("prob_homewin", "0")
-            try:
-                prob = float(prob_str)
-            except (ValueError, TypeError):
-                prob = 0.0
-            odds = row.get("odds_B365H", "")
-            if prob >= 0.6:
-                prob_class = "prob-high"
-            elif prob >= 0.35:
-                prob_class = "prob-mid"
-            else:
-                prob_class = "prob-low"
-            rows_data.append((date, home, away, prob, odds, prob_class))
+            date_str = row.get("kickoff_time_utc", "").strip()
+            home = row.get("home_team", "").strip()
+            away = row.get("away_team", "").strip()
+            prob_str = row.get("prob_homewin", "").strip()
+            odds_str = row.get("odds_B365H", "").strip()
+            generated_str = row.get("generated_at", "").strip()
 
-    rows_data.sort(key=lambda x: x[0])
+            match_dt = None
+            if date_str:
+                try:
+                    match_dt = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+                except ValueError:
+                    pass
+
+            match_date = match_dt.date() if match_dt else None
+            is_today = match_date == today_utc if match_date else False
+            is_locked = False
+            if match_dt:
+                time_to_kickoff = match_dt.replace(tzinfo=datetime.timezone.utc) - now_utc
+                if datetime.timedelta(0) < time_to_kickoff <= datetime.timedelta(hours=1):
+                    is_locked = True
+
+            prob = None
+            if prob_str:
+                try:
+                    prob = float(prob_str)
+                except ValueError:
+                    pass
+
+            odds = None
+            if odds_str:
+                try:
+                    odds = float(odds_str)
+                except ValueError:
+                    odds = None
+
+            if odds is None or odds == 0:
+                prob_display = "N/A"
+                prob_class = "prob-na"
+                odds_display = "N/A"
+                value_star = ""
+            else:
+                if prob is not None:
+                    prob_display = f"{prob:.2%}"
+                    if prob >= 0.6:
+                        prob_class = "prob-high"
+                    elif prob >= 0.35:
+                        prob_class = "prob-mid"
+                    else:
+                        prob_class = "prob-low"
+                else:
+                    prob_display = "N/A"
+                    prob_class = "prob-na"
+                odds_display = f"{odds:.2f}" if odds else "N/A"
+
+                value_star = ""
+                if prob is not None and odds and odds > 0:
+                    implied_prob = 1.0 / odds
+                    if prob > implied_prob:
+                        value_star = '<span class="value-star" title="Model sees value">⭐</span>'
+
+            badges = ""
+            if is_locked:
+                badges += ' <span class="locked-badge">🔒 FINAL</span>'
+            if is_today:
+                badges += ' <span class="today-badge">TODAY</span>'
+
+            rows_data.append({
+                "date": date_str[:10] if date_str else "",
+                "badges": badges,
+                "home": home,
+                "away": away,
+                "prob_display": prob_display,
+                "prob_class": prob_class,
+                "odds_display": odds_display,
+                "value_star": value_star,
+                "match_date_obj": match_date,
+            })
+
+            if not last_generated and generated_str:
+                last_generated = generated_str
+
+    rows_data.sort(key=lambda x: x["match_date_obj"] or datetime.date.min)
 
     html_rows = "\n".join(
         ROW_HTML.format(
-            date=date,
-            home=home,
-            away=away,
-            prob=prob,
-            prob_class=prob_class,
-            odds=odds if odds else "N/A"
-        ) for (date, home, away, prob, odds, prob_class) in rows_data
+            date=r["date"],
+            badges=r["badges"],
+            home=r["home"],
+            away=r["away"],
+            prob_display=r["prob_display"],
+            prob_class=r["prob_class"],
+            odds_display=r["odds_display"],
+            value_star=r["value_star"],
+        )
+        for r in rows_data
     )
 
-    last_updated = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    html = PAGE_TEMPLATE.format(last_updated=last_updated, rows=html_rows)
+    if last_generated:
+        try:
+            dt = datetime.datetime.fromisoformat(last_generated)
+            last_updated = dt.strftime("%Y-%m-%d %H:%M UTC")
+        except Exception:
+            last_updated = now_utc.strftime("%Y-%m-%d %H:%M UTC")
+    else:
+        last_updated = now_utc.strftime("%Y-%m-%d %H:%M UTC")
+
+    html = PAGE_TEMPLATE.format(
+        last_updated=last_updated,
+        telegram_link=TELEGRAM_CHANNEL_LINK,
+        rows=html_rows,
+    )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html, encoding='utf-8')
     print(f"Page generated: {output_path}")
+
 
 if __name__ == "__main__":
     snapshot = Path(sys.argv[1]) if len(sys.argv) > 1 else SNAPSHOT_CSV
