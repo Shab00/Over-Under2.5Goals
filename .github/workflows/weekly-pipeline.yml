@@ -1,0 +1,37 @@
+name: Weekly Pipeline
+
+on:
+  schedule:
+    - cron: '30 10 * * *'   # 10:30 UTC → covers 12:30 UK
+    - cron: '0 12 * * *'    # 12:00 UTC → covers 14:00 UK
+    - cron: '0 13 * * *'    # 13:00 UTC → covers 15:00 UK
+    - cron: '30 14 * * *'   # 14:30 UTC → covers 16:30 UK
+    - cron: '30 15 * * *'   # 15:30 UTC → covers 17:30 UK
+    - cron: '0 18 * * *'    # 18:00 UTC → covers 20:00 UK
+  workflow_dispatch:
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check for matches within the next hour
+        run: python jobs/check_upcoming_matches.py
+
+      - name: Run the full pipeline
+        run: bash jobs/run_weekly_pipeline.sh
+
+      - name: Archive snapshot
+        run: |
+          mkdir -p snapshots/archive
+          cp snapshots/predictions_latest.csv snapshots/archive/predictions_$(date -u +"%Y%m%dT%H%M%S").csv
