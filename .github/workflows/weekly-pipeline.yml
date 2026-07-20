@@ -26,12 +26,15 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Check for matches within the next hour
+        id: check
         run: python jobs/check_upcoming_matches.py
 
       - name: Run the full pipeline
+        if: steps.check.outputs.should_run == 'true'
         run: bash jobs/run_weekly_pipeline.sh
 
       - name: Archive snapshot
+        if: steps.check.outputs.should_run == 'true'
         run: |
           mkdir -p snapshots/archive
           cp snapshots/predictions_latest.csv snapshots/archive/predictions_$(date -u +"%Y%m%dT%H%M%S").csv
