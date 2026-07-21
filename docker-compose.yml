@@ -27,6 +27,9 @@ services:
     command: python3 alertmanager_webhook_receiver.py --port 9000
     network_mode: "host"
     restart: unless-stopped
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
 
   grafana:
     image: grafana/grafana:latest
