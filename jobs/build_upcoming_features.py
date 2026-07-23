@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import requests
 import pandas as pd
 import joblib
@@ -17,7 +18,7 @@ output_annotated = BASE / "data/processed/premier_league_2025_26_upcoming_with_t
 feature_path = BASE / "models/weekly/homewin/feature_list_20260327T205139Z.pkl"
 engineered_history_path = BASE / "data/processed/engineered_train_features.csv"
 
-API_KEY = 'f91688b2469810e18dbf6649b7d462fe'
+API_KEY = os.environ.get("ODDS_API_KEY", "")
 sport_key = 'soccer_epl'
 region = 'uk,eu'
 markets = 'h2h,totals,spreads'
