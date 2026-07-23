@@ -31,6 +31,10 @@ jobs:
 
       - name: Run the full pipeline
         if: steps.check.outputs.should_run == 'true'
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: bash jobs/run_weekly_pipeline.sh
 
       - name: Archive snapshot
