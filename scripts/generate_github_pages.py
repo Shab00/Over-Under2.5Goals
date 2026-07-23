@@ -9,6 +9,7 @@ SNAPSHOT_CSV = Path("snapshots/predictions_latest.csv")
 OUTPUT_DIR = Path("football")
 OUTPUT_FILE = OUTPUT_DIR / "index.html"
 TELEGRAM_CHANNEL_LINK = "https://t.me/HomeWinPrediction"
+PORTFOLIO_URL = "/"
 
 # ---------- HTML TEMPLATE ----------
 PAGE_TEMPLATE = """<!DOCTYPE html>
@@ -57,12 +58,18 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       margin-bottom: 1rem;
       font-style: italic;
     }}
+    .top-actions {{
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }}
     .telegram-banner {{
       background: rgba(56,189,248,0.1);
       border: 1px solid var(--accent);
       border-radius: 12px;
       padding: 0.8rem 1.2rem;
-      margin-bottom: 1.5rem;
       font-size: 0.95rem;
       display: inline-flex;
       align-items: center;
@@ -75,6 +82,22 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     }}
     .telegram-banner a:hover {{
       text-decoration: underline;
+    }}
+    .back-button {{
+      display: inline-block;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }}
+    .back-button:hover {{
+      background: var(--accent);
+      color: var(--button-text);
+      text-decoration: none;
     }}
     .table-wrapper {{
       max-width: 100%;
@@ -89,7 +112,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       border-radius: 16px;
       overflow: hidden;
       box-shadow: var(--shadow);
-      min-width: 600px;          /* ensures table remains readable, wrapper scrolls if needed */
+      min-width: 600px;
     }}
     th, td {{
       padding: 0.9rem 1.2rem;
@@ -176,8 +199,11 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     <h1>Premier League Home‑Win Predictions</h1>
     <p class="updated">Last updated: {last_updated}</p>
     <p class="refresh-note">Predictions are refreshed approximately one hour before kick‑off.</p>
-    <div class="telegram-banner">
-      <span style="font-weight:600;">Telegram:</span> <a href="{telegram_link}" target="_blank" rel="noopener noreferrer">Get live predictions</a>
+    <div class="top-actions">
+      <div class="telegram-banner">
+        <span style="font-weight:600;">Telegram:</span> <a href="{telegram_link}" target="_blank" rel="noopener noreferrer">Get live predictions</a>
+      </div>
+      <a class="back-button" href="{portfolio_url}">← Back to Portfolio</a>
     </div>
     <div class="table-wrapper">
       <table class="predictions-table">
@@ -358,6 +384,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
     html = PAGE_TEMPLATE.format(
         last_updated=last_updated,
         telegram_link=TELEGRAM_CHANNEL_LINK,
+        portfolio_url=PORTFOLIO_URL,
         rows=html_rows,
     )
 
