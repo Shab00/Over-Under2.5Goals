@@ -49,15 +49,15 @@ def require_api_key(x_api_key: Optional[str] = Header(None)):
     return True
 
 
-app = FastAPI(title="Predictions Snapshot API", version="0.1")
-add_prometheus_metrics(app)
+APP = FastAPI(title="Predictions Snapshot API", version="0.1")
+add_prometheus_metrics(APP)
 
 
 # ============================================================
 # Override /metrics to include dynamic snapshot gauges
 # ============================================================
 
-@app.get("/metrics")
+@APP.get("/metrics")
 async def metrics():
     snapshot_path = "snapshots/predictions_latest.csv"
     if Path(snapshot_path).exists():
@@ -81,7 +81,7 @@ async def metrics():
 # New endpoint: called by the pipeline after a successful run
 # ============================================================
 
-@app.post("/update_metrics")
+@APP.post("/update_metrics")
 async def update_metrics():
     """Called by the pipeline after a successful run."""
     PIPELINE_RUNS.inc()
@@ -103,7 +103,7 @@ async def update_metrics():
 # Existing endpoints
 # ============================================================
 
-@app.get("/smoke/ok")
+@APP.get("/smoke/ok")
 def smoke_ok():
     """
     Lightweight smoke endpoint for quick health checks.
@@ -116,7 +116,7 @@ def smoke_ok():
     return {"ok": True}
 
 
-default_db_path = (
+DEFAULT_DB_PATH = (
     os.environ.get("DELIVERIES_DB")
     or os.environ.get("SQLITE_DB")
     or str(Path(__file__).resolve().parents[2] / "data" / "deliveries.db")
@@ -132,7 +132,7 @@ def get_deliveries_conn():
     """
     global _deliveries_conn
     if _deliveries_conn is None:
-        db_path = Path(default_db_path)
+        db_path = Path(DEFAULT_DB_PATH)
         db_path.parent.mkdir(parents=True, exist_ok=True)
         logger.info("Opening deliveries DB at %s", str(db_path))
         _deliveries_conn = init_deliveries_db(str(db_path))
@@ -162,7 +162,7 @@ class IngestPayload(BaseModel):
     source: Optional[str] = None
 
 
-@app.post("/ingest")
+@APP.post("/ingest")
 def ingest(
     payload: IngestPayload = Body(...),
     _auth=Depends(require_api_key),
@@ -252,7 +252,7 @@ def ingest(
     return JSONResponse(status_code=200, content=response)
 
 
-@app.get("/deliveries")
+@APP.get("/deliveries")
 def deliveries(
     limit: int = Query(100, ge=1, le=1000),
     offset: int = Query(0, ge=0),
@@ -282,22 +282,22 @@ def deliveries(
         raise HTTPException(status_code=500, detail=f"Failed to query deliveries: {e}")
 
 
-predictions_csv = (
+PREDICTIONS_CSV = (
     os.environ.get("PREDICTIONS_LATEST_CSV")
     or str(Path(__file__).resolve().parents[2] / "artifacts" / "premier_league_2025_26_predictions.csv")
 )
 
 
-@app.get("/predictions/latest")
+@APP.get("/predictions/latest")
 def get_latest_predictions(_auth=Depends(require_api_key)):
     """
     Serve the latest predictions snapshot as JSON.
     """
     try:
-        df = pd.read_csv(predictions_csv)
+        df = pd.read_csv(PREDICTIONS_CSV)
         df = df.replace([np.nan, np.inf, -np.inf], None)
         records = df.to_dict(orient="records")
-        mtime = os.path.getmtime(predictions_csv)
+        mtime = os.path.getmtime(PREDICTIONS_CSV)
         updated_at = datetime.utcfromtimestamp(mtime).isoformat() + "Z"
         return {"predictions": records, "updated_at": updated_at}
     except Exception as e:
