@@ -2,7 +2,7 @@ from time import time
 from fastapi import Response, FastAPI, Request
 
 try:
-    from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
+    from prometheus_client import Counter, Gauge, Histogram, generate_latest, CONTENT_TYPE_LATEST
     _HAS_PROM = True
 except Exception:
     _HAS_PROM = False
@@ -20,14 +20,13 @@ except Exception:
             return self
 
         def inc(self, n=1):
-            # no-op
             return None
 
         def observe(self, v):
-            # no-op
             return None
 
     Counter = _NoopMetric
+    Gauge = _NoopMetric
     Histogram = _NoopMetric
 
 HTTP_REQUESTS = Counter(
@@ -54,8 +53,29 @@ SMOKE_TEST_RUNS = Counter(
     ["kind", "result"],
 )
 
+# ---- New pipeline health metrics ----
+PIPELINE_RUNS = Counter(
+    "pipeline_runs_total",
+    "Number of successful pipeline runs"
+)
+
+SNAPSHOT_AGE_SECONDS = Gauge(
+    "snapshot_age_seconds",
+    "Seconds since last snapshot was generated"
+)
+
+PREDICTIONS_GENERATED = Gauge(
+    "predictions_generated",
+    "Number of predictions in the latest snapshot"
+)
+
+ODDS_AVAILABLE = Gauge(
+    "odds_available_count",
+    "Number of matches with odds in the latest snapshot"
+)
+
+
 async def metrics_endpoint() -> Response:
-    # Return empty body when prometheus_client missing, otherwise return generate_latest()
     return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
