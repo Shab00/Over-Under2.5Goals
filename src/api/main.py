@@ -15,8 +15,8 @@ from dotenv import load_dotenv
 load_dotenv()
 from src.metrics import (
     add_prometheus_metrics,
-    ingestion_counter,
-    smoke_test_runs,
+    INGESTION_COUNTER,
+    SMOKE_TEST_RUNS,
     PIPELINE_RUNS,
     SNAPSHOT_AGE_SECONDS,
     PREDICTIONS_GENERATED,
@@ -106,11 +106,11 @@ async def update_metrics():
 @app.get("/smoke/ok")
 def smoke_ok():
     """
-    lightweight smoke endpoint for quick health checks.
-    increments a prometheus counter so we can verify scrape + basic request path.
+    Lightweight smoke endpoint for quick health checks.
+    Increments a Prometheus counter so we can verify scrape + basic request path.
     """
     try:
-        smoke_test_runs.labels(kind="api", result="success").inc()
+        SMOKE_TEST_RUNS.labels(kind="api", result="success").inc()
     except Exception:
         pass
     return {"ok": True}
@@ -127,8 +127,8 @@ _deliveries_conn: Optional[sqlite3.Connection] = None
 
 def get_deliveries_conn():
     """
-    return a cached sqlite3.Connection for the deliveries db.
-    the connection is initialized lazily and created with init_deliveries_db(path).
+    Return a cached sqlite3.Connection for the deliveries DB.
+    The connection is initialized lazily and created with init_deliveries_db(path).
     """
     global _deliveries_conn
     if _deliveries_conn is None:
@@ -168,13 +168,13 @@ def ingest(
     _auth=Depends(require_api_key),
 ):
     """
-    accept payload and persist each validated row into deliveries db.
-    application-level idempotency: skip any row if match_id already exists in deliveries (regardless of source).
+    Accept payload and persist each validated row into deliveries DB.
+    Application-level idempotency: skip any row if match_id already exists in deliveries (regardless of source).
     """
     rows = payload.rows
     if not rows or len(rows) == 0:
         try:
-            smoke_test_runs.labels(kind="api", result="error").inc()
+            SMOKE_TEST_RUNS.labels(kind="api", result="error").inc()
         except Exception:
             pass
         raise HTTPException(status_code=400, detail="payload.rows must be a non-empty list")
@@ -183,7 +183,7 @@ def ingest(
     for r in rows:
         if r.match_id in seen:
             try:
-                smoke_test_runs.labels(kind="api", result="error").inc()
+                SMOKE_TEST_RUNS.labels(kind="api", result="error").inc()
             except Exception:
                 pass
             raise HTTPException(status_code=400, detail=f"duplicate match_id in payload: {r.match_id}")
@@ -206,7 +206,7 @@ def ingest(
             if exists:
                 skipped += 1
                 try:
-                    ingestion_counter.labels(result="skipped", source=payload.source or default_source).inc()
+                    INGESTION_COUNTER.labels(result="skipped", source=payload.source or default_source).inc()
                 except Exception:
                     pass
                 continue
@@ -218,19 +218,20 @@ def ingest(
             if ok:
                 persisted += 1
                 try:
-                    ingestion_counter.labels(result="persisted", source=source_to_use).inc()
+                    INGESTION_COUNTER.labels(result="persisted", source=source_to_use).inc()
                 except Exception:
                     pass
             else:
                 skipped += 1
                 try:
-                    ingestion_counter.labels(result="skipped", source=source_to_use).inc()
+                    INGESTION_COUNTER.labels(result="skipped", source=source_to_use).inc()
                 except Exception:
                     pass
         except Exception as e:
             errors.append({"index": idx, "match_id": getattr(r, "match_id", None), "error": str(e)})
+            # increment metric for error
             try:
-                ingestion_counter.labels(result="error", source=payload.source or default_source).inc()
+                INGESTION_COUNTER.labels(result="error", source=payload.source or default_source).inc()
             except Exception:
                 pass
 
@@ -244,7 +245,7 @@ def ingest(
     }
 
     try:
-        smoke_test_runs.labels(kind="api", result="success").inc()
+        SMOKE_TEST_RUNS.labels(kind="api", result="success").inc()
     except Exception:
         pass
 
@@ -258,8 +259,8 @@ def deliveries(
     match_id: Optional[int] = Query(None),
     source: Optional[str] = Query(None),
     since: Optional[str] = Query(None, description="ISO timestamp filter (received_at > since)"),
-    include_payload: bool = Query(True, description="include full payload JSON in results"),
-    simple: bool = Query(False, description="return a compact, fast listing (id,match_id,source,received_at)"),
+    include_payload: bool = Query(True, description="Include full payload JSON in results"),
+    simple: bool = Query(False, description="Return a compact, fast listing (id,match_id,source,received_at)"),
     _auth=Depends(require_api_key),
 ):
     conn = get_deliveries_conn()
@@ -290,7 +291,7 @@ predictions_csv = (
 @app.get("/predictions/latest")
 def get_latest_predictions(_auth=Depends(require_api_key)):
     """
-    serve the latest predictions snapshot as JSON.
+    Serve the latest predictions snapshot as JSON.
     """
     try:
         df = pd.read_csv(predictions_csv)
