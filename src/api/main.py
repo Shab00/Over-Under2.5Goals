@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Query, Header, Depends, Body
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, validator
 from typing import Optional, List
 from pathlib import Path
@@ -9,10 +9,19 @@ from datetime import datetime
 import logging
 import pandas as pd
 import numpy as np
+import time
 
 from dotenv import load_dotenv
 load_dotenv()
-from src.metrics import add_prometheus_metrics, INGESTION_COUNTER, SMOKE_TEST_RUNS
+from src.metrics import (
+    add_prometheus_metrics,
+    ingestion_counter,
+    smoke_test_runs,
+    PIPELINE_RUNS,
+    SNAPSHOT_AGE_SECONDS,
+    PREDICTIONS_GENERATED,
+    ODDS_AVAILABLE,
+)
 
 # basic logger
 logger = logging.getLogger("api")
@@ -40,24 +49,74 @@ def require_api_key(x_api_key: Optional[str] = Header(None)):
     return True
 
 
-APP = FastAPI(title="Predictions Snapshot API", version="0.1")
-add_prometheus_metrics(APP)
+app = FastAPI(title="Predictions Snapshot API", version="0.1")
+add_prometheus_metrics(app)
 
 
-@APP.get("/smoke/ok")
+# ============================================================
+# Override /metrics to include dynamic snapshot gauges
+# ============================================================
+
+@app.get("/metrics")
+async def metrics():
+    snapshot_path = "snapshots/predictions_latest.csv"
+    if Path(snapshot_path).exists():
+        mtime = Path(snapshot_path).stat().st_mtime
+        SNAPSHOT_AGE_SECONDS.set(time.time() - mtime)
+        try:
+            df = pd.read_csv(snapshot_path)
+            PREDICTIONS_GENERATED.set(len(df))
+            if "odds_B365H" in df.columns:
+                ODDS_AVAILABLE.set(df["odds_B365H"].notna().sum())
+        except Exception:
+            pass
+    else:
+        SNAPSHOT_AGE_SECONDS.set(-1)
+
+    from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+    return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
+
+
+# ============================================================
+# New endpoint: called by the pipeline after a successful run
+# ============================================================
+
+@app.post("/update_metrics")
+async def update_metrics():
+    """Called by the pipeline after a successful run."""
+    PIPELINE_RUNS.inc()
+    snapshot_path = "snapshots/predictions_latest.csv"
+    if Path(snapshot_path).exists():
+        mtime = Path(snapshot_path).stat().st_mtime
+        SNAPSHOT_AGE_SECONDS.set(time.time() - mtime)
+        try:
+            df = pd.read_csv(snapshot_path)
+            PREDICTIONS_GENERATED.set(len(df))
+            if "odds_B365H" in df.columns:
+                ODDS_AVAILABLE.set(df["odds_B365H"].notna().sum())
+        except Exception:
+            pass
+    return {"status": "ok"}
+
+
+# ============================================================
+# Existing endpoints
+# ============================================================
+
+@app.get("/smoke/ok")
 def smoke_ok():
     """
-    Lightweight smoke endpoint for quick health checks.
-    Increments a Prometheus counter so we can verify scrape + basic request path.
+    lightweight smoke endpoint for quick health checks.
+    increments a prometheus counter so we can verify scrape + basic request path.
     """
     try:
-        SMOKE_TEST_RUNS.labels(kind="api", result="success").inc()
+        smoke_test_runs.labels(kind="api", result="success").inc()
     except Exception:
         pass
     return {"ok": True}
 
 
-DEFAULT_DB_PATH = (
+default_db_path = (
     os.environ.get("DELIVERIES_DB")
     or os.environ.get("SQLITE_DB")
     or str(Path(__file__).resolve().parents[2] / "data" / "deliveries.db")
@@ -68,12 +127,12 @@ _deliveries_conn: Optional[sqlite3.Connection] = None
 
 def get_deliveries_conn():
     """
-    Return a cached sqlite3.Connection for the deliveries DB.
-    The connection is initialized lazily and created with init_deliveries_db(path).
+    return a cached sqlite3.Connection for the deliveries db.
+    the connection is initialized lazily and created with init_deliveries_db(path).
     """
     global _deliveries_conn
     if _deliveries_conn is None:
-        db_path = Path(DEFAULT_DB_PATH)
+        db_path = Path(default_db_path)
         db_path.parent.mkdir(parents=True, exist_ok=True)
         logger.info("Opening deliveries DB at %s", str(db_path))
         _deliveries_conn = init_deliveries_db(str(db_path))
@@ -103,19 +162,19 @@ class IngestPayload(BaseModel):
     source: Optional[str] = None
 
 
-@APP.post("/ingest")
+@app.post("/ingest")
 def ingest(
     payload: IngestPayload = Body(...),
     _auth=Depends(require_api_key),
 ):
     """
-    Accept payload and persist each validated row into deliveries DB.
-    Application-level idempotency: skip any row if match_id already exists in deliveries (regardless of source).
+    accept payload and persist each validated row into deliveries db.
+    application-level idempotency: skip any row if match_id already exists in deliveries (regardless of source).
     """
     rows = payload.rows
     if not rows or len(rows) == 0:
         try:
-            SMOKE_TEST_RUNS.labels(kind="api", result="error").inc()
+            smoke_test_runs.labels(kind="api", result="error").inc()
         except Exception:
             pass
         raise HTTPException(status_code=400, detail="payload.rows must be a non-empty list")
@@ -124,7 +183,7 @@ def ingest(
     for r in rows:
         if r.match_id in seen:
             try:
-                SMOKE_TEST_RUNS.labels(kind="api", result="error").inc()
+                smoke_test_runs.labels(kind="api", result="error").inc()
             except Exception:
                 pass
             raise HTTPException(status_code=400, detail=f"duplicate match_id in payload: {r.match_id}")
@@ -147,7 +206,7 @@ def ingest(
             if exists:
                 skipped += 1
                 try:
-                    INGESTION_COUNTER.labels(result="skipped", source=payload.source or default_source).inc()
+                    ingestion_counter.labels(result="skipped", source=payload.source or default_source).inc()
                 except Exception:
                     pass
                 continue
@@ -159,20 +218,19 @@ def ingest(
             if ok:
                 persisted += 1
                 try:
-                    INGESTION_COUNTER.labels(result="persisted", source=source_to_use).inc()
+                    ingestion_counter.labels(result="persisted", source=source_to_use).inc()
                 except Exception:
                     pass
             else:
                 skipped += 1
                 try:
-                    INGESTION_COUNTER.labels(result="skipped", source=source_to_use).inc()
+                    ingestion_counter.labels(result="skipped", source=source_to_use).inc()
                 except Exception:
                     pass
         except Exception as e:
             errors.append({"index": idx, "match_id": getattr(r, "match_id", None), "error": str(e)})
-            # increment metric for error
             try:
-                INGESTION_COUNTER.labels(result="error", source=payload.source or default_source).inc()
+                ingestion_counter.labels(result="error", source=payload.source or default_source).inc()
             except Exception:
                 pass
 
@@ -186,22 +244,22 @@ def ingest(
     }
 
     try:
-        SMOKE_TEST_RUNS.labels(kind="api", result="success").inc()
+        smoke_test_runs.labels(kind="api", result="success").inc()
     except Exception:
         pass
 
     return JSONResponse(status_code=200, content=response)
 
 
-@APP.get("/deliveries")
+@app.get("/deliveries")
 def deliveries(
     limit: int = Query(100, ge=1, le=1000),
     offset: int = Query(0, ge=0),
     match_id: Optional[int] = Query(None),
     source: Optional[str] = Query(None),
     since: Optional[str] = Query(None, description="ISO timestamp filter (received_at > since)"),
-    include_payload: bool = Query(True, description="Include full payload JSON in results"),
-    simple: bool = Query(False, description="Return a compact, fast listing (id,match_id,source,received_at)"),
+    include_payload: bool = Query(True, description="include full payload JSON in results"),
+    simple: bool = Query(False, description="return a compact, fast listing (id,match_id,source,received_at)"),
     _auth=Depends(require_api_key),
 ):
     conn = get_deliveries_conn()
@@ -222,21 +280,23 @@ def deliveries(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to query deliveries: {e}")
 
-PREDICTIONS_CSV = (
+
+predictions_csv = (
     os.environ.get("PREDICTIONS_LATEST_CSV")
     or str(Path(__file__).resolve().parents[2] / "artifacts" / "premier_league_2025_26_predictions.csv")
 )
 
-@APP.get("/predictions/latest")
+
+@app.get("/predictions/latest")
 def get_latest_predictions(_auth=Depends(require_api_key)):
     """
-    Serve the latest predictions snapshot as JSON.
+    serve the latest predictions snapshot as JSON.
     """
     try:
-        df = pd.read_csv(PREDICTIONS_CSV)
+        df = pd.read_csv(predictions_csv)
         df = df.replace([np.nan, np.inf, -np.inf], None)
         records = df.to_dict(orient="records")
-        mtime = os.path.getmtime(PREDICTIONS_CSV)
+        mtime = os.path.getmtime(predictions_csv)
         updated_at = datetime.utcfromtimestamp(mtime).isoformat() + "Z"
         return {"predictions": records, "updated_at": updated_at}
     except Exception as e:
