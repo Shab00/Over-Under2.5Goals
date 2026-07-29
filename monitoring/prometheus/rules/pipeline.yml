@@ -1,0 +1,11 @@
+groups:
+- name: pipeline
+  rules:
+  - alert: SnapshotAgeTooHigh
+    expr: snapshot_age_seconds > 10800
+    for: 15m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Predictions snapshot is older than 3 hours"
+      description: "The snapshot has not been refreshed in over 3 hours. Last snapshot age: {{ $value }} seconds."
