@@ -22,4 +22,7 @@ python3 jobs/publish_snapshot.py
 log "step: deliver telegram"
 python3 jobs/deliver_telegram.py
 
+log "step: update metrics"
+curl -s -X POST http://localhost:8000/update_metrics -H "X-API-KEY: ${API_KEY:-test123}" || true
+
 log "weekly pipeline done"

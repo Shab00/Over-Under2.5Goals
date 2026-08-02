@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "20260802T173231Z",
+  "created_at_utc": "20260802T172357Z",
   "train_csv": "data/processed/combinedWithOdds.upserted.csv",
   "rows_used": 9718,
   "features": 218,
@@ -10,8 +10,8 @@
     "accuracy": 0.6517489711934157,
     "f1": 0.5909365558912387
   },
-  "model_path": "models/weekly/homewin/lightgbm_homewin_20260802T173231Z.pkl",
-  "feature_list_path": "models/weekly/homewin/feature_list_20260802T173231Z.pkl",
+  "model_path": "models/weekly/homewin/lightgbm_homewin_20260802T172357Z.pkl",
+  "feature_list_path": "models/weekly/homewin/feature_list_20260802T172357Z.pkl",
   "teams_count": 46,
   "python": "3.12.1 (main, Mar 11 2026, 12:17:56) [GCC 13.3.0]",
   "numpy": "2.5.1",
