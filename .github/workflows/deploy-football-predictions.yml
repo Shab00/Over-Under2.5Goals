@@ -1,12 +1,10 @@
 name: Deploy Football Predictions to GitHub Pages
-
 on:
   workflow_run:
     workflows: ["Weekly Pipeline"]
     types:
       - completed
   workflow_dispatch:
-
 jobs:
   deploy:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
@@ -16,25 +14,21 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: predictor
-
       - name: Checkout portfolio repository
         uses: actions/checkout@v4
         with:
           repository: Shab00/Shab00.github.io
           token: ${{ secrets.PORTFOLIO_DEPLOY_TOKEN }}
           path: portfolio
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Generate predictions page
         run: |
           python predictor/scripts/generate_github_pages.py \
             predictor/snapshots/predictions_latest.csv \
             portfolio/football/index.html
-
       - name: Push changes to portfolio
         run: |
           cd portfolio
@@ -44,6 +38,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Update football predictions [skip ci]"
+            git commit -m "Update football predictions"
             git push
           fi
