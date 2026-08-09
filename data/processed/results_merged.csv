@@ -1,0 +1,2 @@
+match_key,kickoff_time_utc,home_team,away_team,prob_homewin,odds_B365H,FTR,FTHG,FTAG,is_value,correct,profit
+2026-08-21|Arsenal|Coventry City,2026-08-21,Arsenal,Coventry City,0.90,1.16,H,2,0,True,True,0.16

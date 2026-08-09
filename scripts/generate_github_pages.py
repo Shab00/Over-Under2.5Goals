@@ -99,6 +99,31 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       color: var(--button-text);
       text-decoration: none;
     }}
+    .performance-tracker {{
+      background: rgba(17,24,39,0.8);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }}
+    .performance-tracker h2 {{
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+      color: var(--accent);
+    }}
+    .performance-summary {{
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }}
+    .performance-stat {{
+      font-size: 1rem;
+    }}
+    .performance-stat strong {{
+      color: var(--accent);
+    }}
     .table-wrapper {{
       max-width: 100%;
       overflow-x: auto;
@@ -205,6 +230,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       </div>
       <a class="back-button" href="{portfolio_url}">← Back to Portfolio</a>
     </div>
+    {performance_section}
     <div class="table-wrapper">
       <table class="predictions-table">
         <thead>
@@ -351,26 +377,25 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
         for r in rows_data
     )
 
-    # ---- UK local time (Europe/London) ----
+    # ---- Performance section ----
+    performance_html = build_performance_section()
+
+    # ---- UK local time ----
     if last_generated:
         try:
             dt_utc = datetime.datetime.fromisoformat(last_generated)
-            # convert to UK time
             import zoneinfo
             try:
                 uk_tz = zoneinfo.ZoneInfo("Europe/London")
             except Exception:
-                # fallback: use pytz if zoneinfo not available
                 import pytz
                 uk_tz = pytz.timezone("Europe/London")
             dt_uk = dt_utc.astimezone(uk_tz)
             last_updated = dt_uk.strftime("%Y-%m-%d %H:%M %Z")
         except Exception:
-            # fallback to UTC
             dt_utc = datetime.datetime.fromisoformat(last_generated)
             last_updated = dt_utc.strftime("%Y-%m-%d %H:%M UTC")
     else:
-        # no generated_at column, use file modification time as UK
         mtime = datetime.datetime.fromtimestamp(snapshot_path.stat().st_mtime, tz=datetime.timezone.utc)
         try:
             import zoneinfo
@@ -385,12 +410,51 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
         last_updated=last_updated,
         telegram_link=TELEGRAM_CHANNEL_LINK,
         portfolio_url=PORTFOLIO_URL,
+        performance_section=performance_html,
         rows=html_rows,
     )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html, encoding='utf-8')
     print(f"Page generated: {output_path}")
+
+
+def build_performance_section() -> str:
+    results_file = Path("data/processed/results_merged.csv")
+    if not results_file.exists():
+        return """<div class="performance-tracker">
+            <h2>📊 Performance Tracker</h2>
+            <p style="color: var(--muted);">Season starts 21 August – tracking will begin automatically once matches are played.</p>
+        </div>"""
+
+    try:
+        import pandas as pd
+        df = pd.read_csv(results_file)
+        # Expected columns: home_team, away_team, prob_homewin, odds_B365H, FTR, FTHG, FTAG, is_value, correct, profit
+        total = len(df)
+        correct = df["correct"].sum() if "correct" in df.columns else 0
+        accuracy = correct / total if total > 0 else 0
+
+        value_bets = df[df["is_value"] == True] if "is_value" in df.columns else pd.DataFrame()
+        value_total = len(value_bets)
+        value_correct = value_bets["correct"].sum() if "correct" in value_bets.columns else 0
+        value_accuracy = value_correct / value_total if value_total > 0 else 0
+        total_profit = df["profit"].sum() if "profit" in df.columns else 0.0
+
+        return f"""<div class="performance-tracker">
+            <h2>📊 Performance Tracker</h2>
+            <div class="performance-summary">
+                <div class="performance-stat"><strong>Overall Accuracy:</strong> {accuracy:.1%} ({correct}/{total})</div>
+                <div class="performance-stat"><strong>Value Bets:</strong> {value_total} picks</div>
+                <div class="performance-stat"><strong>Value Accuracy:</strong> {value_accuracy:.1%} ({value_correct}/{value_total})</div>
+                <div class="performance-stat"><strong>Value Profit:</strong> {total_profit:+.2f} units</div>
+            </div>
+        </div>"""
+    except Exception as e:
+        return f"""<div class="performance-tracker">
+            <h2>📊 Performance Tracker</h2>
+            <p style="color: var(--muted);">Error processing results: {e}</p>
+        </div>"""
 
 
 if __name__ == "__main__":

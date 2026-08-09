@@ -22,6 +22,9 @@ python3 jobs/publish_snapshot.py
 log "step: deliver telegram"
 python3 jobs/deliver_telegram.py
 
+log "step: merge results"
+python3 jobs/merge_results.py || true
+
 log "step: update metrics"
 curl -s -X POST http://localhost:8000/update_metrics -H "X-API-KEY: ${API_KEY:-test123}" || true
 
