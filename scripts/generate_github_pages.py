@@ -377,10 +377,8 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
         for r in rows_data
     )
 
-    # ---- Performance section ----
-    performance_html = build_performance_section()
+    performance_html = build_performance_section(snapshot_path)
 
-    # ---- UK local time ----
     if last_generated:
         try:
             dt_utc = datetime.datetime.fromisoformat(last_generated)
@@ -419,8 +417,14 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
     print(f"Page generated: {output_path}")
 
 
-def build_performance_section() -> str:
-    results_file = Path("data/processed/results_merged.csv")
+def build_performance_section(snapshot_path: Path) -> str:
+    """
+    Build the HTML for the performance tracker.
+    Derives the results CSV path relative to the snapshot location,
+    so it works both locally and in the deploy workflow.
+    """
+    results_file = snapshot_path.parent.parent / "data" / "processed" / "results_merged.csv"
+
     if not results_file.exists():
         return """<div class="performance-tracker">
             <h2>Performance Tracker</h2>
@@ -431,7 +435,6 @@ def build_performance_section() -> str:
         import pandas as pd
         df = pd.read_csv(results_file)
 
-        # Convert string booleans to Python booleans (just in case)
         if "is_value" in df.columns:
             df["is_value"] = df["is_value"].astype(str).str.strip().str.lower() == "true"
         if "correct" in df.columns:
