@@ -420,8 +420,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
 def build_performance_section(snapshot_path: Path) -> str:
     """
     Build the HTML for the performance tracker.
-    Derives the results CSV path relative to the snapshot location,
-    so it works both locally and in the deploy workflow.
+    Uses only standard-library csv so no extra dependencies are needed.
     """
     results_file = snapshot_path.parent.parent / "data" / "processed" / "results_merged.csv"
 
@@ -432,25 +431,34 @@ def build_performance_section(snapshot_path: Path) -> str:
         </div>"""
 
     try:
-        import pandas as pd
-        df = pd.read_csv(results_file)
+        rows = []
+        with open(results_file, newline='', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                rows.append(row)
 
-        if "is_value" in df.columns:
-            df["is_value"] = df["is_value"].astype(str).str.strip().str.lower() == "true"
-        if "correct" in df.columns:
-            df["correct"] = df["correct"].astype(str).str.strip().str.lower() == "true"
-        if "profit" in df.columns:
-            df["profit"] = pd.to_numeric(df["profit"], errors="coerce").fillna(0.0)
+        if not rows:
+            return """<div class="performance-tracker">
+                <h2>Performance Tracker</h2>
+                <p style="color: var(--muted);">No results yet – check back after the first matchday.</p>
+            </div>"""
 
-        total = len(df)
-        correct = df["correct"].sum() if "correct" in df.columns else 0
+        total = len(rows)
+        correct = sum(1 for r in rows if r.get("correct", "").strip().lower() == "true")
         accuracy = correct / total if total > 0 else 0
 
-        value_bets = df[df["is_value"] == True] if "is_value" in df.columns else pd.DataFrame()
+        value_bets = [r for r in rows if r.get("is_value", "").strip().lower() == "true"]
         value_total = len(value_bets)
-        value_correct = value_bets["correct"].sum() if "correct" in value_bets.columns else 0
+        value_correct = sum(1 for r in value_bets if r.get("correct", "").strip().lower() == "true")
         value_accuracy = value_correct / value_total if value_total > 0 else 0
-        total_profit = df["profit"].sum() if "profit" in df.columns else 0.0
+
+        total_profit = 0.0
+        for r in value_bets:
+            try:
+                profit = float(r.get("profit", 0))
+            except (ValueError, TypeError):
+                profit = 0.0
+            total_profit += profit
 
         return f"""<div class="performance-tracker">
             <h2>Performance Tracker</h2>
