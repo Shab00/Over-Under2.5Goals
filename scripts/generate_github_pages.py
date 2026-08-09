@@ -423,14 +423,22 @@ def build_performance_section() -> str:
     results_file = Path("data/processed/results_merged.csv")
     if not results_file.exists():
         return """<div class="performance-tracker">
-            <h2>📊 Performance Tracker</h2>
+            <h2>Performance Tracker</h2>
             <p style="color: var(--muted);">Season starts 21 August – tracking will begin automatically once matches are played.</p>
         </div>"""
 
     try:
         import pandas as pd
         df = pd.read_csv(results_file)
-        # Expected columns: home_team, away_team, prob_homewin, odds_B365H, FTR, FTHG, FTAG, is_value, correct, profit
+
+        # Convert string booleans to Python booleans (just in case)
+        if "is_value" in df.columns:
+            df["is_value"] = df["is_value"].astype(str).str.strip().str.lower() == "true"
+        if "correct" in df.columns:
+            df["correct"] = df["correct"].astype(str).str.strip().str.lower() == "true"
+        if "profit" in df.columns:
+            df["profit"] = pd.to_numeric(df["profit"], errors="coerce").fillna(0.0)
+
         total = len(df)
         correct = df["correct"].sum() if "correct" in df.columns else 0
         accuracy = correct / total if total > 0 else 0
@@ -442,7 +450,7 @@ def build_performance_section() -> str:
         total_profit = df["profit"].sum() if "profit" in df.columns else 0.0
 
         return f"""<div class="performance-tracker">
-            <h2>📊 Performance Tracker</h2>
+            <h2>Performance Tracker</h2>
             <div class="performance-summary">
                 <div class="performance-stat"><strong>Overall Accuracy:</strong> {accuracy:.1%} ({correct}/{total})</div>
                 <div class="performance-stat"><strong>Value Bets:</strong> {value_total} picks</div>
@@ -452,7 +460,7 @@ def build_performance_section() -> str:
         </div>"""
     except Exception as e:
         return f"""<div class="performance-tracker">
-            <h2>📊 Performance Tracker</h2>
+            <h2>Performance Tracker</h2>
             <p style="color: var(--muted);">Error processing results: {e}</p>
         </div>"""
 
