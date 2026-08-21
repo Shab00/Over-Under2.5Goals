@@ -19,6 +19,10 @@ python3 jobs/build_predictions_snapshot.py
 log "step: publish snapshot"
 python3 jobs/publish_snapshot.py
 
+log "step: archive snapshot"
+mkdir -p snapshots/archive
+cp snapshots/predictions_latest.csv snapshots/archive/predictions_$(date -u +"%Y%m%dT%H%M%S").csv
+
 log "step: deliver telegram"
 python3 jobs/deliver_telegram.py
 
