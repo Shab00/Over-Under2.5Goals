@@ -1,2 +1,381 @@
-match_key,kickoff_time_utc,home_team,away_team,prob_homewin,odds_B365H,FTR,FTHG,FTAG,is_value,correct,profit
-2026-08-21|Arsenal|Coventry City,2026-08-21,Arsenal,Coventry City,0.90,1.16,H,2,0,True,True,0.16
+match_id,kickoff_time_utc,home_team,away_team,prob_homewin,pred_label,odds_B365H,is_predicted_fixture,generated_at,snapshot_file,match_key,FTR,FTHG,FTAG,home_win,pred_win,correct,implied_prob,is_value,profit
+0,2026-08-21,Arsenal,Coventry City,0.7966261714193383,1,1.21,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-21|Arsenal|Coventry City,,,,False,True,False,0.8264462809917356,False,0.0
+250,2027-02-20,Arsenal,Fulham,0.3738733212531388,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-20|Arsenal|Fulham,,,,False,False,True,,False,0.0
+259,2027-02-20,Sunderland,Everton,0.4332236146525278,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-20|Sunderland|Everton,,,,False,False,True,,False,0.0
+258,2027-02-20,Nott'm Forest,Man United,0.4198892511068942,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-20|Nott'm Forest|Man United,,,,False,False,True,,False,0.0
+257,2027-02-20,Man City,Newcastle,0.4077565700068721,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-20|Man City|Newcastle,,,,False,False,True,,False,0.0
+256,2027-02-20,Liverpool,Hull City,0.3808370262654719,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-20|Liverpool|Hull City,,,,False,False,True,,False,0.0
+255,2027-02-20,Leeds,Aston Villa,0.5158251145153782,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-20|Leeds|Aston Villa,,,,False,True,False,,False,0.0
+254,2027-02-20,Chelsea,Ipswich Town,0.3244310428712237,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-20|Chelsea|Ipswich Town,,,,False,False,True,,False,0.0
+253,2027-02-20,Brighton,Tottenham,0.4198892511068942,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-20|Brighton|Tottenham,,,,False,False,True,,False,0.0
+252,2027-02-20,Brentford,Coventry City,0.3893802432510188,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-20|Brentford|Coventry City,,,,False,False,True,,False,0.0
+251,2027-02-20,Bournemouth,Crystal Palace,0.5207223622360942,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-20|Bournemouth|Crystal Palace,,,,False,True,False,,False,0.0
+249,2027-02-10,Tottenham,Man City,0.3937532682571622,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-10|Tottenham|Man City,,,,False,False,True,,False,0.0
+261,2027-02-27,Coventry City,Bournemouth,0.4322299213581867,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-27|Coventry City|Bournemouth,,,,False,False,True,,False,0.0
+248,2027-02-10,Newcastle,Chelsea,0.4640405165414503,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-10|Newcastle|Chelsea,,,,False,False,True,,False,0.0
+247,2027-02-10,Man United,Brighton,0.3949517284909835,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-10|Man United|Brighton,,,,False,False,True,,False,0.0
+246,2027-02-10,Ipswich Town,Arsenal,0.4653336147763827,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-10|Ipswich Town|Arsenal,,,,False,False,True,,False,0.0
+245,2027-02-10,Hull City,Sunderland,0.4021595298070633,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-10|Hull City|Sunderland,,,,False,False,True,,False,0.0
+244,2027-02-10,Fulham,Nott'm Forest,0.4496645037370877,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-10|Fulham|Nott'm Forest,,,,False,False,True,,False,0.0
+243,2027-02-10,Everton,Leeds,0.4304130251621613,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-10|Everton|Leeds,,,,False,False,True,,False,0.0
+242,2027-02-10,Crystal Palace,Brentford,0.3834928532171448,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-10|Crystal Palace|Brentford,,,,False,False,True,,False,0.0
+241,2027-02-10,Coventry City,Liverpool,0.4889682605640433,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-10|Coventry City|Liverpool,,,,False,False,True,,False,0.0
+240,2027-02-10,Aston Villa,Bournemouth,0.3715598501733742,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-10|Aston Villa|Bournemouth,,,,False,False,True,,False,0.0
+260,2027-02-27,Aston Villa,Chelsea,0.4287647642632132,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-27|Aston Villa|Chelsea,,,,False,False,True,,False,0.0
+262,2027-02-27,Crystal Palace,Sunderland,0.3232685188924559,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-27|Crystal Palace|Sunderland,,,,False,False,True,,False,0.0
+238,2027-02-06,Nott'm Forest,Brentford,0.4582657223730835,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-06|Nott'm Forest|Brentford,,,,False,False,True,,False,0.0
+274,2027-03-03,Chelsea,Coventry City,0.3244310428712237,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-03|Chelsea|Coventry City,,,,False,False,True,,False,0.0
+283,2027-03-13,Coventry City,Man City,0.4544495972998168,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-13|Coventry City|Man City,,,,False,False,True,,False,0.0
+282,2027-03-13,Chelsea,Arsenal,0.4042608063171819,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-13|Chelsea|Arsenal,,,,False,False,True,,False,0.0
+281,2027-03-13,Bournemouth,Newcastle,0.4582657223730835,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-13|Bournemouth|Newcastle,,,,False,False,True,,False,0.0
+280,2027-03-13,Aston Villa,Hull City,0.3403340983537655,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-13|Aston Villa|Hull City,,,,False,False,True,,False,0.0
+279,2027-03-03,Sunderland,Man United,0.3575120960628084,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-03|Sunderland|Man United,,,,False,False,True,,False,0.0
+278,2027-03-03,Nott'm Forest,Newcastle,0.4582657223730835,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-03|Nott'm Forest|Newcastle,,,,False,False,True,,False,0.0
+277,2027-03-03,Man City,Everton,0.4644104465149724,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-03|Man City|Everton,,,,False,False,True,,False,0.0
+276,2027-03-03,Liverpool,Aston Villa,0.4880448657386079,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-03|Liverpool|Aston Villa,,,,False,False,True,,False,0.0
+275,2027-03-03,Leeds,Hull City,0.4073706429239739,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-03|Leeds|Hull City,,,,False,False,True,,False,0.0
+273,2027-03-03,Brighton,Fulham,0.432014729693116,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-03|Brighton|Fulham,,,,False,False,True,,False,0.0
+263,2027-02-27,Everton,Nott'm Forest,0.4586080917687262,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-27|Everton|Nott'm Forest,,,,False,False,True,,False,0.0
+272,2027-03-03,Brentford,Ipswich Town,0.3893802432510188,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-03|Brentford|Ipswich Town,,,,False,False,True,,False,0.0
+271,2027-03-03,Bournemouth,Tottenham,0.4198892511068942,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-03|Bournemouth|Tottenham,,,,False,False,True,,False,0.0
+270,2027-03-03,Arsenal,Crystal Palace,0.4775198526417555,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-03|Arsenal|Crystal Palace,,,,False,False,True,,False,0.0
+269,2027-02-27,Tottenham,Liverpool,0.4743277298004534,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-27|Tottenham|Liverpool,,,,False,False,True,,False,0.0
+268,2027-02-27,Newcastle,Brentford,0.4396952960617048,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-27|Newcastle|Brentford,,,,False,False,True,,False,0.0
+267,2027-02-27,Man United,Arsenal,0.4381054958551473,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-27|Man United|Arsenal,,,,False,False,True,,False,0.0
+266,2027-02-27,Ipswich Town,Brighton,0.4215097734500007,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-27|Ipswich Town|Brighton,,,,False,False,True,,False,0.0
+265,2027-02-27,Hull City,Man City,0.4544495972998168,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-27|Hull City|Man City,,,,False,False,True,,False,0.0
+264,2027-02-27,Fulham,Leeds,0.4215911092719604,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-27|Fulham|Leeds,,,,False,False,True,,False,0.0
+239,2027-02-06,Sunderland,Aston Villa,0.4502577977010401,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-06|Sunderland|Aston Villa,,,,False,False,True,,False,0.0
+237,2027-02-06,Man United,Chelsea,0.4640405165414503,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-06|Man United|Chelsea,,,,False,False,True,,False,0.0
+1,2026-08-22,Hull City,Man United,0.0350539608824158,0,9.08,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-22|Hull City|Man United,,,,False,False,True,0.11013215859030837,False,0.0
+202,2027-01-16,Brentford,Brighton,0.3949517284909835,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-16|Brentford|Brighton,,,,False,False,True,,False,0.0
+211,2027-01-23,Brighton,Man City,0.4458131854763713,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-23|Brighton|Man City,,,,False,False,True,,False,0.0
+210,2027-01-23,Arsenal,Newcastle,0.3990736710448975,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-23|Arsenal|Newcastle,,,,False,False,True,,False,0.0
+209,2027-01-16,Tottenham,Leeds,0.35450671336885,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-16|Tottenham|Leeds,,,,False,False,True,,False,0.0
+208,2027-01-16,Newcastle,Fulham,0.4136957261865251,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-16|Newcastle|Fulham,,,,False,False,True,,False,0.0
+207,2027-01-16,Man City,Nott'm Forest,0.3994044219249154,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-16|Man City|Nott'm Forest,,,,False,False,True,,False,0.0
+206,2027-01-16,Liverpool,Crystal Palace,0.4929468918582064,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-16|Liverpool|Crystal Palace,,,,False,False,True,,False,0.0
+205,2027-01-16,Hull City,Arsenal,0.4653336147763827,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-16|Hull City|Arsenal,,,,False,False,True,,False,0.0
+204,2027-01-16,Coventry City,Everton,0.4871886905268191,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-16|Coventry City|Everton,,,,False,False,True,,False,0.0
+203,2027-01-16,Chelsea,Sunderland,0.3286248722358049,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-16|Chelsea|Sunderland,,,,False,False,True,,False,0.0
+201,2027-01-16,Bournemouth,Ipswich Town,0.4073706429239739,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-16|Bournemouth|Ipswich Town,,,,False,False,True,,False,0.0
+213,2027-01-23,Everton,Brentford,0.4672351424334448,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-23|Everton|Brentford,,,,False,False,True,,False,0.0
+200,2027-01-16,Aston Villa,Man United,0.3679302532580836,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-16|Aston Villa|Man United,,,,False,False,True,,False,0.0
+199,2027-01-06,Sunderland,Liverpool,0.4621302893766146,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-06|Sunderland|Liverpool,,,,False,False,True,,False,0.0
+198,2027-01-06,Nott'm Forest,Hull City,0.4073706429239739,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-06|Nott'm Forest|Hull City,,,,False,False,True,,False,0.0
+197,2027-01-06,Man United,Newcastle,0.4396952960617048,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-06|Man United|Newcastle,,,,False,False,True,,False,0.0
+196,2027-01-06,Leeds,Man City,0.4458131854763713,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-06|Leeds|Man City,,,,False,False,True,,False,0.0
+195,2027-01-06,Ipswich Town,Coventry City,0.3911484227882135,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-06|Ipswich Town|Coventry City,,,,False,False,True,,False,0.0
+194,2027-01-06,Fulham,Tottenham,0.4198892511068942,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-06|Fulham|Tottenham,,,,False,False,True,,False,0.0
+193,2027-01-06,Everton,Aston Villa,0.5075791304183552,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-06|Everton|Aston Villa,,,,False,True,False,,False,0.0
+192,2027-01-06,Crystal Palace,Chelsea,0.4237604398643423,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-06|Crystal Palace|Chelsea,,,,False,False,True,,False,0.0
+212,2027-01-23,Crystal Palace,Tottenham,0.3473630421397589,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-23|Crystal Palace|Tottenham,,,,False,False,True,,False,0.0
+214,2027-01-23,Fulham,Aston Villa,0.5158251145153782,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-23|Fulham|Aston Villa,,,,False,True,False,,False,0.0
+236,2027-02-06,Leeds,Bournemouth,0.4236878332267318,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-06|Leeds|Bournemouth,,,,False,False,True,,False,0.0
+226,2027-01-30,Liverpool,Everton,0.4880448657386079,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-30|Liverpool|Everton,,,,False,False,True,,False,0.0
+235,2027-02-06,Ipswich Town,Tottenham,0.4284116852192169,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-06|Ipswich Town|Tottenham,,,,False,False,True,,False,0.0
+234,2027-02-06,Fulham,Man City,0.4458131854763713,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-06|Fulham|Man City,,,,False,False,True,,False,0.0
+233,2027-02-06,Everton,Newcastle,0.4672351424334448,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-06|Everton|Newcastle,,,,False,False,True,,False,0.0
+232,2027-02-06,Crystal Palace,Coventry City,0.3357552433116876,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-06|Crystal Palace|Coventry City,,,,False,False,True,,False,0.0
+231,2027-02-06,Brighton,Hull City,0.4073706429239739,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-06|Brighton|Hull City,,,,False,False,True,,False,0.0
+230,2027-02-06,Arsenal,Liverpool,0.4845706621093881,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-02-06|Arsenal|Liverpool,,,,False,False,True,,False,0.0
+229,2027-01-30,Tottenham,Sunderland,0.3286248722358049,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-30|Tottenham|Sunderland,,,,False,False,True,,False,0.0
+228,2027-01-30,Newcastle,Brighton,0.3949517284909835,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-30|Newcastle|Brighton,,,,False,False,True,,False,0.0
+227,2027-01-30,Man City,Arsenal,0.4061985315255401,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-30|Man City|Arsenal,,,,False,False,True,,False,0.0
+225,2027-01-30,Hull City,Crystal Palace,0.4819132902556232,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-30|Hull City|Crystal Palace,,,,False,False,True,,False,0.0
+215,2027-01-23,Ipswich Town,Hull City,0.3911484227882135,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-23|Ipswich Town|Hull City,,,,False,False,True,,False,0.0
+224,2027-01-30,Coventry City,Leeds,0.4105380580238053,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-30|Coventry City|Leeds,,,,False,False,True,,False,0.0
+223,2027-01-30,Chelsea,Nott'm Forest,0.3974774123695043,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-30|Chelsea|Nott'm Forest,,,,False,False,True,,False,0.0
+222,2027-01-30,Brentford,Man United,0.4017207573631811,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-30|Brentford|Man United,,,,False,False,True,,False,0.0
+221,2027-01-30,Bournemouth,Fulham,0.432014729693116,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-30|Bournemouth|Fulham,,,,False,False,True,,False,0.0
+220,2027-01-30,Aston Villa,Ipswich Town,0.3403340983537655,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-30|Aston Villa|Ipswich Town,,,,False,False,True,,False,0.0
+219,2027-01-23,Sunderland,Coventry City,0.3457448173452868,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-23|Sunderland|Coventry City,,,,False,False,True,,False,0.0
+218,2027-01-23,Nott'm Forest,Bournemouth,0.4236878332267318,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-23|Nott'm Forest|Bournemouth,,,,False,False,True,,False,0.0
+217,2027-01-23,Man United,Liverpool,0.5090262460194482,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-23|Man United|Liverpool,,,,False,True,False,,False,0.0
+216,2027-01-23,Leeds,Chelsea,0.500016831318746,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-23|Leeds|Chelsea,,,,False,True,False,,False,0.0
+284,2027-03-13,Crystal Palace,Fulham,0.358689113166174,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-13|Crystal Palace|Fulham,,,,False,False,True,,False,0.0
+285,2027-03-13,Leeds,Brighton,0.4130254274940168,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-13|Leeds|Brighton,,,,False,False,True,,False,0.0
+286,2027-03-13,Liverpool,Ipswich Town,0.3808370262654719,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-13|Liverpool|Ipswich Town,,,,False,False,True,,False,0.0
+345,2027-05-08,Leeds,Arsenal,0.5092018258889821,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-08|Leeds|Arsenal,,,,False,True,False,,False,0.0
+354,2027-05-15,Crystal Palace,Brighton,0.3829380943677336,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-15|Crystal Palace|Brighton,,,,False,False,True,,False,0.0
+353,2027-05-15,Coventry City,Tottenham,0.4733912752309778,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-15|Coventry City|Tottenham,,,,False,False,True,,False,0.0
+352,2027-05-15,Chelsea,Everton,0.5004993522402902,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-15|Chelsea|Everton,,,,False,True,False,,False,0.0
+351,2027-05-15,Aston Villa,Newcastle,0.4102970112597061,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-15|Aston Villa|Newcastle,,,,False,False,True,,False,0.0
+350,2027-05-15,Arsenal,Nott'm Forest,0.4448184727328938,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-15|Arsenal|Nott'm Forest,,,,False,False,True,,False,0.0
+349,2027-05-08,Tottenham,Chelsea,0.4819125012168678,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-08|Tottenham|Chelsea,,,,False,False,True,,False,0.0
+348,2027-05-08,Nott'm Forest,Crystal Palace,0.5435110841944191,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-08|Nott'm Forest|Crystal Palace,,,,False,True,False,,False,0.0
+347,2027-05-08,Newcastle,Coventry City,0.4431963202139877,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-08|Newcastle|Coventry City,,,,False,False,True,,False,0.0
+346,2027-05-08,Man City,Liverpool,0.5613646823180869,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-08|Man City|Liverpool,,,,False,True,False,,False,0.0
+344,2027-05-08,Fulham,Ipswich Town,0.4617927439215444,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-08|Fulham|Ipswich Town,,,,False,False,True,,False,0.0
+356,2027-05-15,Ipswich Town,Man City,0.5294995540482162,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-15|Ipswich Town|Man City,,,,False,True,False,,False,0.0
+343,2027-05-08,Everton,Hull City,0.4536013027097633,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-08|Everton|Hull City,,,,False,False,True,,False,0.0
+342,2027-05-08,Brighton,Sunderland,0.4477784971161581,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-08|Brighton|Sunderland,,,,False,False,True,,False,0.0
+341,2027-05-08,Brentford,Aston Villa,0.5199389165163227,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-08|Brentford|Aston Villa,,,,False,True,False,,False,0.0
+340,2027-05-08,Bournemouth,Man United,0.4718710933160505,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-08|Bournemouth|Man United,,,,False,False,True,,False,0.0
+339,2027-05-01,Sunderland,Newcastle,0.438198068579285,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-01|Sunderland|Newcastle,,,,False,False,True,,False,0.0
+338,2027-05-01,Man City,Brentford,0.4623588405486935,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-01|Man City|Brentford,,,,False,False,True,,False,0.0
+337,2027-05-01,Liverpool,Chelsea,0.5248568802701301,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-01|Liverpool|Chelsea,,,,False,True,False,,False,0.0
+336,2027-05-01,Ipswich Town,Leeds,0.4551353217185332,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-01|Ipswich Town|Leeds,,,,False,False,True,,False,0.0
+335,2027-05-01,Hull City,Bournemouth,0.4772756573733067,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-01|Hull City|Bournemouth,,,,False,False,True,,False,0.0
+355,2027-05-15,Hull City,Fulham,0.5389469151723453,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-15|Hull City|Fulham,,,,False,True,False,,False,0.0
+357,2027-05-15,Liverpool,Brentford,0.4534033646916489,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-15|Liverpool|Brentford,,,,False,False,True,,False,0.0
+287,2027-03-13,Man United,Everton,0.4798028917250784,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-13|Man United|Everton,,,,False,False,True,,False,0.0
+369,2027-05-23,Tottenham,Man United,0.4190692756283005,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-23|Tottenham|Man United,,,,False,False,True,,False,0.0
+378,2027-05-30,Man United,Fulham,0.4682951070604333,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-30|Man United|Fulham,,,,False,False,True,,False,0.0
+377,2027-05-30,Liverpool,Bournemouth,0.4189086577937335,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-30|Liverpool|Bournemouth,,,,False,False,True,,False,0.0
+376,2027-05-30,Ipswich Town,Everton,0.5648112732395593,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-30|Ipswich Town|Everton,,,,False,True,False,,False,0.0
+375,2027-05-30,Hull City,Newcastle,0.4922446290823065,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-30|Hull City|Newcastle,,,,False,False,True,,False,0.0
+374,2027-05-30,Crystal Palace,Leeds,0.3912957617683315,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-30|Crystal Palace|Leeds,,,,False,False,True,,False,0.0
+373,2027-05-30,Coventry City,Nott'm Forest,0.5036664759957922,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-30|Coventry City|Nott'm Forest,,,,False,True,False,,False,0.0
+372,2027-05-30,Chelsea,Brentford,0.4280679083165126,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-30|Chelsea|Brentford,,,,False,False,True,,False,0.0
+371,2027-05-30,Aston Villa,Tottenham,0.3731704643920371,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-30|Aston Villa|Tottenham,,,,False,False,True,,False,0.0
+370,2027-05-30,Arsenal,Brighton,0.4082813186413435,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-30|Arsenal|Brighton,,,,False,False,True,,False,0.0
+368,2027-05-23,Nott'm Forest,Ipswich Town,0.4617927439215444,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-23|Nott'm Forest|Ipswich Town,,,,False,False,True,,False,0.0
+358,2027-05-15,Man United,Leeds,0.4256140133771828,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-15|Man United|Leeds,,,,False,False,True,,False,0.0
+367,2027-05-23,Newcastle,Crystal Palace,0.5248328845174234,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-23|Newcastle|Crystal Palace,,,,False,True,False,,False,0.0
+366,2027-05-23,Man City,Aston Villa,0.5199389165163227,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-23|Man City|Aston Villa,,,,False,True,False,,False,0.0
+365,2027-05-23,Leeds,Sunderland,0.4477784971161581,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-23|Leeds|Sunderland,,,,False,False,True,,False,0.0
+364,2027-05-23,Fulham,Coventry City,0.4617927439215444,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-23|Fulham|Coventry City,,,,False,False,True,,False,0.0
+363,2027-05-23,Everton,Arsenal,0.518214529119985,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-23|Everton|Arsenal,,,,False,True,False,,False,0.0
+362,2027-05-23,Brighton,Liverpool,0.5797567100058415,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-23|Brighton|Liverpool,,,,False,True,False,,False,0.0
+361,2027-05-23,Brentford,Hull City,0.4431963202139877,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-23|Brentford|Hull City,,,,False,False,True,,False,0.0
+360,2027-05-23,Bournemouth,Chelsea,0.5524712993160049,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-23|Bournemouth|Chelsea,,,,False,True,False,,False,0.0
+359,2027-05-15,Sunderland,Bournemouth,0.404005140858008,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-15|Sunderland|Bournemouth,,,,False,False,True,,False,0.0
+334,2027-05-01,Fulham,Everton,0.5707813633082404,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-01|Fulham|Everton,,,,False,True,False,,False,0.0
+333,2027-05-01,Crystal Palace,Aston Villa,0.4844295212296406,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-01|Crystal Palace|Aston Villa,,,,False,False,True,,False,0.0
+332,2027-05-01,Coventry City,Man United,0.5031272631137081,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-01|Coventry City|Man United,,,,False,True,False,,False,0.0
+298,2027-03-20,Newcastle,Leeds,0.4034001839861065,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-20|Newcastle|Leeds,,,,False,False,True,,False,0.0
+307,2027-04-10,Man United,Hull City,0.4262221624173646,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-10|Man United|Hull City,,,,False,False,True,,False,0.0
+306,2027-04-10,Liverpool,Newcastle,0.4534033646916489,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-10|Liverpool|Newcastle,,,,False,False,True,,False,0.0
+305,2027-04-10,Leeds,Nott'm Forest,0.4724086568896782,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-10|Leeds|Nott'm Forest,,,,False,False,True,,False,0.0
+304,2027-04-10,Crystal Palace,Everton,0.5169603433631114,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-10|Crystal Palace|Everton,,,,False,True,False,,False,0.0
+303,2027-04-10,Coventry City,Arsenal,0.5404005389059372,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-10|Coventry City|Arsenal,,,,False,True,False,,False,0.0
+302,2027-04-10,Chelsea,Fulham,0.433919238876548,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-10|Chelsea|Fulham,,,,False,False,True,,False,0.0
+301,2027-04-10,Bournemouth,Man City,0.4982479186597003,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-10|Bournemouth|Man City,,,,False,False,True,,False,0.0
+300,2027-04-10,Aston Villa,Brighton,0.3665877380861969,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-10|Aston Villa|Brighton,,,,False,False,True,,False,0.0
+299,2027-03-20,Nott'm Forest,Aston Villa,0.5158251145153782,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-20|Nott'm Forest|Aston Villa,,,,False,True,False,,False,0.0
+297,2027-03-20,Man City,Man United,0.3707153884755895,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-20|Man City|Man United,,,,False,False,True,,False,0.0
+331,2027-05-01,Brighton,Nott'm Forest,0.4724086568896782,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-01|Brighton|Nott'm Forest,,,,False,False,True,,False,0.0
+296,2027-03-20,Ipswich Town,Crystal Palace,0.4819132902556232,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-20|Ipswich Town|Crystal Palace,,,,False,False,True,,False,0.0
+295,2027-03-20,Hull City,Chelsea,0.4441515810923438,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-20|Hull City|Chelsea,,,,False,False,True,,False,0.0
+294,2027-03-20,Fulham,Liverpool,0.5449440948645624,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-20|Fulham|Liverpool,,,,False,True,False,,False,0.0
+293,2027-03-20,Everton,Tottenham,0.4287019497377312,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-20|Everton|Tottenham,,,,False,False,True,,False,0.0
+292,2027-03-20,Brighton,Coventry City,0.4073706429239739,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-20|Brighton|Coventry City,,,,False,False,True,,False,0.0
+291,2027-03-20,Brentford,Bournemouth,0.4054698582274432,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-20|Brentford|Bournemouth,,,,False,False,True,,False,0.0
+290,2027-03-20,Arsenal,Sunderland,0.3377429579093189,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-20|Arsenal|Sunderland,,,,False,False,True,,False,0.0
+289,2027-03-13,Tottenham,Nott'm Forest,0.3974774123695043,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-13|Tottenham|Nott'm Forest,,,,False,False,True,,False,0.0
+288,2027-03-13,Sunderland,Brentford,0.3940601471268276,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-03-13|Sunderland|Brentford,,,,False,False,True,,False,0.0
+308,2027-04-10,Sunderland,Ipswich Town,0.4192560382374196,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-10|Sunderland|Ipswich Town,,,,False,False,True,,False,0.0
+309,2027-04-10,Tottenham,Brentford,0.4280679083165126,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-10|Tottenham|Brentford,,,,False,False,True,,False,0.0
+310,2027-04-17,Arsenal,Aston Villa,0.5109280273562901,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-17|Arsenal|Aston Villa,,,,False,True,False,,False,0.0
+311,2027-04-17,Brentford,Leeds,0.4256140133771828,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-17|Brentford|Leeds,,,,False,False,True,,False,0.0
+330,2027-05-01,Arsenal,Tottenham,0.4151220598751788,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-01|Arsenal|Tottenham,,,,False,False,True,,False,0.0
+329,2027-04-24,Tottenham,Hull City,0.3926539757884513,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-24|Tottenham|Hull City,,,,False,False,True,,False,0.0
+328,2027-04-24,Nott'm Forest,Sunderland,0.4477784971161581,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-24|Nott'm Forest|Sunderland,,,,False,False,True,,False,0.0
+327,2027-04-24,Newcastle,Ipswich Town,0.4431963202139877,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-24|Newcastle|Ipswich Town,,,,False,False,True,,False,0.0
+326,2027-04-24,Man United,Crystal Palace,0.5248328845174234,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-24|Man United|Crystal Palace,,,,False,True,False,,False,0.0
+325,2027-04-24,Leeds,Liverpool,0.5964888479417607,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-24|Leeds|Liverpool,,,,False,True,False,,False,0.0
+324,2027-04-24,Everton,Brighton,0.4442713266374827,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-24|Everton|Brighton,,,,False,False,True,,False,0.0
+323,2027-04-24,Chelsea,Man City,0.4449814175018083,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-24|Chelsea|Man City,,,,False,False,True,,False,0.0
+322,2027-04-24,Brentford,Fulham,0.4682951070604333,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-24|Brentford|Fulham,,,,False,False,True,,False,0.0
+321,2027-04-24,Bournemouth,Arsenal,0.5092018258889821,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-24|Bournemouth|Arsenal,,,,False,True,False,,False,0.0
+320,2027-04-24,Aston Villa,Coventry City,0.3917201141737261,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-24|Aston Villa|Coventry City,,,,False,False,True,,False,0.0
+319,2027-04-17,Nott'm Forest,Liverpool,0.5797567100058415,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-17|Nott'm Forest|Liverpool,,,,False,True,False,,False,0.0
+318,2027-04-17,Newcastle,Tottenham,0.4239078174259428,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-17|Newcastle|Tottenham,,,,False,False,True,,False,0.0
+317,2027-04-17,Man City,Crystal Palace,0.5248328845174234,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-17|Man City|Crystal Palace,,,,False,True,False,,False,0.0
+316,2027-04-17,Ipswich Town,Man United,0.5031272631137081,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-17|Ipswich Town|Man United,,,,False,True,False,,False,0.0
+315,2027-04-17,Hull City,Coventry City,0.4674164611558444,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-17|Hull City|Coventry City,,,,False,False,True,,False,0.0
+314,2027-04-17,Fulham,Sunderland,0.4477784971161581,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-17|Fulham|Sunderland,,,,False,False,True,,False,0.0
+313,2027-04-17,Everton,Bournemouth,0.4551149348061474,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-17|Everton|Bournemouth,,,,False,False,True,,False,0.0
+312,2027-04-17,Brighton,Chelsea,0.5524712993160049,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-04-17|Brighton|Chelsea,,,,False,True,False,,False,0.0
+191,2027-01-06,Brighton,Bournemouth,0.4236878332267318,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-06|Brighton|Bournemouth,,,,False,False,True,,False,0.0
+190,2027-01-06,Arsenal,Brentford,0.3990736710448975,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-06|Arsenal|Brentford,,,,False,False,True,,False,0.0
+189,2027-01-02,Sunderland,Hull City,0.3457448173452868,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-02|Sunderland|Hull City,,,,False,False,True,,False,0.0
+59,2026-10-12,Coventry City,Newcastle,0.5262114168534946,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-12|Coventry City|Newcastle,,,,False,True,False,,False,0.0
+68,2026-10-18,Nott'm Forest,Arsenal,0.5140838985295446,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-18|Nott'm Forest|Arsenal,,,,False,True,False,,False,0.0
+67,2026-10-18,Leeds,Man United,0.4767429161261878,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-18|Leeds|Man United,,,,False,False,True,,False,0.0
+66,2026-10-18,Brighton,Crystal Palace,0.5483545809099141,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-18|Brighton|Crystal Palace,,,,False,True,False,,False,0.0
+65,2026-10-18,Bournemouth,Sunderland,0.452614753508116,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-18|Bournemouth|Sunderland,,,,False,False,True,,False,0.0
+64,2026-10-17,Newcastle,Aston Villa,0.524813854433722,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-17|Newcastle|Aston Villa,,,,False,True,False,,False,0.0
+63,2026-10-17,Man City,Ipswich Town,0.4480232383643385,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-17|Man City|Ipswich Town,,,,False,False,True,,False,0.0
+62,2026-10-17,Fulham,Hull City,0.4666524544383665,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-17|Fulham|Hull City,,,,False,False,True,,False,0.0
+61,2026-10-17,Brentford,Liverpool,0.5661699513779993,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-17|Brentford|Liverpool,,,,False,True,False,,False,0.0
+60,2026-10-17,Everton,Chelsea,0.5491401343977479,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-17|Everton|Chelsea,,,,False,True,False,,False,0.0
+58,2026-10-11,Liverpool,Man City,0.4753648200830758,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-11|Liverpool|Man City,,,,False,False,True,,False,0.0
+70,2026-10-23,Ipswich Town,Nott'm Forest,0.4901070357291853,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-23|Ipswich Town|Nott'm Forest,,,,False,False,True,,False,0.0
+57,2026-10-11,Hull City,Everton,0.597889179794108,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-11|Hull City|Everton,,,,False,True,False,,False,0.0
+56,2026-10-11,Crystal Palace,Nott'm Forest,0.4235759002835937,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-11|Crystal Palace|Nott'm Forest,,,,False,False,True,,False,0.0
+55,2026-10-10,Man United,Tottenham,0.4286863987732296,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-10|Man United|Tottenham,,,,False,False,True,,False,0.0
+54,2026-10-10,Sunderland,Brighton,0.3981725764522111,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-10|Sunderland|Brighton,,,,False,False,True,,False,0.0
+53,2026-10-10,Ipswich Town,Fulham,0.5321560472041469,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-10|Ipswich Town|Fulham,,,,False,True,False,,False,0.0
+52,2026-10-10,Chelsea,Bournemouth,0.3987861273321603,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-10|Chelsea|Bournemouth,,,,False,False,True,,False,0.0
+51,2026-10-10,Aston Villa,Brentford,0.415032697699968,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-10|Aston Villa|Brentford,,,,False,False,True,,False,0.0
+50,2026-10-10,Arsenal,Leeds,0.421575625907493,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-10|Arsenal|Leeds,,,,False,False,True,,False,0.0
+49,2026-09-20,Fulham,Man United,0.4503278322901514,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-20|Fulham|Man United,,,,False,False,True,,False,0.0
+69,2026-10-19,Tottenham,Coventry City,0.3973232292169767,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-19|Tottenham|Coventry City,,,,False,False,True,,False,0.0
+71,2026-10-24,Aston Villa,Man City,0.4318200328029686,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-24|Aston Villa|Man City,,,,False,False,True,,False,0.0
+94,2026-11-07,Fulham,Newcastle,0.4859440401528295,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-07|Fulham|Newcastle,,,,False,False,True,,False,0.0
+83,2026-10-31,Coventry City,Sunderland,0.4653680485666218,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-31|Coventry City|Sunderland,,,,False,False,True,,False,0.0
+92,2026-11-07,Crystal Palace,Liverpool,0.5309955522651527,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-07|Crystal Palace|Liverpool,,,,False,True,False,,False,0.0
+91,2026-11-07,Brighton,Brentford,0.4859440401528295,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-07|Brighton|Brentford,,,,False,False,True,,False,0.0
+90,2026-11-07,Arsenal,Hull City,0.4391186450048407,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-07|Arsenal|Hull City,,,,False,False,True,,False,0.0
+89,2026-11-02,Newcastle,Everton,0.5400204108211836,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-02|Newcastle|Everton,,,,False,True,False,,False,0.0
+88,2026-11-01,Liverpool,Arsenal,0.4863032375342536,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-01|Liverpool|Arsenal,,,,False,False,True,,False,0.0
+87,2026-11-01,Aston Villa,Fulham,0.4208369558934468,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-01|Aston Villa|Fulham,,,,False,False,True,,False,0.0
+86,2026-10-31,Tottenham,Crystal Palace,0.4950161660600871,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-31|Tottenham|Crystal Palace,,,,False,False,True,,False,0.0
+85,2026-10-31,Man City,Brighton,0.4217833270757943,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-31|Man City|Brighton,,,,False,False,True,,False,0.0
+84,2026-10-31,Hull City,Ipswich Town,0.4606264272505552,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-31|Hull City|Ipswich Town,,,,False,False,True,,False,0.0
+82,2026-10-31,Brentford,Nott'm Forest,0.4585923267885946,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-31|Brentford|Nott'm Forest,,,,False,False,True,,False,0.0
+72,2026-10-24,Arsenal,Everton,0.548206688078979,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-24|Arsenal|Everton,,,,False,True,False,,False,0.0
+81,2026-10-31,Bournemouth,Leeds,0.448889799589776,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-31|Bournemouth|Leeds,,,,False,False,True,,False,0.0
+80,2026-10-31,Chelsea,Man United,0.4238334413893707,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-31|Chelsea|Man United,,,,False,False,True,,False,0.0
+79,2026-10-25,Sunderland,Leeds,0.4066436245019976,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-25|Sunderland|Leeds,,,,False,False,True,,False,0.0
+78,2026-10-25,Man United,Bournemouth,0.4325052306738361,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-25|Man United|Bournemouth,,,,False,False,True,,False,0.0
+77,2026-10-25,Hull City,Brentford,0.5262114168534946,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-25|Hull City|Brentford,,,,False,True,False,,False,0.0
+76,2026-10-25,Crystal Palace,Newcastle,0.4320698798129904,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-25|Crystal Palace|Newcastle,,,,False,False,True,,False,0.0
+75,2026-10-24,Chelsea,Tottenham,0.3950577611030801,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-24|Chelsea|Tottenham,,,,False,False,True,,False,0.0
+74,2026-10-24,Liverpool,Brighton,0.4130100340862198,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-24|Liverpool|Brighton,,,,False,False,True,,False,0.0
+73,2026-10-24,Coventry City,Fulham,0.5321560472041469,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-10-24|Coventry City|Fulham,,,,False,True,False,,False,0.0
+48,2026-09-20,Bournemouth,Liverpool,0.5584966693436632,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-20|Bournemouth|Liverpool,,,,False,True,False,,False,0.0
+47,2026-09-19,Nott'm Forest,Coventry City,0.440325980270619,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-19|Nott'm Forest|Coventry City,,,,False,False,True,,False,0.0
+46,2026-09-19,Newcastle,Hull City,0.4219163429128153,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-19|Newcastle|Hull City,,,,False,False,True,,False,0.0
+12,2026-08-29,Bournemouth,Everton,0.4180332311118625,0,1.85,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-29|Bournemouth|Everton,,,,False,False,True,0.5405405405405405,False,0.0
+21,2026-09-05,Newcastle,Bournemouth,0.406636433357778,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-05|Newcastle|Bournemouth,,,,False,False,True,,False,0.0
+20,2026-09-04,Ipswich Town,Liverpool,0.5423974021853639,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-04|Ipswich Town|Liverpool,,,,False,True,False,,False,0.0
+19,2026-08-31,Aston Villa,Arsenal,0.6329653212696099,1,4.54,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-31|Aston Villa|Arsenal,,,,False,True,False,0.22026431718061673,True,0.0
+18,2026-08-30,Man United,Ipswich Town,0.4051641445445397,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-30|Man United|Ipswich Town,,,,False,False,True,,False,0.0
+17,2026-08-30,Sunderland,Fulham,0.4227901598830546,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-30|Sunderland|Fulham,,,,False,False,True,,False,0.0
+16,2026-08-30,Leeds,Brentford,0.1985071882551163,0,2.84,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-30|Leeds|Brentford,,,,False,False,True,0.35211267605633806,False,0.0
+15,2026-08-30,Chelsea,Brighton,0.6134631621889586,1,2.18,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-30|Chelsea|Brighton,,,,False,True,False,0.4587155963302752,True,0.0
+14,2026-08-29,Tottenham,Newcastle,0.6214918807198402,1,2.11,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-29|Tottenham|Newcastle,,,,False,True,False,0.47393364928909953,True,0.0
+13,2026-08-29,Coventry City,Hull City,0.4459048636217965,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-29|Coventry City|Hull City,,,,False,False,True,,False,0.0
+11,2026-08-29,Liverpool,Nott'm Forest,0.4235198513043154,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-29|Liverpool|Nott'm Forest,,,,False,False,True,,False,0.0
+45,2026-09-19,Man City,Sunderland,0.4081944273755264,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-19|Man City|Sunderland,,,,False,False,True,,False,0.0
+10,2026-08-28,Crystal Palace,Man City,0.4228969291774632,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-28|Crystal Palace|Man City,,,,False,False,True,,False,0.0
+9,2026-08-24,Fulham,Chelsea,0.0846404857141524,0,3.95,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-24|Fulham|Chelsea,,,,False,False,True,0.2531645569620253,False,0.0
+8,2026-08-23,Newcastle,Liverpool,0.0994502108634439,0,3.87,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-23|Newcastle|Liverpool,,,,False,False,True,0.25839793281653745,False,0.0
+7,2026-08-23,Man City,Bournemouth,0.4851208554856821,0,1.5,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-23|Man City|Bournemouth,,,,False,False,True,0.6666666666666666,False,0.0
+6,2026-08-23,Brighton,Aston Villa,0.0746818941266281,0,2.24,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-23|Brighton|Aston Villa,,,,False,False,True,0.4464285714285714,False,0.0
+5,2026-08-22,Brentford,Tottenham,0.1057996721506687,0,2.39,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-22|Brentford|Tottenham,,,,False,False,True,0.41841004184100417,False,0.0
+4,2026-08-22,Nott'm Forest,Leeds,0.0871592426022978,0,2.35,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-22|Nott'm Forest|Leeds,,,,False,False,True,0.425531914893617,False,0.0
+3,2026-08-22,Ipswich Town,Sunderland,0.4401932583829047,0,2.81,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-22|Ipswich Town|Sunderland,,,,False,False,True,0.35587188612099646,True,0.0
+2,2026-08-22,Everton,Crystal Palace,0.1165737008617954,0,2.28,1,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-08-22|Everton|Crystal Palace,,,,False,False,True,0.4385964912280702,False,0.0
+22,2026-09-05,Brentford,Sunderland,0.4081944273755264,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-05|Brentford|Sunderland,,,,False,False,True,,False,0.0
+23,2026-09-05,Brighton,Leeds,0.422771084212601,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-05|Brighton|Leeds,,,,False,False,True,,False,0.0
+24,2026-09-05,Fulham,Crystal Palace,0.5391337224570668,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-05|Fulham|Crystal Palace,,,,False,True,False,,False,0.0
+25,2026-09-05,Man City,Coventry City,0.4219163429128153,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-05|Man City|Coventry City,,,,False,False,True,,False,0.0
+44,2026-09-19,Leeds,Crystal Palace,0.5391337224570668,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-19|Leeds|Crystal Palace,,,,False,True,False,,False,0.0
+43,2026-09-19,Everton,Ipswich Town,0.432209533103346,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-19|Everton|Ipswich Town,,,,False,False,True,,False,0.0
+42,2026-09-19,Brighton,Arsenal,0.4875275395212068,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-19|Brighton|Arsenal,,,,False,False,True,,False,0.0
+41,2026-09-19,Tottenham,Aston Villa,0.4464848349494402,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-19|Tottenham|Aston Villa,,,,False,False,True,,False,0.0
+40,2026-09-18,Brentford,Chelsea,0.4949489557919703,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-18|Brentford|Chelsea,,,,False,False,True,,False,0.0
+39,2026-09-14,Leeds,Newcastle,0.459466805332424,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-14|Leeds|Newcastle,,,,False,False,True,,False,0.0
+38,2026-09-13,Man United,Man City,0.4579018145145302,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-13|Man United|Man City,,,,False,False,True,,False,0.0
+37,2026-09-13,Coventry City,Brighton,0.4448523954291977,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-13|Coventry City|Brighton,,,,False,False,True,,False,0.0
+36,2026-09-12,Sunderland,Arsenal,0.4445784540320007,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-12|Sunderland|Arsenal,,,,False,False,True,,False,0.0
+35,2026-09-12,Tottenham,Everton,0.4788340955842946,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-12|Tottenham|Everton,,,,False,False,True,,False,0.0
+34,2026-09-12,Liverpool,Fulham,0.4378775212559567,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-12|Liverpool|Fulham,,,,False,False,True,,False,0.0
+33,2026-09-12,Crystal Palace,Ipswich Town,0.3876949987075217,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-12|Crystal Palace|Ipswich Town,,,,False,False,True,,False,0.0
+32,2026-09-12,Chelsea,Hull City,0.3546925109905128,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-12|Chelsea|Hull City,,,,False,False,True,,False,0.0
+31,2026-09-12,Bournemouth,Brentford,0.459466805332424,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-12|Bournemouth|Brentford,,,,False,False,True,,False,0.0
+30,2026-09-12,Aston Villa,Nott'm Forest,0.3812728213244837,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-12|Aston Villa|Nott'm Forest,,,,False,False,True,,False,0.0
+29,2026-09-06,Arsenal,Chelsea,0.5031994311929587,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-06|Arsenal|Chelsea,,,,False,True,False,,False,0.0
+28,2026-09-06,Everton,Man United,0.4592736033584073,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-06|Everton|Man United,,,,False,False,True,,False,0.0
+27,2026-09-05,Hull City,Aston Villa,0.5109559284872491,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-05|Hull City|Aston Villa,,,,False,True,False,,False,0.0
+26,2026-09-05,Nott'm Forest,Tottenham,0.421067930326408,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-09-05|Nott'm Forest|Tottenham,,,,False,False,True,,False,0.0
+93,2026-11-07,Everton,Coventry City,0.4584482384338738,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-07|Everton|Coventry City,,,,False,False,True,,False,0.0
+95,2026-11-07,Ipswich Town,Bournemouth,0.4637628406032076,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-07|Ipswich Town|Bournemouth,,,,False,False,True,,False,0.0
+188,2027-01-02,Nott'm Forest,Fulham,0.432014729693116,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-02|Nott'm Forest|Fulham,,,,False,False,True,,False,0.0
+154,2026-12-19,Chelsea,Aston Villa,0.472868421585757,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-19|Chelsea|Aston Villa,,,,False,False,True,,False,0.0
+163,2026-12-26,Everton,Sunderland,0.4615678062943577,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-26|Everton|Sunderland,,,,False,False,True,,False,0.0
+162,2026-12-26,Crystal Palace,Arsenal,0.4598809587188445,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-26|Crystal Palace|Arsenal,,,,False,False,True,,False,0.0
+161,2026-12-26,Coventry City,Chelsea,0.5529209748039496,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-26|Coventry City|Chelsea,,,,False,True,False,,False,0.0
+160,2026-12-26,Aston Villa,Leeds,0.3793948997837402,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-26|Aston Villa|Leeds,,,,False,False,True,,False,0.0
+159,2026-12-19,Sunderland,Crystal Palace,0.505330819785576,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-19|Sunderland|Crystal Palace,,,,False,True,False,,False,0.0
+158,2026-12-19,Nott'm Forest,Everton,0.5755614698970414,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-19|Nott'm Forest|Everton,,,,False,True,False,,False,0.0
+157,2026-12-19,Man City,Hull City,0.4480232383643385,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-19|Man City|Hull City,,,,False,False,True,,False,0.0
+156,2026-12-19,Liverpool,Tottenham,0.4198737848736251,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-19|Liverpool|Tottenham,,,,False,False,True,,False,0.0
+155,2026-12-19,Leeds,Fulham,0.4919060657740327,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-19|Leeds|Fulham,,,,False,False,True,,False,0.0
+153,2026-12-19,Brighton,Ipswich Town,0.4666524544383665,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-19|Brighton|Ipswich Town,,,,False,False,True,,False,0.0
+165,2026-12-26,Hull City,Liverpool,0.596926563218822,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-26|Hull City|Liverpool,,,,False,True,False,,False,0.0
+152,2026-12-19,Brentford,Newcastle,0.467219336823424,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-19|Brentford|Newcastle,,,,False,False,True,,False,0.0
+151,2026-12-19,Bournemouth,Coventry City,0.4666524544383665,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-19|Bournemouth|Coventry City,,,,False,False,True,,False,0.0
+150,2026-12-19,Arsenal,Man United,0.4491150796017135,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-19|Arsenal|Man United,,,,False,False,True,,False,0.0
+149,2026-12-12,Sunderland,Nott'm Forest,0.4344693241983215,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-12|Sunderland|Nott'm Forest,,,,False,False,True,,False,0.0
+148,2026-12-12,Man City,Chelsea,0.5387042907266429,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-12|Man City|Chelsea,,,,False,True,False,,False,0.0
+147,2026-12-12,Liverpool,Leeds,0.421575625907493,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-12|Liverpool|Leeds,,,,False,False,True,,False,0.0
+146,2026-12-12,Ipswich Town,Newcastle,0.5262114168534946,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-12|Ipswich Town|Newcastle,,,,False,True,False,,False,0.0
+145,2026-12-12,Hull City,Tottenham,0.4598916778475496,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-12|Hull City|Tottenham,,,,False,False,True,,False,0.0
+144,2026-12-12,Fulham,Brentford,0.4859440401528295,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-12|Fulham|Brentford,,,,False,False,True,,False,0.0
+164,2026-12-26,Fulham,Brighton,0.4401915800040529,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-26|Fulham|Brighton,,,,False,False,True,,False,0.0
+166,2026-12-26,Ipswich Town,Brentford,0.5262114168534946,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-26|Ipswich Town|Brentford,,,,False,True,False,,False,0.0
+96,2026-11-07,Leeds,Tottenham,0.4471629365492687,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-07|Leeds|Tottenham,,,,False,False,True,,False,0.0
+178,2026-12-30,Newcastle,Nott'm Forest,0.4585923267885946,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-30|Newcastle|Nott'm Forest,,,,False,False,True,,False,0.0
+187,2027-01-02,Man City,Tottenham,0.3707153884755895,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-02|Man City|Tottenham,,,,False,False,True,,False,0.0
+186,2027-01-02,Liverpool,Coventry City,0.3808370262654719,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-02|Liverpool|Coventry City,,,,False,False,True,,False,0.0
+185,2027-01-02,Leeds,Everton,0.5158251145153782,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-02|Leeds|Everton,,,,False,True,False,,False,0.0
+184,2027-01-02,Chelsea,Newcastle,0.4058164918420289,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-02|Chelsea|Newcastle,,,,False,False,True,,False,0.0
+183,2027-01-02,Brighton,Man United,0.4198892511068942,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-02|Brighton|Man United,,,,False,False,True,,False,0.0
+182,2027-01-02,Brentford,Crystal Palace,0.5019661417756334,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-02|Brentford|Crystal Palace,,,,False,True,False,,False,0.0
+181,2027-01-02,Bournemouth,Aston Villa,0.5158251145153782,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-02|Bournemouth|Aston Villa,,,,False,True,False,,False,0.0
+180,2027-01-02,Arsenal,Ipswich Town,0.3504992063008874,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-01-02|Arsenal|Ipswich Town,,,,False,False,True,,False,0.0
+179,2026-12-30,Tottenham,Brighton,0.38832813129501,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-30|Tottenham|Brighton,,,,False,False,True,,False,0.0
+177,2026-12-30,Man United,Sunderland,0.4340898294322788,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-30|Man United|Sunderland,,,,False,False,True,,False,0.0
+167,2026-12-26,Man United,Nott'm Forest,0.4585923267885946,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-26|Man United|Nott'm Forest,,,,False,False,True,,False,0.0
+176,2026-12-30,Ipswich Town,Chelsea,0.5529209748039496,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-30|Ipswich Town|Chelsea,,,,False,True,False,,False,0.0
+175,2026-12-30,Hull City,Leeds,0.4890075614902284,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-30|Hull City|Leeds,,,,False,False,True,,False,0.0
+174,2026-12-30,Fulham,Arsenal,0.5140838985295446,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-30|Fulham|Arsenal,,,,False,True,False,,False,0.0
+173,2026-12-30,Everton,Man City,0.5121500072537445,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-30|Everton|Man City,,,,False,True,False,,False,0.0
+172,2026-12-30,Crystal Palace,Bournemouth,0.3980163609509332,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-30|Crystal Palace|Bournemouth,,,,False,False,True,,False,0.0
+171,2026-12-30,Coventry City,Brentford,0.5262114168534946,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-30|Coventry City|Brentford,,,,False,True,False,,False,0.0
+170,2026-12-30,Aston Villa,Liverpool,0.5308197464343578,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-30|Aston Villa|Liverpool,,,,False,True,False,,False,0.0
+169,2026-12-26,Tottenham,Bournemouth,0.3987861273321603,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-26|Tottenham|Bournemouth,,,,False,False,True,,False,0.0
+168,2026-12-26,Newcastle,Man City,0.4843696788471857,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-26|Newcastle|Man City,,,,False,False,True,,False,0.0
+143,2026-12-12,Crystal Palace,Man United,0.4230493474460016,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-12|Crystal Palace|Man United,,,,False,False,True,,False,0.0
+142,2026-12-12,Coventry City,Aston Villa,0.5662354793290932,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-12|Coventry City|Aston Villa,,,,False,True,False,,False,0.0
+141,2026-12-12,Brighton,Everton,0.5755614698970414,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-12|Brighton|Everton,,,,False,True,False,,False,0.0
+107,2026-11-21,Man City,Fulham,0.4731630873454164,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-21|Man City|Fulham,,,,False,False,True,,False,0.0
+116,2026-11-28,Leeds,Coventry City,0.4666524544383665,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-28|Leeds|Coventry City,,,,False,False,True,,False,0.0
+115,2026-11-28,Ipswich Town,Aston Villa,0.5662354793290932,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-28|Ipswich Town|Aston Villa,,,,False,True,False,,False,0.0
+114,2026-11-28,Fulham,Bournemouth,0.4510164255562395,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-28|Fulham|Bournemouth,,,,False,False,True,,False,0.0
+113,2026-11-28,Everton,Liverpool,0.5932440995532513,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-28|Everton|Liverpool,,,,False,True,False,,False,0.0
+112,2026-11-28,Crystal Palace,Hull City,0.4131979200182017,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-28|Crystal Palace|Hull City,,,,False,False,True,,False,0.0
+111,2026-11-28,Brighton,Newcastle,0.4859440401528295,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-28|Brighton|Newcastle,,,,False,False,True,,False,0.0
+110,2026-11-28,Arsenal,Man City,0.4753648200830758,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-28|Arsenal|Man City,,,,False,False,True,,False,0.0
+109,2026-11-21,Tottenham,Ipswich Town,0.3973232292169767,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-21|Tottenham|Ipswich Town,,,,False,False,True,,False,0.0
+108,2026-11-21,Newcastle,Arsenal,0.4953196745860591,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-21|Newcastle|Arsenal,,,,False,False,True,,False,0.0
+106,2026-11-21,Liverpool,Man United,0.4491150796017135,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-21|Liverpool|Man United,,,,False,False,True,,False,0.0
+140,2026-12-12,Arsenal,Bournemouth,0.4236723292619839,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-12|Arsenal|Bournemouth,,,,False,False,True,,False,0.0
+105,2026-11-21,Hull City,Brighton,0.4528844428261864,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-21|Hull City|Brighton,,,,False,False,True,,False,0.0
+104,2026-11-21,Coventry City,Crystal Palace,0.561040578994939,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-21|Coventry City|Crystal Palace,,,,False,True,False,,False,0.0
+103,2026-11-21,Chelsea,Leeds,0.3803177495456762,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-21|Chelsea|Leeds,,,,False,False,True,,False,0.0
+102,2026-11-21,Brentford,Everton,0.5571260922443996,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-21|Brentford|Everton,,,,False,True,False,,False,0.0
+101,2026-11-21,Bournemouth,Nott'm Forest,0.4772810140561511,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-21|Bournemouth|Nott'm Forest,,,,False,False,True,,False,0.0
+100,2026-11-21,Aston Villa,Sunderland,0.3829438853125732,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-21|Aston Villa|Sunderland,,,,False,False,True,,False,0.0
+99,2026-11-07,Sunderland,Chelsea,0.4971044183993035,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-07|Sunderland|Chelsea,,,,False,False,True,,False,0.0
+98,2026-11-07,Nott'm Forest,Man City,0.5031326306711661,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-07|Nott'm Forest|Man City,,,,False,True,False,,False,0.0
+97,2026-11-07,Man United,Aston Villa,0.5075632602507775,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-07|Man United|Aston Villa,,,,False,True,False,,False,0.0
+117,2026-11-28,Man United,Brentford,0.467219336823424,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-28|Man United|Brentford,,,,False,False,True,,False,0.0
+118,2026-11-28,Nott'm Forest,Chelsea,0.5572971626799426,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-28|Nott'm Forest|Chelsea,,,,False,True,False,,False,0.0
+119,2026-11-28,Sunderland,Tottenham,0.4049598604356245,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-11-28|Sunderland|Tottenham,,,,False,False,True,,False,0.0
+120,2026-12-02,Aston Villa,Everton,0.5044046000011831,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-02|Aston Villa|Everton,,,,False,True,False,,False,0.0
+139,2026-12-05,Tottenham,Arsenal,0.4606788099769808,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-05|Tottenham|Arsenal,,,,False,False,True,,False,0.0
+138,2026-12-05,Nott'm Forest,Brighton,0.4401915800040529,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-05|Nott'm Forest|Brighton,,,,False,False,True,,False,0.0
+137,2026-12-05,Newcastle,Sunderland,0.4340898294322788,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-05|Newcastle|Sunderland,,,,False,False,True,,False,0.0
+136,2026-12-05,Man United,Coventry City,0.431007314073648,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-05|Man United|Coventry City,,,,False,False,True,,False,0.0
+135,2026-12-05,Leeds,Ipswich Town,0.4666524544383665,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-05|Leeds|Ipswich Town,,,,False,False,True,,False,0.0
+134,2026-12-05,Everton,Fulham,0.5009250855391353,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-05|Everton|Fulham,,,,False,True,False,,False,0.0
+133,2026-12-05,Chelsea,Liverpool,0.5317953048820426,1,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-05|Chelsea|Liverpool,,,,False,True,False,,False,0.0
+132,2026-12-05,Brentford,Man City,0.4843696788471857,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-05|Brentford|Man City,,,,False,False,True,,False,0.0
+131,2026-12-05,Bournemouth,Hull City,0.4666524544383665,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-05|Bournemouth|Hull City,,,,False,False,True,,False,0.0
+130,2026-12-05,Aston Villa,Crystal Palace,0.4940368851029176,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-05|Aston Villa|Crystal Palace,,,,False,False,True,,False,0.0
+129,2026-12-02,Tottenham,Fulham,0.4387247303146666,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-02|Tottenham|Fulham,,,,False,False,True,,False,0.0
+128,2026-12-02,Newcastle,Man United,0.4580568352992177,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-02|Newcastle|Man United,,,,False,False,True,,False,0.0
+127,2026-12-02,Man City,Leeds,0.4303974588895665,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-02|Man City|Leeds,,,,False,False,True,,False,0.0
+126,2026-12-02,Liverpool,Sunderland,0.42524881636701,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-02|Liverpool|Sunderland,,,,False,False,True,,False,0.0
+125,2026-12-02,Hull City,Nott'm Forest,0.4901070357291853,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-02|Hull City|Nott'm Forest,,,,False,False,True,,False,0.0
+124,2026-12-02,Coventry City,Ipswich Town,0.4606264272505552,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-02|Coventry City|Ipswich Town,,,,False,False,True,,False,0.0
+123,2026-12-02,Chelsea,Crystal Palace,0.4950161660600871,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-02|Chelsea|Crystal Palace,,,,False,False,True,,False,0.0
+122,2026-12-02,Brentford,Arsenal,0.4953196745860591,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-02|Brentford|Arsenal,,,,False,False,True,,False,0.0
+121,2026-12-02,Bournemouth,Brighton,0.4401915800040529,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2026-12-02|Bournemouth|Brighton,,,,False,False,True,,False,0.0
+379,2027-05-30,Sunderland,Man City,0.4551932751559259,0,,0,2026-08-21 18:42:54.776856+00:00,predictions_20260821T184254.csv,2027-05-30|Sunderland|Man City,,,,False,False,True,,False,0.0
