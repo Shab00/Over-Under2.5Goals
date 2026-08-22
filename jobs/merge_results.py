@@ -13,7 +13,6 @@ def main():
         print("[merge_results] No archive directory found – nothing to merge.")
         sys.exit(0)
 
-    # 1. Load all archived prediction snapshots
     snapshots = []
     for f in sorted(ARCHIVE_DIR.glob("predictions_*.csv")):
         try:
@@ -57,15 +56,17 @@ def main():
 
     merged = pd.merge(latest_preds, results[["match_key", "FTR", "FTHG", "FTAG"]], on="match_key", how="left")
 
+    merged = merged[merged["FTR"].notna() & (merged["FTR"].astype(str).str.strip() != "")]
+
     if "prob_homewin" in merged.columns:
         merged["prob_homewin"] = pd.to_numeric(merged["prob_homewin"], errors="coerce")
     else:
-        merged["prob_homewin"] = merged.get("PHome", None)  # adjust if column name differs
+        merged["prob_homewin"] = merged.get("PHome", None)
 
     if "odds_B365H" in merged.columns:
         merged["odds_B365H"] = pd.to_numeric(merged["odds_B365H"], errors="coerce")
 
-    merged["FTR"] = merged["FTR"].str.strip()
+    merged["FTR"] = merged["FTR"].astype(str).str.strip()
     merged["home_win"] = merged["FTR"] == "H"
     merged["pred_win"] = merged["prob_homewin"] >= 0.5
     merged["correct"] = merged["home_win"] == merged["pred_win"]
