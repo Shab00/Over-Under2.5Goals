@@ -30,11 +30,15 @@ def main():
 
     if "generated_at" in all_preds.columns:
         all_preds["generated_at"] = pd.to_datetime(all_preds["generated_at"])
-        all_preds.sort_values("generated_at", ascending=False, inplace=True)
     else:
         all_preds["snapshot_ts"] = all_preds["snapshot_file"].str.extract(r"predictions_(\d{8}T\d{6})")
-        all_preds["snapshot_ts"] = pd.to_datetime(all_preds["snapshot_ts"], format="%Y%m%dT%H%M%S")
-        all_preds.sort_values("snapshot_ts", ascending=False, inplace=True)
+        all_preds["generated_at"] = pd.to_datetime(all_preds["snapshot_ts"], format="%Y%m%dT%H%M%S")
+
+    all_preds["kickoff_dt"] = pd.to_datetime(all_preds["kickoff_time_utc"])
+
+    all_preds = all_preds[all_preds["generated_at"] < all_preds["kickoff_dt"]].copy()
+
+    all_preds.sort_values("generated_at", ascending=False, inplace=True)
 
     if "home_team" in all_preds.columns and "away_team" in all_preds.columns:
         all_preds["match_key"] = all_preds["kickoff_time_utc"].str[:10] + "|" + all_preds["home_team"] + "|" + all_preds["away_team"]
