@@ -24,7 +24,17 @@ def main():
     for _, row in df.iterrows():
         try:
             kickoff_naive = pd.to_datetime(row["Date"])
-            kickoff_utc = kickoff_naive.tz_localize("UTC")
+
+            # Convert UK local time (Europe/London) to UTC
+            try:
+                import zoneinfo
+                uk_tz = zoneinfo.ZoneInfo("Europe/London")
+            except Exception:
+                import pytz
+                uk_tz = pytz.timezone("Europe/London")
+
+            kickoff_uk = kickoff_naive.tz_localize(uk_tz)
+            kickoff_utc = kickoff_uk.astimezone(datetime.timezone.utc)
         except Exception:
             continue
 
