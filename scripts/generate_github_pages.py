@@ -143,9 +143,9 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       color: var(--accent);
     }}
     .legend-items {{
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 0.6rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.5rem;
     }}
     .legend-item {{
       display: flex;
@@ -387,13 +387,14 @@ def build_legend_section():
 
 
 def get_model_accuracy(base_dir: Path) -> str:
-    """Read latest model accuracy from metadata files relative to predictor repo root."""
+    """Read latest model accuracy from train_report.json or metadata files."""
     train_report = base_dir / "artifacts" / "train_report.json"
     if train_report.exists():
         try:
             data = json.loads(train_report.read_text(encoding='utf-8'))
-            acc = data.get("accuracy")
-            f1 = data.get("f1")
+            metrics = data.get("metrics", {})
+            acc = metrics.get("accuracy")
+            f1 = metrics.get("f1")
             if acc is not None:
                 acc_str = f"{acc*100:.1f}%"
                 if f1 is not None:
@@ -408,8 +409,9 @@ def get_model_accuracy(base_dir: Path) -> str:
         for mf in metadata_files:
             try:
                 data = json.loads(mf.read_text(encoding='utf-8'))
-                acc = data.get("accuracy")
-                f1 = data.get("f1")
+                metrics = data.get("metrics", {})
+                acc = metrics.get("accuracy")
+                f1 = metrics.get("f1")
                 if acc is not None:
                     acc_str = f"{acc*100:.1f}%"
                     if f1 is not None:
