@@ -11,7 +11,6 @@ OUTPUT_DIR = Path("football")
 OUTPUT_FILE = OUTPUT_DIR / "index.html"
 TELEGRAM_CHANNEL_LINK = "https://t.me/HomeWinPrediction"
 PORTFOLIO_URL = "/"
-TRAIN_REPORT = Path("artifacts/train_report.json")
 
 # ---------- HTML TEMPLATE ----------
 PAGE_TEMPLATE = """<!DOCTYPE html>
@@ -143,21 +142,18 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       margin-bottom: 0.6rem;
       color: var(--accent);
     }}
-    .legend ul {{
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem 1.5rem;
+    .legend-items {{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.6rem 1.5rem;
     }}
-    .legend li {{
+    .legend-item {{
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       font-size: 0.85rem;
       color: var(--muted);
-    }}
-    .legend .value-badge,
-    .legend .over-badge,
-    .legend .today-badge,
-    .legend .locked-badge {{
-      margin-right: 0.3rem;
+      white-space: nowrap;
     }}
     .table-wrapper {{
       max-width: 100%;
@@ -172,10 +168,10 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       border-radius: 16px;
       overflow: hidden;
       box-shadow: var(--shadow);
-      min-width: 600px;
+      font-size: 0.9rem;
     }}
     th, td {{
-      padding: 0.9rem 1.2rem;
+      padding: 0.75rem 0.9rem;
       text-align: left;
       border-bottom: 1px solid var(--panel-border);
       white-space: nowrap;
@@ -186,13 +182,16 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       color: var(--accent);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }}
     td {{
       color: var(--text);
     }}
     .prob-cell {{
-      text-align: left;
+      text-align: right;
+    }}
+    .odds-cell {{
+      text-align: right;
     }}
     .no-upcoming {{
       color: var(--muted);
@@ -225,10 +224,9 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       border-radius: 8px;
       text-transform: uppercase;
       letter-spacing: 0.03em;
-      margin-left: 0.3rem;
       vertical-align: middle;
     }}
-    .over-badge {{
+    .fade-badge {{
       display: inline-block;
       background: #ef4444;
       color: #fff;
@@ -238,7 +236,6 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       border-radius: 8px;
       text-transform: uppercase;
       letter-spacing: 0.03em;
-      margin-left: 0.3rem;
       vertical-align: middle;
     }}
     .today-badge {{
@@ -297,8 +294,8 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
             <th>Home</th>
             <th>Away</th>
             <th class="prob-cell">P(Home Win)</th>
-            <th>Best Home Odds</th>
-            <th>Value</th>
+            <th class="odds-cell">Best Home Odds</th>
+            <th>Edge</th>
           </tr>
         </thead>
         <tbody>
@@ -319,8 +316,8 @@ ROW_HTML = """<tr>
   <td>{home}</td>
   <td>{away}</td>
   <td class="prob-cell {prob_class}">{prob_display}</td>
-  <td>{odds_display}</td>
-  <td>{value_badge}{over_badge}</td>
+  <td class="odds-cell">{odds_display}</td>
+  <td>{value_badge}{fade_badge}</td>
 </tr>"""
 
 
@@ -379,39 +376,57 @@ def format_kickoff(kickoff_dt):
 def build_legend_section():
     return """<div class="legend">
       <h3>Legend</h3>
-      <ul>
-        <li><span class="value-badge">VALUE</span> Model sees an edge vs odds</li>
-        <li><span class="over-badge">OVERPRICED</span> Home team overpriced by market</li>
-        <li><span class="today-badge">TODAY</span> Match takes place today</li>
-        <li><span class="locked-badge">FINAL</span> Kickoff within 1 hour</li>
-        <li><span style="color: var(--muted);">N/A</span> No odds available</li>
-      </ul>
+      <div class="legend-items">
+        <div class="legend-item"><span class="value-badge">VALUE</span> Model sees a positive edge</div>
+        <div class="legend-item"><span class="fade-badge">FADE</span> Home team likely overpriced</div>
+        <div class="legend-item"><span class="today-badge">TODAY</span> Match takes place today</div>
+        <div class="legend-item"><span class="locked-badge">FINAL</span> Kickoff within 1 hour</div>
+        <div class="legend-item"><span style="color: var(--muted);">N/A</span> No odds available</div>
+      </div>
     </div>"""
 
 
-def get_model_accuracy() -> str:
-    """Return a short accuracy string from train_report.json if available."""
-    if not TRAIN_REPORT.exists():
-        return ""
-    try:
-        data = json.loads(TRAIN_REPORT.read_text(encoding='utf-8'))
-        acc = data.get("accuracy")
-        f1 = data.get("f1")
-        if acc is not None:
-            acc_str = f"{acc*100:.1f}%"
-            if f1 is not None:
-                return f"Model training accuracy: {acc_str} · F1: {f1:.3f}"
-            return f"Model training accuracy: {acc_str}"
-    except Exception:
-        pass
-    return ""
+def get_model_accuracy(base_dir: Path) -> str:
+    """Read latest model accuracy from metadata files relative to predictor repo root."""
+    train_report = base_dir / "artifacts" / "train_report.json"
+    if train_report.exists():
+        try:
+            data = json.loads(train_report.read_text(encoding='utf-8'))
+            acc = data.get("accuracy")
+            f1 = data.get("f1")
+            if acc is not None:
+                acc_str = f"{acc*100:.1f}%"
+                if f1 is not None:
+                    return f"Model training accuracy: {acc_str} · F1: {f1:.3f}"
+                return f"Model training accuracy: {acc_str}"
+        except Exception:
+            pass
+
+    models_dir = base_dir / "models" / "weekly" / "homewin"
+    if models_dir.exists():
+        metadata_files = sorted(models_dir.glob("metadata_*.json"), reverse=True)
+        for mf in metadata_files:
+            try:
+                data = json.loads(mf.read_text(encoding='utf-8'))
+                acc = data.get("accuracy")
+                f1 = data.get("f1")
+                if acc is not None:
+                    acc_str = f"{acc*100:.1f}%"
+                    if f1 is not None:
+                        return f"Model training accuracy: {acc_str} · F1: {f1:.3f}"
+                    return f"Model training accuracy: {acc_str}"
+            except Exception:
+                continue
+
+    return "Model training accuracy: N/A"
 
 
 def build_performance_section(snapshot_path: Path) -> str:
-    accuracy_html = get_model_accuracy()
+    base_dir = snapshot_path.parent.parent  # predictor repo root
+    accuracy_html = get_model_accuracy(base_dir)
     accuracy_display = f'<div class="model-accuracy">{accuracy_html}</div>' if accuracy_html else ""
 
-    results_file = snapshot_path.parent.parent / "data" / "processed" / "results_merged.csv"
+    results_file = base_dir / "data" / "processed" / "results_merged.csv"
     if not results_file.exists():
         return f"""<div class="performance-tracker">
             <h2>Performance Tracker</h2>
@@ -495,6 +510,9 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
             if kickoff_dt is not None and kickoff_dt <= now_utc:
                 continue
 
+            if kickoff_dt is not None and kickoff_dt > now_utc + datetime.timedelta(days=7):
+                continue
+
             prob = None
             if prob_str:
                 try:
@@ -514,7 +532,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 prob_class = "prob-na"
                 odds_display = "N/A"
                 value_badge = ""
-                over_badge = ""
+                fade_badge = ""
             else:
                 if prob is not None:
                     prob_display = f"{prob:.2%}"
@@ -530,13 +548,14 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 odds_display = f"{odds:.2f}" if odds else "N/A"
 
                 value_badge = ""
-                over_badge = ""
+                fade_badge = ""
                 if prob is not None and odds and odds > 0:
                     implied_prob = 1.0 / odds
-                    if prob > implied_prob:
+                    diff = prob - implied_prob
+                    if diff > 0:
                         value_badge = '<span class="value-badge">VALUE</span>'
-                    elif prob < implied_prob - 0.10:   # home team overpriced by >10 percentage points
-                        over_badge = '<span class="over-badge">OVERPRICED</span>'
+                    elif diff < -0.15:
+                        fade_badge = '<span class="fade-badge">FADE</span>'
 
             badges = ""
             if kickoff_dt is not None:
@@ -558,7 +577,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 "prob_class": prob_class,
                 "odds_display": odds_display,
                 "value_badge": value_badge,
-                "over_badge": over_badge,
+                "fade_badge": fade_badge,
                 "kickoff_dt": kickoff_dt,
             })
 
@@ -580,7 +599,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 prob_class=r["prob_class"],
                 odds_display=r["odds_display"],
                 value_badge=r["value_badge"],
-                over_badge=r["over_badge"],
+                fade_badge=r["fade_badge"],
             )
             for r in rows_data
         )
