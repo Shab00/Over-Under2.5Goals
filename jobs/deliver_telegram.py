@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import requests
+from datetime import datetime, timezone
 
 PREDICTIONS_CSV = os.getenv("PREDICTIONS_CSV", "snapshots/predictions_latest.csv")
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -10,35 +11,44 @@ assert BOT_TOKEN, "TELEGRAM_BOT_TOKEN is required"
 assert CHAT_ID, "TELEGRAM_CHAT_ID is required"
 
 df = pd.read_csv(PREDICTIONS_CSV)
-
 df = df[df.get("is_predicted_fixture", 1) == 1]
 
 df = df[df["odds_B365H"].notna() & (df["odds_B365H"] > 0)]
 
+df["kickoff_dt"] = pd.to_datetime(df["kickoff_time_utc"])
+now_utc = datetime.now(timezone.utc)
+if df["kickoff_dt"].dt.tz is None:
+    df["kickoff_dt"] = df["kickoff_dt"].dt.tz_localize("UTC")
+df = df[df["kickoff_dt"] > now_utc]
+
 if df.empty:
-    print("[telegram-delivery] No matches with odds to deliver.")
+    print("[telegram-delivery] No upcoming matches with odds to deliver.")
     exit(0)
 
-lines = ["<b>⚽ EPL Home‑Win Predictions</b>\n"]
-value_count = 0
+lines = ["<b>EPL Home-Win Predictions</b>"]
+current_date = None
 
 for _, row in df.iterrows():
+    date = row["kickoff_time_utc"][:10]
+    if date != current_date:
+        current_date = date
+        lines.append("")
+        lines.append(f"<b>{date}</b>")
+
     prob = row["prob_homewin"]
     odds = row["odds_B365H"]
-    implied_prob = 1.0 / odds
-    value_mark = ""
+    implied = 1.0 / odds
+    tag = ""
 
-    if prob > implied_prob:
-        value_mark = "  ⭐ VALUE"
-        value_count += 1
+    if prob > implied:
+        tag = "  [VALUE]"
+    elif prob < implied - 0.15:
+        tag = "  [FADE]"
 
     lines.append(
-        f"{row['kickoff_time_utc'][:10]}: {row['home_team']} vs {row['away_team']}  "
-        f"P(Home)={prob:.2%}  Odds={odds:.2f}{value_mark}"
+        f"{row['home_team']} vs {row['away_team']}  |  "
+        f"Home: {prob:.1%}  |  Odds: {odds:.2f}{tag}"
     )
-
-if value_count > 0:
-    lines.append(f"\n💡 {value_count} value pick(s) found — matches where the model sees an edge.")
 
 message = "\n".join(lines)
 
