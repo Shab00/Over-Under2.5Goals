@@ -156,6 +156,12 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     td {{
       color: var(--text);
     }}
+    .no-upcoming {{
+      color: var(--muted);
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }}
     .prob-high {{
       color: #4ade80;
       font-weight: 700;
@@ -266,10 +272,51 @@ ROW_HTML = """<tr>
 </tr>"""
 
 
+def load_fixture_times(snapshot_path: Path):
+    """
+    Read the full fixture file (which includes kickoff time) and return a dict
+    mapping match_id -> datetime (UTC). If not available, return empty dict.
+    """
+    fixtures_path = snapshot_path.parent.parent / "data" / "processed" / "updated_fixtures_with_odds.csv"
+    if not fixtures_path.exists():
+        return {}
+
+    try:
+        import pandas as pd
+        df = pd.read_csv(fixtures_path, low_memory=False)
+        # Normalize column names
+        if "MatchId" not in df.columns and "match_id" in df.columns:
+            df["MatchId"] = df["match_id"]
+        if "Date" not in df.columns:
+            return {}
+        # Convert Date to datetime, assuming UK local time then to UTC
+        df["kickoff_utc"] = pd.to_datetime(df["Date"], errors="coerce")
+        # Try to localize to Europe/London then convert to UTC
+        try:
+            import zoneinfo
+            uk_tz = zoneinfo.ZoneInfo("Europe/London")
+            df["kickoff_utc"] = df["kickoff_utc"].dt.tz_localize(uk_tz, ambiguous="NaT", nonexistent="NaT")
+            df["kickoff_utc"] = df["kickoff_utc"].dt.tz_convert("UTC")
+        except Exception:
+            # fallback: assume UTC if no timezone
+            df["kickoff_utc"] = df["kickoff_utc"].dt.tz_localize("UTC")
+        # Build dict
+        times = {}
+        for _, row in df.iterrows():
+            if pd.notna(row.get("MatchId")) and pd.notna(row.get("kickoff_utc")):
+                times[str(row["MatchId"])] = row["kickoff_utc"].to_pydatetime()
+        return times
+    except Exception as e:
+        print(f"[generate_page] Warning: could not load fixture times: {e}")
+        return {}
+
+
 def generate_page(snapshot_path: Path, output_path: Path) -> None:
     if not snapshot_path.exists():
         print(f"Snapshot file not found: {snapshot_path}")
         sys.exit(1)
+
+    fixture_times = load_fixture_times(snapshot_path)
 
     now_utc = datetime.datetime.now(datetime.timezone.utc)
     today_utc = now_utc.date()
@@ -285,22 +332,22 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
             prob_str = row.get("prob_homewin", "").strip()
             odds_str = row.get("odds_B365H", "").strip()
             generated_str = row.get("generated_at", "").strip()
+            match_id = row.get("match_id", "").strip()
 
-            match_dt = None
-            if date_str:
-                try:
-                    match_dt = datetime.datetime.strptime(date_str, "%Y-%m-%d")
-                except ValueError:
-                    pass
+            kickoff_dt = fixture_times.get(match_id)
+            if kickoff_dt is None:
+                # Fallback to date only (may miss same-day time)
+                if date_str:
+                    try:
+                        kickoff_dt = datetime.datetime.strptime(date_str[:10], "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc)
+                    except ValueError:
+                        kickoff_dt = None
 
-            match_date = match_dt.date() if match_dt else None
-            is_today = match_date == today_utc if match_date else False
-            is_locked = False
-            if match_dt:
-                time_to_kickoff = match_dt.replace(tzinfo=datetime.timezone.utc) - now_utc
-                if datetime.timedelta(0) < time_to_kickoff <= datetime.timedelta(hours=1):
-                    is_locked = True
+            # Hide finished matches
+            if kickoff_dt is not None and kickoff_dt <= now_utc:
+                continue
 
+            # Parse probability and odds
             prob = None
             if prob_str:
                 try:
@@ -341,10 +388,13 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                         value_badge = '<span class="value-badge">VALUE</span>'
 
             badges = ""
-            if is_locked:
-                badges += ' <span class="locked-badge">FINAL</span>'
-            if is_today:
-                badges += ' <span class="today-badge">TODAY</span>'
+            if kickoff_dt is not None:
+                match_date = kickoff_dt.date()
+                if match_date == today_utc:
+                    badges += ' <span class="today-badge">TODAY</span>'
+                time_to_kickoff = kickoff_dt - now_utc
+                if datetime.timedelta(0) < time_to_kickoff <= datetime.timedelta(hours=1):
+                    badges += ' <span class="locked-badge">FINAL</span>'
 
             rows_data.append({
                 "date": date_str[:10] if date_str else "",
@@ -355,30 +405,34 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 "prob_class": prob_class,
                 "odds_display": odds_display,
                 "value_badge": value_badge,
-                "match_date_obj": match_date,
+                "kickoff_dt": kickoff_dt,
             })
 
             if not last_generated and generated_str:
                 last_generated = generated_str
 
-    rows_data.sort(key=lambda x: x["match_date_obj"] or datetime.date.min)
+    rows_data.sort(key=lambda x: x["kickoff_dt"] or datetime.datetime.max.replace(tzinfo=datetime.timezone.utc))
 
-    html_rows = "\n".join(
-        ROW_HTML.format(
-            date=r["date"],
-            badges=r["badges"],
-            home=r["home"],
-            away=r["away"],
-            prob_display=r["prob_display"],
-            prob_class=r["prob_class"],
-            odds_display=r["odds_display"],
-            value_badge=r["value_badge"],
+    if not rows_data:
+        html_rows = '<tr><td colspan="6" class="no-upcoming">No upcoming fixtures – next predictions will appear closer to the next matchday.</td></tr>'
+    else:
+        html_rows = "\n".join(
+            ROW_HTML.format(
+                date=r["date"],
+                badges=r["badges"],
+                home=r["home"],
+                away=r["away"],
+                prob_display=r["prob_display"],
+                prob_class=r["prob_class"],
+                odds_display=r["odds_display"],
+                value_badge=r["value_badge"],
+            )
+            for r in rows_data
         )
-        for r in rows_data
-    )
 
     performance_html = build_performance_section(snapshot_path)
 
+    # ---- UK local time ----
     if last_generated:
         try:
             dt_utc = datetime.datetime.fromisoformat(last_generated)
