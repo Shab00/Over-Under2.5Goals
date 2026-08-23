@@ -275,40 +275,47 @@ ROW_HTML = """<tr>
 def load_fixture_times(snapshot_path: Path):
     """
     Read the full fixture file (which includes kickoff time) and return a dict
-    mapping match_id -> datetime (UTC). If not available, return empty dict.
+    mapping (date|home|away) -> datetime (UTC).
     """
     fixtures_path = snapshot_path.parent.parent / "data" / "processed" / "updated_fixtures_with_odds.csv"
     if not fixtures_path.exists():
         return {}
 
+    times = {}
     try:
-        import pandas as pd
-        df = pd.read_csv(fixtures_path, low_memory=False)
-        # Normalize column names
-        if "MatchId" not in df.columns and "match_id" in df.columns:
-            df["MatchId"] = df["match_id"]
-        if "Date" not in df.columns:
-            return {}
-        # Convert Date to datetime, assuming UK local time then to UTC
-        df["kickoff_utc"] = pd.to_datetime(df["Date"], errors="coerce")
-        # Try to localize to Europe/London then convert to UTC
-        try:
-            import zoneinfo
-            uk_tz = zoneinfo.ZoneInfo("Europe/London")
-            df["kickoff_utc"] = df["kickoff_utc"].dt.tz_localize(uk_tz, ambiguous="NaT", nonexistent="NaT")
-            df["kickoff_utc"] = df["kickoff_utc"].dt.tz_convert("UTC")
-        except Exception:
-            # fallback: assume UTC if no timezone
-            df["kickoff_utc"] = df["kickoff_utc"].dt.tz_localize("UTC")
-        # Build dict
-        times = {}
-        for _, row in df.iterrows():
-            if pd.notna(row.get("MatchId")) and pd.notna(row.get("kickoff_utc")):
-                times[str(row["MatchId"])] = row["kickoff_utc"].to_pydatetime()
-        return times
+        with open(fixtures_path, newline='', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                date_raw = row.get("Date", "").strip()
+                home = row.get("HomeTeam", "").strip()
+                away = row.get("AwayTeam", "").strip()
+                if not date_raw or not home or not away:
+                    continue
+
+                try:
+                    kickoff_naive = datetime.datetime.strptime(date_raw, "%Y-%m-%d %H:%M:%S")
+                except ValueError:
+                    kickoff_naive = datetime.datetime.strptime(date_raw[:10], "%Y-%m-%d")
+
+                # Convert UK local time (Europe/London) to UTC
+                try:
+                    import zoneinfo
+                    uk_tz = zoneinfo.ZoneInfo("Europe/London")
+                    # zoneinfo does not have localize method; use replace for naive
+                    kickoff_uk = kickoff_naive.replace(tzinfo=uk_tz)
+                except Exception:
+                    import pytz
+                    uk_tz = pytz.timezone("Europe/London")
+                    kickoff_uk = uk_tz.localize(kickoff_naive)
+
+                kickoff_utc = kickoff_uk.astimezone(datetime.timezone.utc)
+
+                key = f"{date_raw[:10]}|{home}|{away}"
+                times[key] = kickoff_utc
     except Exception as e:
         print(f"[generate_page] Warning: could not load fixture times: {e}")
-        return {}
+
+    return times
 
 
 def generate_page(snapshot_path: Path, output_path: Path) -> None:
@@ -332,18 +339,19 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
             prob_str = row.get("prob_homewin", "").strip()
             odds_str = row.get("odds_B365H", "").strip()
             generated_str = row.get("generated_at", "").strip()
-            match_id = row.get("match_id", "").strip()
 
-            kickoff_dt = fixture_times.get(match_id)
-            if kickoff_dt is None:
-                # Fallback to date only (may miss same-day time)
-                if date_str:
-                    try:
-                        kickoff_dt = datetime.datetime.strptime(date_str[:10], "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc)
-                    except ValueError:
-                        kickoff_dt = None
+            # Build the same key used in fixture_times
+            match_key = f"{date_str[:10]}|{home}|{away}"
+            kickoff_dt = fixture_times.get(match_key)
 
-            # Hide finished matches
+            # Fallback: if not found in fixtures, use date only
+            if kickoff_dt is None and date_str:
+                try:
+                    kickoff_dt = datetime.datetime.strptime(date_str[:10], "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc)
+                except ValueError:
+                    kickoff_dt = None
+
+            # Hide finished matches (started before now)
             if kickoff_dt is not None and kickoff_dt <= now_utc:
                 continue
 
