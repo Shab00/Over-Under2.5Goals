@@ -241,7 +241,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       <table class="predictions-table">
         <thead>
           <tr>
-            <th>Date</th>
+            <th>Kickoff (UK)</th>
             <th>Home</th>
             <th>Away</th>
             <th>P(Home Win)</th>
@@ -301,7 +301,6 @@ def load_fixture_times(snapshot_path: Path):
                 try:
                     import zoneinfo
                     uk_tz = zoneinfo.ZoneInfo("Europe/London")
-                    # zoneinfo does not have localize method; use replace for naive
                     kickoff_uk = kickoff_naive.replace(tzinfo=uk_tz)
                 except Exception:
                     import pytz
@@ -316,6 +315,20 @@ def load_fixture_times(snapshot_path: Path):
         print(f"[generate_page] Warning: could not load fixture times: {e}")
 
     return times
+
+
+def format_kickoff(kickoff_dt):
+    """Return a human-friendly UK local time string."""
+    if not kickoff_dt:
+        return ""
+    try:
+        import zoneinfo
+        uk_tz = zoneinfo.ZoneInfo("Europe/London")
+    except Exception:
+        import pytz
+        uk_tz = pytz.timezone("Europe/London")
+    local = kickoff_dt.astimezone(uk_tz)
+    return local.strftime("%a %d %b %H:%M")
 
 
 def generate_page(snapshot_path: Path, output_path: Path) -> None:
@@ -404,8 +417,10 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 if datetime.timedelta(0) < time_to_kickoff <= datetime.timedelta(hours=1):
                     badges += ' <span class="locked-badge">FINAL</span>'
 
+            kickoff_display = format_kickoff(kickoff_dt) if kickoff_dt else date_str[:10]
+
             rows_data.append({
-                "date": date_str[:10] if date_str else "",
+                "date": kickoff_display,
                 "badges": badges,
                 "home": home,
                 "away": away,
