@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import csv
 import datetime
+import json
 from pathlib import Path
 import sys
 
@@ -10,6 +11,7 @@ OUTPUT_DIR = Path("football")
 OUTPUT_FILE = OUTPUT_DIR / "index.html"
 TELEGRAM_CHANNEL_LINK = "https://t.me/HomeWinPrediction"
 PORTFOLIO_URL = "/"
+TRAIN_REPORT = Path("artifacts/train_report.json")
 
 # ---------- HTML TEMPLATE ----------
 PAGE_TEMPLATE = """<!DOCTYPE html>
@@ -124,6 +126,39 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     .performance-stat strong {{
       color: var(--accent);
     }}
+    .model-accuracy {{
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }}
+    .legend {{
+      background: rgba(17,24,39,0.7);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.5rem;
+    }}
+    .legend h3 {{
+      font-size: 0.9rem;
+      margin-bottom: 0.6rem;
+      color: var(--accent);
+    }}
+    .legend ul {{
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 1.5rem;
+    }}
+    .legend li {{
+      font-size: 0.85rem;
+      color: var(--muted);
+    }}
+    .legend .value-badge,
+    .legend .over-badge,
+    .legend .today-badge,
+    .legend .locked-badge {{
+      margin-right: 0.3rem;
+    }}
     .table-wrapper {{
       max-width: 100%;
       overflow-x: auto;
@@ -156,6 +191,9 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     td {{
       color: var(--text);
     }}
+    .prob-cell {{
+      text-align: left;
+    }}
     .no-upcoming {{
       color: var(--muted);
       font-style: italic;
@@ -181,6 +219,19 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       display: inline-block;
       background: #fbbf24;
       color: #000;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-left: 0.3rem;
+      vertical-align: middle;
+    }}
+    .over-badge {{
+      display: inline-block;
+      background: #ef4444;
+      color: #fff;
       font-size: 0.7rem;
       font-weight: 700;
       padding: 0.15rem 0.45rem;
@@ -236,6 +287,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       </div>
       <a class="back-button" href="{portfolio_url}">← Back to Portfolio</a>
     </div>
+    {legend_section}
     {performance_section}
     <div class="table-wrapper">
       <table class="predictions-table">
@@ -244,7 +296,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
             <th>Kickoff (UK)</th>
             <th>Home</th>
             <th>Away</th>
-            <th>P(Home Win)</th>
+            <th class="prob-cell">P(Home Win)</th>
             <th>Best Home Odds</th>
             <th>Value</th>
           </tr>
@@ -266,17 +318,13 @@ ROW_HTML = """<tr>
   <td>{date}{badges}</td>
   <td>{home}</td>
   <td>{away}</td>
-  <td class="{prob_class}">{prob_display}</td>
+  <td class="prob-cell {prob_class}">{prob_display}</td>
   <td>{odds_display}</td>
-  <td>{value_badge}</td>
+  <td>{value_badge}{over_badge}</td>
 </tr>"""
 
 
 def load_fixture_times(snapshot_path: Path):
-    """
-    Read the full fixture file (which includes kickoff time) and return a dict
-    mapping (date|home|away) -> datetime (UTC).
-    """
     fixtures_path = snapshot_path.parent.parent / "data" / "processed" / "updated_fixtures_with_odds.csv"
     if not fixtures_path.exists():
         return {}
@@ -297,7 +345,6 @@ def load_fixture_times(snapshot_path: Path):
                 except ValueError:
                     kickoff_naive = datetime.datetime.strptime(date_raw[:10], "%Y-%m-%d")
 
-                # Convert UK local time (Europe/London) to UTC
                 try:
                     import zoneinfo
                     uk_tz = zoneinfo.ZoneInfo("Europe/London")
@@ -308,7 +355,6 @@ def load_fixture_times(snapshot_path: Path):
                     kickoff_uk = uk_tz.localize(kickoff_naive)
 
                 kickoff_utc = kickoff_uk.astimezone(datetime.timezone.utc)
-
                 key = f"{date_raw[:10]}|{home}|{away}"
                 times[key] = kickoff_utc
     except Exception as e:
@@ -318,7 +364,6 @@ def load_fixture_times(snapshot_path: Path):
 
 
 def format_kickoff(kickoff_dt):
-    """Return a human-friendly UK local time string."""
     if not kickoff_dt:
         return ""
     try:
@@ -329,6 +374,91 @@ def format_kickoff(kickoff_dt):
         uk_tz = pytz.timezone("Europe/London")
     local = kickoff_dt.astimezone(uk_tz)
     return local.strftime("%a %d %b %H:%M")
+
+
+def build_legend_section():
+    return """<div class="legend">
+      <h3>Legend</h3>
+      <ul>
+        <li><span class="value-badge">VALUE</span> Model sees an edge vs odds</li>
+        <li><span class="over-badge">OVERPRICED</span> Home team overpriced by market</li>
+        <li><span class="today-badge">TODAY</span> Match takes place today</li>
+        <li><span class="locked-badge">FINAL</span> Kickoff within 1 hour</li>
+        <li><span style="color: var(--muted);">N/A</span> No odds available</li>
+      </ul>
+    </div>"""
+
+
+def get_model_accuracy() -> str:
+    """Return a short accuracy string from train_report.json if available."""
+    if not TRAIN_REPORT.exists():
+        return ""
+    try:
+        data = json.loads(TRAIN_REPORT.read_text(encoding='utf-8'))
+        acc = data.get("accuracy")
+        f1 = data.get("f1")
+        if acc is not None:
+            acc_str = f"{acc*100:.1f}%"
+            if f1 is not None:
+                return f"Model training accuracy: {acc_str} · F1: {f1:.3f}"
+            return f"Model training accuracy: {acc_str}"
+    except Exception:
+        pass
+    return ""
+
+
+def build_performance_section(snapshot_path: Path) -> str:
+    accuracy_html = get_model_accuracy()
+    accuracy_display = f'<div class="model-accuracy">{accuracy_html}</div>' if accuracy_html else ""
+
+    results_file = snapshot_path.parent.parent / "data" / "processed" / "results_merged.csv"
+    if not results_file.exists():
+        return f"""<div class="performance-tracker">
+            <h2>Performance Tracker</h2>
+            <p style="color: var(--muted);">Season starts 21 August – tracking will begin automatically once matches are played.</p>
+            {accuracy_display}
+        </div>"""
+
+    try:
+        rows = []
+        with open(results_file, newline='', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                rows.append(row)
+
+        if not rows:
+            return f"""<div class="performance-tracker">
+                <h2>Performance Tracker</h2>
+                <p style="color: var(--muted);">No results yet – check back after the first matchday.</p>
+                {accuracy_display}
+            </div>"""
+
+        total = len(rows)
+        correct = sum(1 for r in rows if r.get("correct", "").strip().lower() == "true")
+        accuracy = correct / total if total > 0 else 0
+
+        value_bets = [r for r in rows if r.get("is_value", "").strip().lower() == "true"]
+        value_total = len(value_bets)
+        value_correct = sum(1 for r in value_bets if r.get("correct", "").strip().lower() == "true")
+        value_accuracy = value_correct / value_total if value_total > 0 else 0
+        total_profit = sum(float(r.get("profit", 0)) for r in value_bets)
+
+        return f"""<div class="performance-tracker">
+            <h2>Performance Tracker</h2>
+            <div class="performance-summary">
+                <div class="performance-stat"><strong>Overall Accuracy:</strong> {accuracy:.1%} ({correct}/{total})</div>
+                <div class="performance-stat"><strong>Value Bets:</strong> {value_total} picks</div>
+                <div class="performance-stat"><strong>Value Accuracy:</strong> {value_accuracy:.1%} ({value_correct}/{value_total})</div>
+                <div class="performance-stat"><strong>Value Profit:</strong> {total_profit:+.2f} units</div>
+            </div>
+            {accuracy_display}
+        </div>"""
+    except Exception as e:
+        return f"""<div class="performance-tracker">
+            <h2>Performance Tracker</h2>
+            <p style="color: var(--muted);">Error processing results: {e}</p>
+            {accuracy_display}
+        </div>"""
 
 
 def generate_page(snapshot_path: Path, output_path: Path) -> None:
@@ -353,22 +483,18 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
             odds_str = row.get("odds_B365H", "").strip()
             generated_str = row.get("generated_at", "").strip()
 
-            # Build the same key used in fixture_times
             match_key = f"{date_str[:10]}|{home}|{away}"
             kickoff_dt = fixture_times.get(match_key)
 
-            # Fallback: if not found in fixtures, use date only
             if kickoff_dt is None and date_str:
                 try:
                     kickoff_dt = datetime.datetime.strptime(date_str[:10], "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc)
                 except ValueError:
                     kickoff_dt = None
 
-            # Hide finished matches (started before now)
             if kickoff_dt is not None and kickoff_dt <= now_utc:
                 continue
 
-            # Parse probability and odds
             prob = None
             if prob_str:
                 try:
@@ -388,6 +514,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 prob_class = "prob-na"
                 odds_display = "N/A"
                 value_badge = ""
+                over_badge = ""
             else:
                 if prob is not None:
                     prob_display = f"{prob:.2%}"
@@ -403,10 +530,13 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 odds_display = f"{odds:.2f}" if odds else "N/A"
 
                 value_badge = ""
+                over_badge = ""
                 if prob is not None and odds and odds > 0:
                     implied_prob = 1.0 / odds
                     if prob > implied_prob:
                         value_badge = '<span class="value-badge">VALUE</span>'
+                    elif prob < implied_prob - 0.10:   # home team overpriced by >10 percentage points
+                        over_badge = '<span class="over-badge">OVERPRICED</span>'
 
             badges = ""
             if kickoff_dt is not None:
@@ -428,6 +558,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 "prob_class": prob_class,
                 "odds_display": odds_display,
                 "value_badge": value_badge,
+                "over_badge": over_badge,
                 "kickoff_dt": kickoff_dt,
             })
 
@@ -449,13 +580,14 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 prob_class=r["prob_class"],
                 odds_display=r["odds_display"],
                 value_badge=r["value_badge"],
+                over_badge=r["over_badge"],
             )
             for r in rows_data
         )
 
     performance_html = build_performance_section(snapshot_path)
+    legend_html = build_legend_section()
 
-    # ---- UK local time ----
     if last_generated:
         try:
             dt_utc = datetime.datetime.fromisoformat(last_generated)
@@ -485,6 +617,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
         last_updated=last_updated,
         telegram_link=TELEGRAM_CHANNEL_LINK,
         portfolio_url=PORTFOLIO_URL,
+        legend_section=legend_html,
         performance_section=performance_html,
         rows=html_rows,
     )
@@ -492,65 +625,6 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html, encoding='utf-8')
     print(f"Page generated: {output_path}")
-
-
-def build_performance_section(snapshot_path: Path) -> str:
-    """
-    Build the HTML for the performance tracker.
-    Uses only standard-library csv so no extra dependencies are needed.
-    """
-    results_file = snapshot_path.parent.parent / "data" / "processed" / "results_merged.csv"
-
-    if not results_file.exists():
-        return """<div class="performance-tracker">
-            <h2>Performance Tracker</h2>
-            <p style="color: var(--muted);">Season starts 21 August – tracking will begin automatically once matches are played.</p>
-        </div>"""
-
-    try:
-        rows = []
-        with open(results_file, newline='', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                rows.append(row)
-
-        if not rows:
-            return """<div class="performance-tracker">
-                <h2>Performance Tracker</h2>
-                <p style="color: var(--muted);">No results yet – check back after the first matchday.</p>
-            </div>"""
-
-        total = len(rows)
-        correct = sum(1 for r in rows if r.get("correct", "").strip().lower() == "true")
-        accuracy = correct / total if total > 0 else 0
-
-        value_bets = [r for r in rows if r.get("is_value", "").strip().lower() == "true"]
-        value_total = len(value_bets)
-        value_correct = sum(1 for r in value_bets if r.get("correct", "").strip().lower() == "true")
-        value_accuracy = value_correct / value_total if value_total > 0 else 0
-
-        total_profit = 0.0
-        for r in value_bets:
-            try:
-                profit = float(r.get("profit", 0))
-            except (ValueError, TypeError):
-                profit = 0.0
-            total_profit += profit
-
-        return f"""<div class="performance-tracker">
-            <h2>Performance Tracker</h2>
-            <div class="performance-summary">
-                <div class="performance-stat"><strong>Overall Accuracy:</strong> {accuracy:.1%} ({correct}/{total})</div>
-                <div class="performance-stat"><strong>Value Bets:</strong> {value_total} picks</div>
-                <div class="performance-stat"><strong>Value Accuracy:</strong> {value_accuracy:.1%} ({value_correct}/{value_total})</div>
-                <div class="performance-stat"><strong>Value Profit:</strong> {total_profit:+.2f} units</div>
-            </div>
-        </div>"""
-    except Exception as e:
-        return f"""<div class="performance-tracker">
-            <h2>Performance Tracker</h2>
-            <p style="color: var(--muted);">Error processing results: {e}</p>
-        </div>"""
 
 
 if __name__ == "__main__":
