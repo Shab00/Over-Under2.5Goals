@@ -1,35 +1,96 @@
 import os
 import pandas as pd
 import requests
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
 
 PREDICTIONS_CSV = os.getenv("PREDICTIONS_CSV", "snapshots/predictions_latest.csv")
+FIXTURES_CSV = Path("data/processed/updated_fixtures_with_odds.csv")
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 assert BOT_TOKEN, "TELEGRAM_BOT_TOKEN is required"
 assert CHAT_ID, "TELEGRAM_CHAT_ID is required"
 
+# ------------------------------------------------------------
+# 1. Load actual kickoff times from fixtures file (like page gen)
+# ------------------------------------------------------------
+def load_fixture_times():
+    if not FIXTURES_CSV.exists():
+        return {}
+    times = {}
+    try:
+        with open(FIXTURES_CSV, newline='', encoding='utf-8') as f:
+            reader = pd.read_csv(FIXTURES_CSV, low_memory=False)
+            for _, row in reader.iterrows():
+                date_raw = str(row.get("Date", "")).strip()
+                home = str(row.get("HomeTeam", "")).strip()
+                away = str(row.get("AwayTeam", "")).strip()
+                if not date_raw or not home or not away:
+                    continue
+                try:
+                    kickoff_naive = pd.to_datetime(date_raw, errors="coerce")
+                    if pd.isna(kickoff_naive):
+                        continue
+                    # Convert UK local time to UTC
+                    try:
+                        import zoneinfo
+                        uk_tz = zoneinfo.ZoneInfo("Europe/London")
+                        kickoff_uk = kickoff_naive.tz_localize(uk_tz)
+                    except Exception:
+                        import pytz
+                        uk_tz = pytz.timezone("Europe/London")
+                        kickoff_uk = uk_tz.localize(kickoff_naive.to_pydatetime())
+                    kickoff_utc = kickoff_uk.astimezone(timezone.utc)
+                except Exception:
+                    # fallback: treat as UTC
+                    kickoff_utc = kickoff_naive.tz_localize("UTC")
+                key = f"{date_raw[:10]}|{home}|{away}"
+                times[key] = kickoff_utc
+    except Exception as e:
+        print(f"[telegram-delivery] Warning: could not load fixture times: {e}")
+    return times
+
+fixture_times = load_fixture_times()
+
+# ------------------------------------------------------------
+# 2. Load predictions
+# ------------------------------------------------------------
 df = pd.read_csv(PREDICTIONS_CSV)
 df = df[df.get("is_predicted_fixture", 1) == 1]
-
 df = df[df["odds_B365H"].notna() & (df["odds_B365H"] > 0)]
 
-df["kickoff_dt"] = pd.to_datetime(df["kickoff_time_utc"])
+# Add real kickoff time if available, else fallback to date (may be midnight)
+df["kickoff_dt"] = df.apply(
+    lambda row: fixture_times.get(
+        f"{str(row['kickoff_time_utc'])[:10]}|{row['home_team']}|{row['away_team']}"
+    ),
+    axis=1
+)
+
+# Fallback for any missing
 now_utc = datetime.now(timezone.utc)
-if df["kickoff_dt"].dt.tz is None:
-    df["kickoff_dt"] = df["kickoff_dt"].dt.tz_localize("UTC")
+mask_missing = df["kickoff_dt"].isna()
+if mask_missing.any():
+    df.loc[mask_missing, "kickoff_dt"] = pd.to_datetime(
+        df.loc[mask_missing, "kickoff_time_utc"].str[:10]
+    ).dt.tz_localize("UTC")
+
+# Keep only future matches
 df = df[df["kickoff_dt"] > now_utc]
 
 if df.empty:
     print("[telegram-delivery] No upcoming matches with odds to deliver.")
     exit(0)
 
+# ------------------------------------------------------------
+# 3. Build message
+# ------------------------------------------------------------
 lines = ["<b>EPL Home-Win Predictions</b>"]
 current_date = None
 
 for _, row in df.iterrows():
-    date = row["kickoff_time_utc"][:10]
+    date = str(row["kickoff_time_utc"])[:10]
     if date != current_date:
         current_date = date
         lines.append("")
@@ -52,6 +113,9 @@ for _, row in df.iterrows():
 
 message = "\n".join(lines)
 
+# ------------------------------------------------------------
+# 4. Send to Telegram
+# ------------------------------------------------------------
 send_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 resp = requests.post(send_url, data={
     "chat_id": CHAT_ID,
