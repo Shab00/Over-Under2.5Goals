@@ -193,6 +193,11 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     .odds-cell {{
       text-align: right;
     }}
+    .score-cell,
+    .actual-cell,
+    .correct-cell {{
+      text-align: right;
+    }}
     .no-upcoming {{
       color: var(--muted);
       font-style: italic;
@@ -258,6 +263,14 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       margin-left: 0.5rem;
       vertical-align: middle;
     }}
+    .correct-yes {{
+      color: #4ade80;
+      font-weight: 700;
+    }}
+    .correct-no {{
+      color: #f87171;
+      font-weight: 700;
+    }}
     .footer {{
       margin-top: 2rem;
       color: var(--muted);
@@ -286,6 +299,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     </div>
     {legend_section}
     {performance_section}
+    {results_section}
     <div class="table-wrapper">
       <table class="predictions-table">
         <thead>
@@ -318,6 +332,17 @@ ROW_HTML = """<tr>
   <td class="prob-cell {prob_class}">{prob_display}</td>
   <td class="odds-cell">{odds_display}</td>
   <td>{value_badge}{fade_badge}</td>
+</tr>"""
+
+RESULT_ROW_HTML = """<tr>
+  <td>{date}</td>
+  <td>{home}</td>
+  <td>{away}</td>
+  <td class="score-cell">{score}</td>
+  <td>{predicted}</td>
+  <td class="actual-cell">{actual}</td>
+  <td class="correct-cell {correct_class}">{correct_text}</td>
+  <td>{value_badge}</td>
 </tr>"""
 
 
@@ -387,7 +412,6 @@ def build_legend_section():
 
 
 def get_model_accuracy(base_dir: Path) -> str:
-    """Read latest model accuracy from train_report.json or metadata files."""
     train_report = base_dir / "artifacts" / "train_report.json"
     if train_report.exists():
         try:
@@ -424,7 +448,7 @@ def get_model_accuracy(base_dir: Path) -> str:
 
 
 def build_performance_section(snapshot_path: Path) -> str:
-    base_dir = snapshot_path.parent.parent  # predictor repo root
+    base_dir = snapshot_path.parent.parent
     accuracy_html = get_model_accuracy(base_dir)
     accuracy_display = f'<div class="model-accuracy">{accuracy_html}</div>' if accuracy_html else ""
 
@@ -480,6 +504,95 @@ def build_performance_section(snapshot_path: Path) -> str:
             <h2>Performance Tracker</h2>
             <p style="color: var(--muted);">Error processing results: {e}</p>
             {accuracy_display}
+        </div>"""
+
+
+def build_results_section(snapshot_path: Path) -> str:
+    base_dir = snapshot_path.parent.parent
+    results_file = base_dir / "data" / "processed" / "results_merged.csv"
+
+    if not results_file.exists():
+        return ""
+
+    try:
+        rows = []
+        with open(results_file, newline='', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                rows.append(row)
+
+        if not rows:
+            return ""
+
+        rows.sort(key=lambda r: r.get("kickoff_time_utc", ""), reverse=True)
+        recent = rows[:10]
+
+        def format_score(val):
+            try:
+                return str(int(float(val)))
+            except (ValueError, TypeError):
+                return '?'
+
+        result_rows = []
+        for r in recent:
+            date = r.get("kickoff_time_utc", "")[:10]
+            home = r.get("home_team", "")
+            away = r.get("away_team", "")
+            score = f"{format_score(r.get('FTHG'))}-{format_score(r.get('FTAG'))}"
+            predicted = "Home" if r.get("pred_win", "").strip().lower() == "true" else "Not Home"
+            actual = r.get("FTR", "")
+            correct_val = r.get("correct", "").strip().lower()
+            if correct_val == "true":
+                correct_class = "correct-yes"
+                correct_text = "Yes"
+            else:
+                correct_class = "correct-no"
+                correct_text = "No"
+
+            value_badge = ""
+            if r.get("is_value", "").strip().lower() == "true":
+                value_badge = '<span class="value-badge">VALUE</span>'
+
+            result_rows.append(RESULT_ROW_HTML.format(
+                date=date,
+                home=home,
+                away=away,
+                score=score,
+                predicted=predicted,
+                actual=actual,
+                correct_class=correct_class,
+                correct_text=correct_text,
+                value_badge=value_badge,
+            ))
+
+        table_html = f"""
+        <div class="performance-tracker">
+            <h2>Recent Results</h2>
+            <div class="table-wrapper">
+                <table class="predictions-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Home</th>
+                            <th>Away</th>
+                            <th class="score-cell">Score</th>
+                            <th>Predicted</th>
+                            <th class="actual-cell">Actual</th>
+                            <th class="correct-cell">Correct?</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {''.join(result_rows)}
+                    </tbody>
+                </table>
+            </div>
+        </div>"""
+        return table_html
+    except Exception as e:
+        return f"""<div class="performance-tracker">
+            <h2>Recent Results</h2>
+            <p style="color: var(--muted);">Error loading results: {e}</p>
         </div>"""
 
 
@@ -612,6 +725,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
         )
 
     performance_html = build_performance_section(snapshot_path)
+    results_html = build_results_section(snapshot_path)
     legend_html = build_legend_section()
 
     if last_generated:
@@ -645,6 +759,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
         portfolio_url=PORTFOLIO_URL,
         legend_section=legend_html,
         performance_section=performance_html,
+        results_section=results_html,
         rows=html_rows,
     )
 
