@@ -13,8 +13,8 @@ import pandas as pd
 import requests
 import sys
 
-# Change with site has new Season up.
-EPL_2526_URL = "https://www.football-data.co.uk/mmz4281/2526/E0.csv"
+# Updated to 2026-27 season URL
+EPL_2627_URL = "https://www.football-data.co.uk/mmz4281/2627/E0.csv"
 
 
 @dataclass(frozen=True)
@@ -148,14 +148,14 @@ def backup_file(path: Path) -> Path:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--url", default=EPL_2526_URL)
+    ap.add_argument("--url", default=EPL_2627_URL)
     ap.add_argument("--input-combined-csv", default="data/processed/combinedWithOdds.csv")
     ap.add_argument(
         "--output-combined-csv",
         default="data/processed/combinedWithOdds.upserted.csv",
         help="Staged output combined CSV (ignored when --in-place is set)",
     )
-    ap.add_argument("--raw-csv", default="data/raw/football_data/E0_2526.csv")
+    ap.add_argument("--raw-csv", default="data/raw/football_data/E0_2627.csv")
     ap.add_argument("--fixtures-csv", default="data/processed/fixtures_next7d.csv")
     ap.add_argument("--days", type=int, default=7)
     ap.add_argument("--no-download", action="store_true")
