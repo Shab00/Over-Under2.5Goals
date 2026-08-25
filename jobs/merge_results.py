@@ -29,12 +29,12 @@ def main():
     all_preds = pd.concat(snapshots, ignore_index=True)
 
     if "generated_at" in all_preds.columns:
-        all_preds["generated_at"] = pd.to_datetime(all_preds["generated_at"])
+        all_preds["generated_at"] = pd.to_datetime(all_preds["generated_at"], utc=True)
     else:
         all_preds["snapshot_ts"] = all_preds["snapshot_file"].str.extract(r"predictions_(\d{8}T\d{6})")
-        all_preds["generated_at"] = pd.to_datetime(all_preds["snapshot_ts"], format="%Y%m%dT%H%M%S")
+        all_preds["generated_at"] = pd.to_datetime(all_preds["snapshot_ts"], format="%Y%m%dT%H%M%S", utc=True)
 
-    all_preds["kickoff_dt"] = pd.to_datetime(all_preds["kickoff_time_utc"])
+    all_preds["kickoff_dt"] = pd.to_datetime(all_preds["kickoff_time_utc"]).dt.tz_localize("UTC")
 
     all_preds = all_preds[all_preds["generated_at"] < all_preds["kickoff_dt"]].copy()
 
