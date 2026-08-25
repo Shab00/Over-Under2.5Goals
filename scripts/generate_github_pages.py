@@ -456,7 +456,12 @@ def build_performance_section(snapshot_path: Path) -> str:
 
         value_bets = [r for r in rows if r.get("is_value", "").strip().lower() == "true"]
         value_total = len(value_bets)
-        value_correct = sum(1 for r in value_bets if r.get("correct", "").strip().lower() == "true")
+
+        if value_bets and "value_correct" in value_bets[0]:
+            value_correct = sum(1 for r in value_bets if str(r.get("value_correct", "")).strip().lower() == "true")
+        else:
+            value_correct = sum(1 for r in value_bets if r.get("correct", "").strip().lower() == "true")
+
         value_accuracy = value_correct / value_total if value_total > 0 else 0
         total_profit = sum(float(r.get("profit", 0)) for r in value_bets)
 
