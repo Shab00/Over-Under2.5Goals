@@ -1,0 +1,41 @@
+name: Post Match Results Update
+
+on:
+  schedule:
+    - cron: '0 7 * * *'   # 07:00 UTC every day
+  workflow_dispatch:
+
+jobs:
+  update-results:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Update combined results
+        run: python jobs/scrape_matches.py --in-place
+
+      - name: Merge archived predictions with actual results
+        run: python jobs/merge_results.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/processed/combinedWithOdds.csv data/processed/results_merged.csv
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update results and performance tracker [skip ci]"
+            git push
+          fi
