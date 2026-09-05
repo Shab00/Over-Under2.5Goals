@@ -48,7 +48,7 @@ jobs:
           mkdir -p snapshots/archive
           cp snapshots/predictions_latest.csv snapshots/archive/predictions_$(date -u +"%Y%m%dT%H%M%S").csv
 
-      - name: Commit updated snapshot and results
+      - name: Commit updated snapshot, results, and model accuracy
         if: steps.check.outputs.should_run == 'true'
         run: |
           git config user.name "github-actions[bot]"
@@ -57,9 +57,13 @@ jobs:
           if [ -f data/processed/results_merged.csv ]; then
             git add data/processed/results_merged.csv
           fi
+          # Add training metadata so the page shows the latest accuracy
+          if [ -f artifacts/train_report.json ]; then
+            git add artifacts/train_report.json
+          fi
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Update snapshot after pipeline run [skip ci]"
+            git commit -m "Update snapshot, results, and model accuracy [skip ci]"
             git push
           fi
