@@ -1,67 +1,56 @@
 # ⚽ Football Match Outcome Predictor
-> End-to-end ML pipeline for predicting Premier League **HomeWin** outcomes — featuring automated fixture scraping, live bookmaker odds ingestion, LightGBM modelling, a FastAPI snapshot endpoint, and Telegram delivery.
+
+End-to-end machine learning pipeline for predicting Premier League **HomeWin** outcomes.  
+The system is fully automated and currently running for the **2026–27 season**.
 
 [![CI](https://github.com/Shab00/Over-Under2.5Goals/actions/workflows/ci.yml/badge.svg)](https://github.com/Shab00/Over-Under2.5Goals/actions)
 
-> **Note:**  
-> This project is currently in “off-season mode” and will resume full operation in line with the Premier League’s official 2026–27 fixtures. The pipeline will reactivate automatically at the next season’s kickoff on **22 August 2026** and operate continuously through to the season end on **30 May 2027**. We’ll continue to maintain, monitor, and enhance the system, delivering up-to-date predictions as soon as new matches become available!
-
----
-
-## Table of Contents
-
-1. [Overview](#overview)
-2. [How the Pipeline Works](#how-the-pipeline-works)
-3. [Quick Start](#quick-start)
-4. [Project Structure](#project-structure)
-5. [Features](#features)
-6. [Running Locally](#running-locally)
-7. [API](#api)
-8. [Monitoring & Observability](#monitoring--observability)
-9. [Results & Evaluation](#results--evaluation)
-10. [Changelog](#changelog)
-11. [Next Steps](#next-steps)
-12. [Acknowledgements](#acknowledgements)
+**Live predictions:** [https://shab00.github.io/football/](https://shab00.github.io/football/)  
+**Telegram channel:** [https://t.me/HomeWinPrediction](https://t.me/HomeWinPrediction)
 
 ---
 
 ## Overview
 
-This project uses data analysis and machine learning to predict football match outcomes, with a primary focus on **HomeWin** (does the home team win?). It covers the full lifecycle:
+This project predicts whether the home team will win an upcoming Premier League match. It covers the full machine learning lifecycle:
 
-- Raw data ingestion and cleaning
-- Feature engineering (market odds, rolling form, team encoding)
+- Automated fixture and odds scraping (including Asian handicap)
+- Feature engineering (rolling form, market odds, team encoding)
 - LightGBM model training with versioned artefacts
-- A FastAPI snapshot endpoint serving calibrated probabilities
-- A Telegram digest pipeline for automated pick delivery
-- End-to-end observability via Prometheus + Grafana
+- Calibrated probability outputs
+- Live serving via GitHub Pages and Telegram
+- Performance tracking (overall accuracy, value bets, profit)
 
-**Target variable:** HomeWin  
-**Key goal:** Push predictive accuracy toward 70% and demonstrate real-world value through betting simulation.
+**Target variable:** `HomeWin`  
+**Key goal:** Identify value bets where the model's probability exceeds the bookmaker implied probability.
 
 ---
 
 ## How the Pipeline Works
 
 ```
-Fixtures + Odds Scrape
-        ↓
-Canonicalisation & Feature Engineering
-        ↓
-LightGBM HomeWin Model (versioned artefacts)
-        ↓
-Snapshot CSV  →  FastAPI endpoint  →  Telegram digest
-                                           ↓
-                                    deliveries.db (logged)
+Scrape fixtures + odds (football-data.co.uk, The-Odds-API)
+↓
+Standardise teams & engineer features (form, odds, Asian handicap)
+↓
+Train LightGBM model (versioned artefacts)
+↓
+Build prediction snapshot (CSV)
+↓
+Serve live page (GitHub Pages) & Deliver picks (Telegram)
+↓
+After matches: merge results → update performance tracker
 ```
 
-**Step by step:**
+Two automated workflows run on GitHub Actions:
 
-1. **Scrape fixtures & odds** — Pulls upcoming EPL fixtures and merges live bookmaker odds (Bet365, Pinnacle, William Hill, 1XBet, and aggregators).
-2. **Canonicalise & engineer features** — Standardises team names; computes rolling stats (recent goals, form) and odds-derived features.
-3. **Odds mapping** — Home/draw/away and over/under markets are filled using best-available prices with fallback logic.
-4. **Train & snapshot** — A versioned LightGBM model generates reproducible predictions saved to CSV. Model, feature list, and metadata are all artefacted.
-5. **Serve & deliver** — FastAPI serves the latest snapshot; a Telegram digest script fetches picks, sends them, and logs every delivery to `deliveries.db`.
+1. **Weekly Pipeline** – runs 1 hour before each kick‑off slot.
+   - Scrapes latest odds, trains model, generates predictions, sends Telegram message, archives snapshot, commits updates.
+
+2. **Post Match Results Update** – runs daily at 07:00 UTC.
+   - Updates historical results, merges with archived predictions, refreshes performance tracker, pushes changes.
+
+The live page is automatically deployed after each successful workflow.
 
 ---
 
@@ -72,64 +61,46 @@ Snapshot CSV  →  FastAPI endpoint  →  Telegram digest
 ```bash
 pip install -r requirements.txt
 ```
----
 
-## Automation & CI
+### 2. Set environment variables
 
-### 🚀 One-Command Pipeline (Local or CI)
+Create a `.env` file or export these variables locally:
 
-To run the full forecasting pipeline from raw fixtures to Telegram delivery:
+```bash
+export ODDS_API_KEY="your-the-odds-api-key"
+export TELEGRAM_BOT_TOKEN="your-telegram-bot-token"
+export TELEGRAM_CHAT_ID="your-telegram-chat-id"
+```
+
+### 3. Run the full pipeline locally
 
 ```bash
 bash jobs/run_weekly_pipeline.sh
-
-### Environment Required
-
-For full end-to-end pipeline (including API & Telegram delivery), set the following env variables:
-
-    - TELEGRAM_BOT_TOKEN – your Telegram bot token
-    - TELEGRAM_CHAT_ID – your group/channel ID
-    - (optional) API_KEY – for API authentication
-    - (optional) DELIVERIES_DB – for a custom path to the delivery log (defaults as needed)
-
-### 2. Prepare data
-
-Raw CSVs live in `data/raw/csvFiles/`. Run the cleaning/feature notebook or script:
-
-```bash
-# Option A — notebook
-# Open notebooks/secondIterrationOdds/cleaningWithOdds-evaluation.ipynb and run all cells
-
-# Option B — scripts (if available)
-python3 jobs/scrape_matches.py --in-place
-python3 jobs/train_homewin_weekly.py
 ```
 
-Expected outputs:
-- `data/processed/cleaned_data.csv`
-- `data/processed/combinedWithOdds.csv`
-- `data/processed/final_football_model_data.csv`
-- `data/processed/fixtures_next7d.csv`
+This will:
 
-### 3. Run the weekly pipeline
+- Scrape fixtures and odds
+- Train the model
+- Build features and predictions
+- Send Telegram digest
+- Archive snapshot
+- Merge results (if available)
+- Update performance tracker
 
-```bash
-make weekly   # or run the two jobs manually:
-python3 jobs/scrape_matches.py --in-place
-python3 jobs/train_homewin_weekly.py
-```
-
-### 4. Start the API
+### 4. Start the FastAPI endpoint (optional)
 
 ```bash
 API_KEY="choose-a-secret" uvicorn src.api.main:APP --reload --port 8000
 ```
 
-### 5. Send a Telegram digest
+### 5. Generate GitHub Pages locally
 
 ```bash
-python scripts/deliver_telegram.py
+python scripts/generate_github_pages.py
 ```
+
+This creates `football/index.html` from the latest snapshot and results.
 
 ---
 
@@ -138,31 +109,41 @@ python scripts/deliver_telegram.py
 ```
 .
 ├── data/
-│   ├── raw/csvFiles/          # Source CSVs
-│   └── processed/             # Cleaned data, fixture snapshots, evaluation outputs
+│   ├── raw/football_data/       # Downloaded raw CSVs
+│   └── processed/               # Cleaned data, combined odds, results_merged.csv
 ├── models/
-│   └── weekly/homewin/        # Versioned LightGBM model, feature list, metadata
-├── notebooks/
-│   ├── firstIterration/       # Data cleaning & Random Forest baseline
-│   ├── secondIterrationOdds/  # Odds-aware cleaning & business evaluation
-│   └── thirdIterration/       # Boosting experiments & final pipeline
+│   └── weekly/homewin/          # Versioned LightGBM model, feature list, metadata
 ├── jobs/
-│   ├── scrape_matches.py      # Fixture + odds scrape/upsert
-│   └── train_homewin_weekly.py
-├── src/api/                   # FastAPI app
+│   ├── scrape_matches.py
+│   ├── train_model.py
+│   ├── build_upcoming_features.py
+│   ├── build_predictions_snapshot.py
+│   ├── publish_snapshot.py
+│   ├── deliver_telegram.py
+│   ├── check_upcoming_matches.py
+│   ├── merge_results.py
+│   └── run_weekly_pipeline.sh
 ├── scripts/
-│   ├── send_telegram_digest.py
+│   ├── generate_github_pages.py
 │   ├── smoke_test.sh
-│   └── migrate_make_match_id_unique.sh
+│   └── ...
+├── src/
+│   ├── api/
+│   │   └── main.py               # FastAPI app
+│   └── metrics.py                # Prometheus metrics
 ├── monitoring/
-│   ├── grafana/dashboards/    # Importable Grafana JSON
-│   └── webhook_receiver.py
+│   ├── prometheus/
+│   ├── grafana/dashboards/
+│   └── alertmanager/
 ├── tests/
-│   └── test_idempotency.py
-├── notes/                     # Feature audits and technical notes
-├── DEVELOPER.md               # Local run recipes, observability, smoke tests
-├── Makefile
-└── docker-compose.yml
+├── .github/workflows/
+│   ├── weekly-pipeline.yml
+│   ├── post-match-results.yml
+│   ├── deploy-football-predictions.yml
+│   └── ci.yml
+├── artifacts/                    # Training reports, evaluation outputs
+├── snapshots/                    # Latest snapshot and archive
+└── README.md
 ```
 
 ---
@@ -170,54 +151,71 @@ python scripts/deliver_telegram.py
 ## Features
 
 ### Data Pipeline
-- Ingestion, deduplication, and cleaning with canonical match keys
-- Comprehensive feature engineering: market odds, team encoding, rolling form, contextual variables
-- Idempotent scrape/upsert — safe to re-run without creating duplicates
+
+- Scrapes fixtures from Premier League API and odds from The-Odds-API (h2h, totals, spreads)
+- Merges bookmaker odds with fallback logic
+- Standardises team names
+- Computes rolling form features
+- Handles Asian handicap lines and aggregates
 
 ### Modelling
-- Classifiers tested: Random Forest, Gradient Boosting, Logistic Regression, MLP Neural Networks
-- Final model: **LightGBM** (versioned artefacts: `.pkl` model, feature list, metadata JSON)
-- Hyperparameter tuning and feature importance analysis
-- Calibrated probabilities for downstream use
 
-### Evaluation
-- Robust cross-validation and threshold sweeps
-- Business simulation: ROI, win rate, and PnL tracked via bookmaker odds
-- Calibration curves and error analysis in notebooks
+- LightGBM classifier with versioned artefacts
+- Automated hyperparameter tuning
+- Feature importance analysis
+- Calibrated probability outputs
 
-### Delivery & Logging
-- FastAPI snapshot endpoint (`/predictions/latest`, `/predictions/info`)
-- Telegram digest pipeline with idempotent `deliveries.db` logging
-- Delivery metadata (threshold, prob_col) supports A/B testing and ROI tracking
+### Evaluation & Tracking
+
+- Overall accuracy (50% threshold)
+- Value bet detection (model_prob > implied_prob)
+- Value accuracy and profit tracking
+- Recent results displayed on live page
+- Model training accuracy displayed
+
+### Delivery
+
+- Telegram digest with `[VALUE]` / `[FADE]` tags
+- Live GitHub Pages with predictions, tracker, and recent results
+- FastAPI endpoint serving latest snapshot (optional)
+
+### Monitoring
+
+- Prometheus metrics for pipeline health (`pipeline_runs_total`, `snapshot_age_seconds`, etc.)
+- Grafana dashboard for real-time monitoring
+- Alertmanager alerts for stale snapshots (optional)
 
 ---
 
 ## Running Locally
 
-### Dev server
+### Full pipeline
 
 ```bash
-# Foreground
+bash jobs/run_weekly_pipeline.sh
+```
+
+### Update results manually
+
+```bash
+python jobs/scrape_matches.py --in-place
+python jobs/merge_results.py
+python scripts/generate_github_pages.py
+```
+
+### Start API server
+
+```bash
 API_KEY="choose-a-secret" uvicorn src.api.main:APP --reload --port 8000
-
-# Background
-DELIVERIES_DB=/tmp/pytest_deliveries.db \
-  python -m uvicorn src.api.main:APP --host 0.0.0.0 --port 8000 \
-  &> uvicorn.log & echo $! > uvicorn.pid
-
-# Or via Makefile
-DELIVERIES_DB=/tmp/pytest_deliveries.db make dev
 ```
 
 ### Smoke tests
 
 ```bash
-make smoke
-# or
-API_KEY="choose-a-secret" bash scripts/smoke_test.sh
+bash scripts/smoke_test.sh
 ```
 
-### Tests
+### Run unit tests
 
 ```bash
 pytest
@@ -227,119 +225,77 @@ pytest
 
 ## API
 
-| Endpoint | Method | Description |
-|---|---|---|
-| `/predictions/latest` | GET | Returns the latest snapshot predictions |
-| `/predictions/info` | GET | Returns model metadata for the current snapshot |
-| `/ingest` | POST | Ingest new rows (idempotent by `match_id`) |
-| `/metrics` | GET | Prometheus metrics |
-
-**Example ingest call:**
-
-```bash
-curl -X POST '<URL>/ingest' \
-  -H 'Content-Type: application/json' \
-  -H 'X-API-KEY: choose-a-secret' \
-  -d '{"rows":[{"match_id":12345,"prob":0.5}],"source":"demo"}'
-```
-
-**Running with Docker:**
-
-```bash
-docker compose up -d
-```
+| Endpoint              | Method | Description                                      |
+|-----------------------|--------|--------------------------------------------------|
+| `/predictions/latest` | GET    | Latest snapshot predictions                      |
+| `/predictions/info`   | GET    | Model metadata                                   |
+| `/ingest`             | POST   | Ingest new rows (idempotent)                     |
+| `/metrics`            | GET    | Prometheus metrics                               |
+| `/update_metrics`     | POST   | Refresh pipeline metrics (called automatically)  |
 
 ---
 
 ## Monitoring & Observability
 
-Full local observability is configured via Docker Compose. See [`DEVELOPER.md`](DEVELOPER.md) for detailed recipes.
+The Docker Compose stack runs Prometheus, Grafana, Alertmanager, and a webhook receiver.  
+See `DEVELOPER.md` for setup and configuration.
 
-### Stack
+Key metrics:
 
-| Tool | URL | Purpose |
-|---|---|---|
-| Prometheus | `http://localhost:9090` | Metrics scraping |
-| Grafana | `http://localhost:3001` (admin/admin) | Dashboards |
-| Alertmanager | — | Alert routing → webhook |
+- `pipeline_runs_total`
+- `snapshot_age_seconds`
+- `predictions_generated`
+- `odds_available_count`
 
-### Key metrics
-
-- `smoke_test_runs_total{kind="api", result="success|error"}` — API smoke test counter
-- `alertmanager_webhook_deliveries_total` — Alertmanager → webhook delivery counter
-
-### Smoke test (end-to-end alerting)
-
-```bash
-chmod +x monitoring/ci/run_alertmanager_webhook_smoke.sh
-monitoring/ci/run_alertmanager_webhook_smoke.sh
-
-# Slower CI runners:
-WAIT_SEC=30 monitoring/ci/run_alertmanager_webhook_smoke.sh
-```
-
-### Grafana dashboard
-
-Import `monitoring/grafana/dashboards/smoke_dashboard.json` into Grafana. Panels show total smoke runs, runs over the last hour, and run rate.
+Grafana dashboard: import `monitoring/grafana/dashboards/pipeline_health.json` (or the current dashboard file).
 
 ---
 
 ## Results & Evaluation
 
-- End-to-end flow validated: `fixture scrape → model training → snapshot → API → Telegram → deliveries.db`
-- Calibration metrics, business simulation outputs, and PnL analysis are in `notebooks/` and `data/evaluation/`
-- Delivery logs enable per-user ROI tracking and threshold A/B experiments
-
-Where to find outputs:
-
-| Artefact | Location |
-|---|---|
-| Trained models | `models/weekly/homewin/` |
-| Processed data | `data/processed/` |
-| Evaluation outputs | `data/evaluation/` |
-| Reproducible analysis | `notebooks/` |
-| Feature audits | `notes/` |
+- Performance tracker on the live page shows overall accuracy, value bet performance, and cumulative profit.
+- Recent results section displays completed matches with score, predicted outcome, and correct/incorrect.
+- Evaluation notebooks and calibration metrics are in `notebooks/` and `artifacts/`.
 
 ---
 
 ## Changelog
 
-### April 2026 — Full Pipeline Automation
-- Automated end-to-end scraping of EPL fixtures, odds ingestion, feature engineering, and HomeWin predictions for all upcoming matches
-- All major bookmaker markets (Bet365, Pinnacle, etc.) mapped and populated
+### September 2026 – Full Automation
 
-### March 2026 — Fixture & Odds Pipeline
-- Built odds ingestion and merge scripts with fallback logic (Bet365 → Pinnacle → William Hill → aggregator)
-- Pipeline filters for future, unplayed matches only
-- Weekly orchestrator and Makefile targets for single-command operation
+- Added Post Match Results Update workflow (daily result merging)
+- Fixed timezone guard for scheduled runs
+- Added Recent Results section to live page
+- Added model accuracy commit to pipeline
 
-### March 2026 — Observability & Smoke Tests
-- API smoke test validates `/ingest` HTTP 200, response shape, and idempotency
-- Prometheus counter incremented on successful/failed ingest
-- Grafana dashboard JSON added (importable)
-- Alertmanager → webhook smoke test added to CI
+### August 2026 – Live Season Start
 
-### February 2026 — CI & Idempotency
-- Added `test_idempotency.py` — integration test that posts the same `match_id` twice and asserts the second is skipped
-- Added `.github/workflows/ci.yml` — GitHub Actions runs pytest on every push and PR
-- `UNIQUE` index on `match_id` enforced at both application and DB level
+- Updated to 2026–27 season URL
+- Integrated Asian handicap odds
+- Deployed live GitHub Pages with performance tracker
+- Automated Telegram delivery of pre‑match picks
+- Added value/fade badges
 
-### Earlier — Telegram Delivery & API
-- Dockerised FastAPI snapshot endpoint serving calibrated probabilities
-- Telegram digest pipeline with full delivery logging to `deliveries.db`
+### Earlier
+
+- FastAPI snapshot endpoint
+- Prometheus/Grafana monitoring
+- Idempotent ingest and CI tests
+- LightGBM model and evaluation pipeline
 
 ---
 
 ## Next Steps
 
-- Use `deliveries.db` to run A/B tests on thresholds and message formats
-- Add a lightweight admin UI for inspecting deliveries and re-sending picks
-- Continue model calibration and explore live-data integration
-- Extend models to other targets: over/under 2.5, away win, draw
-- Keep [`DEVELOPER.md`](DEVELOPER.md) up to date with observability and run recipes
+- Add more bookmakers / markets
+- Extend to other targets (over/under, draw, away win)
+- Improve model calibration
+- Add admin UI for delivery management
+- Continue refining value bet strategy
 
 ---
 
 ## Acknowledgements
 
-This project is for educational and sports analytics purposes only. Data sourced from [Football-Data.co.uk](https://www.football-data.co.uk/) and other open football statistics archives.
+Data sources: [Football-Data.co.uk](https://www.football-data.co.uk) and [The-Odds-API](https://the-odds-api.com).  
+This project is for educational and sports analytics purposes only.
