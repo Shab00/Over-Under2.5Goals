@@ -37,12 +37,20 @@ def _utc_today_date():
 def download_csv(url: str, timeout_sec: int = 30, retries: int = 5) -> bytes:
     """
     Download CSV with retry and exponential backoff.
+    Includes a browser User-Agent to avoid server blocks.
     Raises the last exception if all attempts fail.
     """
     last_exc = None
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/120.0.0.0 Safari/537.36"
+        )
+    }
     for attempt in range(1, retries + 1):
         try:
-            resp = requests.get(url, timeout=timeout_sec)
+            resp = requests.get(url, timeout=timeout_sec, headers=headers)
             resp.raise_for_status()
             return resp.content
         except Exception as e:
