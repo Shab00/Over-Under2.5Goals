@@ -4,6 +4,7 @@ import argparse
 import csv
 import io
 import shutil
+import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -33,10 +34,22 @@ def _utc_today_date():
     return datetime.now(timezone.utc).date()
 
 
-def download_csv(url: str, timeout_sec: int = 30) -> bytes:
-    resp = requests.get(url, timeout=timeout_sec)
-    resp.raise_for_status()
-    return resp.content
+def download_csv(url: str, timeout_sec: int = 30, retries: int = 5) -> bytes:
+    """
+    Download CSV with retry and exponential backoff.
+    Raises the last exception if all attempts fail.
+    """
+    last_exc = None
+    for attempt in range(1, retries + 1):
+        try:
+            resp = requests.get(url, timeout=timeout_sec)
+            resp.raise_for_status()
+            return resp.content
+        except Exception as e:
+            last_exc = e
+            print(f"[scrape_matches] download attempt {attempt}/{retries} failed: {e}")
+            time.sleep(3 * attempt)   # 3, 6, 9, 12, 15 seconds
+    raise last_exc
 
 
 def _parse_football_data_date(s: str) -> Optional[datetime.date]:
@@ -191,10 +204,19 @@ def main() -> None:
         raw_bytes = paths.raw_csv.read_bytes()
         source = f"local:{paths.raw_csv}"
     else:
-        raw_bytes = download_csv(args.url)
-        _ensure_parent(paths.raw_csv)
-        paths.raw_csv.write_bytes(raw_bytes)
-        source = args.url
+        try:
+            raw_bytes = download_csv(args.url)
+            _ensure_parent(paths.raw_csv)
+            paths.raw_csv.write_bytes(raw_bytes)
+            source = args.url
+        except Exception as e:
+            # Fallback to cached raw CSV if download fails
+            if paths.raw_csv.exists():
+                print(f"[scrape_matches] download failed ({e}); using existing raw CSV {paths.raw_csv}")
+                raw_bytes = paths.raw_csv.read_bytes()
+                source = f"cached:{paths.raw_csv}"
+            else:
+                raise
 
     df_new = pd.read_csv(io.BytesIO(raw_bytes))
     df_new = df_new.dropna(how="all")
