@@ -191,6 +191,7 @@ def main():
     merged["home_win"] = merged["FTR"] == "H"
     merged["pred_win"] = merged["prob_homewin"] >= 0.5
 
+    # Overall accuracy based on threshold prediction only
     merged["correct"] = merged["home_win"] == merged["pred_win"]
 
     if "odds_B365H" in merged.columns and "prob_homewin" in merged.columns:
@@ -199,6 +200,7 @@ def main():
     else:
         merged["is_value"] = False
 
+    # Value bet correctness: home team won (because we back home when value)
     merged["value_correct"] = merged["is_value"] & merged["home_win"]
 
     merged["profit"] = 0.0
