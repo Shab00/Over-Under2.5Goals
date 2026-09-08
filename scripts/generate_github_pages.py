@@ -219,49 +219,25 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       color: var(--muted);
       font-style: italic;
     }}
-    .value-badge {{
-      display: inline-block;
-      background: #fbbf24;
-      color: #000;
-      font-size: 0.7rem;
+    .edge-text {{
+      color: #fbbf24;
       font-weight: 700;
-      padding: 0.15rem 0.45rem;
-      border-radius: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      vertical-align: middle;
     }}
-    .fade-badge {{
-      display: inline-block;
-      background: #ef4444;
-      color: #fff;
-      font-size: 0.7rem;
+    .fade-text {{
+      color: #ef4444;
       font-weight: 700;
-      padding: 0.15rem 0.45rem;
-      border-radius: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      vertical-align: middle;
     }}
-    .today-badge {{
-      background: #dc2626;
-      color: white;
-      padding: 0.15rem 0.5rem;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      margin-left: 0.5rem;
-      vertical-align: middle;
+    .avoid-text {{
+      color: #94a3b8;
+      font-style: italic;
     }}
-    .locked-badge {{
-      background: #f59e0b;
-      color: #000;
-      padding: 0.15rem 0.5rem;
-      border-radius: 6px;
-      font-size: 0.75rem;
+    .home-text {{
+      color: #4ade80;
       font-weight: 700;
-      margin-left: 0.5rem;
-      vertical-align: middle;
+    }}
+    .not-home-text {{
+      color: #f87171;
+      font-weight: 700;
     }}
     .correct-yes {{
       color: #4ade80;
@@ -309,7 +285,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
             <th>Away</th>
             <th class="prob-cell">P(Home Win)</th>
             <th class="odds-cell">Best Home Odds</th>
-            <th>Edge</th>
+            <th>Model</th>
           </tr>
         </thead>
         <tbody>
@@ -331,7 +307,7 @@ ROW_HTML = """<tr>
   <td>{away}</td>
   <td class="prob-cell {prob_class}">{prob_display}</td>
   <td class="odds-cell">{odds_display}</td>
-  <td>{value_badge}{fade_badge}</td>
+  <td>{model_signal}</td>
 </tr>"""
 
 RESULT_ROW_HTML = """<tr>
@@ -342,7 +318,7 @@ RESULT_ROW_HTML = """<tr>
   <td>{predicted}</td>
   <td class="actual-cell">{actual}</td>
   <td class="correct-cell {correct_class}">{correct_text}</td>
-  <td>{value_badge}</td>
+  <td>{edge_fade}</td>
 </tr>"""
 
 
@@ -402,11 +378,12 @@ def build_legend_section():
     return """<div class="legend">
       <h3>Legend</h3>
       <div class="legend-items">
-        <div class="legend-item"><span class="value-badge">VALUE</span> Model sees a positive edge</div>
-        <div class="legend-item"><span class="fade-badge">FADE</span> Home team likely overpriced</div>
-        <div class="legend-item"><span class="today-badge">TODAY</span> Match takes place today</div>
-        <div class="legend-item"><span class="locked-badge">FINAL</span> Kickoff within 1 hour</div>
-        <div class="legend-item"><span style="color: var(--muted);">N/A</span> No odds available</div>
+        <div class="legend-item"><span class="home-text">Home</span> – confident home win (≥55%)</div>
+        <div class="legend-item"><span class="not-home-text">Not Home</span> – confident against home win (≤45%)</div>
+        <div class="legend-item"><span class="avoid-text">Avoid</span> – too close to call (45–55%)</div>
+        <div class="legend-item"><span class="edge-text">EDGE</span> – positive value vs odds</div>
+        <div class="legend-item"><span class="fade-text">FADE</span> – home team overpriced by market</div>
+        <div class="legend-item"><span style="color: var(--muted);">N/A</span> – no odds available</div>
       </div>
     </div>"""
 
@@ -474,28 +451,39 @@ def build_performance_section(snapshot_path: Path) -> str:
                 {accuracy_display}
             </div>"""
 
-        total = len(rows)
-        correct = sum(1 for r in rows if r.get("correct", "").strip().lower() == "true")
+        # Avoid matches
+        avoid_rows = [r for r in rows if r.get("prediction", "") == "Avoid"]
+        avoid_count = len(avoid_rows)
+
+        # Confident predictions
+        confident_rows = [r for r in rows if r.get("prediction", "") != "Avoid"]
+        total = len(confident_rows)
+        correct = sum(1 for r in confident_rows if r.get("correct", "").strip().lower() == "true")
         accuracy = correct / total if total > 0 else 0
 
-        value_bets = [r for r in rows if r.get("is_value", "").strip().lower() == "true"]
-        value_total = len(value_bets)
+        # Edge bets
+        edge_bets = [r for r in rows if r.get("is_edge", "").strip().lower() == "true"]
+        edge_total = len(edge_bets)
+        edge_correct = sum(1 for r in edge_bets if str(r.get("edge_correct", "")).strip().lower() == "true")
+        edge_accuracy = edge_correct / edge_total if edge_total > 0 else 0
+        total_profit = sum(float(r.get("profit", 0)) for r in edge_bets)
 
-        if value_bets and "value_correct" in value_bets[0]:
-            value_correct = sum(1 for r in value_bets if str(r.get("value_correct", "")).strip().lower() == "true")
-        else:
-            value_correct = sum(1 for r in value_bets if r.get("correct", "").strip().lower() == "true")
-
-        value_accuracy = value_correct / value_total if value_total > 0 else 0
-        total_profit = sum(float(r.get("profit", 0)) for r in value_bets)
+        # Fade bets
+        fade_bets = [r for r in rows if r.get("is_fade", "").strip().lower() == "true"]
+        fade_total = len(fade_bets)
+        fade_correct = sum(1 for r in fade_bets if str(r.get("fade_correct", "")).strip().lower() == "true")
+        fade_accuracy = fade_correct / fade_total if fade_total > 0 else 0
 
         return f"""<div class="performance-tracker">
             <h2>Performance Tracker</h2>
             <div class="performance-summary">
                 <div class="performance-stat"><strong>Overall Accuracy:</strong> {accuracy:.1%} ({correct}/{total})</div>
-                <div class="performance-stat"><strong>Value Bets:</strong> {value_total} picks</div>
-                <div class="performance-stat"><strong>Value Accuracy:</strong> {value_accuracy:.1%} ({value_correct}/{value_total})</div>
-                <div class="performance-stat"><strong>Value Profit:</strong> {total_profit:+.2f} units</div>
+                <div class="performance-stat"><strong>Avoid:</strong> {avoid_count} match{'es' if avoid_count != 1 else ''}</div>
+                <div class="performance-stat"><strong>Edge Bets:</strong> {edge_total} picks</div>
+                <div class="performance-stat"><strong>Edge Accuracy:</strong> {edge_accuracy:.1%} ({edge_correct}/{edge_total})</div>
+                <div class="performance-stat"><strong>Edge Profit:</strong> {total_profit:+.2f} units</div>
+                <div class="performance-stat"><strong>Fade Picks:</strong> {fade_total} picks</div>
+                <div class="performance-stat"><strong>Fade Accuracy:</strong> {fade_accuracy:.1%} ({fade_correct}/{fade_total})</div>
             </div>
             {accuracy_display}
         </div>"""
@@ -539,30 +527,44 @@ def build_results_section(snapshot_path: Path) -> str:
             home = r.get("home_team", "")
             away = r.get("away_team", "")
             score = f"{format_score(r.get('FTHG'))}-{format_score(r.get('FTAG'))}"
-            predicted = "Home" if r.get("pred_win", "").strip().lower() == "true" else "Not Home"
+
+            predicted = r.get("prediction", "Avoid")
+            if predicted == "Home":
+                predicted_text = '<span class="home-text">Home</span>'
+            elif predicted == "Not Home":
+                predicted_text = '<span class="not-home-text">Not Home</span>'
+            else:
+                predicted_text = '<span class="avoid-text">Avoid</span>'
+
             actual = r.get("FTR", "")
             correct_val = r.get("correct", "").strip().lower()
-            if correct_val == "true":
+            if predicted == "Avoid":
+                correct_class = "avoid-text"
+                correct_text = "–"
+            elif correct_val == "true":
                 correct_class = "correct-yes"
                 correct_text = "Yes"
             else:
                 correct_class = "correct-no"
                 correct_text = "No"
 
-            value_badge = ""
-            if r.get("is_value", "").strip().lower() == "true":
-                value_badge = '<span class="value-badge">VALUE</span>'
+            # Edge/Fade signal
+            edge_fade = ""
+            if r.get("is_edge", "").strip().lower() == "true":
+                edge_fade += '<span class="edge-text">EDGE</span> '
+            if r.get("is_fade", "").strip().lower() == "true":
+                edge_fade += '<span class="fade-text">FADE</span>'
 
             result_rows.append(RESULT_ROW_HTML.format(
                 date=date,
                 home=home,
                 away=away,
                 score=score,
-                predicted=predicted,
+                predicted=predicted_text,
                 actual=actual,
                 correct_class=correct_class,
                 correct_text=correct_text,
-                value_badge=value_badge,
+                edge_fade=edge_fade.strip(),
             ))
 
         table_html = f"""
@@ -579,7 +581,7 @@ def build_results_section(snapshot_path: Path) -> str:
                             <th>Predicted</th>
                             <th class="actual-cell">Actual</th>
                             <th class="correct-cell">Correct?</th>
-                            <th>Value</th>
+                            <th>Edge/Fade</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -647,35 +649,28 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 except ValueError:
                     odds = None
 
-            if odds is None or odds == 0:
+            # Model signal
+            model_signal = ""
+            if prob is not None and odds and odds > 0:
+                implied_prob = 1.0 / odds
+                if prob > implied_prob:
+                    model_signal = '<span class="edge-text">EDGE</span>'
+                elif prob < implied_prob - 0.15:
+                    model_signal = '<span class="fade-text">FADE</span>'
+
+            if prob is not None:
+                prob_display = f"{prob:.2%}"
+                if prob >= 0.6:
+                    prob_class = "prob-high"
+                elif prob >= 0.35:
+                    prob_class = "prob-mid"
+                else:
+                    prob_class = "prob-low"
+            else:
                 prob_display = "N/A"
                 prob_class = "prob-na"
-                odds_display = "N/A"
-                value_badge = ""
-                fade_badge = ""
-            else:
-                if prob is not None:
-                    prob_display = f"{prob:.2%}"
-                    if prob >= 0.6:
-                        prob_class = "prob-high"
-                    elif prob >= 0.35:
-                        prob_class = "prob-mid"
-                    else:
-                        prob_class = "prob-low"
-                else:
-                    prob_display = "N/A"
-                    prob_class = "prob-na"
-                odds_display = f"{odds:.2f}" if odds else "N/A"
 
-                value_badge = ""
-                fade_badge = ""
-                if prob is not None and odds and odds > 0:
-                    implied_prob = 1.0 / odds
-                    diff = prob - implied_prob
-                    if diff > 0:
-                        value_badge = '<span class="value-badge">VALUE</span>'
-                    elif diff < -0.15:
-                        fade_badge = '<span class="fade-badge">FADE</span>'
+            odds_display = f"{odds:.2f}" if odds else "N/A"
 
             badges = ""
             if kickoff_dt is not None:
@@ -696,8 +691,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 "prob_display": prob_display,
                 "prob_class": prob_class,
                 "odds_display": odds_display,
-                "value_badge": value_badge,
-                "fade_badge": fade_badge,
+                "model_signal": model_signal,
                 "kickoff_dt": kickoff_dt,
             })
 
@@ -718,8 +712,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 prob_display=r["prob_display"],
                 prob_class=r["prob_class"],
                 odds_display=r["odds_display"],
-                value_badge=r["value_badge"],
-                fade_badge=r["fade_badge"],
+                model_signal=r["model_signal"],
             )
             for r in rows_data
         )

@@ -12,55 +12,45 @@ CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 assert BOT_TOKEN, "TELEGRAM_BOT_TOKEN is required"
 assert CHAT_ID, "TELEGRAM_CHAT_ID is required"
 
-# ------------------------------------------------------------
-# 1. Load actual kickoff times from fixtures file (like page gen)
-# ------------------------------------------------------------
 def load_fixture_times():
     if not FIXTURES_CSV.exists():
         return {}
     times = {}
     try:
-        with open(FIXTURES_CSV, newline='', encoding='utf-8') as f:
-            reader = pd.read_csv(FIXTURES_CSV, low_memory=False)
-            for _, row in reader.iterrows():
-                date_raw = str(row.get("Date", "")).strip()
-                home = str(row.get("HomeTeam", "")).strip()
-                away = str(row.get("AwayTeam", "")).strip()
-                if not date_raw or not home or not away:
+        df = pd.read_csv(FIXTURES_CSV, low_memory=False)
+        for _, row in df.iterrows():
+            date_raw = str(row.get("Date", "")).strip()
+            home = str(row.get("HomeTeam", "")).strip()
+            away = str(row.get("AwayTeam", "")).strip()
+            if not date_raw or not home or not away:
+                continue
+            try:
+                kickoff_naive = pd.to_datetime(date_raw, errors="coerce")
+                if pd.isna(kickoff_naive):
                     continue
                 try:
-                    kickoff_naive = pd.to_datetime(date_raw, errors="coerce")
-                    if pd.isna(kickoff_naive):
-                        continue
-                    # Convert UK local time to UTC
-                    try:
-                        import zoneinfo
-                        uk_tz = zoneinfo.ZoneInfo("Europe/London")
-                        kickoff_uk = kickoff_naive.tz_localize(uk_tz)
-                    except Exception:
-                        import pytz
-                        uk_tz = pytz.timezone("Europe/London")
-                        kickoff_uk = uk_tz.localize(kickoff_naive.to_pydatetime())
-                    kickoff_utc = kickoff_uk.astimezone(timezone.utc)
+                    import zoneinfo
+                    uk_tz = zoneinfo.ZoneInfo("Europe/London")
+                    kickoff_uk = kickoff_naive.tz_localize(uk_tz)
                 except Exception:
-                    # fallback: treat as UTC
-                    kickoff_utc = kickoff_naive.tz_localize("UTC")
-                key = f"{date_raw[:10]}|{home}|{away}"
-                times[key] = kickoff_utc
+                    import pytz
+                    uk_tz = pytz.timezone("Europe/London")
+                    kickoff_uk = uk_tz.localize(kickoff_naive.to_pydatetime())
+                kickoff_utc = kickoff_uk.astimezone(timezone.utc)
+            except Exception:
+                kickoff_utc = kickoff_naive.tz_localize("UTC")
+            key = f"{date_raw[:10]}|{home}|{away}"
+            times[key] = kickoff_utc
     except Exception as e:
         print(f"[telegram-delivery] Warning: could not load fixture times: {e}")
     return times
 
 fixture_times = load_fixture_times()
 
-# ------------------------------------------------------------
-# 2. Load predictions
-# ------------------------------------------------------------
 df = pd.read_csv(PREDICTIONS_CSV)
 df = df[df.get("is_predicted_fixture", 1) == 1]
 df = df[df["odds_B365H"].notna() & (df["odds_B365H"] > 0)]
 
-# Add real kickoff time if available, else fallback to date (may be midnight)
 df["kickoff_dt"] = df.apply(
     lambda row: fixture_times.get(
         f"{str(row['kickoff_time_utc'])[:10]}|{row['home_team']}|{row['away_team']}"
@@ -68,7 +58,6 @@ df["kickoff_dt"] = df.apply(
     axis=1
 )
 
-# Fallback for any missing
 now_utc = datetime.now(timezone.utc)
 mask_missing = df["kickoff_dt"].isna()
 if mask_missing.any():
@@ -76,16 +65,12 @@ if mask_missing.any():
         df.loc[mask_missing, "kickoff_time_utc"].str[:10]
     ).dt.tz_localize("UTC")
 
-# Keep only future matches
-df = df[df["kickoff_dt"] > now_utc]
+df = df[(df["kickoff_dt"] > now_utc) & (df["kickoff_dt"] <= now_utc + timedelta(days=7))]
 
 if df.empty:
-    print("[telegram-delivery] No upcoming matches with odds to deliver.")
+    print("[telegram-delivery] No upcoming matches with odds in the next 7 days.")
     exit(0)
 
-# ------------------------------------------------------------
-# 3. Build message
-# ------------------------------------------------------------
 lines = ["<b>EPL Home-Win Predictions</b>"]
 current_date = None
 
@@ -99,23 +84,40 @@ for _, row in df.iterrows():
     prob = row["prob_homewin"]
     odds = row["odds_B365H"]
     implied = 1.0 / odds
-    tag = ""
 
+    # Confidence circle and label
+    if prob >= 0.55:
+        pred_emoji = "🟢"
+        pred_label = "Home"
+    elif prob <= 0.45:
+        pred_emoji = "🟡"
+        pred_label = "Not Home"
+    else:
+        pred_emoji = "🔴"
+        pred_label = "Avoid"
+
+    # Edge/Fade circle (second circle)
+    edge_fade_emoji = ""
     if prob > implied:
-        tag = "  [VALUE]"
+        edge_fade_emoji = " 🔵"   # EDGE
     elif prob < implied - 0.15:
-        tag = "  [FADE]"
+        edge_fade_emoji = " ⚫"   # FADE
 
-    lines.append(
-        f"{row['home_team']} vs {row['away_team']}  |  "
-        f"Home: {prob:.1%}  |  Odds: {odds:.2f}{tag}"
+    # Two circles (if edge/fade) before team name
+    circles = f"{pred_emoji}{edge_fade_emoji}"
+
+    match_line = (
+        f"{circles} <b>{row['home_team']} vs {row['away_team']}</b>  |  "
+        f"{pred_label}  |  Home: {prob:.1%}  |  Odds: {odds:.2f}"
     )
+    lines.append(match_line)
+
+# Legend with distinct colours
+lines.append("")
+lines.append("🟢 Home  ·  🟡 Not Home  ·  🔴 Avoid  ·  🔵 EDGE  ·  ⚫ FADE")
 
 message = "\n".join(lines)
 
-# ------------------------------------------------------------
-# 4. Send to Telegram
-# ------------------------------------------------------------
 send_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 resp = requests.post(send_url, data={
     "chat_id": CHAT_ID,
