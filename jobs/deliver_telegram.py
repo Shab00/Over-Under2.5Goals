@@ -85,7 +85,6 @@ for _, row in df.iterrows():
     odds = row["odds_B365H"]
     implied = 1.0 / odds
 
-    # Confidence circle and label
     if prob >= 0.55:
         pred_emoji = "🟢"
         pred_label = "Home"
@@ -96,15 +95,11 @@ for _, row in df.iterrows():
         pred_emoji = "🔴"
         pred_label = "Avoid"
 
-    # Edge/Fade circle (second circle)
-    edge_fade_emoji = ""
-    if prob > implied:
-        edge_fade_emoji = " 🔵"   # EDGE
-    elif prob < implied - 0.15:
-        edge_fade_emoji = " ⚫"   # FADE
+    edge_emoji = ""
+    if prob >= 0.55 and prob > implied:
+        edge_emoji = " 🔵"   # EDGE
 
-    # Two circles (if edge/fade) before team name
-    circles = f"{pred_emoji}{edge_fade_emoji}"
+    circles = f"{pred_emoji}{edge_emoji}"
 
     match_line = (
         f"{circles} <b>{row['home_team']} vs {row['away_team']}</b>  |  "
@@ -112,9 +107,8 @@ for _, row in df.iterrows():
     )
     lines.append(match_line)
 
-# Legend with distinct colours
 lines.append("")
-lines.append("🟢 Home  ·  🟡 Not Home  ·  🔴 Avoid  ·  🔵 EDGE  ·  ⚫ FADE")
+lines.append("🟢 Home  ·  🟡 Not Home  ·  🔴 Avoid  ·  🔵 EDGE")
 
 message = "\n".join(lines)
 
