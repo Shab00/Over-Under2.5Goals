@@ -189,24 +189,39 @@ def main():
 
     merged["FTR"] = merged["FTR"].astype(str).str.strip()
     merged["home_win"] = merged["FTR"] == "H"
-    merged["pred_win"] = merged["prob_homewin"] >= 0.5
 
-    # Overall accuracy based on threshold prediction only
-    merged["correct"] = merged["home_win"] == merged["pred_win"]
+    def classify(prob):
+        if pd.isna(prob):
+            return "Avoid"
+        if prob >= 0.55:
+            return "Home"
+        elif prob <= 0.45:
+            return "Not Home"
+        else:
+            return "Avoid"
+    merged["prediction"] = merged["prob_homewin"].apply(classify)
+
+    merged["correct"] = (
+        ((merged["prediction"] == "Home") & merged["home_win"]) |
+        ((merged["prediction"] == "Not Home") & ~merged["home_win"])
+    )
 
     if "odds_B365H" in merged.columns and "prob_homewin" in merged.columns:
         merged["implied_prob"] = 1.0 / merged["odds_B365H"]
-        merged["is_value"] = merged["prob_homewin"] > merged["implied_prob"]
+        # EDGE only when we confidently back Home and have positive value
+        merged["is_edge"] = (merged["prediction"] == "Home") & (merged["prob_homewin"] > merged["implied_prob"])
     else:
-        merged["is_value"] = False
+        merged["is_edge"] = False
 
-    # Value bet correctness: home team won (because we back home when value)
-    merged["value_correct"] = merged["is_value"] & merged["home_win"]
+    merged["edge_correct"] = merged["is_edge"] & merged["home_win"]
+
+    merged["is_fade"] = merged["prediction"] == "Not Home"
+    merged["fade_correct"] = merged["is_fade"] & ~merged["home_win"]
 
     merged["profit"] = 0.0
-    value_mask = merged["is_value"]
-    merged.loc[value_mask & merged["value_correct"], "profit"] = merged.loc[value_mask & merged["value_correct"], "odds_B365H"] - 1
-    merged.loc[value_mask & ~merged["value_correct"], "profit"] = -1.0
+    edge_mask = merged["is_edge"]
+    merged.loc[edge_mask & merged["edge_correct"], "profit"] = merged.loc[edge_mask & merged["edge_correct"], "odds_B365H"] - 1
+    merged.loc[edge_mask & ~merged["edge_correct"], "profit"] = -1.0
 
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
     merged.to_csv(OUTPUT_FILE, index=False)
