@@ -247,6 +247,26 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       color: #f87171;
       font-weight: 700;
     }}
+    .today-badge {{
+      background: #dc2626;
+      color: white;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }}
+    .locked-badge {{
+      background: #f59e0b;
+      color: #000;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }}
     .footer {{
       margin-top: 2rem;
       color: var(--muted);
@@ -649,14 +669,15 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
                 except ValueError:
                     odds = None
 
-            # Model signal
+            # Model signal: only confidence label, no EDGE/FADE here
             model_signal = ""
-            if prob is not None and odds and odds > 0:
-                implied_prob = 1.0 / odds
-                if prob > implied_prob:
-                    model_signal = '<span class="edge-text">EDGE</span>'
-                elif prob < implied_prob - 0.15:
-                    model_signal = '<span class="fade-text">FADE</span>'
+            if prob is not None:
+                if prob >= 0.55:
+                    model_signal = '<span class="home-text">Home</span>'
+                elif prob <= 0.45:
+                    model_signal = '<span class="not-home-text">Not Home</span>'
+                else:
+                    model_signal = '<span class="avoid-text">Avoid</span>'
 
             if prob is not None:
                 prob_display = f"{prob:.2%}"

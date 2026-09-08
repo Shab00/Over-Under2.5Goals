@@ -64,37 +64,73 @@ def clean_team_names(df, cols=("HomeTeam", "AwayTeam")):
     return df
 
 def load_fixture_times():
-    if not FIXTURES_SOURCE.exists():
-        return {}
+    """Return a dict mapping 'YYYY-MM-DD|Home|Away' -> timezone-aware UTC kickoff."""
     times = {}
-    try:
-        df = pd.read_csv(FIXTURES_SOURCE, low_memory=False)
-        if "Date" not in df.columns or "HomeTeam" not in df.columns or "AwayTeam" not in df.columns:
-            return {}
-        df = clean_team_names(df, cols=("HomeTeam", "AwayTeam"))
-        for _, row in df.iterrows():
-            date_raw = str(row["Date"]).strip()
-            home = row["HomeTeam"]
-            away = row["AwayTeam"]
-            try:
-                kickoff_naive = pd.to_datetime(date_raw, dayfirst=False, errors="coerce")
-                if pd.isna(kickoff_naive):
-                    continue
-                try:
-                    import zoneinfo
-                    uk_tz = zoneinfo.ZoneInfo("Europe/London")
-                    kickoff_uk = kickoff_naive.tz_localize(uk_tz)
-                except Exception:
-                    import pytz
-                    uk_tz = pytz.timezone("Europe/London")
-                    kickoff_uk = uk_tz.localize(kickoff_naive.to_pydatetime())
-                kickoff_utc = kickoff_uk.astimezone('UTC')
-            except Exception:
-                kickoff_utc = kickoff_naive.tz_localize('UTC')
-            key = f"{kickoff_utc.strftime('%Y-%m-%d')}|{home}|{away}"
-            times[key] = kickoff_utc
-    except Exception as e:
-        print(f"[merge_results] Warning: could not load fixture times: {e}")
+
+    # 1. Load from future fixtures file (updated_fixtures_with_odds.csv)
+    if FIXTURES_SOURCE.exists():
+        try:
+            df = pd.read_csv(FIXTURES_SOURCE, low_memory=False)
+            if {"Date", "HomeTeam", "AwayTeam"}.issubset(df.columns):
+                df = clean_team_names(df, cols=("HomeTeam", "AwayTeam"))
+                for _, row in df.iterrows():
+                    date_raw = str(row["Date"]).strip()
+                    home = row["HomeTeam"]
+                    away = row["AwayTeam"]
+                    try:
+                        kickoff_naive = pd.to_datetime(date_raw, dayfirst=False, errors="coerce")
+                        if pd.isna(kickoff_naive):
+                            continue
+                        try:
+                            import zoneinfo
+                            uk_tz = zoneinfo.ZoneInfo("Europe/London")
+                            kickoff_uk = kickoff_naive.tz_localize(uk_tz)
+                        except Exception:
+                            import pytz
+                            uk_tz = pytz.timezone("Europe/London")
+                            kickoff_uk = uk_tz.localize(kickoff_naive.to_pydatetime())
+                        kickoff_utc = kickoff_uk.astimezone('UTC')
+                    except Exception:
+                        kickoff_utc = kickoff_naive.tz_localize('UTC')
+                    key = f"{kickoff_utc.strftime('%Y-%m-%d')}|{home}|{away}"
+                    times[key] = kickoff_utc
+        except Exception as e:
+            print(f"[merge_results] Warning: could not load fixture times from {FIXTURES_SOURCE.name}: {e}")
+
+    # 2. Load from historical results (combinedWithOdds.csv)
+    if RESULTS_SOURCE.exists():
+        try:
+            df = pd.read_csv(RESULTS_SOURCE, low_memory=False)
+            if {"Date", "Time", "HomeTeam", "AwayTeam"}.issubset(df.columns):
+                df = clean_team_names(df, cols=("HomeTeam", "AwayTeam"))
+                for _, row in df.iterrows():
+                    date_str = str(row["Date"]).strip()
+                    time_str = str(row["Time"]).strip() if not pd.isna(row.get("Time")) else "00:00"
+                    try:
+                        # Date is DD/MM/YYYY and Time is HH:MM
+                        kickoff_naive = pd.to_datetime(
+                            date_str + " " + time_str, format="%d/%m/%Y %H:%M", errors="coerce"
+                        )
+                        if pd.isna(kickoff_naive):
+                            continue
+                        try:
+                            import zoneinfo
+                            uk_tz = zoneinfo.ZoneInfo("Europe/London")
+                            kickoff_uk = kickoff_naive.tz_localize(uk_tz)
+                        except Exception:
+                            import pytz
+                            uk_tz = pytz.timezone("Europe/London")
+                            kickoff_uk = uk_tz.localize(kickoff_naive.to_pydatetime())
+                        kickoff_utc = kickoff_uk.astimezone('UTC')
+                    except Exception:
+                        continue
+                    home = row["HomeTeam"]
+                    away = row["AwayTeam"]
+                    key = f"{kickoff_utc.strftime('%Y-%m-%d')}|{home}|{away}"
+                    times[key] = kickoff_utc
+        except Exception as e:
+            print(f"[merge_results] Warning: could not load kickoff times from {RESULTS_SOURCE.name}: {e}")
+
     return times
 
 def main():
@@ -135,10 +171,15 @@ def main():
         key = f"{date_str}|{home}|{away}"
         kickoff_dt = fixture_times.get(key)
         if kickoff_dt is None:
-            kickoff_dt = pd.to_datetime(date_str + " 23:59:59", errors="coerce").tz_localize("UTC")
-        kickoff_values.append(kickoff_dt)
+            kickoff_values.append(pd.NaT)
+        else:
+            kickoff_values.append(kickoff_dt)
+
     all_preds["kickoff_dt"] = kickoff_values
 
+    all_preds = all_preds[pd.notna(all_preds["kickoff_dt"])].copy()
+
+    # Keep only pre‑match snapshots (generated before kickoff)
     all_preds = all_preds[all_preds["generated_at"] < all_preds["kickoff_dt"]].copy()
 
     all_preds["match_key"] = (
@@ -208,7 +249,6 @@ def main():
 
     if "odds_B365H" in merged.columns and "prob_homewin" in merged.columns:
         merged["implied_prob"] = 1.0 / merged["odds_B365H"]
-        # EDGE only when we confidently back Home and have positive value
         merged["is_edge"] = (merged["prediction"] == "Home") & (merged["prob_homewin"] > merged["implied_prob"])
     else:
         merged["is_edge"] = False
