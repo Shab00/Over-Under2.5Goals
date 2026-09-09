@@ -296,6 +296,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     {legend_section}
     {performance_section}
     {results_section}
+    {strategy_section}
     <div class="table-wrapper">
       <table class="predictions-table">
         <thead>
@@ -618,6 +619,166 @@ def build_results_section(snapshot_path: Path) -> str:
         </div>"""
 
 
+def load_strategy(snapshot_path: Path = None):
+    """Read artifacts/strategy_latest.json safely.
+
+    Returns the parsed dict, or None if the file is missing or malformed -
+    never raises.
+    """
+    if snapshot_path is not None:
+        path = snapshot_path.parent.parent / "artifacts" / "strategy_latest.json"
+    else:
+        path = Path("artifacts/strategy_latest.json")
+
+    if not path.exists():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def render_strategy_section(strategy) -> str:
+    """Render the AI Pundit Analysis panel, matching the page's dark theme.
+
+    Returns an empty string silently when there is no strategy to show.
+    """
+    if not strategy:
+        return ""
+
+    import html as _html
+
+    def esc(v):
+        return _html.escape(str(v if v is not None else ""))
+
+    def fmt_gap(v):
+        try:
+            return f"{float(v):+.1%}"
+        except (TypeError, ValueError):
+            return "N/A"
+
+    def fmt_prob(v):
+        try:
+            return f"{float(v):.0%}"
+        except (TypeError, ValueError):
+            return "N/A"
+
+    signal_colors = {"Home": "#4ade80", "Not Home": "#facc15", "Avoid": "#f87171"}
+
+    def pill(text, color):
+        return (
+            f'<span style="display:inline-block;padding:0.15rem 0.6rem;'
+            f'border-radius:999px;font-size:0.75rem;font-weight:700;'
+            f'background:{color}1a;color:{color};border:1px solid {color};'
+            f'margin:0 0.4rem 0.3rem 0;">{esc(text)}</span>'
+        )
+
+    def muted_badge(text):
+        return (
+            f'<span style="display:inline-block;padding:0.15rem 0.6rem;'
+            f'border-radius:999px;font-size:0.75rem;font-weight:700;'
+            f'background:rgba(148,163,184,0.15);color:var(--muted);'
+            f'border:1px solid var(--panel-border);margin:0 0.4rem 0.3rem 0;">'
+            f'{esc(text)}</span>'
+        )
+
+    def edge_badge(label):
+        if label not in ("EDGE", "FADE"):
+            return ""
+        color = "#fbbf24" if label == "EDGE" else "#ef4444"
+        return (
+            f'<span style="display:inline-block;padding:0.15rem 0.6rem;'
+            f'border-radius:999px;font-size:0.75rem;font-weight:700;'
+            f'background:{color}1a;color:{color};border:1px solid {color};'
+            f'margin:0 0.4rem 0.3rem 0;">{esc(label)}</span>'
+        )
+
+    def card(fx, accent=False):
+        sig = fx.get("signal", "")
+        border = "var(--accent)" if accent else "var(--panel-border)"
+        pills = pill(sig, signal_colors.get(sig, "#94a3b8"))
+        if fx.get("confidence"):
+            pills += muted_badge(f'{fx.get("confidence")} confidence')
+        pills += edge_badge(fx.get("edge_label", ""))
+        return (
+            f'<div style="background:rgba(17,24,39,0.6);border:1px solid {border};'
+            f'border-radius:12px;padding:1rem 1.2rem;margin-bottom:0.8rem;">'
+            f'<div style="font-weight:700;font-size:1rem;margin-bottom:0.5rem;">'
+            f'{esc(fx.get("home_team"))} vs {esc(fx.get("away_team"))}</div>'
+            f'<div>{pills}</div>'
+            f'<div style="color:var(--muted);font-size:0.85rem;margin:0.4rem 0;">'
+            f'Prob: {fmt_prob(fx.get("prob_homewin"))} &middot; '
+            f'Odds: {esc(fx.get("odds"))} &middot; '
+            f'Value: {fmt_gap(fx.get("value_gap"))}</div>'
+            f'<p style="font-style:italic;color:var(--text);margin:0.5rem 0;">'
+            f'{esc(fx.get("pundit_take"))}</p>'
+            f'<div style="font-size:0.85rem;color:var(--muted);">'
+            f'<strong style="color:var(--accent);">{esc(fx.get("bet_type"))}</strong>'
+            f' &middot; Stake: {esc(fx.get("stake_advice"))}</div>'
+            f'</div>'
+        )
+
+    parts = [
+        '<div class="performance-tracker">',
+        '<h2>AI Pundit Analysis '
+        '<span style="font-size:0.7rem;font-weight:600;color:var(--muted);'
+        'background:rgba(148,163,184,0.15);border:1px solid var(--panel-border);'
+        'border-radius:999px;padding:0.1rem 0.5rem;vertical-align:middle;">'
+        'Powered by GPT-4o-mini | Not financial advice</span></h2>',
+    ]
+
+    if strategy.get("gameweek_summary"):
+        parts.append(
+            f'<p style="color:var(--muted);margin-bottom:1rem;">'
+            f'{esc(strategy["gameweek_summary"])}</p>'
+        )
+
+    top_picks = strategy.get("top_picks") or []
+    if top_picks:
+        parts.append(
+            '<h3 style="color:var(--accent);font-size:0.9rem;'
+            'margin:0.8rem 0 0.6rem;">Top Picks</h3>'
+        )
+        parts += [card(fx) for fx in top_picks]
+
+    value_bets = strategy.get("value_bets") or []
+    if value_bets:
+        parts.append(
+            '<h3 style="color:var(--accent);font-size:0.9rem;'
+            'margin:1rem 0 0.6rem;">Value Bets (EDGE)</h3>'
+        )
+        parts += [card(fx, accent=True) for fx in value_bets]
+
+    avoid_list = strategy.get("avoid_list") or []
+    if avoid_list:
+        parts.append(
+            '<h3 style="color:var(--accent);font-size:0.9rem;'
+            'margin:1rem 0 0.6rem;">Avoid This Week</h3>'
+        )
+        parts.append(
+            '<ul style="color:var(--muted);font-size:0.85rem;'
+            'padding-left:1.2rem;margin:0;">'
+        )
+        for fx in avoid_list:
+            reason = fx.get("pundit_take") or fx.get("reason") or ""
+            parts.append(
+                f'<li style="margin-bottom:0.3rem;"><strong>'
+                f'{esc(fx.get("home_team"))} vs {esc(fx.get("away_team"))}</strong>'
+                f' &ndash; {esc(reason)}</li>'
+            )
+        parts.append('</ul>')
+
+    if strategy.get("model_form"):
+        parts.append(
+            f'<div style="font-size:0.8rem;color:var(--muted);margin-top:0.8rem;">'
+            f'{esc(strategy["model_form"])}</div>'
+        )
+
+    parts.append('</div>')
+    return "\n".join(parts)
+
+
 def generate_page(snapshot_path: Path, output_path: Path) -> None:
     if not snapshot_path.exists():
         print(f"Snapshot file not found: {snapshot_path}")
@@ -741,6 +902,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
     performance_html = build_performance_section(snapshot_path)
     results_html = build_results_section(snapshot_path)
     legend_html = build_legend_section()
+    strategy_html = render_strategy_section(load_strategy(snapshot_path))
 
     if last_generated:
         try:
@@ -774,6 +936,7 @@ def generate_page(snapshot_path: Path, output_path: Path) -> None:
         legend_section=legend_html,
         performance_section=performance_html,
         results_section=results_html,
+        strategy_section=strategy_html,
         rows=html_rows,
     )
 
