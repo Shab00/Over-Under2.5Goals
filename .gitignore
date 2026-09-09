@@ -58,3 +58,4 @@ pip-log.txt
 
 # Logs
 *.log
+data/processed/news_context.json
