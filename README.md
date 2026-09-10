@@ -26,6 +26,24 @@ This project predicts whether the home team will win an upcoming Premier League 
 
 ---
 
+## AI Pundit Agent (RAG Layer)
+
+The pipeline now includes a RAG-powered AI pundit agent that generates written betting strategy for every gameweek.
+
+**How it works:**
+- Live injury news scraped daily from NewsNow and accumulated in a compound knowledge base
+- Past strategies archived with outcomes after each gameweek — the system learns from what worked
+- FAISS vector store activates automatically after 20 scored strategies for embedding-based similarity retrieval
+- GPT-4o-mini reasons over pre-computed context (form, H2H, value gaps) to produce per-fixture analysis with written justification
+
+**Engineering decisions:**
+- All maths pre-computed in Python — the LLM receives clean labelled facts, never raw numbers
+- Pydantic v2 schema validation on every GPT output
+- Graceful fallback to model signals if OpenAI is unavailable — pipeline never goes dark
+- Delivered via Telegram and injected into the GitHub Pages predictions page on every training run
+
+---
+
 ## How the Pipeline Works
 
 ```
