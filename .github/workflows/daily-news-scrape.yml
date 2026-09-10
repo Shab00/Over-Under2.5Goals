@@ -1,0 +1,41 @@
+name: Daily News Scrape
+
+permissions:
+  contents: write
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # 09:00 UTC = 10:00 UK
+  workflow_dispatch:
+
+jobs:
+  scrape-news:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Scrape injury and team news
+        run: python jobs/scrape_news.py
+
+      - name: Commit updated news context
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/processed/news_context.json
+          if git diff --staged --quiet; then
+            echo "No new headlines."
+          else
+            git commit -m "Update news context [skip ci]"
+            git push
+          fi

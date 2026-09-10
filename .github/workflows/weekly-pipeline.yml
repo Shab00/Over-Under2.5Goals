@@ -40,6 +40,7 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: bash jobs/run_weekly_pipeline.sh
 
       - name: Archive snapshot
@@ -61,6 +62,16 @@ jobs:
           if [ -f artifacts/train_report.json ]; then
             git add artifacts/train_report.json
           fi
+          if [ -f artifacts/strategy_latest.json ]; then
+            git add artifacts/strategy_latest.json
+          fi
+          if [ -f artifacts/strategy_latest.md ]; then
+            git add artifacts/strategy_latest.md
+          fi
+          if [ -f artifacts/match_context.json ]; then
+            git add artifacts/match_context.json
+          fi
+          git add artifacts/strategy_archive/ 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else

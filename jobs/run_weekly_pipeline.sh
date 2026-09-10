@@ -33,3 +33,15 @@ log "step: update metrics"
 curl -s -X POST http://localhost:8000/update_metrics -H "X-API-KEY: ${API_KEY:-test123}" || true
 
 log "weekly pipeline done"
+
+echo "[pipeline] Computing match context..."
+python jobs/compute_context.py
+
+echo "[pipeline] Scoring strategy archive..."
+python jobs/score_strategy_archive.py
+
+echo "[pipeline] Generating AI pundit strategy..."
+python jobs/generate_strategy.py
+
+echo "[pipeline] Delivering strategy to Telegram..."
+python jobs/deliver_strategy_telegram.py
