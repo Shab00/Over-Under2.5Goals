@@ -846,7 +846,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    load_dotenv()
+    load_dotenv(override=False)
 
     if not CONTEXT_JSON.exists():
         raise SystemExit(f"[strategy] missing {CONTEXT_JSON} - run compute_context.py first")
