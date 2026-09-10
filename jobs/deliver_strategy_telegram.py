@@ -1,10 +1,39 @@
 import json
 import os
+import re
 from pathlib import Path
 
 import requests
 
 STRATEGY_JSON = Path("artifacts/strategy_latest.json")
+
+# Tags Telegram's HTML parse_mode actually accepts.
+_TELEGRAM_ALLOWED_TAGS = {
+    "b", "strong", "i", "em", "u", "ins", "s", "strike", "del",
+    "a", "code", "pre", "span", "tg-spoiler", "tg-emoji", "blockquote",
+}
+
+
+def sanitise_html(text: str) -> str:
+    """Strip anything Telegram HTML can't parse.
+
+    Safety net for the GPT-authored telegram_message: turn <br> into newlines
+    and drop every tag not on Telegram's allow-list (e.g. <footer>, <div>).
+    """
+    if not text:
+        return text
+    # <br>, <br/>, <br /> -> newline
+    text = re.sub(r"(?i)<br\s*/?>", "\n", text)
+
+    def _keep_or_drop(m: "re.Match") -> str:
+        return m.group(0) if m.group(1).lower() in _TELEGRAM_ALLOWED_TAGS else ""
+
+    # remove opening/closing tags whose name is not allowed, keep their text
+    text = re.sub(r"</?([A-Za-z0-9-]+)(?:\s[^>]*)?>", _keep_or_drop, text)
+    # tidy up whitespace left behind
+    text = re.sub(r"[ \t]+\n", "\n", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text.strip()
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
@@ -43,6 +72,8 @@ if not message:
     lines.append("")
     lines.append("Full analysis: shab00.github.io/football")
     message = "\n".join(lines)
+
+message = sanitise_html(message)
 
 send_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 resp = requests.post(send_url, data={

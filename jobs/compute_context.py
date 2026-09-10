@@ -223,12 +223,21 @@ def model_performance() -> dict:
 
     total = int(len(res))
     if total == 0:
-        return {"total_predictions": 0, "overall_accuracy_pct": 0.0,
+        return {"total_predictions": 0, "avoid_count": 0, "overall_accuracy_pct": 0.0,
                 "edge_count": 0, "edge_accuracy_pct": 0.0, "edge_profit": 0.0,
                 "fade_count": 0, "fade_accuracy_pct": 0.0,
                 "streak_label": "MIXED", "streak_string": "", "streak_last5": []}
 
-    correct = _as_bool(res["correct"])
+    # Match the page's performance tracker: accuracy is over CONFIDENT
+    # predictions only - "Avoid" rows are excluded (counted separately).
+    pred_col = res["prediction"] if "prediction" in res.columns else res.get("pred_label", "")
+    is_avoid = pred_col.astype(str).str.strip().str.lower() == "avoid"
+    avoid_count = int(is_avoid.sum())
+    confident = res[~is_avoid]
+    n_confident = int(len(confident))
+
+    correct = _as_bool(res["correct"])              # full window - used for streak
+    correct_conf = _as_bool(confident["correct"])   # confident only - used for accuracy
     is_edge = _as_bool(res["is_edge"])
     edge_correct = _as_bool(res["edge_correct"])
     is_fade = _as_bool(res["is_fade"])
@@ -244,8 +253,9 @@ def model_performance() -> dict:
     streak_label = "HOT" if hits >= 4 else "COLD" if hits <= 1 else "MIXED"
 
     return {
-        "total_predictions": total,
-        "overall_accuracy_pct": round(int(correct.sum()) / total * 100, 1),
+        "total_predictions": n_confident,
+        "avoid_count": avoid_count,
+        "overall_accuracy_pct": round(int(correct_conf.sum()) / n_confident * 100, 1) if n_confident else 0.0,
         "edge_count": edge_count,
         "edge_accuracy_pct": round(int(edge_correct.sum()) / edge_count * 100, 1) if edge_count else 0.0,
         "edge_profit": round(float(profit[is_edge].sum()), 2),
@@ -294,6 +304,17 @@ def top_headlines(entries, k: int = 3) -> list[str]:
         elif isinstance(e, str) and e:
             out.append(e)
     return out
+
+
+def betting_category(prob: float) -> str:
+    """Pre-computed betting bucket from the home-win probability (pure Python)."""
+    if prob >= 0.55:
+        return "back_home"
+    if prob >= 0.45:
+        return "avoid"
+    if prob >= 0.30:
+        return "double_chance"
+    return "strong_fade"
 
 
 # --------------------------------------------------------------------------- #
@@ -366,6 +387,8 @@ def main() -> None:
             "implied_prob": round(implied, 3) if implied is not None else None,
             "value_gap": round(value_gap, 3) if value_gap is not None else None,
             "edge_label": edge_label,
+            "betting_category": betting_category(prob),
+            "is_strong_fade": bool(prob < 0.30),
             "home_team_form": team_form(hist, home_canon),
             "away_team_form": team_form(hist, away_canon),
             "h2h": head_to_head(hist, home_canon, away_canon),

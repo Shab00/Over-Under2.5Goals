@@ -1,8 +1,9 @@
 {
-  "computed_at": "2026-09-09T11:33:31.183155+00:00",
+  "computed_at": "2026-09-10T11:31:43.350805+00:00",
   "model_performance": {
-    "total_predictions": 30,
-    "overall_accuracy_pct": 63.3,
+    "total_predictions": 27,
+    "avoid_count": 3,
+    "overall_accuracy_pct": 70.4,
     "edge_count": 4,
     "edge_accuracy_pct": 75.0,
     "edge_profit": 0.82,
@@ -29,6 +30,8 @@
       "implied_prob": 0.442,
       "value_gap": -0.034,
       "edge_label": "N/A",
+      "betting_category": "double_chance",
+      "is_strong_fade": false,
       "home_team_form": {
         "current_season_pts": 1,
         "current_season_games": 3,
@@ -75,6 +78,8 @@
       "implied_prob": 0.398,
       "value_gap": -0.105,
       "edge_label": "N/A",
+      "betting_category": "strong_fade",
+      "is_strong_fade": true,
       "home_team_form": {
         "current_season_pts": 2,
         "current_season_games": 3,
@@ -120,6 +125,8 @@
       "implied_prob": 0.813,
       "value_gap": 0.109,
       "edge_label": "EDGE",
+      "betting_category": "back_home",
+      "is_strong_fade": false,
       "home_team_form": {
         "current_season_pts": 6,
         "current_season_games": 3,
@@ -166,6 +173,8 @@
       "implied_prob": 0.526,
       "value_gap": 0.233,
       "edge_label": "EDGE",
+      "betting_category": "back_home",
+      "is_strong_fade": false,
       "home_team_form": {
         "current_season_pts": 3,
         "current_season_games": 3,
@@ -210,6 +219,8 @@
       "implied_prob": 0.685,
       "value_gap": 0.149,
       "edge_label": "EDGE",
+      "betting_category": "back_home",
+      "is_strong_fade": false,
       "home_team_form": {
         "current_season_pts": 5,
         "current_season_games": 3,
@@ -256,6 +267,8 @@
       "implied_prob": 0.483,
       "value_gap": -0.209,
       "edge_label": "N/A",
+      "betting_category": "strong_fade",
+      "is_strong_fade": true,
       "home_team_form": {
         "current_season_pts": 1,
         "current_season_games": 3,
@@ -302,6 +315,8 @@
       "implied_prob": 0.139,
       "value_gap": 0.161,
       "edge_label": "N/A",
+      "betting_category": "double_chance",
+      "is_strong_fade": false,
       "home_team_form": {
         "current_season_pts": 4,
         "current_season_games": 3,
@@ -348,6 +363,8 @@
       "implied_prob": 0.244,
       "value_gap": 0.049,
       "edge_label": "N/A",
+      "betting_category": "strong_fade",
+      "is_strong_fade": true,
       "home_team_form": {
         "current_season_pts": 0,
         "current_season_games": 3,
@@ -394,6 +411,8 @@
       "implied_prob": 0.317,
       "value_gap": -0.22,
       "edge_label": "N/A",
+      "betting_category": "strong_fade",
+      "is_strong_fade": true,
       "home_team_form": {
         "current_season_pts": 4,
         "current_season_games": 3,
@@ -440,6 +459,8 @@
       "implied_prob": 0.412,
       "value_gap": 0.007,
       "edge_label": "N/A",
+      "betting_category": "double_chance",
+      "is_strong_fade": false,
       "home_team_form": {
         "current_season_pts": 5,
         "current_season_games": 3,

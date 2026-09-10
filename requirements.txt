@@ -18,3 +18,5 @@ webdriver-manager
 openai
 faiss-cpu
 python-dotenv
+json5
+pydantic
