@@ -29,7 +29,6 @@ RESULTS_CSV = Path("data/processed/results_merged.csv")
 NEWS_JSON = Path("data/processed/news_context.json")
 OUT_JSON = Path("artifacts/match_context.json")
 
-LOOKAHEAD_DAYS = 7
 FORM_N = 5
 H2H_N = 5
 PERF_N = 30
@@ -306,6 +305,36 @@ def top_headlines(entries, k: int = 3) -> list[str]:
     return out
 
 
+def get_gameweek_window(now: datetime) -> tuple:
+    """
+    Returns (start, end) datetime range for the current
+    or next gameweek.
+
+    Gameweek = Friday 00:00 to Monday 23:59 UTC.
+
+    If today is Fri/Sat/Sun/Mon: use this week's window.
+    If today is Tue/Wed/Thu: use next Friday to Monday.
+    """
+    weekday = now.weekday()  # Mon=0, Fri=4, Sun=6
+
+    if weekday == 4:   # Friday
+        days_to_friday = 0
+    elif weekday == 5:  # Saturday
+        days_to_friday = -1
+    elif weekday == 6:  # Sunday
+        days_to_friday = -2
+    elif weekday == 0:  # Monday
+        days_to_friday = -3
+    else:               # Tue/Wed/Thu — look ahead to next Friday
+        days_to_friday = (4 - weekday) % 7
+
+    friday = (now + timedelta(days=days_to_friday)).replace(
+        hour=0, minute=0, second=0, microsecond=0)
+    monday = friday + timedelta(days=3, hours=23, minutes=59)
+
+    return friday, monday
+
+
 def betting_category(prob: float) -> str:
     """Pre-computed betting bucket from the home-win probability (pure Python)."""
     if prob >= 0.55:
@@ -322,14 +351,37 @@ def betting_category(prob: float) -> str:
 # --------------------------------------------------------------------------- #
 def main() -> None:
     now = datetime.now(timezone.utc)
-    today = now.date()
-    end = today + timedelta(days=LOOKAHEAD_DAYS)
+    gameweek_start, gameweek_end = get_gameweek_window(now)
 
     # ---- STEP 1: upcoming fixtures ------------------------------------------
     pred = pd.read_csv(PREDICTIONS_CSV)
     pred["_kd"] = pd.to_datetime(pred["kickoff_time_utc"], errors="coerce", utc=True)
     pred = pred[pred["_kd"].notna()]
-    upcoming = pred[pred["_kd"].dt.date.between(today, end)].copy()
+    upcoming = pred[
+        (pred["_kd"] >= gameweek_start) & (pred["_kd"] <= gameweek_end)
+    ].copy()
+
+    if upcoming.empty:
+        print("[context] No fixtures in current gameweek window")
+        print(f"[context] Window: {gameweek_start.date()} to {gameweek_end.date()}")
+        OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
+        OUT_JSON.write_text(
+            json.dumps(
+                {
+                    "computed_at": now.isoformat(),
+                    "gameweek_start": gameweek_start.isoformat(),
+                    "gameweek_end": gameweek_end.isoformat(),
+                    "model_performance": model_performance(),
+                    "fixtures": [],
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        print(f"[context] wrote empty context to {OUT_JSON}")
+        exit(0)
 
     hist = load_history()
     hometeams = set(hist["HomeTeam"].dropna().astype(str).unique())
@@ -400,6 +452,8 @@ def main() -> None:
 
     payload = {
         "computed_at": now.isoformat(),
+        "gameweek_start": gameweek_start.isoformat(),
+        "gameweek_end": gameweek_end.isoformat(),
         "model_performance": perf,
         "fixtures": fixtures_out,
     }
@@ -407,6 +461,9 @@ def main() -> None:
     OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     OUT_JSON.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
+    print(f"[context] gameweek window: {gameweek_start.date()} to {gameweek_end.date()}")
+    for fx in fixtures_out:
+        print(f"[context]   {fx['home_team']} vs {fx['away_team']} — {fx['kickoff']}")
     print(f"[context] computed context for {len(fixtures_out)} fixtures")
     print(f"[context] model: {perf['overall_accuracy_pct']}% accuracy, {perf['streak_label']} streak")
     print(f"[context] wrote {OUT_JSON}")

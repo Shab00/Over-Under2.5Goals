@@ -152,16 +152,18 @@ SYSTEM_PROMPT = (
     "fixtures.\n"
     "Rules:\n"
     "- Write in natural pundit voice - opinionated, direct\n"
-    "- Use ONLY the pre-computed prob_homewin percentages provided in the "
-    "data - never invent figures\n"
-    "- Reference specific betting_category thresholds: strong_fade = below "
-    "30% home win probability; double_chance = 30-45% home win probability; "
-    "avoid = 45-55% too close to call\n"
+    "- Describe each fixture qualitatively using the pre-computed "
+    "betting_category and form/h2h data - never invent or write out numeric "
+    "figures\n"
+    "- Reference specific betting_category thresholds in words, not "
+    "numbers: strong_fade = well below a coin-flip on the home win; "
+    "double_chance = below-average but not hopeless home win chances; "
+    "avoid = too close to call\n"
     "- Reference specific injury news from home_news and away_news where "
     "relevant - name the player\n"
-    "- You MUST cite the model's recent performance using the exact "
-    "figures provided: the overall_accuracy_pct number, the "
-    "streak_label word (e.g. HOT), and the edge_profit units\n"
+    "- You MUST reference the model's recent performance using the "
+    "streak_label word (e.g. HOT) and a qualitative sense of its accuracy "
+    "(e.g. 'in strong form') - do not write out the accuracy number\n"
     "- Reference h2h or form data where it strengthens the argument\n"
     "- Do NOT use phrases like 'keep an eye on' or generic disclaimers\n"
     "- Structure naturally: start with strong fades, move to double "
@@ -171,14 +173,24 @@ SYSTEM_PROMPT = (
     "robot reading a spreadsheet\n"
     "Example tone (do not copy this exactly - use real data from this "
     "week): 'The Manchester derby is as close to a no-bet as it gets for "
-    "the home side - United are at just 10% which is a signal to back City "
-    "all day. Similarly Sunderland hosting Arsenal at 30% is a strong "
-    "fade. For those looking at double chances, Villa at 41% against "
-    "Forest is interesting but Goretzka's knee injury weakens their "
-    "midfield and the h2h favours a tight game. Leeds vs Newcastle at 42% "
-    "is another one to take double chance rather than back the home side. "
-    "The model is currently HOT at 63% accuracy over the last 30 - trust "
-    "the signals this week.'"
+    "the home side - United look out of their depth here which is a "
+    "signal to back City all day. Similarly Sunderland hosting Arsenal "
+    "is a strong fade. For those looking at double chances, Villa "
+    "against Forest is interesting but Goretzka's knee injury weakens "
+    "their midfield and the h2h favours a tight game. Leeds vs "
+    "Newcastle is another one to take double chance rather than back "
+    "the home side. The model is currently HOT and in strong form - "
+    "trust the signals this week.'\n\n"
+    "CRITICAL RULE: Never write percentage figures, probability numbers, "
+    "or odds figures in pundit_take, rest_of_card_paragraph or "
+    "gameweek_summary. Do not write things like '93%', '28.1%', '1.24 "
+    "odds'. Describe form and situation in words only.\n"
+    "Example of WRONG: 'Chelsea have a 93% chance of winning'\n"
+    "Example of RIGHT: 'Chelsea are overwhelming favourites and should "
+    "have too much quality for Hull City'\n"
+    "The structured fields (prob_homewin, odds, value_gap) already show "
+    "the numbers - your job is to add qualitative insight not repeat the "
+    "numbers."
 )
 
 FIXTURE_SCHEMA = """{
@@ -204,7 +216,7 @@ OUTPUT_SCHEMA = """{
   "generated_at": "ISO datetime",
   "model_form": "one sentence on recent model form",
   "gameweek_summary": "2-3 sentence pundit overview",
-  "rest_of_card_paragraph": "single flowing pundit paragraph (<120 words) covering strong fades, double chances then avoids, using ONLY pre-computed prob_homewin percentages and named injury news",
+  "rest_of_card_paragraph": "single flowing pundit paragraph (<120 words) covering strong fades, double chances then avoids, using qualitative descriptions of form/situation (no percentage or odds figures) and named injury news",
   "top_picks": [...all betting_category==back_home fixture objects...],
   "strong_fades": [...all betting_category==strong_fade fixture objects...],
   "double_chances": [...all betting_category==double_chance fixture objects...],
@@ -684,6 +696,19 @@ def build_fallback_strategy(context: dict) -> dict:
     }
 
 
+def scrub_percentages(text: str) -> str:
+    """Safety-net: strip any percentage/odds figures GPT wrote into free
+    text despite the system prompt's CRITICAL RULE against it."""
+    # Remove patterns like 93%, 28.1%, 7.8%
+    text = re.sub(r'\d+\.?\d*%', '', text)
+    # Remove patterns like 1.24 odds, odds of 2.06
+    text = re.sub(r'\d+\.\d+ odds', '', text)
+    text = re.sub(r'odds of \d+\.\d+', '', text)
+    # Clean up double spaces
+    text = re.sub(r'  +', ' ', text).strip()
+    return text
+
+
 def enforce_category_bets(data: dict) -> None:
     """Deterministic guard: bet_type / stake_advice / pundit_action must match
     betting_category regardless of what GPT returned."""
@@ -698,10 +723,14 @@ def enforce_category_bets(data: dict) -> None:
                 fx["stake_advice"] = "Small"
                 fx["pundit_action"] = "Strong Fade \u2014 Back Away Win"
             elif cat == "double_chance":
+                fx["bet_type"] = "Back Double Chance (X2)"
                 fx["stake_advice"] = "Small"  # never Skip for double_chance
-                if not fx.get("bet_type") or fx.get("bet_type") == "Skip":
-                    fx["bet_type"] = "Back Double Chance (X2)"
                 fx["pundit_action"] = "Back Double Chance (X2)"
+            elif cat == "back_home":
+                fx["bet_type"] = "Back Home"
+            elif cat == "avoid":
+                fx["bet_type"] = "Skip"
+                fx["stake_advice"] = "Skip"
 
 
 def _extract_injury_detail(headline: str, team: str, team_names: set[str] | None = None) -> str | None:
@@ -939,15 +968,26 @@ def main() -> None:
         f"EDGE profit: {perf.get('edge_profit', 0):+.2f} units."
     )
 
-    # Guarantee the rest-of-card paragraph carries the real accuracy figure
-    # (gpt-4o-mini often paraphrases the model stats away).
-    _acc = perf.get("overall_accuracy_pct")
+    # Guarantee the rest-of-card paragraph carries a mention of model form
+    # (gpt-4o-mini often paraphrases it away). Qualitative only - no
+    # accuracy percentage - per the CRITICAL RULE against numbers in free
+    # text.
+    _streak = perf.get("streak_label", "")
     _para = (data.get("rest_of_card_paragraph") or "").strip()
-    if _acc is not None and f"{_acc}%" not in _para:
-        _sfx = (f" The model is {perf.get('streak_label', '')} at {_acc}% "
-                f"accuracy over the last {perf.get('total_predictions', 0)} "
-                f"confident predictions.")
+    if _streak and _streak.upper() not in _para.upper():
+        _sfx = (f" The model is currently {_streak} over its last "
+                f"{perf.get('total_predictions', 0)} confident predictions.")
         data["rest_of_card_paragraph"] = (_para + _sfx).strip()
+
+    # Safety net: strip any percentage/probability/odds figures GPT wrote
+    # into free text despite the system prompt's CRITICAL RULE against it.
+    data["gameweek_summary"] = scrub_percentages(data.get("gameweek_summary") or "")
+    data["rest_of_card_paragraph"] = scrub_percentages(data.get("rest_of_card_paragraph") or "")
+    for array_name in ["fixtures_full", "top_picks", "strong_fades",
+                       "double_chances", "avoid_list", "value_bets"]:
+        for fx in data.get(array_name, []) or []:
+            if isinstance(fx, dict) and fx.get("pundit_take"):
+                fx["pundit_take"] = scrub_percentages(fx["pundit_take"])
 
     # Telegram message is ALWAYS built deterministically from the strategy
     # data - GPT never generates it (avoids two competing messages).

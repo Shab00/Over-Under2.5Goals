@@ -712,6 +712,17 @@ def render_strategy_section(strategy) -> str:
             f'background:{bg};color:var(--button-text);">{esc(text)}</span></div>'
         )
 
+    def _footer(fx):
+        cat = fx.get("betting_category", "")
+        if cat == "double_chance":
+            return "Back Double Chance (X2) · Stake: Small"
+        if cat == "strong_fade":
+            return "Back Away Win · Stake: Small"
+        if cat == "back_home":
+            stake = fx.get("stake_advice", "Small")
+            return f"Back Home · Stake: {stake}"
+        return "Skip"
+
     def card(fx, *, border="#38bdf8", shadow="rgba(56,189,248,0.15)", show_action=False):
         sig = fx.get("signal", "")
         pills = pill(sig, signal_colors.get(sig, "#94a3b8"))
@@ -735,7 +746,7 @@ def render_strategy_section(strategy) -> str:
             f'{esc(fx.get("pundit_take"))}</p>'
             f'{action_html}'
             f'<div style="font-size:0.78rem;color:var(--muted);margin-top:0.2rem;">'
-            f'{esc(fx.get("bet_type"))} &middot; Stake: {esc(fx.get("stake_advice"))}</div>'
+            f'{esc(_footer(fx))}</div>'
             f'</div>'
         )
 
