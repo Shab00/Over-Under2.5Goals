@@ -312,7 +312,7 @@ def betting_category(prob: float) -> str:
         return "back_home"
     if prob >= 0.45:
         return "avoid"
-    if prob >= 0.30:
+    if prob >= 0.20:
         return "double_chance"
     return "strong_fade"
 
@@ -388,7 +388,7 @@ def main() -> None:
             "value_gap": round(value_gap, 3) if value_gap is not None else None,
             "edge_label": edge_label,
             "betting_category": betting_category(prob),
-            "is_strong_fade": bool(prob < 0.30),
+            "is_strong_fade": bool(prob < 0.20),
             "home_team_form": team_form(hist, home_canon),
             "away_team_form": team_form(hist, away_canon),
             "h2h": head_to_head(hist, home_canon, away_canon),

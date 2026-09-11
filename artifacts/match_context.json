@@ -1,5 +1,5 @@
 {
-  "computed_at": "2026-09-10T13:50:00.416211+00:00",
+  "computed_at": "2026-09-11T22:20:39.135795+00:00",
   "model_performance": {
     "total_predictions": 27,
     "avoid_count": 3,
@@ -78,8 +78,8 @@
       "implied_prob": 0.403,
       "value_gap": -0.127,
       "edge_label": "N/A",
-      "betting_category": "strong_fade",
-      "is_strong_fade": true,
+      "betting_category": "double_chance",
+      "is_strong_fade": false,
       "home_team_form": {
         "current_season_pts": 2,
         "current_season_games": 3,
@@ -267,8 +267,8 @@
       "implied_prob": 0.485,
       "value_gap": -0.253,
       "edge_label": "N/A",
-      "betting_category": "strong_fade",
-      "is_strong_fade": true,
+      "betting_category": "double_chance",
+      "is_strong_fade": false,
       "home_team_form": {
         "current_season_pts": 1,
         "current_season_games": 3,
@@ -496,6 +496,46 @@
         "'His groin' - Defender injury blow after Newcastle United transfer decision as record signing makes debut",
         "Jaissle gives injury updates on Newcastle duo ahead of cup clash"
       ]
+    },
+    {
+      "home_team": "Brentford",
+      "away_team": "Chelsea",
+      "kickoff": "2026-09-18",
+      "prob_homewin": 0.102,
+      "signal": "Not Home",
+      "odds": 2.72,
+      "implied_prob": 0.368,
+      "value_gap": -0.266,
+      "edge_label": "N/A",
+      "betting_category": "strong_fade",
+      "is_strong_fade": true,
+      "home_team_form": {
+        "current_season_pts": 5,
+        "current_season_games": 3,
+        "pts_last5": 9,
+        "gf_last5": 9,
+        "ga_last5": 5,
+        "wins_last5": 2,
+        "form_string": "W D W D D"
+      },
+      "away_team_form": {
+        "current_season_pts": 6,
+        "current_season_games": 3,
+        "pts_last5": 9,
+        "gf_last5": 13,
+        "ga_last5": 10,
+        "wins_last5": 3,
+        "form_string": "L W W W L"
+      },
+      "h2h": {
+        "home_wins": 0,
+        "away_wins": 2,
+        "draws": 3,
+        "home_gf_avg": 1.3,
+        "summary": "Home 0W 3D 2L in last 5 meetings"
+      },
+      "home_news": [],
+      "away_news": []
     }
   ]
 }
