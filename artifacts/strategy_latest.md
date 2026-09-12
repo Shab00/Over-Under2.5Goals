@@ -2,12 +2,12 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Look out for Manchester City's impressive form as they head into the Manchester derby, where their quality should overshadow a struggling United side. Also, Coventry's home struggles make the double chance against Brighton a tempting pick. Carlos Baleba's injury for United adds to their woes, making the away team even more appealing.
+This week, the standout value bet is clearly Manchester City against Manchester United, where the home side looks outclassed. The biggest mismatch fixture is also in Manchester, with City riding high on solid form. Notably, United's Carlos Baleba is set to miss out due to injury, further complicating their chances.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-In the Manchester derby, United's poor form and injuries, especially to Carlos Baleba, signal a strong fade for their chances against a confident City side. For double chances, Coventry versus Brighton is intriguing; Coventry's home form has been abysmal, while Brighton seems to be finding their feet. Leeds and Newcastle offer another double chance option, but both teams have had inconsistent starts, making it too close to call. The model is currently HOT over its last 27 confident predictions.
+In the strong fade category, Manchester United face a daunting task against a City side that is in excellent form, and with injuries to key players like Carlos Baleba, it’s a clear signal to back City. For double chance bets, both Coventry against Brighton and Leeds against Newcastle show potential, albeit with limited h2h data and injuries impacting both sides. The model's current HOT streak supports trusting these insights this week.
 
 ## Value Bets (EDGE)
 
