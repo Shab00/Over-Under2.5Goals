@@ -32,9 +32,9 @@ class FixtureStrategy(BaseModel):
     signal: Literal["Home", "Not Home", "Avoid"]
     confidence: Literal["High", "Medium", "Low"]
     edge_label: Literal["EDGE", "FADE", "N/A"]
-    prob_homewin: float
-    odds: float
-    value_gap: float
+    prob_homewin: float = 0.0
+    odds: float = 0.0
+    value_gap: float = 0.0
     pundit_take: str
     bet_type: str
     stake_advice: str
@@ -200,9 +200,6 @@ FIXTURE_SCHEMA = """{
   "signal": "Home|Not Home|Avoid",
   "confidence": "High|Medium|Low",
   "edge_label": "EDGE|FADE|N/A",
-  "prob_homewin": 0.0,
-  "odds": 0.0,
-  "value_gap": 0.0,
   "betting_category": "back_home|avoid|double_chance|strong_fade (PRE-COMPUTED, keep exactly)",
   "is_strong_fade": true/false,
   "pundit_take": "2-3 sentence analysis",
@@ -409,7 +406,10 @@ def build_user_prompt(context: dict, rag_by_fixture: list[str]) -> str:
         "pundit_action. fixtures_full MUST contain ALL fixtures. Assign each "
         "fixture to exactly one of top_picks / strong_fades / double_chances / "
         "avoid_list according to its pre-computed betting_category. "
-        "Do NOT include a telegram_message field - it is built separately."
+        "Do NOT include a telegram_message field - it is built separately. "
+        "Do NOT include prob_homewin, odds or value_gap on any fixture "
+        "object - these are filled in separately from pre-computed data "
+        "in Python, not by you."
     )
     return "\n\n".join(["\n\n".join(blocks), perf_block, instruction])
 
@@ -943,6 +943,28 @@ def main() -> None:
     except Exception as e:  # noqa: BLE001
         print(f"[strategy] Pydantic validation warning: {e}")
 
+    # GPT does not transcribe numeric values reliably (it invents its own
+    # prob_homewin/odds instead of copying them) - never trust its numbers.
+    # Overwrite every fixture's numeric fields and computed labels from
+    # match_context.json, the source of truth. GPT only supplies text
+    # fields (pundit_take, confidence, stake_advice).
+    ctx_lookup = {
+        f"{fx['home_team']}|{fx['away_team']}": fx
+        for fx in context["fixtures"]
+    }
+    for array_name in ["fixtures_full", "top_picks", "strong_fades",
+                       "double_chances", "avoid_list"]:
+        for fx in data.get(array_name, []):
+            key = f"{fx['home_team']}|{fx['away_team']}"
+            if key in ctx_lookup:
+                ctx = ctx_lookup[key]
+                fx["prob_homewin"] = ctx["prob_homewin"]
+                fx["odds"] = ctx["odds"]
+                fx["value_gap"] = ctx["value_gap"]
+                fx["edge_label"] = ctx["edge_label"]
+                fx["betting_category"] = ctx["betting_category"]
+                fx["signal"] = ctx["signal"]
+
     # Post-process: recompute value_gap in Python from the pre-computed
     # prob_homewin and odds - never trust GPT's arithmetic.
     for array_name in ["fixtures_full", "top_picks", "strong_fades",
@@ -988,6 +1010,30 @@ def main() -> None:
         for fx in data.get(array_name, []) or []:
             if isinstance(fx, dict) and fx.get("pundit_take"):
                 fx["pundit_take"] = scrub_percentages(fx["pundit_take"])
+
+    # FILTER 1 - drop fixtures that are not in the current gameweek context.
+    valid_keys = {
+        f"{fx['home_team']}|{fx['away_team']}"
+        for fx in context["fixtures"]
+    }
+    for array_name in ["top_picks", "strong_fades", "double_chances",
+                       "avoid_list", "fixtures_full"]:
+        data[array_name] = [
+            fx for fx in data.get(array_name, []) or []
+            if f"{fx.get('home_team')}|{fx.get('away_team')}" in valid_keys
+        ]
+
+    # FILTER 2 - drop fixtures with zero prob_homewin or zero odds.
+    for array_name in ["top_picks", "strong_fades", "double_chances",
+                       "avoid_list", "fixtures_full"]:
+        kept = []
+        for fx in data.get(array_name, []) or []:
+            try:
+                if float(fx.get("prob_homewin", 0)) > 0 and float(fx.get("odds", 0)) > 0:
+                    kept.append(fx)
+            except (TypeError, ValueError):
+                continue
+        data[array_name] = kept
 
     # Telegram message is ALWAYS built deterministically from the strategy
     # data - GPT never generates it (avoids two competing messages).

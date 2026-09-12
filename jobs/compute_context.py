@@ -360,6 +360,7 @@ def main() -> None:
     upcoming = pred[
         (pred["_kd"] >= gameweek_start) & (pred["_kd"] <= gameweek_end)
     ].copy()
+    upcoming = upcoming[upcoming["_kd"] > now - timedelta(minutes=5)]
 
     if upcoming.empty:
         print("[context] No fixtures in current gameweek window")
