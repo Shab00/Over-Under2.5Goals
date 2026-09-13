@@ -1,0 +1,52 @@
+{
+  "generated_at": "2023-10-01T12:00:00",
+  "model_form": "Model is HOT — 70.4% accuracy over last 27 confident predictions. EDGE profit: +0.82 units.",
+  "gameweek_summary": "This gameweek features Leeds hosting Newcastle in what looks to be a tightly contested matchup. Leeds are struggling with form while Newcastle may be without key defender Jaouen due to injury, which could tip the scales. The standout value bet is backing Leeds for a double chance.",
+  "rest_of_card_paragraph": "In the strong fade category, Sunderland against Arsenal is a clear choice as Arsenal are in great form, while Sunderland are well below a coin-flip on home win chances. For double chances, Leeds vs Newcastle presents an interesting battle, especially with Jaouen's injury possibly impacting Newcastle's defense. The model is HOT right now, so trust the signals and avoid fixtures that are too close to call, like Crystal Palace vs Ipswich Town, where neither side offers enough confidence.",
+  "top_picks": [],
+  "fixtures_full": [
+    {
+      "home_team": "Leeds",
+      "away_team": "Newcastle",
+      "kickoff": "2026-09-14T20:00:00",
+      "signal": "Not Home",
+      "confidence": "Medium",
+      "edge_label": "N/A",
+      "prob_homewin": 0.314,
+      "odds": 2.33,
+      "value_gap": -0.1152,
+      "pundit_take": "Leeds host Newcastle in a match that could go either way. With both teams showing inconsistent form, backing Leeds for a double chance seems wise, especially with Newcastle's defensive issues.",
+      "bet_type": "Back Double Chance (X2)",
+      "stake_advice": "Small",
+      "pundit_action": "Back Double Chance (X2)",
+      "betting_category": "double_chance",
+      "rag_informed": true,
+      "is_strong_fade": false
+    }
+  ],
+  "strong_fades": [],
+  "double_chances": [
+    {
+      "home_team": "Leeds",
+      "away_team": "Newcastle",
+      "kickoff": "2026-09-14T20:00:00",
+      "signal": "Not Home",
+      "confidence": "Medium",
+      "edge_label": "N/A",
+      "prob_homewin": 0.314,
+      "odds": 2.33,
+      "value_gap": -0.1152,
+      "pundit_take": "Leeds host Newcastle in a match that could go either way. With both teams showing inconsistent form, backing Leeds for a double chance seems wise, especially with Newcastle's defensive issues.",
+      "bet_type": "Back Double Chance (X2)",
+      "stake_advice": "Small",
+      "pundit_action": "Back Double Chance (X2)",
+      "betting_category": "double_chance",
+      "rag_informed": true,
+      "is_strong_fade": false
+    }
+  ],
+  "avoid_list": [],
+  "value_bets": [],
+  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nThis gameweek features Leeds hosting Newcastle in what looks to be a tightly contested matchup.\n\n<b>Double Chance:</b>\n<b>Leeds vs Newcastle</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nLeeds — Leeds hit with injury blow for Chelsea trip but trio in line\n\nFull analysis: shab00.github.io/football",
+  "scored": false
+}

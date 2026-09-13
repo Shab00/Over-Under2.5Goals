@@ -715,7 +715,7 @@ def render_strategy_section(strategy) -> str:
     def _footer(fx):
         cat = fx.get("betting_category", "")
         if cat == "double_chance":
-            return "Back Double Chance (X2) · Stake: Small"
+            return f'{fx.get("bet_description", "Back Double Chance (X2)")} · Stake: Small'
         if cat == "strong_fade":
             return "Back Away Win · Stake: Small"
         if cat == "back_home":

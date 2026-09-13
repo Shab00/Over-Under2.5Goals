@@ -145,9 +145,10 @@ SYSTEM_PROMPT = (
     "injuries for that team. Never write generic injury disclaimers.\n\n"
     "GAMEWEEK SUMMARY\n"
     "gameweek_summary must name specific teams and facts. Mention: the "
-    "standout value bet by name, the biggest mismatch fixture, and one "
-    "specific named injury if any exists in the news data. No generic "
-    "statements.\n\n"
+    "standout value bet by name, and one specific named injury if any "
+    "exists in the news data. Mention the biggest mismatch from the "
+    "REMAINING fixtures only - do not reference games that have already "
+    "kicked off. No generic statements.\n\n"
     "REST OF THE CARD PARAGRAPH\n"
     "Generate a field called rest_of_card_paragraph. This is a pundit's "
     "summary paragraph covering the strong fades, double chance and avoid "
@@ -211,18 +212,32 @@ FIXTURE_SCHEMA = """{
   "rag_informed": true/false
 }"""
 
-OUTPUT_SCHEMA = """{
-  "generated_at": "ISO datetime",
-  "model_form": "one sentence on recent model form",
-  "gameweek_summary": "2-3 sentence pundit overview",
-  "rest_of_card_paragraph": "single flowing pundit paragraph (<120 words) covering strong fades, double chances then avoids, using qualitative descriptions of form/situation (no percentage or odds figures) and named injury news",
-  "top_picks": [...all betting_category==back_home fixture objects...],
-  "strong_fades": [...all betting_category==strong_fade fixture objects...],
-  "double_chances": [...all betting_category==double_chance fixture objects...],
-  "avoid_list": [...all betting_category==avoid fixture objects...],
-  "fixtures_full": [...ALL fixture objects...],
-  "value_bets": [...EDGE fixtures only...]
-}"""
+def build_output_schema(include_rest_of_card: bool) -> str:
+    """The JSON schema shown to GPT. rest_of_card_paragraph is only included
+    when there are enough remaining fixtures (>=2) for a "rest of the card"
+    summary to mean anything - with 0 or 1 remaining fixtures the pundit
+    just analyses that fixture directly."""
+    rest_of_card_line = (
+        '  "rest_of_card_paragraph": "single flowing pundit paragraph '
+        '(<120 words) covering strong fades, double chances then avoids, '
+        'using qualitative descriptions of form/situation (no percentage '
+        'or odds figures) and named injury news",\n'
+        if include_rest_of_card else ""
+    )
+    return (
+        "{\n"
+        '  "generated_at": "ISO datetime",\n'
+        '  "model_form": "one sentence on recent model form",\n'
+        '  "gameweek_summary": "2-3 sentence pundit overview",\n'
+        f"{rest_of_card_line}"
+        '  "top_picks": [...all betting_category==back_home fixture objects...],\n'
+        '  "strong_fades": [...all betting_category==strong_fade fixture objects...],\n'
+        '  "double_chances": [...all betting_category==double_chance fixture objects...],\n'
+        '  "avoid_list": [...all betting_category==avoid fixture objects...],\n'
+        '  "fixtures_full": [...ALL fixture objects...],\n'
+        '  "value_bets": [...EDGE fixtures only...]\n'
+        "}"
+    )
 
 
 # --------------------------------------------------------------------------- #
@@ -477,9 +492,26 @@ def build_user_prompt(context: dict, rag_by_fixture: list[str]) -> str:
     )
     earlier_context = get_earlier_gameweek_context(context)
     earlier_block = f"Earlier gameweek context: {earlier_context}"
+
+    fixtures = context.get("fixtures", [])
+    include_rest_of_card = len(fixtures) >= 2
+    if include_rest_of_card:
+        rest_of_card_instruction = (
+            "rest_of_card_paragraph covers ONLY these specific fixtures: "
+            + ", ".join(f"{fx.get('home_team')} vs {fx.get('away_team')}" for fx in fixtures)
+            + ". Do not mention any other teams or games."
+        )
+    else:
+        rest_of_card_instruction = (
+            "Do NOT include a rest_of_card_paragraph field in your JSON "
+            "output at all - there are not enough remaining fixtures this "
+            "run for a 'rest of the card' summary. Just analyse the "
+            "fixture(s) directly."
+        )
+
     instruction = (
         "Return ONLY valid JSON, no markdown fences, this schema:\n"
-        f"{OUTPUT_SCHEMA}\n\n"
+        f"{build_output_schema(include_rest_of_card)}\n\n"
         f"Each fixture object:\n{FIXTURE_SCHEMA}\n\n"
         "EVERY fixture object in EVERY array (top_picks, strong_fades, "
         "double_chances, avoid_list, fixtures_full) MUST include every field in "
@@ -491,10 +523,26 @@ def build_user_prompt(context: dict, rag_by_fixture: list[str]) -> str:
         "Do NOT include prob_homewin, odds or value_gap on any fixture "
         "object - these are filled in separately from pre-computed data "
         "in Python, not by you. "
-        "If earlier_gameweek_context is provided, acknowledge the earlier "
-        "picks briefly in gameweek_summary - e.g. 'Earlier today we backed "
-        "Chelsea and Liverpool at home - those games have now kicked off. "
-        "For the remaining fixtures...'"
+        "You have been provided with context about fixtures that were "
+        "predicted earlier in the gameweek but have now kicked off. Use "
+        "this context silently to inform your analysis - do not mention "
+        "it explicitly. Do not say 'earlier today', 'this week', or "
+        "reference games that have already kicked off. Just analyse the "
+        "remaining fixtures in front of you as a pundit would - with full "
+        "context but without narrating your own history. If form or "
+        "injury news from earlier fixtures is relevant to a remaining "
+        "fixture, reference it naturally without saying where you got it. "
+        "confidence is pre-computed and provided in the data - do not set "
+        "it yourself, it will be overwritten anyway. "
+        "For double_chance fixtures the pundit_take must describe backing "
+        "the away team or the draw - use the pre-computed "
+        "double_chance_direction field which says 'Back Away Win or Draw "
+        "(X2)'. The home team has a low win probability which is why we "
+        "are not backing them. "
+        "gameweek_summary must ONLY reference fixtures currently provided "
+        "in the data. Never mention any fixture not in the current "
+        "match_context - you have no knowledge of other games. "
+        f"{rest_of_card_instruction}"
     )
     return "\n\n".join(["\n\n".join(blocks), perf_block, earlier_block, instruction])
 
@@ -1028,6 +1076,13 @@ def main() -> None:
     except Exception as e:  # noqa: BLE001
         print(f"[strategy] Pydantic validation warning: {e}")
 
+    # rest_of_card_paragraph only makes sense with >=2 remaining fixtures -
+    # with 0 or 1 remaining, the pundit just analyses that fixture
+    # directly. GPT was told not to write the field at all in this case,
+    # but force it empty here regardless of what GPT actually returned.
+    if len(fixtures) <= 1:
+        data["rest_of_card_paragraph"] = ""
+
     # GPT does not transcribe numeric values reliably (it invents its own
     # prob_homewin/odds instead of copying them) - never trust its numbers.
     # Overwrite every fixture's numeric fields and computed labels from
@@ -1049,6 +1104,10 @@ def main() -> None:
                 fx["edge_label"] = ctx["edge_label"]
                 fx["betting_category"] = ctx["betting_category"]
                 fx["signal"] = ctx["signal"]
+                fx["confidence"] = ctx["confidence"]
+                fx["bet_description"] = ctx["bet_description"]
+                fx["double_chance_direction"] = ctx.get(
+                    "double_chance_direction", "")
 
     # Post-process: recompute value_gap in Python from the pre-computed
     # prob_homewin and odds - never trust GPT's arithmetic.
@@ -1078,13 +1137,14 @@ def main() -> None:
     # Guarantee the rest-of-card paragraph carries a mention of model form
     # (gpt-4o-mini often paraphrases it away). Qualitative only - no
     # accuracy percentage - per the CRITICAL RULE against numbers in free
-    # text.
-    _streak = perf.get("streak_label", "")
-    _para = (data.get("rest_of_card_paragraph") or "").strip()
-    if _streak and _streak.upper() not in _para.upper():
-        _sfx = (f" The model is currently {_streak} over its last "
-                f"{perf.get('total_predictions', 0)} confident predictions.")
-        data["rest_of_card_paragraph"] = (_para + _sfx).strip()
+    # text. Only applies when the field exists at all (>=2 fixtures).
+    if len(fixtures) >= 2:
+        _streak = perf.get("streak_label", "")
+        _para = (data.get("rest_of_card_paragraph") or "").strip()
+        if _streak and _streak.upper() not in _para.upper():
+            _sfx = (f" The model is currently {_streak} over its last "
+                    f"{perf.get('total_predictions', 0)} confident predictions.")
+            data["rest_of_card_paragraph"] = (_para + _sfx).strip()
 
     # Safety net: strip any percentage/probability/odds figures GPT wrote
     # into free text despite the system prompt's CRITICAL RULE against it.

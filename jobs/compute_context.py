@@ -346,6 +346,35 @@ def betting_category(prob: float) -> str:
     return "strong_fade"
 
 
+def confidence_label(cat: str, prob: float) -> str:
+    """Pre-computed confidence label from betting_category + prob_homewin
+    (pure Python)."""
+    if cat == "back_home" and prob >= 0.70:
+        return "High"
+    if cat == "strong_fade" and prob <= 0.15:
+        return "High"
+    if cat == "double_chance":
+        return "Medium"
+    if cat == "back_home" and 0.55 <= prob < 0.70:
+        return "Medium"
+    return "Low"
+
+
+def double_chance_direction(cat: str) -> str:
+    """Pre-computed away/draw direction text for double_chance fixtures."""
+    return "Back Away Win or Draw (X2)" if cat == "double_chance" else ""
+
+
+def bet_description(cat: str) -> str:
+    """Pre-computed human-readable bet description from betting_category."""
+    return {
+        "back_home": "Back Home to Win",
+        "double_chance": "Back Away Win or Draw (X2)",
+        "strong_fade": "Back Away Win",
+        "avoid": "Skip — too close to call",
+    }.get(cat, "")
+
+
 # --------------------------------------------------------------------------- #
 # Main
 # --------------------------------------------------------------------------- #
@@ -430,6 +459,8 @@ def main() -> None:
             home_news = []
             away_news = []
 
+        cat = betting_category(prob)
+
         fixtures_out.append({
             "home_team": home,
             "away_team": away,
@@ -440,7 +471,10 @@ def main() -> None:
             "implied_prob": round(implied, 3) if implied is not None else None,
             "value_gap": round(value_gap, 3) if value_gap is not None else None,
             "edge_label": edge_label,
-            "betting_category": betting_category(prob),
+            "betting_category": cat,
+            "confidence": confidence_label(cat, prob),
+            "double_chance_direction": double_chance_direction(cat),
+            "bet_description": bet_description(cat),
             "is_strong_fade": bool(prob < 0.20),
             "home_team_form": team_form(hist, home_canon),
             "away_team_form": team_form(hist, away_canon),

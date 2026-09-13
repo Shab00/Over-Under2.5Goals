@@ -1,0 +1,56 @@
+{
+  "generated_at": "2023-09-14T15:00:00",
+  "model_form": "Model is HOT — 70.4% accuracy over last 27 confident predictions. EDGE profit: +0.82 units.",
+  "gameweek_summary": "Leeds versus Newcastle presents a fascinating clash, with a standout double chance bet on Newcastle to either win or draw, capitalizing on Leeds' inconsistent start. Notably, Leeds are grappling with key injuries that could impact their performance, while Newcastle's squad depth remains a strength despite some minor injury issues.",
+  "rest_of_card_paragraph": "Looking at the double chance fixtures, Leeds against Newcastle stands out as a solid opportunity to back Newcastle or settle for a draw, especially with Leeds struggling for form and dealing with injuries. Meanwhile, the model is currently HOT, so trust the signals. In terms of avoids, fixtures are too close to call, leaving us with no immediate betting opportunities worth pursuing.",
+  "top_picks": [],
+  "fixtures_full": [
+    {
+      "home_team": "Leeds",
+      "away_team": "Newcastle",
+      "kickoff": "2026-09-14T20:00:00",
+      "signal": "Not Home",
+      "confidence": "Medium",
+      "edge_label": "N/A",
+      "prob_homewin": 0.314,
+      "odds": 2.33,
+      "value_gap": -0.1152,
+      "pundit_take": "Backing Newcastle to either win or draw seems wise here given Leeds' shaky form and injuries. With Leeds losing ground early this season, Newcastle's consistency could prove decisive.",
+      "bet_type": "Back Double Chance (X2)",
+      "stake_advice": "Small",
+      "pundit_action": "Back Double Chance (X2)",
+      "betting_category": "double_chance",
+      "rag_informed": true,
+      "bet_description": "Back Away Win or Draw (X2)",
+      "double_chance_direction": "Back Away Win or Draw (X2)",
+      "is_strong_fade": false
+    }
+  ],
+  "strong_fades": [],
+  "double_chances": [
+    {
+      "home_team": "Leeds",
+      "away_team": "Newcastle",
+      "kickoff": "2026-09-14T20:00:00",
+      "signal": "Not Home",
+      "confidence": "Medium",
+      "edge_label": "N/A",
+      "prob_homewin": 0.314,
+      "odds": 2.33,
+      "value_gap": -0.1152,
+      "pundit_take": "Backing Newcastle to either win or draw seems wise here given Leeds' shaky form and injuries. With Leeds losing ground early this season, Newcastle's consistency could prove decisive.",
+      "bet_type": "Back Double Chance (X2)",
+      "stake_advice": "Small",
+      "pundit_action": "Back Double Chance (X2)",
+      "betting_category": "double_chance",
+      "rag_informed": true,
+      "bet_description": "Back Away Win or Draw (X2)",
+      "double_chance_direction": "Back Away Win or Draw (X2)",
+      "is_strong_fade": false
+    }
+  ],
+  "avoid_list": [],
+  "value_bets": [],
+  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nLeeds versus Newcastle presents a fascinating clash, with a standout double chance bet on Newcastle to either win or draw, capitalizing on Leeds' inconsistent start.\n\n<b>Double Chance:</b>\n<b>Leeds vs Newcastle</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nLeeds — Leeds hit with injury blow for Chelsea trip but trio in line\n\nFull analysis: shab00.github.io/football",
+  "scored": false
+}

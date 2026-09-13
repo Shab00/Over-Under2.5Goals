@@ -1,5 +1,5 @@
 {
-  "computed_at": "2026-09-13T18:15:28.680360+00:00",
+  "computed_at": "2026-09-13T18:54:37.841836+00:00",
   "gameweek_start": "2026-09-11T00:00:00+00:00",
   "gameweek_end": "2026-09-14T23:59:00+00:00",
   "model_performance": {
@@ -33,6 +33,9 @@
       "value_gap": -0.115,
       "edge_label": "N/A",
       "betting_category": "double_chance",
+      "confidence": "Medium",
+      "double_chance_direction": "Back Away Win or Draw (X2)",
+      "bet_description": "Back Away Win or Draw (X2)",
       "is_strong_fade": false,
       "home_team_form": {
         "current_season_pts": 5,
