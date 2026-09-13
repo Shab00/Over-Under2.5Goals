@@ -140,16 +140,16 @@ def main() -> int:
 
     out = pd.DataFrame({
         "match_id": prospective["match_id"] if "match_id" in prospective.columns else prospective.index.astype(int),
-        "date": pd.to_datetime(prospective["Date"]).dt.strftime("%Y-%m-%d"),
-        "home": prospective["HomeTeam"] if "HomeTeam" in prospective.columns else "",
-        "away": prospective["AwayTeam"] if "AwayTeam" in prospective.columns else "",
-        "prob_home": probs,
+        "kickoff_time_utc": pd.to_datetime(prospective["Date"]).dt.strftime("%Y-%m-%dT%H:%M:%S"),
+        "home_team": prospective["HomeTeam"] if "HomeTeam" in prospective.columns else "",
+        "away_team": prospective["AwayTeam"] if "AwayTeam" in prospective.columns else "",
+        "prob_homewin": probs,
         "pred_label": preds,
         "odds_B365H": prospective["B365H"] if "B365H" in prospective.columns else np.nan,
         "model_source": model_path.name,
         "featurelist_source": feat_path.name,
         "snapshot_created_at": snapshot_created_at,
-    })
+        })
 
     out.to_csv(out_path, index=False)
     print("[snapshot] wrote", out_path, "rows:", len(out))

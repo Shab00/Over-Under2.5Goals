@@ -2,12 +2,12 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This week, Leeds vs Newcastle stands out as a solid double chance bet given both teams' struggles early in the season. Leeds has been inconsistent at home, while Newcastle has shown mixed results away. With Jaouen's injury for the away side, this adds another layer of uncertainty.
+Earlier today we backed Chelsea and Liverpool at home - those games have now kicked off. For the remaining fixtures, the standout value bet is Aston Villa against Nott'm Forest, while Sunderland vs Arsenal presents a significant mismatch favoring the away side. Notably, Leeds are dealing with an injury blow as they prepare to face Newcastle.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-Looking at the strong fades, there are no fixtures that fit this criterion this week. For double chances, Leeds against Newcastle is intriguing, especially with Leeds' shaky home form and Newcastle missing Jaouen. Avoid fixtures are hard to come by as well, but there are few matches that are simply too close to call. The model is HOT and has been accurate in predicting these tight matchups.
+In the strong fade category, Sunderland against Arsenal is a clear choice - the Gunners are in much better form and should capitalize on Sunderland's struggles. For double chances, Leeds vs Newcastle is interesting; however, Leeds have hit a rough patch and are facing injury concerns, while Newcastle has shown some resilience away from home. As for the avoid fixtures, there are a few too close to call, making it wise to skip them altogether this week. The model is currently HOT over its last 27 confident predictions.
 
 ## Value Bets (EDGE)
 

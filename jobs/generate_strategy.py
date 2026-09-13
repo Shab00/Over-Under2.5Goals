@@ -24,6 +24,8 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, field_validator
 from typing import Literal
 
+import compute_context
+
 
 class FixtureStrategy(BaseModel):
     home_team: str
@@ -382,6 +384,83 @@ def fixture_block(fx: dict, rag_context: str) -> str:
     )
 
 
+def _parse_kickoff(value) -> datetime | None:
+    """Best-effort parse of a fixture's kickoff string to an aware UTC
+    datetime. Returns None if it can't be parsed (caller should then treat
+    the fixture as unverifiable rather than trust it)."""
+    if not value:
+        return None
+    try:
+        dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt
+
+
+def get_earlier_gameweek_context(context: dict) -> str:
+    """Surface picks made earlier THIS gameweek whose games have since
+    kicked off (no longer present in the fresh match_context.json), so the
+    pundit can acknowledge them instead of ignoring that part of the card.
+
+    Uses the same Friday-Monday gameweek window as compute_context.py to
+    decide which archived runs count as "earlier this gameweek".
+    """
+    now = datetime.now(timezone.utc)
+    gw_start, gw_end = compute_context.get_gameweek_window(now)
+
+    current_keys = {
+        f"{fx.get('home_team')}|{fx.get('away_team')}"
+        for fx in context.get("fixtures", [])
+    }
+
+    earlier_by_key: dict[str, dict] = {}
+    for path in sorted(glob.glob(str(ARCHIVE_DIR / "strategy_*.json"))):
+        ts_str = Path(path).stem.removeprefix("strategy_")
+        try:
+            archived_at = datetime.strptime(ts_str, "%Y%m%dT%H%M%SZ").replace(
+                tzinfo=timezone.utc
+            )
+        except ValueError:
+            continue
+        if not (gw_start <= archived_at <= gw_end):
+            continue
+        try:
+            arch = json.loads(Path(path).read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        for fx in arch.get("fixtures_full", []) or []:
+            key = f"{fx.get('home_team')}|{fx.get('away_team')}"
+            earlier_by_key[key] = fx  # later archives win over earlier ones
+
+    kicked_off = []
+    for key, fx in earlier_by_key.items():
+        if key in current_keys:
+            continue
+        # Defensive check: only trust this fixture if its own kickoff date
+        # actually falls inside the current gameweek window - guards against
+        # stale/unrelated fixtures leaking in from an old or malformed
+        # archive file.
+        kickoff_dt = _parse_kickoff(fx.get("kickoff"))
+        if kickoff_dt is None or not (gw_start <= kickoff_dt <= gw_end):
+            continue
+        kicked_off.append(fx)
+    if not kicked_off:
+        return ""
+
+    lines = ["Earlier this gameweek the following predictions were made:"]
+    for fx in kicked_off:
+        action = fx.get("pundit_action", "")
+        odds = fx.get("odds")
+        odds_part = f" @ {odds}" if odds else ""
+        lines.append(
+            f"- {fx.get('home_team')} vs {fx.get('away_team')}: {action}"
+            f"{odds_part} — game has now kicked off"
+        )
+    return "\n".join(lines)
+
+
 def build_user_prompt(context: dict, rag_by_fixture: list[str]) -> str:
     perf = context.get("model_performance", {})
     blocks = [
@@ -396,6 +475,8 @@ def build_user_prompt(context: dict, rag_by_fixture: list[str]) -> str:
         f"({perf.get('edge_profit', 0):+.2f} units profit)\n"
         f"Current streak: {perf.get('streak_label')} ({perf.get('streak_string')})"
     )
+    earlier_context = get_earlier_gameweek_context(context)
+    earlier_block = f"Earlier gameweek context: {earlier_context}"
     instruction = (
         "Return ONLY valid JSON, no markdown fences, this schema:\n"
         f"{OUTPUT_SCHEMA}\n\n"
@@ -409,9 +490,13 @@ def build_user_prompt(context: dict, rag_by_fixture: list[str]) -> str:
         "Do NOT include a telegram_message field - it is built separately. "
         "Do NOT include prob_homewin, odds or value_gap on any fixture "
         "object - these are filled in separately from pre-computed data "
-        "in Python, not by you."
+        "in Python, not by you. "
+        "If earlier_gameweek_context is provided, acknowledge the earlier "
+        "picks briefly in gameweek_summary - e.g. 'Earlier today we backed "
+        "Chelsea and Liverpool at home - those games have now kicked off. "
+        "For the remaining fixtures...'"
     )
-    return "\n\n".join(["\n\n".join(blocks), perf_block, instruction])
+    return "\n\n".join(["\n\n".join(blocks), perf_block, earlier_block, instruction])
 
 
 # --------------------------------------------------------------------------- #

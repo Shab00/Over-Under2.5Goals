@@ -32,12 +32,6 @@ def main():
 
     generated_at = datetime.now(timezone.utc).isoformat()
     df['generated_at'] = generated_at
-    df = df.rename(columns={
-        "date": "kickoff_time_utc",
-        "home": "home_team",
-        "away": "away_team",
-        "prob_home": "prob_homewin",
-    })
 
     if 'odds_B365H' in df.columns:
         df['is_predicted_fixture'] = df['odds_B365H'].apply(
