@@ -1,13 +1,13 @@
-# EPL AI Pundit Strategy - 2026-09-12
+# EPL AI Pundit Strategy - 2026-09-13
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This week, the standout value bet is clearly Manchester City against Manchester United, where the home side looks outclassed. The biggest mismatch fixture is also in Manchester, with City riding high on solid form. Notably, United's Carlos Baleba is set to miss out due to injury, further complicating their chances.
+Leeds versus Newcastle presents an intriguing matchup with potential value. With both teams struggling to find their footing, the double chance on Leeds offers a solid opportunity to capitalize on their home advantage.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-In the strong fade category, Manchester United face a daunting task against a City side that is in excellent form, and with injuries to key players like Carlos Baleba, it’s a clear signal to back City. For double chance bets, both Coventry against Brighton and Leeds against Newcastle show potential, albeit with limited h2h data and injuries impacting both sides. The model's current HOT streak supports trusting these insights this week.
+In the double chance category, Leeds against Newcastle is compelling, especially as Leeds faces injury concerns that may affect their lineup. The model is HOT, indicating strong signals for this matchup. Meanwhile, fixtures are too close to call, so avoiding them makes sense; no strong fades are present this week, providing a safer betting landscape.
 
 ## Value Bets (EDGE)
 

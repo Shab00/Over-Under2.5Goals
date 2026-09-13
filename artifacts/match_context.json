@@ -1,5 +1,5 @@
 {
-  "computed_at": "2026-09-12T18:05:26.555858+00:00",
+  "computed_at": "2026-09-13T12:08:47.945668+00:00",
   "gameweek_start": "2026-09-11T00:00:00+00:00",
   "gameweek_end": "2026-09-14T23:59:00+00:00",
   "model_performance": {
@@ -12,9 +12,9 @@
     "fade_count": 21,
     "fade_accuracy_pct": 66.7,
     "streak_label": "HOT",
-    "streak_string": "L W W W W",
+    "streak_string": "W W W W W",
     "streak_last5": [
-      false,
+      true,
       true,
       true,
       true,
@@ -23,110 +23,14 @@
   },
   "fixtures": [
     {
-      "home_team": "Coventry City",
-      "away_team": "Brighton",
-      "kickoff": "2026-09-13T14:00:00+00:00",
-      "prob_homewin": 0.24,
-      "signal": "Not Home",
-      "odds": 4.03,
-      "implied_prob": 0.248,
-      "value_gap": -0.008,
-      "edge_label": "N/A",
-      "betting_category": "double_chance",
-      "is_strong_fade": false,
-      "home_team_form": {
-        "current_season_pts": 0,
-        "current_season_games": 3,
-        "pts_last5": 1,
-        "gf_last5": 2,
-        "ga_last5": 8,
-        "wins_last5": 0,
-        "form_string": "L D L L L"
-      },
-      "away_team_form": {
-        "current_season_pts": 4,
-        "current_season_games": 3,
-        "pts_last5": 7,
-        "gf_last5": 10,
-        "ga_last5": 7,
-        "wins_last5": 2,
-        "form_string": "W L W L D"
-      },
-      "h2h": {
-        "home_wins": 0,
-        "away_wins": 0,
-        "draws": 0,
-        "home_gf_avg": 0.0,
-        "summary": "Limited h2h data (0 matches found)"
-      },
-      "home_news": [
-        "Bayern Munich star Manuel Neuer treated for shoulder injury during training",
-        "Bayern Munich receive Serge Gnabry injury boost",
-        "Bayern Munich star Jamal Musiala set to miss Dfl Super Cup clash"
-      ],
-      "away_news": [
-        "Hurzeler gives injury update on Brighton star after defeat to Chelsea",
-        "Hinshelwood + Rutter: Brighton injury latest for FPL Gameweek 2",
-        "Jack Hinshelwood injury update ahead of Chelsea vs Brighton"
-      ]
-    },
-    {
-      "home_team": "Man United",
-      "away_team": "Man City",
-      "kickoff": "2026-09-13T16:30:00+00:00",
-      "prob_homewin": 0.148,
-      "signal": "Not Home",
-      "odds": 3.24,
-      "implied_prob": 0.309,
-      "value_gap": -0.161,
-      "edge_label": "N/A",
-      "betting_category": "strong_fade",
-      "is_strong_fade": true,
-      "home_team_form": {
-        "current_season_pts": 4,
-        "current_season_games": 3,
-        "pts_last5": 7,
-        "gf_last5": 10,
-        "ga_last5": 9,
-        "wins_last5": 2,
-        "form_string": "W L L W D"
-      },
-      "away_team_form": {
-        "current_season_pts": 9,
-        "current_season_games": 3,
-        "pts_last5": 13,
-        "gf_last5": 10,
-        "ga_last5": 4,
-        "wins_last5": 4,
-        "form_string": "W D W W W"
-      },
-      "h2h": {
-        "home_wins": 2,
-        "away_wins": 2,
-        "draws": 1,
-        "home_gf_avg": 1.0,
-        "summary": "Home 2W 1D 2L in last 5 meetings"
-      },
-      "home_news": [
-        "Michael Carrick confirms injury latest on Carlos Baleba, Marcus Rashford and more",
-        "Matthijs de Ligt’s 10-month injury hell nearly over as Carrick learns when Man Utd defender can finally play again",
-        "Rashford, Amad, Baleba - Man Utd injury update before Champions League return"
-      ],
-      "away_news": [
-        "Man City starting XI vs FC Porto: Confirmed Team News and predicted lineup",
-        "Maresca reveals Man City duo could return for Manchester derby",
-        "Man City injury news: Nico O’Reilly, Jeremy Doku update from Enzo Maresca as 22-man Champions League squad for Porto trip is confirmed"
-      ]
-    },
-    {
       "home_team": "Leeds",
       "away_team": "Newcastle",
       "kickoff": "2026-09-14T20:00:00+00:00",
-      "prob_homewin": 0.419,
+      "prob_homewin": 0.367,
       "signal": "Not Home",
-      "odds": 2.35,
-      "implied_prob": 0.426,
-      "value_gap": -0.007,
+      "odds": 2.31,
+      "implied_prob": 0.433,
+      "value_gap": -0.066,
       "edge_label": "N/A",
       "betting_category": "double_chance",
       "is_strong_fade": false,
