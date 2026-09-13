@@ -2,12 +2,12 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Leeds versus Newcastle presents an intriguing matchup with potential value. With both teams struggling to find their footing, the double chance on Leeds offers a solid opportunity to capitalize on their home advantage.
+This week, Leeds vs Newcastle stands out as a solid double chance bet given both teams' struggles early in the season. Leeds has been inconsistent at home, while Newcastle has shown mixed results away. With Jaouen's injury for the away side, this adds another layer of uncertainty.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-In the double chance category, Leeds against Newcastle is compelling, especially as Leeds faces injury concerns that may affect their lineup. The model is HOT, indicating strong signals for this matchup. Meanwhile, fixtures are too close to call, so avoiding them makes sense; no strong fades are present this week, providing a safer betting landscape.
+Looking at the strong fades, there are no fixtures that fit this criterion this week. For double chances, Leeds against Newcastle is intriguing, especially with Leeds' shaky home form and Newcastle missing Jaouen. Avoid fixtures are hard to come by as well, but there are few matches that are simply too close to call. The model is HOT and has been accurate in predicting these tight matchups.
 
 ## Value Bets (EDGE)
 
