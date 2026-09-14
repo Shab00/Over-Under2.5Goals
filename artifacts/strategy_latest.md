@@ -1,8 +1,8 @@
-# EPL AI Pundit Strategy - 2026-09-13
+# EPL AI Pundit Strategy - 2026-09-14
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-In the upcoming clash between Leeds and Newcastle, backing the away side is the standout value bet as Leeds are struggling with form and have a low home win probability. With Jaouen out for Newcastle, it may be tighter than expected, but the odds still favor an away win.
+Leeds versus Newcastle is set to be a closely contested match, with both teams struggling to find form. The standout value bet is to back the double chance on Newcastle, as Leeds will be without key players due to injury. Expect a tight contest here.
 
 ## Top Picks
 

@@ -1,5 +1,5 @@
 {
-  "computed_at": "2026-09-13T18:54:37.841836+00:00",
+  "computed_at": "2026-09-14T18:05:40.437069+00:00",
   "gameweek_start": "2026-09-11T00:00:00+00:00",
   "gameweek_end": "2026-09-14T23:59:00+00:00",
   "model_performance": {
@@ -12,10 +12,10 @@
     "fade_count": 21,
     "fade_accuracy_pct": 66.7,
     "streak_label": "HOT",
-    "streak_string": "W L W W W",
+    "streak_string": "L W W W W",
     "streak_last5": [
-      true,
       false,
+      true,
       true,
       true,
       true
@@ -26,11 +26,11 @@
       "home_team": "Leeds",
       "away_team": "Newcastle",
       "kickoff": "2026-09-14T20:00:00",
-      "prob_homewin": 0.314,
+      "prob_homewin": 0.252,
       "signal": "Not Home",
-      "odds": 2.33,
-      "implied_prob": 0.429,
-      "value_gap": -0.115,
+      "odds": 2.42,
+      "implied_prob": 0.413,
+      "value_gap": -0.162,
       "edge_label": "N/A",
       "betting_category": "double_chance",
       "confidence": "Medium",
