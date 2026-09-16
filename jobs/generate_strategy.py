@@ -132,6 +132,16 @@ SYSTEM_PROMPT = (
     "For double_chance fixtures: stake_advice must be 'Small'. Never "
     "use 'Skip' as stake_advice for double_chance fixtures - Skip is "
     "only for avoid fixtures.\n\n"
+    "RESPECT THE PRE-COMPUTED CATEGORY IN FREE TEXT\n"
+    "In rest_of_card_paragraph and pundit_take you MUST respect the "
+    "pre-computed betting_category for each fixture:\n"
+    "- double_chance fixtures must be described as double chance bets - "
+    "never as avoid or skip\n"
+    "- strong_fade fixtures must be described as back away win\n"
+    "- avoid fixtures are the only ones to describe as skip\n"
+    "The betting_category is pre-computed by the model in Python. You are "
+    "not permitted to override it with your own assessment. Your job is "
+    "to explain WHY the category makes sense, not to reassign it.\n\n"
     "OUTPUT ARRAYS\n"
     "Populate these arrays in your response:\n"
     "- top_picks: all fixtures where betting_category==back_home\n"
@@ -139,6 +149,13 @@ SYSTEM_PROMPT = (
     "- double_chances: all fixtures where betting_category==double_chance\n"
     "- avoid_list: all fixtures where betting_category==avoid\n"
     "Also populate fixtures_full with every fixture.\n\n"
+    "TOP PICKS RANKING\n"
+    "Within top_picks rank fixtures by conviction - the fixture with the "
+    "highest prob_homewin AND positive or neutral value_gap should be "
+    "stake_advice Banker. Others are Value Bet or Small based on your "
+    "analysis of form, injuries and value. You may use injury news and "
+    "form data to justify why a lower probability fixture deserves Banker "
+    "over a higher probability one.\n\n"
     "EDGE/FADE BADGES ARE INDEPENDENT\n"
     "The edge_label field (EDGE/FADE/N/A) is pre-computed and independent of "
     "betting_category. Keep edge_label exactly as provided - do not change it. "
@@ -852,6 +869,41 @@ def scrub_percentages(text: str) -> str:
     return text
 
 
+def scrub_miscategorized_avoid_sentences(text: str, context: dict) -> str:
+    """Safety net: GPT doesn't reliably respect betting_category in free
+    text (e.g. calling a double_chance fixture "too close to call - skip").
+    Drop any sentence that both (a) names a fixture and (b) describes it
+    with an avoid/skip phrase, when that fixture's pre-computed
+    betting_category is NOT "avoid"."""
+    if not text:
+        return text
+
+    fixture_categories = {
+        f"{fx['home_team']}": fx["betting_category"]
+        for fx in context["fixtures"]
+    }
+
+    avoid_phrases = ["avoid", "skip", "too close to call",
+                     "stay away", "give this one a miss",
+                     "steer clear"]
+
+    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
+    kept = []
+    for sentence in sentences:
+        low = sentence.lower()
+        has_avoid_phrase = any(phrase in low for phrase in avoid_phrases)
+        if has_avoid_phrase:
+            mismatched = any(
+                team in sentence and cat != "avoid"
+                for team, cat in fixture_categories.items()
+            )
+            if mismatched:
+                continue  # drop this sentence - miscategorized
+        kept.append(sentence)
+
+    return " ".join(kept).strip()
+
+
 def enforce_category_bets(data: dict) -> None:
     """Deterministic guard: bet_type / stake_advice / pundit_action must match
     betting_category regardless of what GPT returned."""
@@ -1349,6 +1401,9 @@ def main() -> None:
     # into free text despite the system prompt's CRITICAL RULE against it.
     data["gameweek_summary"] = scrub_percentages(data.get("gameweek_summary") or "")
     data["rest_of_card_paragraph"] = scrub_percentages(data.get("rest_of_card_paragraph") or "")
+    data["rest_of_card_paragraph"] = scrub_miscategorized_avoid_sentences(
+        data.get("rest_of_card_paragraph") or "", context
+    )
     for array_name in ["fixtures_full", "top_picks", "strong_fades",
                        "double_chances", "avoid_list", "value_bets"]:
         for fx in data.get(array_name, []) or []:

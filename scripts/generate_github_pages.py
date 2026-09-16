@@ -739,7 +739,6 @@ def render_strategy_section(strategy) -> str:
         pills = pill(sig, signal_colors.get(sig, "#94a3b8"))
         if fx.get("confidence"):
             pills += muted_badge(f'{fx.get("confidence")} confidence')
-        pills += edge_badge(fx.get("edge_label", ""), fx.get("value_gap"))
         action_html = action_pill(fx.get("pundit_action"), bg=border) if show_action else ""
         return (
             f'<div style="background:rgba(17,24,39,0.6);'
