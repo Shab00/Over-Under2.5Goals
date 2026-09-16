@@ -691,8 +691,19 @@ def render_strategy_section(strategy) -> str:
             f'{esc(text)}</span>'
         )
 
-    def edge_badge(label):
+    def edge_badge(label, value_gap):
         if label not in ("EDGE", "FADE"):
+            return ""
+        try:
+            gap = float(value_gap)
+        except (TypeError, ValueError):
+            return ""
+        # Hide trivial EDGE/FADE badges - only show when the gap is
+        # meaningfully non-neutral (>5% either way). Prevents e.g. a
+        # -0.5% gap showing a misleading FADE badge.
+        if label == "EDGE" and gap <= 0.05:
+            return ""
+        if label == "FADE" and gap >= -0.05:
             return ""
         color = "#38bdf8" if label == "EDGE" else "#ef4444"
         return (
@@ -728,7 +739,7 @@ def render_strategy_section(strategy) -> str:
         pills = pill(sig, signal_colors.get(sig, "#94a3b8"))
         if fx.get("confidence"):
             pills += muted_badge(f'{fx.get("confidence")} confidence')
-        pills += edge_badge(fx.get("edge_label", ""))
+        pills += edge_badge(fx.get("edge_label", ""), fx.get("value_gap"))
         action_html = action_pill(fx.get("pundit_action"), bg=border) if show_action else ""
         return (
             f'<div style="background:rgba(17,24,39,0.6);'

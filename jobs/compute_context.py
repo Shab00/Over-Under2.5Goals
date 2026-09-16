@@ -31,7 +31,6 @@ OUT_JSON = Path("artifacts/match_context.json")
 
 FORM_N = 5
 H2H_N = 5
-PERF_N = 30
 SEASON_START = pd.Timestamp("2026-08-01")  # start of the 26/27 season
 
 # prediction-feed name -> variants that may appear as HomeTeam in combinedWithOdds
@@ -214,11 +213,13 @@ def _as_bool(series: pd.Series) -> pd.Series:
 def model_performance() -> dict:
     res = pd.read_csv(RESULTS_CSV)
     res = res[res["FTR"].notna() & (res["FTR"].astype(str).str.strip() != "")]
-    # results_merged.csv is written newest-first (merge_results.py sorts desc on
-    # generated_at); the "last 30" / "last 5" the spec means are the most recent.
+    # Use ALL scored rows - matches generate_github_pages.py's Performance
+    # Tracker section exactly (it reads the full CSV with no row-count
+    # window), so the two numbers shown on the page never disagree.
+    # results_merged.csv is written newest-first (merge_results.py sorts desc
+    # on generated_at); "last 5" for the streak means the most recent 5.
     if "generated_at" in res.columns:
         res = res.sort_values("generated_at", ascending=False)
-    res = res.head(PERF_N)
 
     total = int(len(res))
     if total == 0:
