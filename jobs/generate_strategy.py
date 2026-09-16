@@ -17,7 +17,7 @@ import glob
 import json
 import os
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -78,6 +78,12 @@ WeekendStrategy.model_rebuild()
 
 CONTEXT_JSON = Path("artifacts/match_context.json")
 ARCHIVE_DIR = Path("artifacts/strategy_archive")
+
+# Early testing snapshots from before regular gameweek numbering started -
+# the only RAG history that predates it, so clean_strategy_archive() must
+# never sweep them up even though get_gameweek_window() groups them with a
+# later, already-thinned gameweek.
+PROTECTED_ARCHIVE_FILES = {"strategy_20260911T230002Z.json"}
 LATEST_JSON = Path("artifacts/strategy_latest.json")
 LATEST_MD = Path("artifacts/strategy_latest.md")
 FAISS_INDEX = Path("artifacts/strategy_faiss.index")
@@ -1003,6 +1009,103 @@ def build_telegram_from_strategy(data: dict) -> str:
     return "\n".join(lines)
 
 
+def _archive_entries() -> list[tuple[datetime, str]]:
+    """(archived_at, path) for every archive file whose filename matches
+    strategy_YYYYMMDDTHHMMSSZ.json. Files that don't match are ignored."""
+    entries = []
+    for path in sorted(glob.glob(str(ARCHIVE_DIR / "strategy_*.json"))):
+        ts_str = Path(path).stem.removeprefix("strategy_")
+        try:
+            ts = datetime.strptime(ts_str, "%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+        entries.append((ts, path))
+    return entries
+
+
+def _has_friday_fixture(gw_start: datetime, files: list[tuple[datetime, str]]) -> bool:
+    """True if any archive in this gameweek's group has a fixture kicking
+    off on the gameweek's Friday."""
+    friday_date = gw_start.date()
+    for _, path in files:
+        try:
+            arch = json.loads(Path(path).read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        for fx in arch.get("fixtures_full", []) or []:
+            kickoff_dt = _parse_kickoff(fx.get("kickoff"))
+            if kickoff_dt and kickoff_dt.date() == friday_date:
+                return True
+    return False
+
+
+def _closest_pre_kickoff_file(gw_start: datetime, files: list[tuple[datetime, str]]) -> str:
+    """The single file from a completed gameweek worth keeping: the one
+    closest to the pre-kickoff moment (Friday 18:00 UTC if there's a
+    Friday fixture, else Saturday 12:00 UTC) - not the most recent."""
+    if _has_friday_fixture(gw_start, files):
+        target = gw_start.replace(hour=18, minute=0, second=0, microsecond=0)
+    else:
+        saturday = gw_start + timedelta(days=1)
+        target = saturday.replace(hour=12, minute=0, second=0, microsecond=0)
+    return min(files, key=lambda t: abs((t[0] - target).total_seconds()))[1]
+
+
+def clean_strategy_archive(
+    dry_run: bool = False, keep_extra: set[str] | None = None
+) -> tuple[list[str], list[str]]:
+    """Thin artifacts/strategy_archive/ down to one pre-kickoff snapshot per
+    completed gameweek (the RAG's historical record), while keeping a short
+    rolling window of recent snapshots for the current gameweek. Never
+    touches anything from more than 4 weeks ago - that's valuable RAG
+    history regardless of how many snapshots pile up.
+
+    keep_extra: manual override paths to always keep on top of the normal
+    selection - e.g. one-off early history predating the usual gameweek
+    grouping. Not used by the automatic main() call.
+
+    Returns (kept_paths, deleted_paths). With dry_run=True nothing is
+    actually deleted - it just reports the plan.
+    """
+    now = datetime.now(timezone.utc)
+    current_window = compute_context.get_gameweek_window(now)
+    four_weeks_ago = now - timedelta(weeks=4)
+
+    entries = _archive_entries()
+
+    groups: dict[tuple[datetime, datetime], list[tuple[datetime, str]]] = {}
+    for ts, path in entries:
+        gw = compute_context.get_gameweek_window(ts)
+        groups.setdefault(gw, []).append((ts, path))
+
+    keep: set[str] = set(keep_extra or ())
+    for (gw_start, gw_end), files in groups.items():
+        files.sort(key=lambda t: t[0])
+        oldest_ts = files[0][0]
+
+        if oldest_ts < four_weeks_ago:
+            # Older than 4 weeks - never delete, keep everything as-is.
+            keep.update(p for _, p in files)
+            continue
+
+        if (gw_start, gw_end) == current_window:
+            # Current gameweek - keep the last 3 for fresh RAG context.
+            keep.update(p for _, p in files[-3:])
+        else:
+            # Completed gameweek - keep exactly one pre-kickoff snapshot.
+            keep.add(_closest_pre_kickoff_file(gw_start, files))
+
+    deleted = [path for _, path in entries if path not in keep]
+    kept = [path for _, path in entries if path in keep]
+
+    if not dry_run:
+        for path in deleted:
+            Path(path).unlink(missing_ok=True)
+
+    print(f"[strategy] archive: {len(kept)} files kept, {len(deleted)} deleted")
+    return kept, deleted
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -1217,6 +1320,10 @@ def main() -> None:
         f"{n_dc} double chances | RAG: {n_rag} matches retrieved"
     )
     print(f"[strategy] wrote {LATEST_JSON}")
+
+    clean_strategy_archive(
+        keep_extra={str(ARCHIVE_DIR / name) for name in PROTECTED_ARCHIVE_FILES}
+    )
 
 
 if __name__ == "__main__":

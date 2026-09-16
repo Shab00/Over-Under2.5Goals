@@ -2,22 +2,22 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Tottenham are in dire straits and face a tough task against Aston Villa, with injury concerns compounding their issues. Expect a strong fade on this match. Meanwhile, Bournemouth's chances against Liverpool are grim, making it a prime candidate for a fade as well.
+The standout value bet this week is to back Chelsea against Brentford, as their away form has been impressive. Notably, Brentford faces a difficult situation with injuries impacting their squad. In the biggest mismatch, Tottenham looks lost against Aston Villa, making this a prime opportunity for a strong fade on the home side.
 
 ## Top Picks
-### Man City vs Sunderland - Home (High)
-FADE | Prob: 76% | Odds: 1.3 | Value: -0.5%
-> Manchester City continue to showcase their dominance at home, and Sunderland will struggle to keep pace. With City in great form, this is a clear backing opportunity.
-**Action:** Back Home (Banker) | **Bet:** Back Home | **Stake:** Banker
+### Brentford vs Chelsea - Not Home (Medium)
+N/A | Prob: 22% | Odds: 2.9 | Value: -12.7%
+> Brentford faces a tough challenge against a Chelsea side that has been strong away from home. With Brentford struggling to secure wins and facing injury concerns, backing Chelsea to either win or draw is a sensible play.
+**Action:** Back Double Chance (X2) | **Bet:** Back Double Chance (X2) | **Stake:** Small
 
 
 ## Pundit's View on the Rest of the Card
-We're looking at some significant fades this week, starting with Tottenham against Aston Villa; the home side is struggling with injuries and poor form, making backing Villa a solid choice. Similarly, Brighton's matchup with Arsenal is another strong fade as their recent performance has not been up to par. For double chances, Brentford against Chelsea is intriguing, especially given Chelsea's injury news leaving them vulnerable. Everton's clash with Ipswich Town is also a double chance, as both teams are inconsistent but not hopeless. Finally, Newcastle versus Hull City is too close to call, requiring a skip this time around. The model is currently HOT over its last 27 confident predictions.
+Starting with the strong fades, Tottenham's struggles continue as they face a rejuvenated Aston Villa. Brighton is also in a tough spot against an Arsenal side that is flying high, making this another solid fade opportunity. For double chances, Brentford against Chelsea is intriguing, but Brentford's recent injury issues weaken their chances. Meanwhile, Everton hosting Ipswich Town is a close call, with both teams showing mixed form. The model is in strong form, so trust the signals this week. The model is currently HOT over its last 37 confident predictions.
 
 ## Value Bets (EDGE)
 
 ## Avoid This Week
-- **Newcastle vs Hull City** - Newcastle is struggling to find form, and with Hull City showing signs of life, this match is too close to call.
+- **Newcastle vs Hull City** - This is a close call with Newcastle not in the best form and Hull City showing some resilience. It's too tight to call, so best to avoid this fixture.
 
 ## Model Form
-Model is HOT — 81.5% accuracy over last 27 confident predictions. EDGE profit: -1.18 units.
+Model is HOT — 70.3% accuracy over last 37 confident predictions. EDGE profit: -1.18 units.
