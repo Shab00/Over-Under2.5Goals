@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-09-16T09:08:22.959212+00:00",
+  "scraped_at": "2026-09-16T10:40:19.440180+00:00",
   "fixtures": [
     {
       "home_team": "aston villa",
@@ -3377,6 +3377,14 @@
           "team": "chelsea",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
           "first_seen": "2026-09-16T09:08:22.959212+00:00"
+        },
+        {
+          "headline": "Chelsea handed huge injury boost before Brentford in new double update",
+          "source": "",
+          "time_ago": "10:40",
+          "team": "chelsea",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
+          "first_seen": "2026-09-16T10:40:19.440180+00:00"
         }
       ]
     },
@@ -3600,6 +3608,14 @@
           "team": "tottenham",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Tottenham+Hotspur/Injuries+and+Suspensions",
           "first_seen": "2026-09-16T09:08:22.959212+00:00"
+        },
+        {
+          "headline": "Spurs handed key injury boost as De Zerbi reveals bold attacking plan",
+          "source": "",
+          "time_ago": "11:19",
+          "team": "tottenham",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Tottenham+Hotspur/Injuries+and+Suspensions",
+          "first_seen": "2026-09-16T10:40:19.440180+00:00"
         }
       ],
       "away_news": [
@@ -3987,6 +4003,14 @@
           "team": "arsenal",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
           "first_seen": "2026-09-16T09:08:22.959212+00:00"
+        },
+        {
+          "headline": "Why Mikel Arteta Has Ruled Out Lamine Yamal-Like Role for Record-Setting Max Dowman",
+          "source": "",
+          "time_ago": "10:41",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-09-16T10:40:19.440180+00:00"
         }
       ]
     },
@@ -4685,6 +4709,22 @@
           "team": "leeds",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
           "first_seen": "2026-09-16T09:08:22.959212+00:00"
+        },
+        {
+          "headline": "8 players could miss Crystal Palace vs Leeds United clash as Jean-Philippe Mateta update emerges",
+          "source": "",
+          "time_ago": "11:39",
+          "team": "leeds",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
+          "first_seen": "2026-09-16T10:40:19.440180+00:00"
+        },
+        {
+          "headline": "Leeds handed huge boost as five Crystal Palace players ruled out of Elland Road clash",
+          "source": "",
+          "time_ago": "10:09",
+          "team": "leeds",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
+          "first_seen": "2026-09-16T10:40:19.440180+00:00"
         }
       ],
       "away_news": [
