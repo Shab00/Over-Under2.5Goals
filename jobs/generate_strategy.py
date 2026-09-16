@@ -1239,6 +1239,91 @@ def main() -> None:
     enrich_from_context(data, context)
     enforce_category_bets(data)
 
+    # Section placement is deterministic, never GPT's call - GPT only
+    # contributes pundit_take text. Rebuild top_picks / strong_fades /
+    # double_chances / avoid_list from fixtures_full purely on the
+    # (now-authoritative) betting_category field.
+    top_picks = []
+    strong_fades = []
+    double_chances = []
+    avoid_list = []
+
+    for fx in data.get("fixtures_full", []):
+        cat = fx.get("betting_category", "")
+        if cat == "back_home":
+            top_picks.append(fx)
+        elif cat == "strong_fade":
+            strong_fades.append(fx)
+        elif cat == "double_chance":
+            double_chances.append(fx)
+        elif cat == "avoid":
+            avoid_list.append(fx)
+
+    data["top_picks"] = top_picks
+    data["strong_fades"] = strong_fades
+    data["double_chances"] = double_chances
+    data["avoid_list"] = avoid_list
+
+    # Ensure fixtures_full is complete
+    ctx_keys = {
+        f"{fx['home_team']}|{fx['away_team']}"
+        for fx in context["fixtures"]
+    }
+    existing_keys = {
+        f"{fx['home_team']}|{fx['away_team']}"
+        for fx in data.get("fixtures_full", [])
+    }
+    missing_keys = ctx_keys - existing_keys
+
+    if missing_keys:
+        print(f"[strategy] GPT omitted {len(missing_keys)} fixtures — injecting from context")
+        for fx in context["fixtures"]:
+            key = f"{fx['home_team']}|{fx['away_team']}"
+            if key in missing_keys:
+                # Build a fallback fixture object from context
+                fallback = {
+                    "home_team": fx["home_team"],
+                    "away_team": fx["away_team"],
+                    "kickoff": fx["kickoff"],
+                    "signal": fx["signal"],
+                    "confidence": fx["confidence"],
+                    "edge_label": fx["edge_label"],
+                    "prob_homewin": fx["prob_homewin"],
+                    "odds": fx["odds"],
+                    "value_gap": fx["value_gap"],
+                    "betting_category": fx["betting_category"],
+                    "bet_description": fx["bet_description"],
+                    "double_chance_direction": fx.get("double_chance_direction",""),
+                    "pundit_take": "Model signal only — no AI analysis for this fixture.",
+                    "bet_type": fx["bet_description"],
+                    "stake_advice": "Small",
+                    "pundit_action": fx["bet_description"],
+                    "rag_informed": False
+                }
+                data["fixtures_full"].append(fallback)
+                print(f"[strategy] injected: {key}")
+
+    # Re-run section enforcement after injection
+    top_picks = []
+    strong_fades = []
+    double_chances = []
+    avoid_list = []
+    for fx in data.get("fixtures_full", []):
+        cat = fx.get("betting_category", "")
+        if cat == "back_home":
+            top_picks.append(fx)
+        elif cat == "strong_fade":
+            strong_fades.append(fx)
+        elif cat == "double_chance":
+            double_chances.append(fx)
+        elif cat == "avoid":
+            avoid_list.append(fx)
+
+    data["top_picks"] = top_picks
+    data["strong_fades"] = strong_fades
+    data["double_chances"] = double_chances
+    data["avoid_list"] = avoid_list
+
     # model_form is ALWAYS built from match_context.json - never GPT, never stale.
     perf = context.get("model_performance", {})
     data["model_form"] = (
