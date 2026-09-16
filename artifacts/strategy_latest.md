@@ -1,8 +1,8 @@
-# EPL AI Pundit Strategy - 2026-09-14
+# EPL AI Pundit Strategy - 2026-09-16
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Leeds versus Newcastle is set to be a closely contested match, with both teams struggling to find form. The standout value bet is to back the double chance on Newcastle, as Leeds will be without key players due to injury. Expect a tight contest here.
+AI analysis unavailable. Showing model predictions only. Model is HOT at accuracy.
 
 ## Top Picks
 

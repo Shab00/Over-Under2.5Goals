@@ -39,3 +39,32 @@ jobs:
             git commit -m "Update news context [skip ci]"
             git push
           fi
+
+      - name: Refresh AI pundit strategy
+        run: |
+          python jobs/compute_context.py
+          python jobs/generate_strategy.py
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      - name: Regenerate GitHub Pages
+        run: |
+          python scripts/generate_github_pages.py \
+            snapshots/predictions_latest.csv \
+            football/index.html
+
+      - name: Commit strategy and page
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add artifacts/strategy_latest.json
+          git add artifacts/strategy_latest.md
+          git add artifacts/match_context.json
+          git add artifacts/strategy_archive/
+          git add football/index.html
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Daily strategy refresh [skip ci]"
+            git push
+          fi

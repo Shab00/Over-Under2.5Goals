@@ -560,19 +560,23 @@ def _openai_client():
 
         api_key = os.environ.get("OPENAI_API_KEY")
         if not api_key:
-            raise SystemExit("[strategy] OPENAI_API_KEY not set in environment / .env")
+            print("[strategy] OPENAI_API_KEY not set — using fallback")
+            return None
         _CLIENT = OpenAI(api_key=api_key)
     return _CLIENT
 
 
-def call_gpt(user_prompt: str, extra: str | None = None) -> str:
+def call_gpt(user_prompt: str, extra: str | None = None) -> str | None:
+    client = _openai_client()
+    if client is None:
+        return None
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": user_prompt},
     ]
     if extra:
         messages.append({"role": "user", "content": extra})
-    resp = _openai_client().chat.completions.create(
+    resp = client.chat.completions.create(
         model=MODEL,
         messages=messages,
         max_tokens=MAX_TOKENS,
@@ -1032,21 +1036,28 @@ def main() -> None:
     parsed_via = "primary"
     try:
         raw = call_gpt(user_prompt)
-        if args.debug:
-            print("=" * 72)
-            print("[strategy] RAW GPT RESPONSE:")
-            print(raw)
-            print("=" * 72)
-        try:
-            data = extract_json(raw, allow_llm_repair=False)
-        except Exception:
-            raw = call_gpt(user_prompt, extra="Return only valid JSON")
+        if raw is None:
+            data = build_fallback_strategy(context)
+            parsed_via = "fallback (no AI)"
+            print("[strategy] using fallback strategy (no API key)")
+        else:
             if args.debug:
-                print("[strategy] RAW GPT RESPONSE (retry with 'Return only valid JSON'):")
+                print("=" * 72)
+                print("[strategy] RAW GPT RESPONSE:")
                 print(raw)
                 print("=" * 72)
-            data = extract_json(raw, allow_llm_repair=True)
-            parsed_via = "retry + fallback ladder"
+            try:
+                data = extract_json(raw, allow_llm_repair=False)
+            except Exception:
+                raw = call_gpt(user_prompt, extra="Return only valid JSON")
+                if raw is None:
+                    raise RuntimeError("OPENAI_API_KEY not set")
+                if args.debug:
+                    print("[strategy] RAW GPT RESPONSE (retry with 'Return only valid JSON'):")
+                    print(raw)
+                    print("=" * 72)
+                data = extract_json(raw, allow_llm_repair=True)
+                parsed_via = "retry + fallback ladder"
     except Exception as exc:  # noqa: BLE001
         print(f"[strategy] GPT unavailable ({exc}); building fallback strategy "
               f"from {CONTEXT_JSON.name} with no AI")

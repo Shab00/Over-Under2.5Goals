@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-16T10:35:36.052406+00:00",
+  "generated_at": "2026-09-16T10:35:10.772870+00:00",
   "model_form": "Model is HOT — 70.4% accuracy over last 27 confident predictions. EDGE profit: +0.82 units.",
   "gameweek_summary": "AI analysis unavailable. Showing model predictions only. Model is HOT at accuracy.",
   "rest_of_card_paragraph": "",
@@ -51,5 +51,6 @@
   ],
   "avoid_list": [],
   "value_bets": [],
-  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nAI analysis unavailable.\n\n<b>Double Chance:</b>\n<b>Leeds vs Newcastle</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nLeeds — Leeds hit with injury blow for Chelsea trip but trio in line\n\nFull analysis: shab00.github.io/football"
+  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nAI analysis unavailable.\n\n<b>Double Chance:</b>\n<b>Leeds vs Newcastle</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nLeeds — Leeds hit with injury blow for Chelsea trip but trio in line\n\nFull analysis: shab00.github.io/football",
+  "scored": false
 }

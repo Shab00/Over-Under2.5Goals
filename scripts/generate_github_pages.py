@@ -757,6 +757,11 @@ def render_strategy_section(strategy) -> str:
         'background:rgba(148,163,184,0.15);border:1px solid var(--panel-border);'
         'border-radius:999px;padding:0.1rem 0.5rem;vertical-align:middle;">'
         'Powered by GPT-4o-mini | Not financial advice</span></h2>',
+        '<p style="font-size:0.8rem;color:var(--muted);'
+        'margin-bottom:1rem;">'
+        'Analysis updates daily with latest injury news. '
+        'Probabilities refresh one hour before each kickoff.'
+        '</p>',
     ]
 
     gw_summary = strategy.get("gameweek_summary") or ""
