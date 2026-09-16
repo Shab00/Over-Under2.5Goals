@@ -1,36 +1,87 @@
 {
-  "computed_at": "2026-09-14T18:05:40.437069+00:00",
-  "gameweek_start": "2026-09-11T00:00:00+00:00",
-  "gameweek_end": "2026-09-14T23:59:00+00:00",
+  "computed_at": "2026-09-16T10:40:57.060882+00:00",
+  "gameweek_start": "2026-09-18T00:00:00+00:00",
+  "gameweek_end": "2026-09-21T23:59:00+00:00",
   "model_performance": {
     "total_predictions": 27,
     "avoid_count": 3,
-    "overall_accuracy_pct": 70.4,
-    "edge_count": 4,
-    "edge_accuracy_pct": 75.0,
-    "edge_profit": 0.82,
-    "fade_count": 21,
-    "fade_accuracy_pct": 66.7,
+    "overall_accuracy_pct": 81.5,
+    "edge_count": 6,
+    "edge_accuracy_pct": 50.0,
+    "edge_profit": -1.18,
+    "fade_count": 20,
+    "fade_accuracy_pct": 90.0,
     "streak_label": "HOT",
-    "streak_string": "L W W W W",
+    "streak_string": "W W W W L",
     "streak_last5": [
-      false,
       true,
       true,
       true,
-      true
+      true,
+      false
     ]
   },
   "fixtures": [
     {
-      "home_team": "Leeds",
-      "away_team": "Newcastle",
-      "kickoff": "2026-09-14T20:00:00",
-      "prob_homewin": 0.252,
+      "home_team": "Brentford",
+      "away_team": "Chelsea",
+      "kickoff": "2026-09-18T20:00:00",
+      "prob_homewin": 0.174,
       "signal": "Not Home",
-      "odds": 2.42,
-      "implied_prob": 0.413,
-      "value_gap": -0.162,
+      "odds": 2.93,
+      "implied_prob": 0.341,
+      "value_gap": -0.168,
+      "edge_label": "N/A",
+      "betting_category": "strong_fade",
+      "confidence": "Low",
+      "double_chance_direction": "",
+      "bet_description": "Back Away Win",
+      "is_strong_fade": true,
+      "home_team_form": {
+        "current_season_pts": 6,
+        "current_season_games": 4,
+        "pts_last5": 7,
+        "gf_last5": 7,
+        "ga_last5": 4,
+        "wins_last5": 1,
+        "form_string": "D W D D D"
+      },
+      "away_team_form": {
+        "current_season_pts": 7,
+        "current_season_games": 4,
+        "pts_last5": 10,
+        "gf_last5": 14,
+        "ga_last5": 10,
+        "wins_last5": 3,
+        "form_string": "W W W L D"
+      },
+      "h2h": {
+        "home_wins": 0,
+        "away_wins": 2,
+        "draws": 3,
+        "home_gf_avg": 1.3,
+        "summary": "Home 0W 3D 2L in last 5 meetings"
+      },
+      "home_news": [
+        "Brentford dealt double injury blow ahead of Sunderland clash",
+        "Brentford v Tottenham Hotspur confirmed team news: Sangaré starts for Bees",
+        "Brentford v Sunderland confirmed Team News: Andrews makes one change for Premier League meeting"
+      ],
+      "away_news": [
+        "Chelsea vs. Hull City Team News: Xabi Alonso make surprise decision for Tigers Stamford Bridge clash",
+        "Chelsea Starting XI vs Hull City: Confirmed Team News and Predicted Lineup",
+        "Chelsea injury update: Caicedo and Palestra latest return dates"
+      ]
+    },
+    {
+      "home_team": "Tottenham",
+      "away_team": "Aston Villa",
+      "kickoff": "2026-09-19T12:30:00",
+      "prob_homewin": 0.227,
+      "signal": "Not Home",
+      "odds": 2.0,
+      "implied_prob": 0.5,
+      "value_gap": -0.273,
       "edge_label": "N/A",
       "betting_category": "double_chance",
       "confidence": "Medium",
@@ -38,39 +89,441 @@
       "bet_description": "Back Away Win or Draw (X2)",
       "is_strong_fade": false,
       "home_team_form": {
-        "current_season_pts": 5,
-        "current_season_games": 3,
-        "pts_last5": 5,
-        "gf_last5": 3,
-        "ga_last5": 4,
-        "wins_last5": 1,
-        "form_string": "L L W D D"
+        "current_season_pts": 2,
+        "current_season_games": 4,
+        "pts_last5": 2,
+        "gf_last5": 1,
+        "ga_last5": 8,
+        "wins_last5": 0,
+        "form_string": "L L L D D"
       },
       "away_team_form": {
-        "current_season_pts": 5,
-        "current_season_games": 3,
-        "pts_last5": 8,
-        "gf_last5": 10,
-        "ga_last5": 8,
+        "current_season_pts": 1,
+        "current_season_games": 4,
+        "pts_last5": 1,
+        "gf_last5": 2,
+        "ga_last5": 11,
+        "wins_last5": 0,
+        "form_string": "L L L D L"
+      },
+      "h2h": {
+        "home_wins": 2,
+        "away_wins": 3,
+        "draws": 0,
+        "home_gf_avg": 2.0,
+        "summary": "Home 2W 0D 3L in last 5 meetings"
+      },
+      "home_news": [
+        "Tottenham have two unconventional left-wing options to fill Mudryk void, De Zerbi insists",
+        "Roberto De Zerbi explains importance of getting James Maddison fully fit",
+        "Injury concerns hit Tottenham, Pedro Porro and Destiny Udogie left out of Everton clash after De Zerbi's warning"
+      ],
+      "away_news": [
+        "Aston Villa suffer fresh injury blow as defender forced off in Nottingham Forest clash",
+        "View: Maatsen injury now opens UCL door for snubbed Aston Villa man",
+        "Aston Villa duo facing spells out with injury following defeat to Nottingham Forest"
+      ]
+    },
+    {
+      "home_team": "Brighton",
+      "away_team": "Arsenal",
+      "kickoff": "2026-09-19T15:00:00",
+      "prob_homewin": 0.099,
+      "signal": "Not Home",
+      "odds": 4.73,
+      "implied_prob": 0.211,
+      "value_gap": -0.113,
+      "edge_label": "N/A",
+      "betting_category": "strong_fade",
+      "confidence": "High",
+      "double_chance_direction": "",
+      "bet_description": "Back Away Win",
+      "is_strong_fade": true,
+      "home_team_form": {
+        "current_season_pts": 7,
+        "current_season_games": 4,
+        "pts_last5": 7,
+        "gf_last5": 13,
+        "ga_last5": 6,
         "wins_last5": 2,
-        "form_string": "L W D W D"
+        "form_string": "L W L D W"
+      },
+      "away_team_form": {
+        "current_season_pts": 12,
+        "current_season_games": 4,
+        "pts_last5": 15,
+        "gf_last5": 9,
+        "ga_last5": 1,
+        "wins_last5": 5,
+        "form_string": "W W W W W"
       },
       "h2h": {
         "home_wins": 0,
-        "away_wins": 2,
-        "draws": 3,
-        "home_gf_avg": 0.7,
-        "summary": "Home 0W 3D 2L in last 5 meetings"
+        "away_wins": 3,
+        "draws": 2,
+        "home_gf_avg": 0.3,
+        "summary": "Home 0W 2D 3L in last 5 meetings"
       },
       "home_news": [
-        "Leeds hit with injury blow for Chelsea trip but trio in line to debut",
-        "Chelsea vs Leeds United - prediction, Team News, lineups",
-        "Daniel Farke explains surprise Leeds United snub is due to new injury concern"
+        "Hurzeler reveals Brighton star is ‘close’ to return from injury",
+        "Super Eagles winger Azeez faces late fitness test ahead of Brighton's trip to Man Utd",
+        "'Setback' - Another Brighton injury blow confirmed ahead of Manchester United"
       ],
       "away_news": [
-        "Newcastle United: Jaouen may miss cup clash",
-        "'His groin' - Defender injury blow after Newcastle United transfer decision as record signing makes debut",
-        "Jaissle gives injury updates on Newcastle duo ahead of cup clash"
+        "Arsenal dealt injury blow vs Sunderland as Mikel Arteta forced to make change",
+        "Odegaard details 'tough moments' as £75m Arsenal Guimaraes reservation raised",
+        "Why Max Dowman won't play for Arsenal against Sunderland as early injury hint dropped"
+      ]
+    },
+    {
+      "home_team": "Everton",
+      "away_team": "Ipswich Town",
+      "kickoff": "2026-09-19T15:00:00",
+      "prob_homewin": 0.527,
+      "signal": "Home",
+      "odds": 1.8,
+      "implied_prob": 0.556,
+      "value_gap": -0.029,
+      "edge_label": "FADE",
+      "betting_category": "avoid",
+      "confidence": "Low",
+      "double_chance_direction": "",
+      "bet_description": "Skip — too close to call",
+      "is_strong_fade": false,
+      "home_team_form": {
+        "current_season_pts": 6,
+        "current_season_games": 4,
+        "pts_last5": 9,
+        "gf_last5": 7,
+        "ga_last5": 3,
+        "wins_last5": 2,
+        "form_string": "W W D D D"
+      },
+      "away_team_form": {
+        "current_season_pts": 6,
+        "current_season_games": 4,
+        "pts_last5": 6,
+        "gf_last5": 8,
+        "ga_last5": 13,
+        "wins_last5": 2,
+        "form_string": "L W L L W"
+      },
+      "h2h": {
+        "home_wins": 1,
+        "away_wins": 2,
+        "draws": 2,
+        "home_gf_avg": 1.5,
+        "summary": "Home 1W 2D 2L in last 5 meetings"
+      },
+      "home_news": [
+        "Everton Team News vs Manchester United: Jack Grealish, Ainsley Maitland-Niles",
+        "Jordan Pickford remains the one player Everton can't lose after injury warning signs",
+        "‘Doesn’t look in a good way’: MEN journo shares early injury update from Everton vs Man Utd"
+      ],
+      "away_news": [
+        "Crystal Palace vs Ipswich Town: Games Axel Disasi will miss after 'reckless' challenge on Jack Clarke",
+        "Ipswich Town boss O’Neil provides update on Emersonn injury worry and praises striker after win over Crystal Palace",
+        "Manchester united 5-2 Ipswich Town - Match report"
+      ]
+    },
+    {
+      "home_team": "Newcastle",
+      "away_team": "Hull City",
+      "kickoff": "2026-09-19T15:00:00",
+      "prob_homewin": 0.648,
+      "signal": "Home",
+      "odds": 1.52,
+      "implied_prob": 0.658,
+      "value_gap": -0.009,
+      "edge_label": "FADE",
+      "betting_category": "back_home",
+      "confidence": "Medium",
+      "double_chance_direction": "",
+      "bet_description": "Back Home to Win",
+      "is_strong_fade": false,
+      "home_team_form": {
+        "current_season_pts": 5,
+        "current_season_games": 4,
+        "pts_last5": 8,
+        "gf_last5": 9,
+        "ga_last5": 9,
+        "wins_last5": 2,
+        "form_string": "W D W D L"
+      },
+      "away_team_form": {
+        "current_season_pts": 8,
+        "current_season_games": 4,
+        "pts_last5": 8,
+        "gf_last5": 6,
+        "ga_last5": 9,
+        "wins_last5": 2,
+        "form_string": "L W W D D"
+      },
+      "h2h": {
+        "home_wins": 2,
+        "away_wins": 1,
+        "draws": 2,
+        "home_gf_avg": 2.0,
+        "summary": "Home 2W 2D 1L in last 5 meetings"
+      },
+      "home_news": [
+        "Why Anthony Elanga missed Newcastle clash vs Leeds as long-term fears emerge",
+        "Early Newcastle Team News vs Leeds: Duo face late fitness tests, three players ruled out",
+        "Newcastle United triple injury blow ahead of Hull City as Anthony Elanga fear grows"
+      ],
+      "away_news": [
+        "Hull City defender taken to hospital with injury sustained at Chelsea",
+        "Hull City team news to face Chelsea as Sergej Jakirovic makes Sorba Thomas decision",
+        "Hull City dealt blow as Sergej Jakirovic gives injury updates on Ansah, Iroegbunam and Morita"
+      ]
+    },
+    {
+      "home_team": "Nott'm Forest",
+      "away_team": "Coventry City",
+      "kickoff": "2026-09-19T17:30:00",
+      "prob_homewin": 0.848,
+      "signal": "Home",
+      "odds": 1.71,
+      "implied_prob": 0.585,
+      "value_gap": 0.263,
+      "edge_label": "EDGE",
+      "betting_category": "back_home",
+      "confidence": "High",
+      "double_chance_direction": "",
+      "bet_description": "Back Home to Win",
+      "is_strong_fade": false,
+      "home_team_form": {
+        "current_season_pts": 5,
+        "current_season_games": 4,
+        "pts_last5": 6,
+        "gf_last5": 6,
+        "ga_last5": 6,
+        "wins_last5": 1,
+        "form_string": "D L D D W"
+      },
+      "away_team_form": {
+        "current_season_pts": 0,
+        "current_season_games": 4,
+        "pts_last5": 1,
+        "gf_last5": 0,
+        "ga_last5": 10,
+        "wins_last5": 0,
+        "form_string": "D L L L L"
+      },
+      "h2h": {
+        "home_wins": 2,
+        "away_wins": 2,
+        "draws": 1,
+        "home_gf_avg": 0.3,
+        "summary": "Home 2W 1D 2L in last 5 meetings"
+      },
+      "home_news": [
+        "Milenkovic, Jair, Murillo - Nottingham Forest injury update provided after Aston Villa win",
+        "Munoz, Delap, Sangare: Nott’m Forest injury latest for FPL Gameweek 3",
+        "Nikola Milenkovic injury update as Nottingham Forest defender misses Aston Villa game"
+      ],
+      "away_news": [
+        "Nico Schlotterbeck plays down injury fears after Borussia Dortmund comeback: ‘I'm physically fit’",
+        "Dastan Satpayev injury blow confirmed for Burnley after absence",
+        "Cardiff City suffer fresh injury blow as Calum Chambers time frame emerges"
+      ]
+    },
+    {
+      "home_team": "Bournemouth",
+      "away_team": "Liverpool",
+      "kickoff": "2026-09-20T14:00:00",
+      "prob_homewin": 0.086,
+      "signal": "Not Home",
+      "odds": 3.31,
+      "implied_prob": 0.302,
+      "value_gap": -0.216,
+      "edge_label": "N/A",
+      "betting_category": "strong_fade",
+      "confidence": "High",
+      "double_chance_direction": "",
+      "bet_description": "Back Away Win",
+      "is_strong_fade": true,
+      "home_team_form": {
+        "current_season_pts": 3,
+        "current_season_games": 4,
+        "pts_last5": 4,
+        "gf_last5": 6,
+        "ga_last5": 7,
+        "wins_last5": 0,
+        "form_string": "D L D D D"
+      },
+      "away_team_form": {
+        "current_season_pts": 6,
+        "current_season_games": 4,
+        "pts_last5": 6,
+        "gf_last5": 7,
+        "ga_last5": 6,
+        "wins_last5": 1,
+        "form_string": "L D D W D"
+      },
+      "h2h": {
+        "home_wins": 1,
+        "away_wins": 4,
+        "draws": 0,
+        "home_gf_avg": 1.0,
+        "summary": "Home 1W 0D 4L in last 5 meetings"
+      },
+      "home_news": [],
+      "away_news": [
+        "Liverpool injury, suspension list and return dates for Tottenham: Latest update on Joe Gomez, Giovanni Leoni",
+        "Liverpool starting XI vs Fulham: Confirmed Team News and predicted lineup",
+        "Liverpool injury latest and return dates including Joe Gomez with Hugo Ekitike plan confirmed"
+      ]
+    },
+    {
+      "home_team": "Leeds",
+      "away_team": "Crystal Palace",
+      "kickoff": "2026-09-20T14:00:00",
+      "prob_homewin": 0.255,
+      "signal": "Not Home",
+      "odds": 1.91,
+      "implied_prob": 0.524,
+      "value_gap": -0.268,
+      "edge_label": "N/A",
+      "betting_category": "double_chance",
+      "confidence": "Medium",
+      "double_chance_direction": "Back Away Win or Draw (X2)",
+      "bet_description": "Back Away Win or Draw (X2)",
+      "is_strong_fade": false,
+      "home_team_form": {
+        "current_season_pts": 8,
+        "current_season_games": 4,
+        "pts_last5": 8,
+        "gf_last5": 7,
+        "ga_last5": 4,
+        "wins_last5": 2,
+        "form_string": "L W D D W"
+      },
+      "away_team_form": {
+        "current_season_pts": 3,
+        "current_season_games": 4,
+        "pts_last5": 6,
+        "gf_last5": 9,
+        "ga_last5": 12,
+        "wins_last5": 2,
+        "form_string": "W L L W L"
+      },
+      "h2h": {
+        "home_wins": 2,
+        "away_wins": 2,
+        "draws": 1,
+        "home_gf_avg": 2.0,
+        "summary": "Home 2W 1D 2L in last 5 meetings"
+      },
+      "home_news": [
+        "Adam Pope reveals huge new Leeds United injury update after Newcastle win",
+        "Leeds United handed major boost as Newcastle trio ruled out of tonight’s clash",
+        "Leeds United vs Newcastle United: Team News and predicted lineups for September 14"
+      ],
+      "away_news": [
+        "Dean Henderson injury update as he misses Crystal Palace vs Ipswich",
+        "Huge blow, Crystal Palace captain Dean Henderson ruled out until after international break with ankle injury",
+        "Fulham vs. Crystal Palace: Ismaila Sarr, Jean-Philippe Mateta, team news update before Premier League clash"
+      ]
+    },
+    {
+      "home_team": "Man City",
+      "away_team": "Sunderland",
+      "kickoff": "2026-09-20T14:00:00",
+      "prob_homewin": 0.845,
+      "signal": "Home",
+      "odds": 1.3,
+      "implied_prob": 0.769,
+      "value_gap": 0.076,
+      "edge_label": "EDGE",
+      "betting_category": "back_home",
+      "confidence": "High",
+      "double_chance_direction": "",
+      "bet_description": "Back Home to Win",
+      "is_strong_fade": false,
+      "home_team_form": {
+        "current_season_pts": 12,
+        "current_season_games": 4,
+        "pts_last5": 13,
+        "gf_last5": 10,
+        "ga_last5": 4,
+        "wins_last5": 4,
+        "form_string": "D W W W W"
+      },
+      "away_team_form": {
+        "current_season_pts": 4,
+        "current_season_games": 4,
+        "pts_last5": 7,
+        "gf_last5": 4,
+        "ga_last5": 5,
+        "wins_last5": 2,
+        "form_string": "W L W D L"
+      },
+      "h2h": {
+        "home_wins": 4,
+        "away_wins": 0,
+        "draws": 1,
+        "home_gf_avg": 2.5,
+        "summary": "Home 4W 1D 0L in last 5 meetings"
+      },
+      "home_news": [
+        "Manchester City vs Manchester United: Latest City Team News and predicted City starting eleven",
+        "Should Erling Haaland's goal for City against Man United have been ruled out?",
+        "Man City games Phil Foden will miss as Michael Oliver explains Man United red card"
+      ],
+      "away_news": [
+        "Sunderland star could miss 10 games after fresh injury blow as full return timeline emerges",
+        "Man City handed early team news boost for Sunderland after last-minute Arsenal decision"
+      ]
+    },
+    {
+      "home_team": "Fulham",
+      "away_team": "Man United",
+      "kickoff": "2026-09-20T16:30:00",
+      "prob_homewin": 0.084,
+      "signal": "Not Home",
+      "odds": 3.51,
+      "implied_prob": 0.285,
+      "value_gap": -0.201,
+      "edge_label": "N/A",
+      "betting_category": "strong_fade",
+      "confidence": "High",
+      "double_chance_direction": "",
+      "bet_description": "Back Away Win",
+      "is_strong_fade": true,
+      "home_team_form": {
+        "current_season_pts": 1,
+        "current_season_games": 4,
+        "pts_last5": 1,
+        "gf_last5": 4,
+        "ga_last5": 8,
+        "wins_last5": 0,
+        "form_string": "L L L L D"
+      },
+      "away_team_form": {
+        "current_season_pts": 4,
+        "current_season_games": 4,
+        "pts_last5": 4,
+        "gf_last5": 8,
+        "ga_last5": 9,
+        "wins_last5": 1,
+        "form_string": "L L W D L"
+      },
+      "h2h": {
+        "home_wins": 1,
+        "away_wins": 3,
+        "draws": 1,
+        "home_gf_avg": 0.5,
+        "summary": "Home 1W 1D 3L in last 5 meetings"
+      },
+      "home_news": [
+        "Injured Sessegnon could miss Fulham’s clash with Man Utd",
+        "Fulham vs Chelsea Injury News: Major Blow Leaves Both Sides Facing Early Problems"
+      ],
+      "away_news": [
+        "Manchester United give Luke Shaw injury update after derby blow",
+        "'Great decision': 23yo Man Utd star finally reveals why he delayed his return from injury",
+        "Man United release footage of midfield enforcer training in gym following recovery from injury"
       ]
     }
   ]
