@@ -190,7 +190,10 @@
       "rag_informed": true,
       "prob_homewin": 0.42,
       "odds": 10.33,
-      "value_gap": 0.3232
+      "value_gap": 0.3232,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Bournemouth",
@@ -208,7 +211,10 @@
       "rag_informed": true,
       "prob_homewin": 0.749,
       "odds": 3.46,
-      "value_gap": 0.46
+      "value_gap": 0.46,
+      "correct": false,
+      "FTR": "D",
+      "profit": -1.0
     },
     {
       "home_team": "Chelsea",
@@ -226,7 +232,10 @@
       "rag_informed": true,
       "prob_homewin": 0.745,
       "odds": 2.02,
-      "value_gap": 0.25
+      "value_gap": 0.25,
+      "correct": false,
+      "FTR": "D",
+      "profit": -1.0
     },
     {
       "home_team": "Crystal Palace",
@@ -244,7 +253,10 @@
       "rag_informed": true,
       "prob_homewin": 0.496,
       "odds": 7.0,
-      "value_gap": 0.3531
+      "value_gap": 0.3531,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Liverpool",
@@ -262,7 +274,10 @@
       "rag_informed": true,
       "prob_homewin": 0.638,
       "odds": 2.84,
-      "value_gap": 0.2859
+      "value_gap": 0.2859,
+      "correct": false,
+      "FTR": "D",
+      "profit": -1.0
     },
     {
       "home_team": "Tottenham",
@@ -280,7 +295,10 @@
       "rag_informed": true,
       "prob_homewin": 0.319,
       "odds": 2.02,
-      "value_gap": -0.176
+      "value_gap": -0.176,
+      "correct": true,
+      "FTR": "D",
+      "profit": 0.0
     },
     {
       "home_team": "Sunderland",
@@ -298,7 +316,10 @@
       "rag_informed": true,
       "prob_homewin": 0.176,
       "odds": 6.79,
-      "value_gap": 0.0287
+      "value_gap": 0.0287,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Man United",
@@ -316,7 +337,10 @@
       "rag_informed": true,
       "prob_homewin": 0.161,
       "odds": 3.24,
-      "value_gap": -0.1476
+      "value_gap": -0.1476,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Coventry City",
@@ -334,7 +358,10 @@
       "rag_informed": true,
       "prob_homewin": 0.305,
       "odds": 4.05,
-      "value_gap": 0.0581
+      "value_gap": 0.0581,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Leeds",
@@ -352,7 +379,10 @@
       "rag_informed": true,
       "prob_homewin": 0.419,
       "odds": 2.35,
-      "value_gap": -0.0065
+      "value_gap": -0.0065,
+      "correct": false,
+      "FTR": "H",
+      "profit": 0.0
     }
   ],
   "value_bets": [
@@ -403,5 +433,13 @@
     }
   ],
   "telegram_message": "<b>EPL AI Pundit Strategy</b>\nBournemouth against Brentford stands out as the top value bet this week, given their impressive home form and clear edge.\n\n<b>Top Picks:</b>\n<b>Bournemouth vs Brentford</b> — Back Home (Banker) @ 3.46\n<b>Chelsea vs Hull City</b> — Back Home (Banker) @ 2.02\n<b>Liverpool vs Fulham</b> — Back Home (Value) @ 2.84\n\n<b>Strong Fades:</b>\n<b>Sunderland vs Arsenal</b> — Strong Fade — Back Away Win\n<b>Man United vs Man City</b> — Strong Fade — Back Away Win\n\n<b>Double Chance:</b>\n<b>Aston Villa vs Nott'm Forest</b> — Back Double Chance (X2)\n<b>Tottenham vs Everton</b> — Back Double Chance (X2)\n<b>Leeds vs Newcastle</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nAston Villa — Leon Goretzka (knee)\nBournemouth — El Junior Kroupi\nChelsea — Marco Palestra\n\nFull analysis: shab00.github.io/football",
-  "scored": false
+  "scored": true,
+  "score_summary": {
+    "total": 10,
+    "correct": 6,
+    "accuracy_pct": 60.0,
+    "total_profit": -3.0,
+    "edge_correct": 0,
+    "edge_profit": -3.0
+  }
 }

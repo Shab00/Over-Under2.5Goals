@@ -23,7 +23,10 @@
       "rag_informed": false,
       "bet_description": "Back Away Win or Draw (X2)",
       "double_chance_direction": "Back Away Win or Draw (X2)",
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "H",
+      "profit": 0.0
     }
   ],
   "strong_fades": [],
@@ -52,5 +55,13 @@
   "avoid_list": [],
   "value_bets": [],
   "telegram_message": "<b>EPL AI Pundit Strategy</b>\nThis week, Leeds vs Newcastle stands out with the double chance on offer, as Leeds has struggled recently and faces a tough test.\n\n<b>Double Chance:</b>\n<b>Leeds vs Newcastle</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nLeeds — Leeds hit with injury blow for Chelsea trip but trio in line\n\nFull analysis: shab00.github.io/football",
-  "scored": false
+  "scored": true,
+  "score_summary": {
+    "total": 1,
+    "correct": 0,
+    "accuracy_pct": 0.0,
+    "total_profit": 0.0,
+    "edge_correct": 0,
+    "edge_profit": 0
+  }
 }

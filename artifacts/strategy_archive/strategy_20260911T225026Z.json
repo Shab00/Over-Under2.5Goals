@@ -76,7 +76,10 @@
       "pundit_action": "Skip — too close to call",
       "betting_category": "avoid",
       "rag_informed": false,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Bournemouth",
@@ -94,7 +97,10 @@
       "pundit_action": "Strong Fade — Back Away Win",
       "betting_category": "strong_fade",
       "rag_informed": true,
-      "is_strong_fade": true
+      "is_strong_fade": true,
+      "correct": true,
+      "FTR": "D",
+      "profit": 0.0
     },
     {
       "home_team": "Chelsea",
@@ -112,7 +118,10 @@
       "pundit_action": "Back Home (Banker)",
       "betting_category": "back_home",
       "rag_informed": false,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "D",
+      "profit": -1.0
     },
     {
       "home_team": "Crystal Palace",
@@ -130,7 +139,10 @@
       "pundit_action": "Back Home (Value)",
       "betting_category": "back_home",
       "rag_informed": false,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "A",
+      "profit": -1.0
     },
     {
       "home_team": "Liverpool",
@@ -148,7 +160,10 @@
       "pundit_action": "Back Home (Value)",
       "betting_category": "back_home",
       "rag_informed": false,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "D",
+      "profit": -1.0
     },
     {
       "home_team": "Tottenham",
@@ -166,7 +181,10 @@
       "pundit_action": "Back Double Chance (X2)",
       "betting_category": "double_chance",
       "rag_informed": true,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": true,
+      "FTR": "D",
+      "profit": 0.0
     },
     {
       "home_team": "Sunderland",
@@ -184,7 +202,10 @@
       "pundit_action": "Strong Fade — Back Away Win",
       "betting_category": "strong_fade",
       "rag_informed": true,
-      "is_strong_fade": true
+      "is_strong_fade": true,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Coventry City",
@@ -202,7 +223,10 @@
       "pundit_action": "Back Double Chance (X2)",
       "betting_category": "double_chance",
       "rag_informed": false,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Man United",
@@ -220,7 +244,10 @@
       "pundit_action": "Back Double Chance (X2)",
       "betting_category": "double_chance",
       "rag_informed": true,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Leeds",
@@ -238,7 +265,10 @@
       "pundit_action": "Back Double Chance (X2)",
       "betting_category": "double_chance",
       "rag_informed": true,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "H",
+      "profit": 0.0
     }
   ],
   "strong_fades": [
@@ -357,5 +387,13 @@
   ],
   "value_bets": [],
   "telegram_message": "<b>EPL AI Pundit Strategy</b>\nThis week’s standout value bet is Chelsea against Hull City, boasting a massive 93.3% home win probability.\n\n<b>Top Picks:</b>\n<b>Chelsea vs Hull City</b> — Back Home (Banker) @ 1.24\n<b>Crystal Palace vs Ipswich Town</b> — Back Home (Value) @ 1.89\n<b>Liverpool vs Fulham</b> — Back Home (Value) @ 1.45\n\n<b>Strong Fades:</b>\n<b>Bournemouth vs Brentford</b> — Strong Fade — Back Away Win\n<b>Sunderland vs Arsenal</b> — Strong Fade — Back Away Win\n\n<b>Double Chance:</b>\n<b>Tottenham vs Everton</b> — Back Double Chance (X2)\n<b>Coventry City vs Brighton</b> — Back Double Chance (X2)\n<b>Leeds vs Newcastle</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nAston Villa — Leon Goretzka (knee)\nBournemouth — El Junior Kroupi\nChelsea — Marco Palestra\n\nFull analysis: shab00.github.io/football",
-  "scored": false
+  "scored": true,
+  "score_summary": {
+    "total": 10,
+    "correct": 5,
+    "accuracy_pct": 50.0,
+    "total_profit": -3.0,
+    "edge_correct": 0,
+    "edge_profit": -3.0
+  }
 }

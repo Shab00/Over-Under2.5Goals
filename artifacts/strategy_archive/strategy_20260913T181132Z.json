@@ -21,7 +21,10 @@
       "pundit_action": "Back Double Chance (X2)",
       "betting_category": "double_chance",
       "rag_informed": true,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Leeds",
@@ -39,7 +42,10 @@
       "pundit_action": "Back Double Chance (X2)",
       "betting_category": "double_chance",
       "rag_informed": true,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "H",
+      "profit": 0.0
     }
   ],
   "strong_fades": [],
@@ -84,5 +90,13 @@
   "avoid_list": [],
   "value_bets": [],
   "telegram_message": "<b>EPL AI Pundit Strategy</b>\nEarlier today we backed Bournemouth and Liverpool at home - those games have now kicked off.\n\n<b>Double Chance:</b>\n<b>Man United vs Man City</b> — Back Double Chance (X2)\n<b>Leeds vs Newcastle</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nMan United — Carlos Baleba\nLeeds — Leeds hit with injury blow for Chelsea trip but trio in line\n\nFull analysis: shab00.github.io/football",
-  "scored": false
+  "scored": true,
+  "score_summary": {
+    "total": 2,
+    "correct": 1,
+    "accuracy_pct": 50.0,
+    "total_profit": 0.0,
+    "edge_correct": 0,
+    "edge_profit": 0
+  }
 }

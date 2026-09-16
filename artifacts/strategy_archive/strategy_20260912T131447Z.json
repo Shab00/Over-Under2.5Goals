@@ -58,7 +58,10 @@
       "pundit_action": "Back Double Chance (X2)",
       "betting_category": "double_chance",
       "rag_informed": true,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Bournemouth",
@@ -76,7 +79,10 @@
       "pundit_action": "Back Double Chance (X2)",
       "betting_category": "double_chance",
       "rag_informed": true,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": true,
+      "FTR": "D",
+      "profit": 0.0
     },
     {
       "home_team": "Chelsea",
@@ -94,7 +100,10 @@
       "pundit_action": "Back Home (Banker)",
       "betting_category": "back_home",
       "rag_informed": true,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "D",
+      "profit": -1.0
     },
     {
       "home_team": "Crystal Palace",
@@ -112,7 +121,10 @@
       "pundit_action": "Back Double Chance (X2)",
       "betting_category": "double_chance",
       "rag_informed": true,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Liverpool",
@@ -130,7 +142,10 @@
       "pundit_action": "Back Home (Banker)",
       "betting_category": "back_home",
       "rag_informed": true,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "D",
+      "profit": -1.0
     },
     {
       "home_team": "Tottenham",
@@ -148,7 +163,10 @@
       "pundit_action": "Back Double Chance (X2)",
       "betting_category": "double_chance",
       "rag_informed": true,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": true,
+      "FTR": "D",
+      "profit": 0.0
     },
     {
       "home_team": "Sunderland",
@@ -166,7 +184,10 @@
       "pundit_action": "Strong Fade — Back Away Win",
       "betting_category": "strong_fade",
       "rag_informed": true,
-      "is_strong_fade": true
+      "is_strong_fade": true,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Man United",
@@ -184,7 +205,10 @@
       "pundit_action": "Strong Fade — Back Away Win",
       "betting_category": "strong_fade",
       "rag_informed": true,
-      "is_strong_fade": true
+      "is_strong_fade": true,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Leeds",
@@ -202,7 +226,10 @@
       "pundit_action": "Back Double Chance (X2)",
       "betting_category": "double_chance",
       "rag_informed": true,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "H",
+      "profit": 0.0
     },
     {
       "home_team": "Coventry City",
@@ -220,7 +247,10 @@
       "pundit_action": "Back Double Chance (X2)",
       "betting_category": "double_chance",
       "rag_informed": true,
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     }
   ],
   "strong_fades": [
@@ -393,5 +423,13 @@
     }
   ],
   "telegram_message": "<b>EPL AI Pundit Strategy</b>\nChelsea against Hull City stands out as the top value bet this week, with Chelsea in excellent form and overwhelming favourites.\n\n<b>Top Picks:</b>\n<b>Chelsea vs Hull City</b> — Back Home (Banker) @ 1.22\n<b>Liverpool vs Fulham</b> — Back Home (Banker) @ 1.53\n\n<b>Strong Fades:</b>\n<b>Sunderland vs Arsenal</b> — Strong Fade — Back Away Win\n<b>Man United vs Man City</b> — Strong Fade — Back Away Win\n\n<b>Double Chance:</b>\n<b>Aston Villa vs Nott'm Forest</b> — Back Double Chance (X2)\n<b>Bournemouth vs Brentford</b> — Back Double Chance (X2)\n<b>Crystal Palace vs Ipswich Town</b> — Back Double Chance (X2)\n<b>Tottenham vs Everton</b> — Back Double Chance (X2)\n<b>Leeds vs Newcastle</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nAston Villa — Leon Goretzka (knee)\nBournemouth — El Junior Kroupi\nChelsea — Marco Palestra\n\nFull analysis: shab00.github.io/football",
-  "scored": false
+  "scored": true,
+  "score_summary": {
+    "total": 10,
+    "correct": 7,
+    "accuracy_pct": 70.0,
+    "total_profit": -2.0,
+    "edge_correct": 0,
+    "edge_profit": -2.0
+  }
 }
