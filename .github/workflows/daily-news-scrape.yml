@@ -40,6 +40,9 @@ jobs:
             git push
           fi
 
+      - name: Publish latest predictions snapshot
+        run: python jobs/publish_snapshot.py
+
       - name: Refresh AI pundit strategy
         run: |
           python jobs/compute_context.py

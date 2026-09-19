@@ -296,13 +296,33 @@ def match_news(news_index, home: str, away: str) -> dict | None:
     return None
 
 
+# Headline phrases indicating a player is FIT, not injured - a headline
+# containing any of these is not an injury concern and must be excluded at
+# source so it never reaches the GPT prompt. Deliberately does NOT include
+# "returns to training" - that phrase also shows up in genuine injury
+# updates (e.g. "X returns to training after three weeks out").
+FIT_PLAYER_PHRASES = [
+    "is fit", "fit and available", "no injury", "back in training",
+    "cleared to play", "available for selection", "passed fit",
+    "fitness boost",
+]
+
+
 def top_headlines(entries, k: int = 3) -> list[str]:
     out: list[str] = []
-    for e in (entries or [])[:k]:
+    for e in (entries or []):
         if isinstance(e, dict) and e.get("headline"):
-            out.append(e["headline"])
+            headline = e["headline"]
         elif isinstance(e, str) and e:
-            out.append(e)
+            headline = e
+        else:
+            continue
+        low = headline.lower()
+        if any(phrase in low for phrase in FIT_PLAYER_PHRASES):
+            continue  # player is fit, not an injury concern - exclude
+        out.append(headline)
+        if len(out) >= k:
+            break
     return out
 
 

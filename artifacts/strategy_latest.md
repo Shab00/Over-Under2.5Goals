@@ -2,17 +2,17 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Man City are set to dominate Sunderland, capitalizing on their strong form at home. Meanwhile, Fulham are in dire straits, particularly with Sessegnon injured, making it a tough outing against United.
+This gameweek features a strong fade on Bournemouth against Liverpool, who are in much better form. Keep an eye on Fulham's struggles as they face Manchester United, especially with Sessegnon out injured.
 
 ## Top Picks
 ### Man City vs Sunderland - Home (High)
-EDGE | Prob: 76% | Odds: 1.33 | Value: +0.9%
-> Man City are in sensational form, winning consistently and scoring freely. Sunderland will struggle against their relentless attack, especially with key injuries hampering their squad.
+FADE | Prob: 70% | Odds: 1.3 | Value: -6.7%
+> Manchester City are looking formidable at home against Sunderland, who have struggled to find form. City’s recent results and their head-to-head dominance suggest a comfortable win is on the cards.
 **Action:** Back Home (Banker) | **Bet:** Back Home | **Stake:** Banker
 
 
 ## Pundit's View on the Rest of the Card
-Starting with the strong fades, Nottingham Forest are struggling significantly, and with key injuries like Nikola Milenkovic, backing Coventry City looks wise. Bournemouth face Liverpool, and given Bournemouth's poor form and lack of home advantage, backing Liverpool is the call. For the double chance, Leeds against Crystal Palace is a precarious match; Leeds have shown some resilience but with Dean Henderson's absence, backing either a draw or an away win makes sense. The model is currently HOT over its last 37 confident predictions.
+Bournemouth are in dire straits, sitting at the bottom of the table and struggling for points, making Liverpool a strong fade to back for the away win. Leeds take on Crystal Palace in a double chance situation as both sides have shown inconsistency, though injuries to Palace's captain Dean Henderson make this a more intriguing match. Fulham's woeful form continues with no wins, and facing a revitalized Manchester United, they find themselves in a tough spot without Sessegnon. The model is HOT and in strong form, so trust these signals this week.
 
 ## Value Bets (EDGE)
 

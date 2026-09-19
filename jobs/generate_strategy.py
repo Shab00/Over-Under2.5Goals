@@ -823,7 +823,7 @@ def build_fallback_strategy(context: dict) -> dict:
             "prob_homewin": fx["prob_homewin"],
             "odds": fx["odds"],
             "value_gap": fx["value_gap"],
-            "pundit_take": f"Model probability: {fx['prob_homewin']:.0%}. No AI analysis available.",
+            "pundit_take": "No AI analysis available for this fixture.",
             "bet_type": "Back Home" if cat == "back_home" else "Back Away Win" if cat == "strong_fade" else "Back Double Chance (X2)" if cat == "double_chance" else "Skip",
             "stake_advice": "Small",
             "pundit_action": "Back Home" if cat == "back_home" else "Strong Fade \u2014 Back Away Win" if cat == "strong_fade" else "Back Double Chance (X2)" if cat == "double_chance" else "Skip \u2014 too close to call",
@@ -871,35 +871,53 @@ def scrub_percentages(text: str) -> str:
 
 def scrub_miscategorized_avoid_sentences(text: str, context: dict) -> str:
     """Safety net: GPT doesn't reliably respect betting_category in free
-    text (e.g. calling a double_chance fixture "too close to call - skip").
-    Drop any sentence that both (a) names a fixture and (b) describes it
-    with an avoid/skip phrase, when that fixture's pre-computed
-    betting_category is NOT "avoid"."""
+    text - e.g. calling a double_chance fixture "too close to call - skip",
+    calling a back_home fixture "double chance", or calling a
+    strong_fade/double_chance fixture "back the home". Drop any sentence
+    that names a fixture and describes it with language that contradicts
+    its pre-computed betting_category."""
     if not text:
         return text
 
-    fixture_categories = {
-        f"{fx['home_team']}": fx["betting_category"]
-        for fx in context["fixtures"]
-    }
+    # Keyed on BOTH home and away team names, so a sentence naming either
+    # side of a fixture is still matched to its betting_category.
+    fixture_categories: dict[str, str] = {}
+    for fx in context["fixtures"]:
+        fixture_categories[fx["home_team"]] = fx["betting_category"]
+        fixture_categories[fx["away_team"]] = fx["betting_category"]
 
     avoid_phrases = ["avoid", "skip", "too close to call",
                      "stay away", "give this one a miss",
                      "steer clear"]
+    double_chance_phrases = ["double chance", "back the draw", "x2"]
+    # Only the specific phrase "back the home" - broader phrases like
+    # "at home" false-positive on common pundit language such as "strong
+    # at home" or "good at home".
+    back_home_phrases = ["back the home"]
 
     sentences = re.split(r'(?<=[.!?])\s+', text.strip())
     kept = []
     for sentence in sentences:
         low = sentence.lower()
-        has_avoid_phrase = any(phrase in low for phrase in avoid_phrases)
-        if has_avoid_phrase:
-            mismatched = any(
-                team in sentence and cat != "avoid"
-                for team, cat in fixture_categories.items()
-            )
-            if mismatched:
-                continue  # drop this sentence - miscategorized
-        kept.append(sentence)
+        drop = False
+
+        if any(phrase in low for phrase in avoid_phrases):
+            if any(team in sentence and cat != "avoid"
+                   for team, cat in fixture_categories.items()):
+                drop = True
+
+        if not drop and any(phrase in low for phrase in double_chance_phrases):
+            if any(team in sentence and cat == "back_home"
+                   for team, cat in fixture_categories.items()):
+                drop = True
+
+        if not drop and any(phrase in low for phrase in back_home_phrases):
+            if any(team in sentence and cat in ("strong_fade", "double_chance")
+                   for team, cat in fixture_categories.items()):
+                drop = True
+
+        if not drop:
+            kept.append(sentence)
 
     return " ".join(kept).strip()
 
@@ -1043,7 +1061,14 @@ def build_telegram_from_strategy(data: dict) -> str:
                 hit = None
                 for news in feed:
                     headline = news if isinstance(news, str) else news.get("headline", "")
-                    if any(w in headline.lower() for w in injury_words):
+                    low = headline.lower()
+                    # Belt-and-braces: skip fit-player headlines even if
+                    # they also match an injury word (e.g. "Pickford
+                    # injury news vs Ipswich - is fit and available"
+                    # contains "injury" but is not an injury concern).
+                    if any(p in low for p in compute_context.FIT_PLAYER_PHRASES):
+                        continue
+                    if any(w in low for w in injury_words):
                         hit = headline
                         break
                 if hit:
