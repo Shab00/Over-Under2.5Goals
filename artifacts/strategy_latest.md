@@ -2,17 +2,17 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This gameweek features a strong fade on Bournemouth against Liverpool, who are in much better form. Keep an eye on Fulham's struggles as they face Manchester United, especially with Sessegnon out injured.
+This week, Man City looks poised for a dominant performance against Sunderland, while Fulham's struggles are compounded by key injuries. Expect Liverpool to capitalize on Bournemouth's dire form as well.
 
 ## Top Picks
-### Man City vs Sunderland - Home (High)
-FADE | Prob: 70% | Odds: 1.3 | Value: -6.7%
-> Manchester City are looking formidable at home against Sunderland, who have struggled to find form. City’s recent results and their head-to-head dominance suggest a comfortable win is on the cards.
+### Man City vs Sunderland - Home (Medium)
+FADE | Prob: 64% | Odds: 1.33 | Value: -11.4%
+> Man City are in fantastic form, riding high with a solid home record. Sunderland will struggle to keep pace against such a talented side, making City a strong choice to win comfortably.
 **Action:** Back Home (Banker) | **Bet:** Back Home | **Stake:** Banker
 
 
 ## Pundit's View on the Rest of the Card
-Bournemouth are in dire straits, sitting at the bottom of the table and struggling for points, making Liverpool a strong fade to back for the away win. Leeds take on Crystal Palace in a double chance situation as both sides have shown inconsistency, though injuries to Palace's captain Dean Henderson make this a more intriguing match. Fulham's woeful form continues with no wins, and facing a revitalized Manchester United, they find themselves in a tough spot without Sessegnon. The model is HOT and in strong form, so trust these signals this week.
+In the strong fades, Bournemouth are in terrible shape and face a Liverpool side looking to pounce on their weaknesses, making it a clear call to back the away win. Leeds against Crystal Palace presents a decent double chance opportunity; Leeds have shown some positive signs lately, but Palace will be tough without their captain Dean Henderson. The model is currently HOT over its last 37 confident predictions.
 
 ## Value Bets (EDGE)
 
