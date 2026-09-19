@@ -1,5 +1,5 @@
 {
-  "computed_at": "2026-09-18T18:05:50.070386+00:00",
+  "computed_at": "2026-09-19T09:07:57.047233+00:00",
   "gameweek_start": "2026-09-18T00:00:00+00:00",
   "gameweek_end": "2026-09-21T23:59:00+00:00",
   "model_performance": {
@@ -22,57 +22,6 @@
     ]
   },
   "fixtures": [
-    {
-      "home_team": "Brentford",
-      "away_team": "Chelsea",
-      "kickoff": "2026-09-18T20:00:00",
-      "prob_homewin": 0.185,
-      "signal": "Not Home",
-      "odds": 2.7,
-      "implied_prob": 0.37,
-      "value_gap": -0.186,
-      "edge_label": "N/A",
-      "betting_category": "strong_fade",
-      "confidence": "Low",
-      "double_chance_direction": "",
-      "bet_description": "Back Away Win",
-      "is_strong_fade": true,
-      "home_team_form": {
-        "current_season_pts": 6,
-        "current_season_games": 4,
-        "pts_last5": 7,
-        "gf_last5": 7,
-        "ga_last5": 4,
-        "wins_last5": 1,
-        "form_string": "D W D D D"
-      },
-      "away_team_form": {
-        "current_season_pts": 7,
-        "current_season_games": 4,
-        "pts_last5": 10,
-        "gf_last5": 14,
-        "ga_last5": 10,
-        "wins_last5": 3,
-        "form_string": "W W W L D"
-      },
-      "h2h": {
-        "home_wins": 0,
-        "away_wins": 2,
-        "draws": 3,
-        "home_gf_avg": 1.3,
-        "summary": "Home 0W 3D 2L in last 5 meetings"
-      },
-      "home_news": [
-        "Brentford dealt double injury blow ahead of Sunderland clash",
-        "Brentford v Tottenham Hotspur confirmed team news: Sangaré starts for Bees",
-        "Brentford v Sunderland confirmed Team News: Andrews makes one change for Premier League meeting"
-      ],
-      "away_news": [
-        "Chelsea vs. Hull City Team News: Xabi Alonso make surprise decision for Tigers Stamford Bridge clash",
-        "Chelsea Starting XI vs Hull City: Confirmed Team News and Predicted Lineup",
-        "Chelsea injury update: Caicedo and Palestra latest return dates"
-      ]
-    },
     {
       "home_team": "Tottenham",
       "away_team": "Aston Villa",
@@ -519,7 +468,8 @@
       },
       "home_news": [
         "Injured Sessegnon could miss Fulham’s clash with Man Utd",
-        "Fulham vs Chelsea Injury News: Major Blow Leaves Both Sides Facing Early Problems"
+        "Fulham vs Chelsea Injury News: Major Blow Leaves Both Sides Facing Early Problems",
+        "Kenny Tete to miss Man United clash as Alvaro Arbeloa provides Fulham injury update"
       ],
       "away_news": [
         "Manchester United give Luke Shaw injury update after derby blow",
