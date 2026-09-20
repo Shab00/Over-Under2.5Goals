@@ -129,6 +129,49 @@ def _points(res: str) -> int:
     return 3 if res == "W" else 1 if res == "D" else 0
 
 
+def compute_league_table(hist: pd.DataFrame) -> list[dict]:
+    """Current-season (SEASON_START onwards) league table - one row per
+    team with played/won/drawn/lost/goals/points, ordered by position
+    (points desc, then goal difference desc, then goals for desc)."""
+    season = hist[hist["_date"] >= SEASON_START]
+    teams = sorted(set(season["HomeTeam"].dropna()) | set(season["AwayTeam"].dropna()))
+
+    rows = []
+    for team in teams:
+        team_games = season[(season["HomeTeam"] == team) | (season["AwayTeam"] == team)]
+        played = won = drawn = lost = 0
+        gf = ga = 0.0
+        for _, row in team_games.iterrows():
+            res, g_for, g_against = _perspective(row, team)
+            played += 1
+            gf += g_for
+            ga += g_against
+            if res == "W":
+                won += 1
+            elif res == "D":
+                drawn += 1
+            else:
+                lost += 1
+        rows.append({
+            "team": team,
+            "played": played,
+            "won": won,
+            "drawn": drawn,
+            "lost": lost,
+            "goals_for": int(round(gf)),
+            "goals_against": int(round(ga)),
+            "goal_difference": int(round(gf - ga)),
+            "points": won * 3 + drawn,
+        })
+
+    rows.sort(key=lambda r: (-r["points"], -r["goal_difference"], -r["goals_for"], r["team"]))
+
+    table = []
+    for i, row in enumerate(rows, start=1):
+        table.append({"position": i, **row})
+    return table
+
+
 def current_season(hist: pd.DataFrame, team_canon: str) -> tuple[int, int]:
     """Points and games played since SEASON_START, home + away combined."""
     d = _team_rows(hist, team_canon)
@@ -304,12 +347,145 @@ def match_news(news_index, home: str, away: str) -> dict | None:
 FIT_PLAYER_PHRASES = [
     "is fit", "fit and available", "no injury", "back in training",
     "cleared to play", "available for selection", "passed fit",
-    "fitness boost",
+    "fitness boost", "back from injury", "returns from injury",
 ]
 
 
-def top_headlines(entries, k: int = 3) -> list[str]:
+# Status keywords an injury headline gets classified into, checked in this
+# order so a more specific phrase ("ruled out") wins over a bare "out".
+_STATUS_PATTERNS = [
+    (re.compile(r"\bruled out\b"), "ruled out"),
+    (re.compile(r"\bmisses?\b"), "misses"),
+    (re.compile(r"\bdoubtful\b"), "doubtful"),
+    (re.compile(r"\bdoubt\b"), "doubtful"),
+    (re.compile(r"\bunavailable\b"), "unavailable"),
+    (re.compile(r"\binjury concern\b"), "injury concern"),
+    (re.compile(r"\bout\b"), "out"),
+]
+
+_NAME_RE = re.compile(r"\b([A-Z][a-z']+(?:[-’ ][A-Z][a-z']+)+)\b")
+
+# Headline "furniture" words that capitalise at the start of a sentence and
+# would otherwise be mistaken for a player's first name (e.g. "Injured
+# Sessegnon could miss...").
+_GENERIC_LEAD_WORDS = {
+    "injured", "confirmed", "exclusive", "breaking", "official",
+    "report", "reports", "revealed", "update", "latest", "news", "team",
+    "watch", "video", "live", "gallery", "analysis", "opinion",
+    "should", "why", "how", "when", "what", "who", "will", "can",
+    "does", "did", "has", "have", "could", "would", "big", "huge",
+    "major", "shock", "surprise", "early", "triple", "controversial",
+}
+
+_GENERIC_TRAIL_WORDS = {
+    "injury", "injuries", "update", "updates", "news", "latest",
+    "report", "reports", "watch", "video", "live",
+}
+
+_COMPETITION_STOP_PHRASES = {
+    "champions league", "premier league", "europa league", "carabao cup",
+    "fa cup", "nations league", "world cup", "super cup", "efl cup",
+}
+
+# Current Premier League stadium/venue names - these read exactly like a
+# plausible "Firstname Lastname" candidate to the name regex but are never
+# a player.
+_VENUE_STOP_PHRASES = {
+    "elland road", "emirates stadium", "etihad stadium", "old trafford",
+    "stamford bridge", "london stadium", "villa park", "molineux stadium",
+    "selhurst park", "craven cottage", "vitality stadium", "goodison park",
+    "the city ground", "portman road", "bramall lane", "turf moor",
+    "st james", "st mary", "tottenham hotspur stadium",
+}
+
+# "Home nations" international sides - frequently the first capitalised
+# 2-word phrase in headlines about a player away on international duty
+# (e.g. "Northern Ireland boss responds to Conor Bradley injury update").
+# Not an exhaustive list of countries - a foreign nation not on this list
+# is a known gap in this best-effort extractor.
+_NATION_STOP_PHRASES = {
+    "northern ireland", "republic of ireland", "england", "scotland", "wales",
+}
+
+
+def extract_injury_headline(headline: str, team_names: set[str]) -> str | None:
+    """Best-effort 'Firstname Lastname — status' extraction from a raw
+    injury headline (pure Python, no AI). Returns None when no clean
+    player + status pair can be found - the caller should then drop the
+    headline entirely rather than pass through a truncated or irrelevant
+    one."""
+    low = headline.lower()
+
+    status = None
+    for pattern, label in _STATUS_PATTERNS:
+        if pattern.search(low):
+            status = label
+            break
+    if status is None:
+        if "injury" in low:
+            status = "injury concern"
+        else:
+            return None
+
+    stop = ({t.lower() for t in team_names} | _COMPETITION_STOP_PHRASES
+            | _VENUE_STOP_PHRASES | _NATION_STOP_PHRASES)
+
+    name = None
+    for m in _NAME_RE.finditer(headline):
+        words = m.group(1).split()
+        # Strip leading headline "furniture" words (e.g. "Should Erling
+        # Haaland's ..." -> "Erling Haaland's", "Injured Sessegnon ..." ->
+        # just "Sessegnon", which then fails the 2-word minimum and is
+        # correctly skipped) so a real name isn't rejected just because a
+        # question/lead word happened to precede it in the same capitalised
+        # run.
+        while len(words) > 2 and words[0].lower() in _GENERIC_LEAD_WORDS:
+            words = words[1:]
+        # Same idea for trailing "furniture" words (e.g. "Anthony Elanga
+        # Injury Update" -> "Anthony Elanga").
+        while len(words) > 2 and words[-1].lower() in _GENERIC_TRAIL_WORDS:
+            words = words[:-1]
+        if (len(words) < 2 or words[0].lower() in _GENERIC_LEAD_WORDS
+                or words[-1].lower() in _GENERIC_TRAIL_WORDS):
+            continue
+        # A real name is 2-3 words - a long title-case run swept up whole
+        # (e.g. "Blow Leaves Both Sides Facing Early Problems") is never a
+        # plausible name, no matter what its individual words are.
+        if len(words) > 3:
+            continue
+        cand = " ".join(words)
+        # Strip a trailing possessive ("Haaland's" -> "Haaland") for a
+        # clean player name.
+        if cand.endswith("’s") or cand.endswith("'s"):
+            cand = cand[:-2]
+        cl = cand.lower()
+        # Reject if the candidate contains a known team name, competition
+        # or stadium anywhere within it, not just an exact match - catches
+        # cases like "Triple Newcastle" or "Chelsea Injury News" where a
+        # real team name got swept up alongside an adjacent capitalised word.
+        if any(stop_phrase in cl for stop_phrase in stop):
+            continue
+        # skip a speaker/journalist/manager reporting the news, rather than
+        # the player it's about ("Adam Pope reveals...", "X drops update...")
+        after = headline[m.end():m.end() + 30].lower()
+        if re.match(r"\s+(provides?|says?|reveals?|confirms?|gives?|"
+                    r"explains?|admits?|addresses|hopes?|expects?|laments?|"
+                    r"drops?|issues?|delivers?|shares?|offers?|makes?|"
+                    r"sends?|writes?|claims?|insists?|warns?|reacts?|"
+                    r"responds?)\b", after):
+            continue
+        name = cand
+        break
+
+    if not name:
+        return None
+
+    return f"{name} — {status}"
+
+
+def top_headlines(entries, team_names: set[str], k: int = 3) -> list[str]:
     out: list[str] = []
+    seen: set[str] = set()
     for e in (entries or []):
         if isinstance(e, dict) and e.get("headline"):
             headline = e["headline"]
@@ -320,7 +496,14 @@ def top_headlines(entries, k: int = 3) -> list[str]:
         low = headline.lower()
         if any(phrase in low for phrase in FIT_PLAYER_PHRASES):
             continue  # player is fit, not an injury concern - exclude
-        out.append(headline)
+        extracted = extract_injury_headline(headline, team_names)
+        if extracted is None:
+            continue  # no clean player+status extraction - skip entirely
+        name_part = extracted.split(" — ")[0].lower()
+        if name_part in seen:
+            continue  # multiple headlines about the same player - dedupe
+        seen.add(name_part)
+        out.append(extracted)
         if len(out) >= k:
             break
     return out
@@ -441,6 +624,14 @@ def main() -> None:
     )
     norm_map = build_norm_map(names, hometeams)
 
+    known_team_names = set(hometeams)
+    for key, variants in KNOWN_VARIANTS.items():
+        known_team_names.add(key)
+        known_team_names.update(variants)
+
+    league_table = compute_league_table(hist)
+    league_position_by_team = {row["team"]: row["position"] for row in league_table}
+
     news_index = load_news_index()
 
     fixtures_out = []
@@ -474,8 +665,8 @@ def main() -> None:
             nk = nf.get("kickoff")
             if nk and "T" in str(nk) and "T" not in kickoff_str:
                 kickoff_str = str(nk)
-            home_news = top_headlines(nf.get("home_news"))
-            away_news = top_headlines(nf.get("away_news"))
+            home_news = top_headlines(nf.get("home_news"), known_team_names)
+            away_news = top_headlines(nf.get("away_news"), known_team_names)
         else:
             home_news = []
             away_news = []
@@ -500,6 +691,8 @@ def main() -> None:
             "home_team_form": team_form(hist, home_canon),
             "away_team_form": team_form(hist, away_canon),
             "h2h": head_to_head(hist, home_canon, away_canon),
+            "home_league_position": league_position_by_team.get(home_canon),
+            "away_league_position": league_position_by_team.get(away_canon),
             "home_news": home_news,
             "away_news": away_news,
         })
@@ -511,6 +704,7 @@ def main() -> None:
         "gameweek_start": gameweek_start.isoformat(),
         "gameweek_end": gameweek_end.isoformat(),
         "model_performance": perf,
+        "league_table": league_table,
         "fixtures": fixtures_out,
     }
 

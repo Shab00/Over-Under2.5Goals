@@ -166,6 +166,14 @@ SYSTEM_PROMPT = (
     "and injury from the headline and include it naturally in your pundit "
     "analysis. If no injury headlines exist for a team, do not mention "
     "injuries for that team. Never write generic injury disclaimers.\n\n"
+    "LEAGUE TABLE\n"
+    "The current season's league table is provided in the context - each "
+    "fixture includes home_league_position and away_league_position, "
+    "pre-computed from that table. Use these league positions accurately "
+    "in pundit_take when relevant to your analysis (e.g. a top-of-the-table "
+    "team hosting a relegation-threatened side). Do NOT invent or estimate "
+    "league positions - only use the league_table data provided in the "
+    "context.\n\n"
     "GAMEWEEK SUMMARY\n"
     "gameweek_summary must name specific teams and facts. Mention: the "
     "standout value bet by name, and one specific named injury if any "
@@ -406,6 +414,8 @@ def fixture_block(fx: dict, rag_context: str) -> str:
         f"Value gap: {gap:+.1%} | {fx.get('edge_label')}\n"
         f"betting_category: {fx.get('betting_category')}\n"
         f"is_strong_fade: {str(bool(fx.get('is_strong_fade'))).lower()}\n"
+        f"Home league position: {fx.get('home_league_position', 'N/A')}\n"
+        f"Away league position: {fx.get('away_league_position', 'N/A')}\n"
         f"Home season so far: {hf.get('current_season_pts', 0)} pts from "
         f"{hf.get('current_season_games', 0)} games\n"
         f"Home form last 5: {hf.get('form_string', '')} "
@@ -1043,18 +1053,19 @@ def build_telegram_from_strategy(data: dict) -> str:
         lines.append("")
 
     lines.append("<b>Injury News:</b>")
+    # compute_context.py's top_headlines() now pre-classifies every
+    # home_news/away_news entry into "Name - status" with status one of:
+    # out, doubtful, ruled out, misses, unavailable, injury concern - cover
+    # all six so none silently vanish from this section.
     injury_words = ("injury", "injured", "knee", "hamstring", "ruled out",
-                    "doubt", "unavailable", "setback", "sidelined")
+                    "doubt", "unavailable", "setback", "sidelined",
+                    "out", "misses")
     injuries: list[str] = []
     try:
         import json as _json
         import pathlib as _pathlib
 
         ctx = _json.loads(_pathlib.Path("artifacts/match_context.json").read_text())
-        all_teams = set()
-        for fx in ctx.get("fixtures", []):
-            all_teams.add(fx.get("home_team", ""))
-            all_teams.add(fx.get("away_team", ""))
         for fix in ctx.get("fixtures", []):
             for is_home, feed in ((True, fix.get("home_news", [])),
                                   (False, fix.get("away_news", []))):
@@ -1073,9 +1084,10 @@ def build_telegram_from_strategy(data: dict) -> str:
                         break
                 if hit:
                     team = fix["home_team"] if is_home else fix["away_team"]
-                    detail = _extract_injury_detail(hit, team, all_teams)
-                    injuries.append(f"{team} \u2014 {detail}" if detail
-                                    else f"{team} \u2014 {hit[:60]}")
+                    # hit is already "Name - status" from compute_context.py's
+                    # top_headlines() - use it directly rather than
+                    # re-extracting (which would discard the status).
+                    injuries.append(f"{team} \u2014 {hit}")
                     break  # one line per fixture
     except Exception:
         pass

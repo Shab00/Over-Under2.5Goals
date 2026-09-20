@@ -2,17 +2,17 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This week, look out for Man City as they host Sunderland, with City in dominant form and Sunderland struggling with injuries. Bournemouth’s dire situation against Liverpool also stands out, as they sit firmly in the relegation zone.
+Look for Manchester City to dominate Sunderland at home, even with Haaland ruled out. The standout value bet this week is backing Leeds to secure points against Palace, despite injury concerns for both teams.
 
 ## Top Picks
 ### Man City vs Sunderland - Home (Medium)
 FADE | Prob: 64% | Odds: 1.33 | Value: -11.4%
-> Man City are in fantastic form and should dominate Sunderland, who are struggling to find their footing and have key injuries in their squad.
+> Manchester City are looking to maintain their strong momentum against Sunderland, despite losing Haaland to injury. The home side's depth and recent form should see them through comfortably.
 **Action:** Back Home (Banker) | **Bet:** Back Home | **Stake:** Banker
 
 
 ## Pundit's View on the Rest of the Card
-Bournemouth is in terrible form, and with no injury news to help them against Liverpool, it's a clear signal to back the away win. Leeds face Crystal Palace, and while the home side has shown some fight, they are still better off with a double chance bet given Palace's captain Dean Henderson is sidelined. Man City against Sunderland is a banker pick; the home team is in great shape, while Sunderland’s squad is weakened by injuries. Finally, Fulham's struggles deepen with key injuries, making them a strong fade against Man United, who are looking to bounce back. The model is currently HOT over its last 37 confident predictions.
+We're seeing some strong fades this week, especially with Bournemouth hosting Liverpool, as they struggle to find form and the model indicates a clear away win. Leeds against Crystal Palace presents a double chance opportunity, as Leeds are in decent shape but face injury concerns, making the draw or away win a safer bet. The model is HOT and in strong form, so trust the signals this week.
 
 ## Value Bets (EDGE)
 
