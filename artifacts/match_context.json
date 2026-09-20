@@ -1,5 +1,5 @@
 {
-  "computed_at": "2026-09-20T12:09:03.776175+00:00",
+  "computed_at": "2026-09-20T14:37:54.821801+00:00",
   "gameweek_start": "2026-09-18T00:00:00+00:00",
   "gameweek_end": "2026-09-21T23:59:00+00:00",
   "model_performance": {
@@ -265,165 +265,14 @@
   ],
   "fixtures": [
     {
-      "home_team": "Bournemouth",
-      "away_team": "Liverpool",
-      "kickoff": "2026-09-20T14:00:00",
-      "prob_homewin": 0.125,
-      "signal": "Not Home",
-      "odds": 3.12,
-      "implied_prob": 0.321,
-      "value_gap": -0.195,
-      "edge_label": "N/A",
-      "betting_category": "strong_fade",
-      "confidence": "High",
-      "double_chance_direction": "",
-      "bet_description": "Back Away Win",
-      "is_strong_fade": true,
-      "home_team_form": {
-        "current_season_pts": 3,
-        "current_season_games": 4,
-        "pts_last5": 4,
-        "gf_last5": 6,
-        "ga_last5": 7,
-        "wins_last5": 0,
-        "form_string": "D L D D D"
-      },
-      "away_team_form": {
-        "current_season_pts": 6,
-        "current_season_games": 4,
-        "pts_last5": 6,
-        "gf_last5": 7,
-        "ga_last5": 6,
-        "wins_last5": 1,
-        "form_string": "L D D W D"
-      },
-      "h2h": {
-        "home_wins": 1,
-        "away_wins": 4,
-        "draws": 0,
-        "home_gf_avg": 1.0,
-        "summary": "Home 1W 0D 4L in last 5 meetings"
-      },
-      "home_league_position": 15,
-      "away_league_position": 8,
-      "home_news": [],
-      "away_news": [
-        "Joe Gomez — injury concern",
-        "Conor Bradley — injury concern",
-        "Cody Gakpo — injury concern"
-      ]
-    },
-    {
-      "home_team": "Leeds",
-      "away_team": "Crystal Palace",
-      "kickoff": "2026-09-20T14:00:00",
-      "prob_homewin": 0.552,
-      "signal": "Home",
-      "odds": 1.72,
-      "implied_prob": 0.581,
-      "value_gap": -0.03,
-      "edge_label": "FADE",
-      "betting_category": "back_home",
-      "confidence": "Medium",
-      "double_chance_direction": "",
-      "bet_description": "Back Home to Win",
-      "is_strong_fade": false,
-      "home_team_form": {
-        "current_season_pts": 8,
-        "current_season_games": 4,
-        "pts_last5": 8,
-        "gf_last5": 7,
-        "ga_last5": 4,
-        "wins_last5": 2,
-        "form_string": "L W D D W"
-      },
-      "away_team_form": {
-        "current_season_pts": 3,
-        "current_season_games": 4,
-        "pts_last5": 6,
-        "gf_last5": 9,
-        "ga_last5": 12,
-        "wins_last5": 2,
-        "form_string": "W L L W L"
-      },
-      "h2h": {
-        "home_wins": 2,
-        "away_wins": 2,
-        "draws": 1,
-        "home_gf_avg": 2.0,
-        "summary": "Home 2W 1D 2L in last 5 meetings"
-      },
-      "home_league_position": 3,
-      "away_league_position": 16,
-      "home_news": [
-        "Harry Wilson — injury concern",
-        "Matthias Jaissle — injury concern",
-        "Anthony Elanga — injury concern"
-      ],
-      "away_news": [
-        "Dean Henderson — misses"
-      ]
-    },
-    {
-      "home_team": "Man City",
-      "away_team": "Sunderland",
-      "kickoff": "2026-09-20T14:00:00",
-      "prob_homewin": 0.603,
-      "signal": "Home",
-      "odds": 1.34,
-      "implied_prob": 0.746,
-      "value_gap": -0.143,
-      "edge_label": "FADE",
-      "betting_category": "back_home",
-      "confidence": "Medium",
-      "double_chance_direction": "",
-      "bet_description": "Back Home to Win",
-      "is_strong_fade": false,
-      "home_team_form": {
-        "current_season_pts": 12,
-        "current_season_games": 4,
-        "pts_last5": 13,
-        "gf_last5": 10,
-        "ga_last5": 4,
-        "wins_last5": 4,
-        "form_string": "D W W W W"
-      },
-      "away_team_form": {
-        "current_season_pts": 4,
-        "current_season_games": 4,
-        "pts_last5": 7,
-        "gf_last5": 4,
-        "ga_last5": 5,
-        "wins_last5": 2,
-        "form_string": "W L W D L"
-      },
-      "h2h": {
-        "home_wins": 4,
-        "away_wins": 0,
-        "draws": 1,
-        "home_gf_avg": 2.5,
-        "summary": "Home 4W 1D 0L in last 5 meetings"
-      },
-      "home_league_position": 2,
-      "away_league_position": 14,
-      "home_news": [
-        "Erling Haaland — ruled out",
-        "Bayern Munich — ruled out",
-        "Phil Foden — injury concern"
-      ],
-      "away_news": [
-        "Omar Alderete — injury concern"
-      ]
-    },
-    {
       "home_team": "Fulham",
       "away_team": "Man United",
       "kickoff": "2026-09-20T16:30:00",
-      "prob_homewin": 0.119,
+      "prob_homewin": 0.091,
       "signal": "Not Home",
-      "odds": 3.52,
-      "implied_prob": 0.284,
-      "value_gap": -0.165,
+      "odds": 3.6,
+      "implied_prob": 0.278,
+      "value_gap": -0.187,
       "edge_label": "N/A",
       "betting_category": "strong_fade",
       "confidence": "High",
