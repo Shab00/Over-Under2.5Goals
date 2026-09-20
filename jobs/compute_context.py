@@ -489,13 +489,20 @@ def top_headlines(entries, team_names: set[str], k: int = 3) -> list[str]:
     for e in (entries or []):
         if isinstance(e, dict) and e.get("headline"):
             headline = e["headline"]
+            is_injury_concern = e.get("is_injury_concern")
         elif isinstance(e, str) and e:
             headline = e
+            is_injury_concern = None
         else:
             continue
         low = headline.lower()
         if any(phrase in low for phrase in FIT_PLAYER_PHRASES):
             continue  # player is fit, not an injury concern - exclude
+        # News Classifier agent (jobs/scrape_news.py) filter: only include
+        # if classified true, or not yet classified at all - fail open so
+        # older, unstamped news_context.json data still passes through.
+        if is_injury_concern is False:
+            continue
         extracted = extract_injury_headline(headline, team_names)
         if extracted is None:
             continue  # no clean player+status extraction - skip entirely

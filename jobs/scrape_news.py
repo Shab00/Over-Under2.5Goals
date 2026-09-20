@@ -11,14 +11,21 @@ knowledge base for the downstream RAG agent: existing headlines are kept
 forever, only genuinely new headline strings are appended, and every entry
 carries a ``first_seen`` timestamp.
 
+Every genuinely new headline is then run through a News Classifier agent
+(GPT-4o-mini, one call per headline) that stamps it with
+``is_injury_concern: true/false`` - headlines already classified in a
+previous run are left untouched. jobs/compute_context.py filters on this
+field before anything reaches the strategy prompt.
+
 Only libraries already in requirements.txt are used: requests, bs4,
-pandas, python-dateutil.
+pandas, python-dateutil, openai, python-dotenv.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 import time
@@ -29,6 +36,7 @@ from pathlib import Path
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 
 # --------------------------------------------------------------------------- #
 # Constants
@@ -442,6 +450,92 @@ def collect_seen(existing: dict) -> tuple[set[str], dict[str, str]]:
 
 
 # --------------------------------------------------------------------------- #
+# News Classifier agent - GPT-4o-mini, one call per NEW headline, to
+# distinguish genuine injury news from headlines that merely contain
+# injury-adjacent words (team news roundups, VAR/goal "ruled out" stories,
+# a player confirmed fit, etc).
+# --------------------------------------------------------------------------- #
+
+CLASSIFIER_MODEL = "gpt-4o-mini"
+CLASSIFIER_SYSTEM_PROMPT = (
+    "You are a sports injury news classifier. Answer YES or NO only. "
+    "No explanation."
+)
+
+_CLASSIFIER_CLIENT = None
+
+
+def _classifier_client():
+    """Lazily-built OpenAI client, same OPENAI_API_KEY env var as
+    generate_strategy.py. Returns None (rather than raising) if the key is
+    missing, so a missing key degrades to "classify everything false"
+    instead of crashing the scrape."""
+    global _CLASSIFIER_CLIENT
+    if _CLASSIFIER_CLIENT is None:
+        api_key = os.environ.get("OPENAI_API_KEY")
+        if not api_key:
+            return None
+        from openai import OpenAI
+
+        _CLASSIFIER_CLIENT = OpenAI(api_key=api_key)
+    return _CLASSIFIER_CLIENT
+
+
+def classify_injury_headline(headline: str) -> bool:
+    """Ask GPT-4o-mini whether a headline is a genuine injury concern.
+    Never raises: any failure (no API key, network error, unexpected
+    response) defaults to False so one bad classification can never break
+    the scrape."""
+    result = False
+    client = _classifier_client()
+    if client is not None:
+        try:
+            resp = client.chat.completions.create(
+                model=CLASSIFIER_MODEL,
+                messages=[
+                    {"role": "system", "content": CLASSIFIER_SYSTEM_PROMPT},
+                    {
+                        "role": "user",
+                        "content": (
+                            "Is this headline about a player being injured, "
+                            "doubtful, unavailable or ruled out due to "
+                            f"fitness? Headline: {headline}"
+                        ),
+                    },
+                ],
+                max_tokens=5,
+            )
+            answer = (resp.choices[0].message.content or "").strip().upper()
+            result = answer.startswith("YES")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[classifier] warn: classification failed for "
+                  f"{headline[:60]!r}: {exc}")
+            result = False
+    print(f"[classifier] {headline[:60]} → {result}")
+    return result
+
+
+def classify_new_headlines(payload: dict) -> None:
+    """Stamp is_injury_concern on every headline entry that doesn't already
+    have it. Entries already classified in a previous run are left
+    untouched - only genuinely new headlines get a fresh GPT call."""
+
+    def _walk(entries) -> None:
+        for h in entries or []:
+            if "is_injury_concern" in h:
+                continue
+            headline = h.get("headline", "")
+            h["is_injury_concern"] = (
+                classify_injury_headline(headline) if headline else False
+            )
+
+    for fx in payload.get("fixtures", []):
+        _walk(fx.get("home_news"))
+        _walk(fx.get("away_news"))
+    _walk(payload.get("general_pl_news"))
+
+
+# --------------------------------------------------------------------------- #
 # Main
 # --------------------------------------------------------------------------- #
 
@@ -480,6 +574,7 @@ def write_json(path: Path, payload: dict) -> None:
 
 
 def main() -> None:
+    load_dotenv(override=False)
     args = build_arg_parser().parse_args()
 
     now = datetime.now(timezone.utc)
@@ -585,6 +680,10 @@ def main() -> None:
         "fixtures": list(fixtures_by_key.values()),
         "general_pl_news": general_news,
     }
+
+    # --- News Classifier agent: stamp is_injury_concern on new headlines --
+    classify_new_headlines(payload)
+
     write_json(out_path, payload)
 
     # --- Summary --------------------------------------------------------

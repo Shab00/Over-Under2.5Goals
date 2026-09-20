@@ -2,7 +2,7 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-In a key matchup, Fulham faces Manchester United, where the home side is struggling mightily, making it a clear signal to back United for the away win. Fulham's recent form is concerning, and the absence of Kenny Tete adds more uncertainty to their defense.
+This week, the standout value bet comes from the double chance on Brighton against Everton, where the home side has struggled with injuries. Expect a significant mismatch when Tottenham host a relegation-threatened side, which should be a comfortable win for the home team.
 
 ## Top Picks
 
