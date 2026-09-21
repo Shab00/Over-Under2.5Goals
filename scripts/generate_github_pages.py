@@ -661,6 +661,10 @@ def render_strategy_section(strategy) -> str:
     # from a previous gameweek.
     if strategy.get("mode") == "no_fixtures":
         next_matchday = strategy.get("next_matchday") or "TBC"
+        # Backward compatible: an older strategy_latest.json written before
+        # lookback_ready existed is treated as ready (it has no reason to
+        # be gated).
+        lookback_ready = strategy.get("lookback_ready", True)
         lookback = (strategy.get("lookback_summary") or "").strip()
         parts = [
             '<div class="performance-tracker" style="margin-bottom:1.5rem;">',
@@ -670,7 +674,13 @@ def render_strategy_section(strategy) -> str:
             'border-radius:999px;padding:0.1rem 0.5rem;vertical-align:middle;">'
             'Powered by GPT-4o-mini | Not financial advice</span></h2>',
         ]
-        if lookback:
+        if not lookback_ready:
+            parts.append(
+                '<p style="color:var(--muted);margin-bottom:1rem;">'
+                '⚽ Results being confirmed — Pundit’s review will appear '
+                f'shortly. Next predictions: {esc(next_matchday)}</p>'
+            )
+        elif lookback:
             parts.append(
                 '<h3 style="color:var(--accent);font-size:0.9rem;'
                 'margin:0.8rem 0 0.6rem;">Pundit’s Gameweek Review</h3>'

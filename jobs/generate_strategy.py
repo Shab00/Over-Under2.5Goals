@@ -1215,8 +1215,22 @@ LOOKBACK_SYSTEM_PROMPT = (
     "model called them correctly. Use natural pundit language - 'didn't see "
     "that coming', 'model nailed this one', 'had to eat humble pie on that "
     "one'. Do not mention probabilities or model internals. Write as if "
-    "speaking to fans."
+    "speaking to fans. "
+    "The model only predicts Home win or Not Home win - never scores. Do "
+    "not invent or reference predicted scorelines. "
+    "Only use stake labels (banker, value bet, small) from the data "
+    "provided. Do not invent them. "
+    "Do not say a result was 'supposed to be a banker' unless stake_advice "
+    "in the data explicitly says Banker. "
+    "You may reference the actual final score if it is provided in the "
+    "data. Do not invent scores."
 )
+
+# Below this many hours old, the most recent result in results_merged.csv is
+# treated as still "settling" - football-data.co.uk lags real kickoffs by up
+# to a day, and Monday night games mean a gameweek's last result may not be
+# confirmed until Tuesday.
+LOOKBACK_READY_HOURS = 18
 
 
 def compute_next_matchday() -> str | None:
@@ -1252,6 +1266,72 @@ def latest_scored_archive() -> dict | None:
     return sorted(scored, key=lambda a: a.get("_path", ""))[-1]
 
 
+def check_lookback_ready() -> tuple[bool, datetime | None]:
+    """Whether results_merged.csv's most recent kickoff is old enough to
+    trust for the lookback review, or whether results may still be coming
+    in (see LOOKBACK_READY_HOURS). Returns (ready, most_recent_kickoff) -
+    ready defaults to True when there is no data to wait on at all (missing
+    file, empty file, or no parseable kickoff)."""
+    if not RESULTS_CSV.exists():
+        return True, None
+    try:
+        import pandas as pd
+
+        df = pd.read_csv(RESULTS_CSV)
+        if df.empty:
+            return True, None
+        col = "kickoff_dt" if "kickoff_dt" in df.columns else "kickoff_time_utc"
+        kd = pd.to_datetime(df[col], errors="coerce", utc=True).dropna()
+        if kd.empty:
+            return True, None
+        most_recent = kd.max().to_pydatetime()
+        age_hours = (datetime.now(timezone.utc) - most_recent).total_seconds() / 3600
+        return age_hours >= LOOKBACK_READY_HOURS, most_recent
+    except Exception as exc:  # noqa: BLE001
+        print(f"[strategy] warn: could not check lookback readiness: {exc}")
+        return True, None
+
+
+def build_lookback_results_lines(archive: dict | None) -> list[str]:
+    """Exact-format 'model predicted vs result' lines built dynamically
+    from the scored archive's fixtures_full - correct, FTR, signal,
+    stake_advice, edge_label. Never hardcoded: any archive, any fixtures.
+    A fixture without a scored FTR is skipped rather than guessed at."""
+    if not archive:
+        return []
+
+    ftr_word = {"H": "Home win", "A": "Away win", "D": "Draw"}
+    lines: list[str] = []
+    for fx in archive.get("fixtures_full", []) or []:
+        ftr = fx.get("FTR")
+        if ftr not in ftr_word:
+            continue  # not actually scored yet - skip rather than guess
+
+        signal = fx.get("signal", "")
+        edge_label = fx.get("edge_label")
+        stake_advice = (fx.get("stake_advice") or "").strip()
+
+        # Only "back_home" bets ever carry a Banker/Value Bet stake in this
+        # pipeline (fades/double-chances/avoids are forced to Small/Skip by
+        # enforce_category_bets), so the qualifier only ever applies to a
+        # "Home" signal - matching the app's own "Back Home (Banker)" /
+        # "Back Home (Value)" convention used elsewhere.
+        annotation = ""
+        if signal == "Home" and edge_label and edge_label != "N/A":
+            if stake_advice.lower() == "banker":
+                annotation = f" ({edge_label} banker)"
+            else:
+                annotation = f" ({edge_label})"
+
+        lines.append(
+            f"{fx.get('home_team')} vs {fx.get('away_team')} — "
+            f"model predicted: {signal}{annotation} — "
+            f"result: {ftr_word[ftr]} — "
+            f"{'CORRECT' if fx.get('correct') else 'WRONG'}"
+        )
+    return lines
+
+
 def recent_results(n: int = LOOKBACK_RESULTS_N) -> list[dict]:
     """The n most recent scored rows from results_merged.csv. The file is
     written newest-first (merge_results.py sorts desc on generated_at), so
@@ -1277,34 +1357,52 @@ def recent_results(n: int = LOOKBACK_RESULTS_N) -> list[dict]:
 def build_lookback_summary(archive: dict | None, results: list[dict]) -> str:
     """Ask GPT-4o-mini for a short pundit review of the gameweek just gone.
     Returns "" if there is nothing to review or the call fails - the page
-    simply omits the review rather than showing an error."""
-    if not results and not archive:
+    simply omits the review rather than showing an error.
+
+    The mandatory "model predicted ... result ... CORRECT/WRONG" block is
+    built dynamically from the scored archive (never hardcoded) and is the
+    ONLY data GPT is told to review. A short supplementary block of real
+    final scores (matched from results_merged.csv) is appended separately
+    so GPT can optionally cite a real scoreline without ever being allowed
+    to invent one for the mandatory block.
+    """
+    result_lines = build_lookback_results_lines(archive)
+    if not result_lines:
         return ""
 
-    lines = ["Recent Premier League results and whether the model called them:"]
-    for r in results:
-        try:
-            score = f"{int(float(r.get('FTHG', 0)))}-{int(float(r.get('FTAG', 0)))}"
-        except (TypeError, ValueError):
-            score = "?-?"
-        called = str(r.get("correct", "")).strip().lower() in {"true", "1", "yes"}
-        lines.append(
-            f"- {r.get('home_team')} {score} {r.get('away_team')} | "
-            f"model said '{r.get('prediction')}' | "
-            f"{'CORRECT' if called else 'WRONG'}"
-        )
+    prompt_parts = [
+        "Here are the exact results to review. Reference ONLY these - do "
+        "not invent scores, predictions or stake labels:",
+        "",
+        "\n".join(result_lines),
+    ]
 
-    if archive:
-        picks = []
-        for fx in (archive.get("fixtures_full") or [])[:10]:
-            picks.append(
-                f"- {fx.get('home_team')} vs {fx.get('away_team')}: "
-                f"{fx.get('pundit_action', '')}"
+    scores_by_fixture = {
+        (r.get("home_team"), r.get("away_team")): (r.get("FTHG"), r.get("FTAG"))
+        for r in results
+    }
+    score_lines = []
+    for fx in (archive.get("fixtures_full") or []) if archive else []:
+        key = (fx.get("home_team"), fx.get("away_team"))
+        if key not in scores_by_fixture:
+            continue
+        fthg, ftag = scores_by_fixture[key]
+        try:
+            score_lines.append(
+                f"- {fx['home_team']} {int(float(fthg))}-{int(float(ftag))} "
+                f"{fx['away_team']}"
             )
-        if picks:
-            lines.append("")
-            lines.append("What the pundit advised for those fixtures:")
-            lines.extend(picks)
+        except (TypeError, ValueError):
+            continue
+    if score_lines:
+        prompt_parts += [
+            "",
+            "Actual final scores (only reference these if useful - never "
+            "invent any others):",
+            "\n".join(score_lines),
+        ]
+
+    user_prompt = "\n".join(prompt_parts)
 
     try:
         client = _openai_client()
@@ -1315,7 +1413,7 @@ def build_lookback_summary(archive: dict | None, results: list[dict]) -> str:
             model=MODEL,
             messages=[
                 {"role": "system", "content": LOOKBACK_SYSTEM_PROMPT},
-                {"role": "user", "content": "\n".join(lines)},
+                {"role": "user", "content": user_prompt},
             ],
             max_tokens=400,
             temperature=0.7,
@@ -1327,18 +1425,30 @@ def build_lookback_summary(archive: dict | None, results: list[dict]) -> str:
 
 
 def write_no_fixtures_strategy() -> dict:
-    """Publish the no-fixtures payload: a mode flag, the next matchday and a
-    pundit lookback review. No fixture strategy is generated and the main
-    GPT strategy call is never made."""
+    """Publish the no-fixtures payload: a mode flag, the next matchday and,
+    once results have had time to settle, a pundit lookback review. No
+    fixture strategy is generated and the main GPT strategy call is never
+    made."""
     next_matchday = compute_next_matchday()
-    archive = latest_scored_archive()
-    results = recent_results()
-    lookback = build_lookback_summary(archive, results)
+    lookback_ready, most_recent_kickoff = check_lookback_ready()
+
+    lookback = ""
+    if lookback_ready:
+        archive = latest_scored_archive()
+        results = recent_results()
+        lookback = build_lookback_summary(archive, results)
+    else:
+        print(
+            f"[strategy] most recent result kicked off {most_recent_kickoff} "
+            f"(<{LOOKBACK_READY_HOURS}h ago) - results may still be coming "
+            "in, skipping lookback GPT call"
+        )
 
     data = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "mode": "no_fixtures",
         "next_matchday": next_matchday,
+        "lookback_ready": lookback_ready,
         "lookback_summary": lookback,
         "gameweek_summary": "",
         "rest_of_card_paragraph": "",
@@ -1357,6 +1467,7 @@ def write_no_fixtures_strategy() -> dict:
 
     print("[strategy] no fixtures in the current gameweek - skipped GPT strategy")
     print(f"[strategy] next matchday: {next_matchday or 'unknown'}")
+    print(f"[strategy] lookback_ready: {lookback_ready}")
     print(f"[strategy] lookback review: {'yes' if lookback else 'none'}")
     print(f"[strategy] wrote {LATEST_JSON}")
     return data
