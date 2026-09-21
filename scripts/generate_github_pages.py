@@ -594,6 +594,87 @@ def build_performance_section(snapshot_path: Path) -> str:
                 </table>
             </div>"""
 
+        # --- Team Analysis: per-club performance as home_team ------------
+        # "Backed home" / "faded" both refer to the home_team's own fixture
+        # (prediction is always about that row's home_team) - Avoid rows
+        # aren't a call on the team either way, so they don't count.
+        team_stats: dict[str, dict[str, int]] = {}
+        for r in rows:
+            pred = r.get("prediction", "")
+            if pred not in ("Home", "Not Home"):
+                continue
+            team = r.get("home_team", "")
+            if not team:
+                continue
+            stats = team_stats.setdefault(
+                team, {"home_n": 0, "home_c": 0, "fade_n": 0, "fade_c": 0}
+            )
+            team_correct = _is_true(r.get("correct", ""))
+            if pred == "Home":
+                stats["home_n"] += 1
+                stats["home_c"] += int(team_correct)
+            else:
+                stats["fade_n"] += 1
+                stats["fade_c"] += int(team_correct)
+
+        total_team_predictions = sum(
+            s["home_n"] + s["fade_n"] for s in team_stats.values()
+        )
+        team_count = len(team_stats)
+        qualifying_teams = {
+            team: s for team, s in team_stats.items()
+            if s["home_n"] + s["fade_n"] >= 5
+        }
+
+        def _frac(n_correct, n_total):
+            pct = f"{n_correct / n_total:.0%}" if n_total else "–"
+            return f"{n_correct}/{n_total} ({pct})"
+
+        if not qualifying_teams:
+            team_analysis_html = f"""
+            <h3 style="color:var(--accent);font-size:0.9rem;margin:1rem 0 0.6rem;">Team Analysis</h3>
+            <p style="color: var(--muted);">
+                Tracking model performance by club. Minimum 5 predictions per team
+                required for meaningful insight — this section will populate from GW8 onwards.<br>
+                Currently tracking: {total_team_predictions} predictions across {team_count} teams.
+            </p>"""
+        else:
+            team_rows_html = []
+            for team, s in sorted(
+                qualifying_teams.items(),
+                key=lambda kv: (kv[1]["home_c"] + kv[1]["fade_c"])
+                / (kv[1]["home_n"] + kv[1]["fade_n"]),
+                reverse=True,
+            ):
+                overall_n = s["home_n"] + s["fade_n"]
+                overall_c = s["home_c"] + s["fade_c"]
+                overall_acc = overall_c / overall_n if overall_n else 0
+                if overall_acc >= 0.70:
+                    trend = "✅ Strong"
+                elif overall_acc < 0.50:
+                    trend = "⚠️ Weak"
+                else:
+                    trend = "— Mixed"
+                team_rows_html.append(
+                    f"<tr><td>{team}</td>"
+                    f"<td>{_frac(s['home_c'], s['home_n'])}</td>"
+                    f"<td>{_frac(s['fade_c'], s['fade_n'])}</td>"
+                    f"<td>{_frac(overall_c, overall_n)}</td>"
+                    f"<td>{trend}</td></tr>"
+                )
+            team_analysis_html = f"""
+            <h3 style="color:var(--accent);font-size:0.9rem;margin:1rem 0 0.6rem;">Team Analysis</h3>
+            <div class="table-wrapper">
+                <table class="predictions-table">
+                    <thead>
+                        <tr><th>Team</th><th>Backed Home</th><th>Faded</th><th>Overall Accuracy</th><th>Trend</th></tr>
+                    </thead>
+                    <tbody>
+                        {''.join(team_rows_html)}
+                    </tbody>
+                </table>
+            </div>"""
+
         return f"""<div class="performance-tracker">
             <h2>Performance Tracker</h2>
             <div class="performance-summary">
@@ -612,6 +693,7 @@ def build_performance_section(snapshot_path: Path) -> str:
                 <div class="performance-stat"><strong>Fade P&amp;L (est.):</strong> {fade_pnl:+.2f} units</div>
             </div>
             {calibration_table_html}
+            {team_analysis_html}
             {accuracy_display}
         </div>"""
     except Exception as e:
