@@ -498,10 +498,107 @@ def build_performance_section(snapshot_path: Path) -> str:
         fade_correct = sum(1 for r in fade_bets if str(r.get("fade_correct", "")).strip().lower() == "true")
         fade_accuracy = fade_correct / fade_total if fade_total > 0 else 0
 
+        def _is_true(v) -> bool:
+            return str(v).strip().lower() == "true"
+
+        def _to_float(v, default=0.0) -> float:
+            try:
+                return float(v)
+            except (TypeError, ValueError):
+                return default
+
+        # --- ADD 1: accuracy by betting category -----------------------
+        back_home_rows = [r for r in rows if r.get("prediction", "") == "Home"]
+        back_home_total = len(back_home_rows)
+        back_home_correct = sum(1 for r in back_home_rows if _is_true(r.get("correct", "")))
+        back_home_accuracy = back_home_correct / back_home_total if back_home_total else 0
+
+        strong_fade_rows = [r for r in rows if _is_true(r.get("is_fade", ""))]
+        strong_fade_total = len(strong_fade_rows)
+        strong_fade_correct = sum(1 for r in strong_fade_rows if _is_true(r.get("correct", "")))
+        strong_fade_accuracy = strong_fade_correct / strong_fade_total if strong_fade_total else 0
+
+        category_table_html = f"""
+            <h3 style="color:var(--accent);font-size:0.9rem;margin:1rem 0 0.6rem;">Accuracy by Category</h3>
+            <div class="table-wrapper">
+                <table class="predictions-table">
+                    <thead>
+                        <tr><th>Category</th><th>Count</th><th>Correct</th><th>Accuracy</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Back Home</td><td>{back_home_total}</td><td>{back_home_correct}</td><td>{back_home_accuracy:.1%}</td></tr>
+                        <tr><td>Strong Fade</td><td>{strong_fade_total}</td><td>{strong_fade_correct}</td><td>{strong_fade_accuracy:.1%}</td></tr>
+                        <tr><td>Avoid</td><td>{avoid_count}</td><td>–</td><td>–</td></tr>
+                    </tbody>
+                </table>
+            </div>"""
+
+        # --- ADD 2: rolling accuracy over the last 10 scored predictions
+        scored_sorted = sorted(
+            confident_rows, key=lambda r: r.get("kickoff_time_utc", ""), reverse=True
+        )
+        last10 = scored_sorted[:10]
+        last10_total = len(last10)
+        last10_correct = sum(1 for r in last10 if _is_true(r.get("correct", "")))
+        last10_accuracy = last10_correct / last10_total if last10_total else 0
+
+        # --- ADD 3: P&L by category -------------------------------------
+        edge_pnl = sum(_to_float(r.get("profit", 0)) for r in edge_bets)
+        # Away odds aren't in results_merged.csv, so fade P&L is estimated
+        # with a flat unit assumption rather than the real odds-based profit.
+        fade_pnl = sum(
+            0.8 if _is_true(r.get("fade_correct", "")) else -1.0
+            for r in fade_bets
+        )
+
+        # --- ADD 4: calibration - predicted probability vs actual outcome
+        prob_buckets = [
+            (0.0, 0.30, "0–30% (strong fade zone)"),
+            (0.30, 0.45, "30–45% (double chance zone)"),
+            (0.45, 0.55, "45–55% (avoid zone)"),
+            (0.55, 0.70, "55–70% (back home)"),
+            (0.70, 1.01, "70%+ (strong home)"),
+        ]
+
+        def _prob(r):
+            try:
+                return float(r.get("prob_homewin", ""))
+            except (TypeError, ValueError):
+                return None
+
+        calibration_rows_html = []
+        for lo, hi, label in prob_buckets:
+            bucket_rows = [r for r in rows if (p := _prob(r)) is not None and lo <= p < hi]
+            n = len(bucket_rows)
+            if n:
+                predicted_pct = sum(_prob(r) for r in bucket_rows) / n
+                actual_wins = sum(1 for r in bucket_rows if _is_true(r.get("home_win", "")))
+                actual_pct = actual_wins / n
+                calibration_text = f"Predicted {predicted_pct:.0%}, Actual {actual_pct:.0%}"
+            else:
+                calibration_text = "No data"
+            calibration_rows_html.append(
+                f"<tr><td>{label}</td><td>{n}</td><td>{calibration_text}</td></tr>"
+            )
+
+        calibration_table_html = f"""
+            <h3 style="color:var(--accent);font-size:0.9rem;margin:1rem 0 0.6rem;">Calibration</h3>
+            <div class="table-wrapper">
+                <table class="predictions-table">
+                    <thead>
+                        <tr><th>Probability Bucket</th><th>Count</th><th>Predicted vs Actual</th></tr>
+                    </thead>
+                    <tbody>
+                        {''.join(calibration_rows_html)}
+                    </tbody>
+                </table>
+            </div>"""
+
         return f"""<div class="performance-tracker">
             <h2>Performance Tracker</h2>
             <div class="performance-summary">
                 <div class="performance-stat"><strong>Overall Accuracy:</strong> {accuracy:.1%} ({correct}/{total})</div>
+                <div class="performance-stat"><strong>Rolling (last {last10_total}):</strong> {last10_correct}/{last10_total} ({last10_accuracy:.0%})</div>
                 <div class="performance-stat"><strong>Avoid:</strong> {avoid_count} match{'es' if avoid_count != 1 else ''}</div>
                 <div class="performance-stat"><strong>Edge Bets:</strong> {edge_total} picks</div>
                 <div class="performance-stat"><strong>Edge Accuracy:</strong> {edge_accuracy:.1%} ({edge_correct}/{edge_total})</div>
@@ -509,6 +606,12 @@ def build_performance_section(snapshot_path: Path) -> str:
                 <div class="performance-stat"><strong>Fade Picks:</strong> {fade_total} picks</div>
                 <div class="performance-stat"><strong>Fade Accuracy:</strong> {fade_accuracy:.1%} ({fade_correct}/{fade_total})</div>
             </div>
+            {category_table_html}
+            <div class="performance-summary" style="margin-top:1rem;">
+                <div class="performance-stat"><strong>EDGE P&amp;L:</strong> {edge_pnl:+.2f} units</div>
+                <div class="performance-stat"><strong>Fade P&amp;L (est.):</strong> {fade_pnl:+.2f} units</div>
+            </div>
+            {calibration_table_html}
             {accuracy_display}
         </div>"""
     except Exception as e:
