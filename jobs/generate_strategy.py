@@ -88,6 +88,12 @@ LATEST_JSON = Path("artifacts/strategy_latest.json")
 LATEST_MD = Path("artifacts/strategy_latest.md")
 FAISS_INDEX = Path("artifacts/strategy_faiss.index")
 
+# Only read in no-fixtures mode, to work out when predictions resume and to
+# build the pundit's lookback review of the gameweek just gone.
+PREDICTIONS_CSV = Path("snapshots/predictions_latest.csv")
+RESULTS_CSV = Path("data/processed/results_merged.csv")
+LOOKBACK_RESULTS_N = 10
+
 MODEL = "gpt-4o-mini"
 EMBED_MODEL = "text-embedding-3-small"
 # The schema repeats full fixture objects across fixtures_full + top_picks +
@@ -1195,6 +1201,167 @@ def clean_strategy_archive(
     return kept, deleted
 
 
+# --------------------------------------------------------------------------- #
+# No-fixtures mode: when the gameweek window holds no upcoming fixtures there
+# is nothing to predict, so we skip GPT strategy generation entirely and
+# instead publish a "next matchday" flag plus a pundit review of the gameweek
+# just gone.
+# --------------------------------------------------------------------------- #
+
+LOOKBACK_SYSTEM_PROMPT = (
+    "You are an opinionated football pundit reviewing last weekend's Premier "
+    "League results. Write a natural, engaging 3-4 sentence review of how the "
+    "model performed. Reference specific fixtures, scores and whether the "
+    "model called them correctly. Use natural pundit language - 'didn't see "
+    "that coming', 'model nailed this one', 'had to eat humble pie on that "
+    "one'. Do not mention probabilities or model internals. Write as if "
+    "speaking to fans."
+)
+
+
+def compute_next_matchday() -> str | None:
+    """Earliest future kickoff date (YYYY-MM-DD) in the predictions snapshot
+    that the model actually predicts (is_predicted_fixture == 1). Returns
+    None if the snapshot is missing, unreadable or holds no future
+    predicted fixture."""
+    if not PREDICTIONS_CSV.exists():
+        return None
+    try:
+        import pandas as pd
+
+        df = pd.read_csv(PREDICTIONS_CSV)
+        if "is_predicted_fixture" not in df.columns:
+            return None
+        kd = pd.to_datetime(df["kickoff_time_utc"], errors="coerce", utc=True)
+        predicted = pd.to_numeric(df["is_predicted_fixture"], errors="coerce") == 1
+        future = kd[predicted & kd.notna() & (kd > datetime.now(timezone.utc))]
+        if future.empty:
+            return None
+        return future.min().strftime("%Y-%m-%d")
+    except Exception as exc:  # noqa: BLE001
+        print(f"[strategy] warn: could not compute next matchday: {exc}")
+        return None
+
+
+def latest_scored_archive() -> dict | None:
+    """The most recent archived strategy that has been scored against real
+    results - the pundit's raw material for the lookback review."""
+    scored = load_scored_archive()
+    if not scored:
+        return None
+    return sorted(scored, key=lambda a: a.get("_path", ""))[-1]
+
+
+def recent_results(n: int = LOOKBACK_RESULTS_N) -> list[dict]:
+    """The n most recent scored rows from results_merged.csv. The file is
+    written newest-first (merge_results.py sorts desc on generated_at), so
+    the most recent n are the head rows."""
+    if not RESULTS_CSV.exists():
+        return []
+    try:
+        import pandas as pd
+
+        df = pd.read_csv(RESULTS_CSV)
+        df = df[df["FTR"].notna() & (df["FTR"].astype(str).str.strip() != "")]
+        if "generated_at" in df.columns:
+            df = df.sort_values("generated_at", ascending=False)
+        wanted = ["home_team", "away_team", "FTHG", "FTAG", "FTR",
+                  "prediction", "correct"]
+        cols = [c for c in wanted if c in df.columns]
+        return df[cols].head(n).to_dict("records")
+    except Exception as exc:  # noqa: BLE001
+        print(f"[strategy] warn: could not read recent results: {exc}")
+        return []
+
+
+def build_lookback_summary(archive: dict | None, results: list[dict]) -> str:
+    """Ask GPT-4o-mini for a short pundit review of the gameweek just gone.
+    Returns "" if there is nothing to review or the call fails - the page
+    simply omits the review rather than showing an error."""
+    if not results and not archive:
+        return ""
+
+    lines = ["Recent Premier League results and whether the model called them:"]
+    for r in results:
+        try:
+            score = f"{int(float(r.get('FTHG', 0)))}-{int(float(r.get('FTAG', 0)))}"
+        except (TypeError, ValueError):
+            score = "?-?"
+        called = str(r.get("correct", "")).strip().lower() in {"true", "1", "yes"}
+        lines.append(
+            f"- {r.get('home_team')} {score} {r.get('away_team')} | "
+            f"model said '{r.get('prediction')}' | "
+            f"{'CORRECT' if called else 'WRONG'}"
+        )
+
+    if archive:
+        picks = []
+        for fx in (archive.get("fixtures_full") or [])[:10]:
+            picks.append(
+                f"- {fx.get('home_team')} vs {fx.get('away_team')}: "
+                f"{fx.get('pundit_action', '')}"
+            )
+        if picks:
+            lines.append("")
+            lines.append("What the pundit advised for those fixtures:")
+            lines.extend(picks)
+
+    try:
+        client = _openai_client()
+        if client is None:
+            print("[strategy] no API key - skipping lookback review")
+            return ""
+        resp = client.chat.completions.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": LOOKBACK_SYSTEM_PROMPT},
+                {"role": "user", "content": "\n".join(lines)},
+            ],
+            max_tokens=400,
+            temperature=0.7,
+        )
+        return (resp.choices[0].message.content or "").strip()
+    except Exception as exc:  # noqa: BLE001
+        print(f"[strategy] warn: lookback review unavailable ({exc})")
+        return ""
+
+
+def write_no_fixtures_strategy() -> dict:
+    """Publish the no-fixtures payload: a mode flag, the next matchday and a
+    pundit lookback review. No fixture strategy is generated and the main
+    GPT strategy call is never made."""
+    next_matchday = compute_next_matchday()
+    archive = latest_scored_archive()
+    results = recent_results()
+    lookback = build_lookback_summary(archive, results)
+
+    data = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "mode": "no_fixtures",
+        "next_matchday": next_matchday,
+        "lookback_summary": lookback,
+        "gameweek_summary": "",
+        "rest_of_card_paragraph": "",
+        "top_picks": [],
+        "strong_fades": [],
+        "double_chances": [],
+        "avoid_list": [],
+        "fixtures_full": [],
+        "value_bets": [],
+    }
+
+    LATEST_JSON.parent.mkdir(parents=True, exist_ok=True)
+    LATEST_JSON.write_text(
+        json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+
+    print("[strategy] no fixtures in the current gameweek - skipped GPT strategy")
+    print(f"[strategy] next matchday: {next_matchday or 'unknown'}")
+    print(f"[strategy] lookback review: {'yes' if lookback else 'none'}")
+    print(f"[strategy] wrote {LATEST_JSON}")
+    return data
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -1210,6 +1377,13 @@ def main() -> None:
         raise SystemExit(f"[strategy] missing {CONTEXT_JSON} - run compute_context.py first")
     context = json.loads(CONTEXT_JSON.read_text(encoding="utf-8"))
     fixtures = context.get("fixtures", [])
+
+    # --- NO-FIXTURES GUARD ---------------------------------------------------
+    # Nothing to predict this gameweek: publish the next-matchday flag plus a
+    # pundit lookback review and exit without ever calling the strategy GPT.
+    if not fixtures:
+        write_no_fixtures_strategy()
+        return
 
     # --- STEP 1: RAG ---------------------------------------------------------
     archives = load_scored_archive()

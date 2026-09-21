@@ -655,6 +655,45 @@ def render_strategy_section(strategy) -> str:
     def esc(v):
         return _html.escape(str(v if v is not None else ""))
 
+    # No-fixtures mode (jobs/generate_strategy.py never called GPT for a
+    # full strategy this run) - replace the entire section with the
+    # pundit's lookback review + next matchday, never stale picks/analysis
+    # from a previous gameweek.
+    if strategy.get("mode") == "no_fixtures":
+        next_matchday = strategy.get("next_matchday") or "TBC"
+        lookback = (strategy.get("lookback_summary") or "").strip()
+        parts = [
+            '<div class="performance-tracker" style="margin-bottom:1.5rem;">',
+            '<h2>AI Pundit Analysis '
+            '<span style="font-size:0.7rem;font-weight:600;color:var(--muted);'
+            'background:rgba(148,163,184,0.15);border:1px solid var(--panel-border);'
+            'border-radius:999px;padding:0.1rem 0.5rem;vertical-align:middle;">'
+            'Powered by GPT-4o-mini | Not financial advice</span></h2>',
+        ]
+        if lookback:
+            parts.append(
+                '<h3 style="color:var(--accent);font-size:0.9rem;'
+                'margin:0.8rem 0 0.6rem;">Pundit’s Gameweek Review</h3>'
+            )
+            parts.append(
+                '<div style="background:rgba(17,24,39,0.4);'
+                'border:1px solid var(--panel-border);border-radius:12px;'
+                'padding:1rem 1.2rem;font-style:italic;color:var(--text);'
+                f'font-size:0.95rem;margin-bottom:1rem;">{esc(lookback)}</div>'
+            )
+            parts.append(
+                '<p style="color:var(--muted);margin-bottom:1rem;">'
+                f'⚽ Next predictions: {esc(next_matchday)}</p>'
+            )
+        else:
+            parts.append(
+                '<p style="color:var(--muted);margin-bottom:1rem;">'
+                f'⚽ No fixtures this gameweek — next predictions due '
+                f'{esc(next_matchday)}</p>'
+            )
+        parts.append('</div>')
+        return "\n".join(parts)
+
     def fmt_gap(v):
         try:
             return f"{float(v):+.1%}"
