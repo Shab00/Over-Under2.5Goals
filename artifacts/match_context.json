@@ -1,24 +1,24 @@
 {
-  "computed_at": "2026-09-21T09:10:58.396732+00:00",
-  "gameweek_start": "2026-09-18T00:00:00+00:00",
-  "gameweek_end": "2026-09-21T23:59:00+00:00",
+  "computed_at": "2026-09-22T09:08:26.469560+00:00",
+  "gameweek_start": "2026-09-25T00:00:00+00:00",
+  "gameweek_end": "2026-09-28T23:59:00+00:00",
   "model_performance": {
-    "total_predictions": 37,
-    "avoid_count": 3,
-    "overall_accuracy_pct": 70.3,
-    "edge_count": 6,
-    "edge_accuracy_pct": 50.0,
-    "edge_profit": -1.18,
-    "fade_count": 29,
-    "fade_accuracy_pct": 72.4,
+    "total_predictions": 46,
+    "avoid_count": 4,
+    "overall_accuracy_pct": 67.4,
+    "edge_count": 7,
+    "edge_accuracy_pct": 57.1,
+    "edge_profit": -0.57,
+    "fade_count": 35,
+    "fade_accuracy_pct": 68.6,
     "streak_label": "HOT",
-    "streak_string": "W W W W L",
+    "streak_string": "W W W L W",
     "streak_last5": [
       true,
       true,
       true,
-      true,
-      false
+      false,
+      true
     ]
   },
   "fixtures": []
