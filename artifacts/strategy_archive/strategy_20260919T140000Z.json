@@ -1,0 +1,130 @@
+{
+  "generated_at": "2026-09-22T09:35:56.155406+00:00",
+  "scored": true,
+  "gameweek": "2026-09-19",
+  "fixtures_full": [
+    {
+      "home_team": "Fulham",
+      "away_team": "Man United",
+      "kickoff": "2026-09-20T16:30:00",
+      "signal": "Not Home",
+      "betting_category": "strong_fade",
+      "edge_label": "N/A",
+      "stake_advice": "Small",
+      "pundit_action": "Strong Fade — Back Away Win",
+      "is_strong_fade": true,
+      "correct": true,
+      "FTR": "D"
+    },
+    {
+      "home_team": "Leeds",
+      "away_team": "Crystal Palace",
+      "kickoff": "2026-09-20T14:00:00",
+      "signal": "Home",
+      "betting_category": "back_home",
+      "edge_label": "FADE",
+      "stake_advice": "Value Bet",
+      "pundit_action": "Back Home (Value Bet)",
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "D"
+    },
+    {
+      "home_team": "Man City",
+      "away_team": "Sunderland",
+      "kickoff": "2026-09-20T14:00:00",
+      "signal": "Home",
+      "betting_category": "back_home",
+      "edge_label": "FADE",
+      "stake_advice": "Value Bet",
+      "pundit_action": "Back Home (Value Bet)",
+      "is_strong_fade": false,
+      "correct": true,
+      "FTR": "H"
+    },
+    {
+      "home_team": "Bournemouth",
+      "away_team": "Liverpool",
+      "kickoff": "2026-09-20T14:00:00",
+      "signal": "Not Home",
+      "betting_category": "strong_fade",
+      "edge_label": "N/A",
+      "stake_advice": "Small",
+      "pundit_action": "Strong Fade — Back Away Win",
+      "is_strong_fade": true,
+      "correct": true,
+      "FTR": "A"
+    },
+    {
+      "home_team": "Nott'm Forest",
+      "away_team": "Coventry City",
+      "kickoff": "2026-09-19T17:30:00",
+      "signal": "Not Home",
+      "betting_category": "strong_fade",
+      "edge_label": "N/A",
+      "stake_advice": "Small",
+      "pundit_action": "Strong Fade — Back Away Win",
+      "is_strong_fade": true,
+      "correct": true,
+      "FTR": "A"
+    },
+    {
+      "home_team": "Everton",
+      "away_team": "Ipswich Town",
+      "kickoff": "2026-09-19T15:00:00",
+      "signal": "Not Home",
+      "betting_category": "double_chance",
+      "edge_label": "N/A",
+      "stake_advice": "Small",
+      "pundit_action": "Back Double Chance (X2)",
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "H"
+    },
+    {
+      "home_team": "Newcastle",
+      "away_team": "Hull City",
+      "kickoff": "2026-09-19T15:00:00",
+      "signal": "Home",
+      "betting_category": "back_home",
+      "edge_label": "EDGE",
+      "stake_advice": "Banker",
+      "pundit_action": "Back Home (Banker)",
+      "is_strong_fade": false,
+      "correct": true,
+      "FTR": "H"
+    },
+    {
+      "home_team": "Brighton",
+      "away_team": "Arsenal",
+      "kickoff": "2026-09-19T15:00:00",
+      "signal": "Not Home",
+      "betting_category": "strong_fade",
+      "edge_label": "N/A",
+      "stake_advice": "Small",
+      "pundit_action": "Strong Fade — Back Away Win",
+      "is_strong_fade": true,
+      "correct": false,
+      "FTR": "H"
+    },
+    {
+      "home_team": "Tottenham",
+      "away_team": "Aston Villa",
+      "kickoff": "2026-09-19T12:30:00",
+      "signal": "Avoid",
+      "betting_category": "avoid",
+      "edge_label": "N/A",
+      "stake_advice": "Skip",
+      "pundit_action": "Skip — too close to call",
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "A"
+    }
+  ],
+  "score_summary": {
+    "total_fixtures": 9,
+    "confident_predictions": 8,
+    "correct": 5,
+    "accuracy_pct": 62.5
+  }
+}

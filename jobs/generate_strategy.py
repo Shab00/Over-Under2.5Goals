@@ -1146,6 +1146,17 @@ def _closest_pre_kickoff_file(gw_start: datetime, files: list[tuple[datetime, st
     return min(files, key=lambda t: abs((t[0] - target).total_seconds()))[1]
 
 
+def _archive_meta(path: str) -> tuple[bool, int]:
+    """(is_scored, fixture_count) for an archive file - best-effort, both
+    default to False/0 if the file is missing or unreadable so a broken
+    file is always treated as the lowest priority (safe to prune)."""
+    try:
+        data = json.loads(Path(path).read_text(encoding="utf-8"))
+    except Exception:
+        return False, 0
+    return data.get("scored") is True, len(data.get("fixtures_full") or [])
+
+
 def clean_strategy_archive(
     dry_run: bool = False, keep_extra: set[str] | None = None
 ) -> tuple[list[str], list[str]]:
@@ -1154,6 +1165,12 @@ def clean_strategy_archive(
     rolling window of recent snapshots for the current gameweek. Never
     touches anything from more than 4 weeks ago - that's valuable RAG
     history regardless of how many snapshots pile up.
+
+    Within a gameweek group, files are prioritised scored > real unscored
+    (fixtures_full non-empty) > empty - a scored file is NEVER deleted no
+    matter how many exist, and an empty/garbage file is always the first
+    to go, never a real prediction file, while any real or scored data
+    exists to keep instead.
 
     keep_extra: manual override paths to always keep on top of the normal
     selection - e.g. one-off early history predating the usual gameweek
@@ -1183,12 +1200,35 @@ def clean_strategy_archive(
             keep.update(p for _, p in files)
             continue
 
+        meta = {p: _archive_meta(p) for _, p in files}
+        scored = [(ts, p) for ts, p in files if meta[p][0]]
+        unscored = [(ts, p) for ts, p in files if not meta[p][0]]
+        real_unscored = [(ts, p) for ts, p in unscored if meta[p][1] > 0]
+        empty_unscored = [(ts, p) for ts, p in unscored if meta[p][1] == 0]
+
+        # Never delete a scored file, regardless of count caps below.
+        keep.update(p for _, p in scored)
+
         if (gw_start, gw_end) == current_window:
-            # Current gameweek - keep the last 3 for fresh RAG context.
-            keep.update(p for _, p in files[-3:])
+            # Current gameweek - keep up to 3 total for fresh RAG context,
+            # counting the scored files already kept toward that cap, and
+            # filling any remaining slots from the most recent REAL files
+            # first, only reaching for empty ones if there aren't enough.
+            slots = max(0, 3 - len(scored))
+            if slots:
+                ordered = (
+                    sorted(real_unscored, key=lambda t: t[0])
+                    + sorted(empty_unscored, key=lambda t: t[0])
+                )
+                keep.update(p for _, p in ordered[-slots:])
         else:
-            # Completed gameweek - keep exactly one pre-kickoff snapshot.
-            keep.add(_closest_pre_kickoff_file(gw_start, files))
+            # Completed gameweek - a scored file already satisfies "one per
+            # gameweek"; only fall back to an unscored file if there isn't
+            # one yet, preferring a real file over an empty one.
+            if not scored:
+                pool = real_unscored if real_unscored else empty_unscored
+                if pool:
+                    keep.add(_closest_pre_kickoff_file(gw_start, pool))
 
     deleted = [path for _, path in entries if path not in keep]
     kept = [path for _, path in entries if path in keep]
@@ -1470,10 +1510,154 @@ def write_no_fixtures_strategy() -> dict:
     print(f"[strategy] lookback_ready: {lookback_ready}")
     print(f"[strategy] lookback review: {'yes' if lookback else 'none'}")
     print(f"[strategy] wrote {LATEST_JSON}")
+
+    # Archive cleanup must run here too, not just in the normal (has-fixtures)
+    # path - otherwise empty/garbage snapshots accumulate between gameweeks
+    # whenever a run lands in no-fixtures mode.
+    clean_strategy_archive(
+        keep_extra={str(ARCHIVE_DIR / name) for name in PROTECTED_ARCHIVE_FILES}
+    )
+
     return data
 
 
+# --------------------------------------------------------------------------- #
+# One-time repair: GW5 (2026-09-19/20) never ended up with a real scored
+# archive - clean_strategy_archive()'s old bug thinned that gameweek down to
+# nothing but empty/garbage snapshots (see the fix above). This rebuilds it
+# directly from the real results_merged.csv rows so the RAG and pundit
+# lookback review have genuine GW5 history to draw from.
+# --------------------------------------------------------------------------- #
+
+GW5_ARCHIVE_PATH = ARCHIVE_DIR / "strategy_20260919T140000Z.json"
+
+# The exact GW5 fixtures to reconstruct - also used as a sanity check that
+# results_merged.csv actually has the rows we expect.
+GW5_FIXTURE_KEYS = {
+    ("Fulham", "Man United"),
+    ("Leeds", "Crystal Palace"),
+    ("Man City", "Sunderland"),
+    ("Bournemouth", "Liverpool"),
+    ("Nott'm Forest", "Coventry City"),
+    ("Everton", "Ipswich Town"),
+    ("Newcastle", "Hull City"),
+    ("Brighton", "Arsenal"),
+    ("Tottenham", "Aston Villa"),
+}
+
+
+def reconstruct_gw5_archive() -> None:
+    """Rebuild artifacts/strategy_archive/strategy_20260919T140000Z.json from
+    the real results_merged.csv rows for GW5. A no-op once the file exists -
+    this only ever needs to run once.
+
+    betting_category and edge_label are derived from each fixture's real
+    prob_homewin/odds_B365H using the exact same logic compute_context.py
+    uses live, rather than hardcoding labels - so the reconstruction stays
+    consistent with how the rest of the pipeline actually computes them.
+    """
+    if GW5_ARCHIVE_PATH.exists():
+        return
+
+    if not RESULTS_CSV.exists():
+        print(f"[strategy] cannot reconstruct GW5 archive - {RESULTS_CSV} missing")
+        return
+
+    try:
+        import pandas as pd
+
+        df = pd.read_csv(RESULTS_CSV)
+        gw5 = df[df["kickoff_time_utc"].astype(str).str.startswith(("2026-09-19", "2026-09-20"))]
+    except Exception as exc:  # noqa: BLE001
+        print(f"[strategy] warn: could not read {RESULTS_CSV} for GW5 reconstruction: {exc}")
+        return
+
+    fixtures_full = []
+    for _, r in gw5.iterrows():
+        key = (str(r.get("home_team")), str(r.get("away_team")))
+        if key not in GW5_FIXTURE_KEYS:
+            continue  # not one of the known GW5 fixtures - skip defensively
+
+        prob = float(r.get("prob_homewin", 0) or 0)
+        try:
+            odds = float(r.get("odds_B365H"))
+        except (TypeError, ValueError):
+            odds = None
+        signal = str(r.get("prediction", ""))
+        ftr = str(r.get("FTR", ""))
+        correct = str(r.get("correct", "")).strip().lower() == "true"
+
+        cat = compute_context.betting_category(prob)
+        if signal == "Home" and odds and odds > 0:
+            value_gap = prob - (1.0 / odds)
+            edge_label = "EDGE" if value_gap > 0 else "FADE"
+        else:
+            edge_label = "N/A"
+
+        if cat == "back_home":
+            stake_advice = "Banker" if edge_label == "EDGE" else "Value Bet"
+            pundit_action = f"Back Home ({stake_advice})"
+        elif cat == "strong_fade":
+            stake_advice = "Small"
+            pundit_action = "Strong Fade — Back Away Win"
+        elif cat == "double_chance":
+            stake_advice = "Small"
+            pundit_action = "Back Double Chance (X2)"
+        else:  # avoid
+            stake_advice = "Skip"
+            pundit_action = "Skip — too close to call"
+
+        fixtures_full.append({
+            "home_team": r.get("home_team"),
+            "away_team": r.get("away_team"),
+            "kickoff": str(r.get("kickoff_time_utc")),
+            "signal": signal,
+            "betting_category": cat,
+            "edge_label": edge_label,
+            "stake_advice": stake_advice,
+            "pundit_action": pundit_action,
+            "is_strong_fade": bool(prob < 0.20),
+            "correct": correct,
+            "FTR": ftr,
+        })
+
+    if len(fixtures_full) != len(GW5_FIXTURE_KEYS):
+        print(
+            f"[strategy] warn: GW5 reconstruction found {len(fixtures_full)}/"
+            f"{len(GW5_FIXTURE_KEYS)} expected fixtures in {RESULTS_CSV} - "
+            "writing archive with what was found"
+        )
+
+    confident = [fx for fx in fixtures_full if fx["signal"] != "Avoid"]
+    n_confident = len(confident)
+    n_correct = sum(1 for fx in confident if fx["correct"])
+
+    archive = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "scored": True,
+        "gameweek": "2026-09-19",
+        "fixtures_full": fixtures_full,
+        "score_summary": {
+            "total_fixtures": len(fixtures_full),
+            "confident_predictions": n_confident,
+            "correct": n_correct,
+            "accuracy_pct": round(n_correct / n_confident * 100, 1) if n_confident else 0.0,
+        },
+    }
+
+    ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
+    GW5_ARCHIVE_PATH.write_text(
+        json.dumps(archive, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    print(
+        f"[strategy] reconstructed GW5 scored archive: {GW5_ARCHIVE_PATH} "
+        f"({len(fixtures_full)} fixtures, {n_correct}/{n_confident} correct)"
+    )
+
+
 def main() -> None:
+    reconstruct_gw5_archive()
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--debug",
