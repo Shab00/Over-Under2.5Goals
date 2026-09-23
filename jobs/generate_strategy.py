@@ -1263,7 +1263,9 @@ LOOKBACK_SYSTEM_PROMPT = (
     "Do not say a result was 'supposed to be a banker' unless stake_advice "
     "in the data explicitly says Banker. "
     "You may reference the actual final score if it is provided in the "
-    "data. Do not invent scores."
+    "data. Do not invent scores. "
+    "The result description tells you exactly who won. Do not use your own "
+    "knowledge of these matches - only reference what is written here."
 )
 
 # Below this many hours old, the most recent result in results_merged.csv is
@@ -1336,18 +1338,34 @@ def build_lookback_results_lines(archive: dict | None) -> list[str]:
     """Exact-format 'model predicted vs result' lines built dynamically
     from the scored archive's fixtures_full - correct, FTR, signal,
     stake_advice, edge_label. Never hardcoded: any archive, any fixtures.
-    A fixture without a scored FTR is skipped rather than guessed at."""
+    A fixture without a scored FTR is skipped rather than guessed at.
+
+    The result is spelled out as a plain-English sentence naming the actual
+    team that won ("Brighton won at home"), rather than a bare FTR code -
+    GPT has repeatedly misread a raw "FTR: H" as the first-named team
+    winning regardless of home/away, or substituted its own training-data
+    memory of the fixture instead of the literal result given here.
+    """
     if not archive:
         return []
 
-    ftr_word = {"H": "Home win", "A": "Away win", "D": "Draw"}
     lines: list[str] = []
     for fx in archive.get("fixtures_full", []) or []:
+        home = fx.get("home_team")
+        away = fx.get("away_team")
         ftr = fx.get("FTR")
-        if ftr not in ftr_word:
+        signal = fx.get("signal", "")
+        correct = fx.get("correct")
+
+        if ftr == "H":
+            result_str = f"{home} won at home"
+        elif ftr == "A":
+            result_str = f"{away} won away"
+        elif ftr == "D":
+            result_str = "the match ended in a draw"
+        else:
             continue  # not actually scored yet - skip rather than guess
 
-        signal = fx.get("signal", "")
         edge_label = fx.get("edge_label")
         stake_advice = (fx.get("stake_advice") or "").strip()
 
@@ -1363,11 +1381,10 @@ def build_lookback_results_lines(archive: dict | None) -> list[str]:
             else:
                 annotation = f" ({edge_label})"
 
+        correct_str = "CORRECT" if correct else "WRONG"
         lines.append(
-            f"{fx.get('home_team')} vs {fx.get('away_team')} — "
-            f"model predicted: {signal}{annotation} — "
-            f"result: {ftr_word[ftr]} — "
-            f"{'CORRECT' if fx.get('correct') else 'WRONG'}"
+            f"{home} vs {away} — model predicted: {signal}{annotation} — "
+            f"{result_str} — model was {correct_str}"
         )
     return lines
 
