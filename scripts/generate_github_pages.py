@@ -457,7 +457,7 @@ def build_performance_section(snapshot_path: Path) -> str:
     if not results_file.exists():
         return f"""<div class="performance-tracker">
             <h2>Performance Tracker</h2>
-            <p style="color: var(--muted);">Season starts 21 August – tracking will begin automatically once matches are played.</p>
+            <p style="color: var(--muted);">No results yet — check back after the first gameweek.</p>
             {accuracy_display}
         </div>"""
 
@@ -471,7 +471,7 @@ def build_performance_section(snapshot_path: Path) -> str:
         if not rows:
             return f"""<div class="performance-tracker">
                 <h2>Performance Tracker</h2>
-                <p style="color: var(--muted);">No results yet – check back after the first matchday.</p>
+                <p style="color: var(--muted);">No results yet — check back after the first gameweek.</p>
                 {accuracy_display}
             </div>"""
 

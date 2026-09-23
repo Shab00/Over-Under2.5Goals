@@ -1275,37 +1275,65 @@ LOOKBACK_SYSTEM_PROMPT = (
 LOOKBACK_READY_HOURS = 18
 
 
-def compute_next_matchday() -> str | None:
+NEXT_MATCHDAY_FALLBACK = "TBC"
+
+
+def compute_next_matchday() -> str:
     """Earliest future kickoff date (YYYY-MM-DD) in the predictions snapshot
-    that the model actually predicts (is_predicted_fixture == 1). Returns
-    None if the snapshot is missing, unreadable or holds no future
-    predicted fixture."""
+    that the model actually predicts (is_predicted_fixture == 1). Falls
+    back to NEXT_MATCHDAY_FALLBACK ("TBC") - never None, never a crash -
+    whenever the snapshot is missing, unreadable, has no predicted-fixture
+    rows, or every predicted fixture is already in the past."""
     if not PREDICTIONS_CSV.exists():
-        return None
+        print(
+            "[strategy] next_matchday fallback: TBC — no predicted fixtures found "
+            f"({PREDICTIONS_CSV} does not exist)"
+        )
+        return NEXT_MATCHDAY_FALLBACK
     try:
         import pandas as pd
 
         df = pd.read_csv(PREDICTIONS_CSV)
-        if "is_predicted_fixture" not in df.columns:
-            return None
+        if "is_predicted_fixture" not in df.columns or df.empty:
+            print("[strategy] next_matchday fallback: TBC — no predicted fixtures found")
+            return NEXT_MATCHDAY_FALLBACK
         kd = pd.to_datetime(df["kickoff_time_utc"], errors="coerce", utc=True)
         predicted = pd.to_numeric(df["is_predicted_fixture"], errors="coerce") == 1
+        if not predicted.any():
+            print("[strategy] next_matchday fallback: TBC — no predicted fixtures found")
+            return NEXT_MATCHDAY_FALLBACK
         future = kd[predicted & kd.notna() & (kd > datetime.now(timezone.utc))]
         if future.empty:
-            return None
+            print("[strategy] next_matchday fallback: TBC — no predicted fixtures found")
+            return NEXT_MATCHDAY_FALLBACK
         return future.min().strftime("%Y-%m-%d")
     except Exception as exc:  # noqa: BLE001
-        print(f"[strategy] warn: could not compute next matchday: {exc}")
-        return None
+        print(f"[strategy] warn: could not compute next matchday ({exc})")
+        print("[strategy] next_matchday fallback: TBC — no predicted fixtures found")
+        return NEXT_MATCHDAY_FALLBACK
 
 
 def latest_scored_archive() -> dict | None:
     """The most recent archived strategy that has been scored against real
-    results - the pundit's raw material for the lookback review."""
-    scored = load_scored_archive()
-    if not scored:
+    results AND actually has fixtures - the pundit's raw material for the
+    lookback review. Sorted by each archive's own timestamp (parsed from
+    its filename, i.e. its gameweek date) descending, so a scored-but-empty
+    file (garbage/incomplete) is never picked over a real one, no matter
+    how recent its timestamp is."""
+    candidates: list[tuple[datetime, dict]] = []
+    for ts, path in _archive_entries():
+        try:
+            data = json.loads(Path(path).read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if data.get("scored") is True and len(data.get("fixtures_full") or []) > 0:
+            data["_path"] = path
+            candidates.append((ts, data))
+
+    if not candidates:
         return None
-    return sorted(scored, key=lambda a: a.get("_path", ""))[-1]
+    candidates.sort(key=lambda t: t[0], reverse=True)
+    return candidates[0][1]
 
 
 def check_lookback_ready() -> tuple[bool, datetime | None]:

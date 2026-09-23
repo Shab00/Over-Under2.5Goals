@@ -49,29 +49,66 @@ strategy = json.loads(STRATEGY_JSON.read_text(encoding="utf-8"))
 message = strategy.get("telegram_message")
 
 if not message:
-    lines = ["<b>EPL AI Pundit Strategy</b>"]
-    top_picks = strategy.get("top_picks", [])
-    if not top_picks:
+    if strategy.get("mode") == "no_fixtures":
+        # write_no_fixtures_strategy() never sets telegram_message - build a
+        # clean one here from mode/next_matchday/lookback_ready/lookback_summary
+        # instead of falling through to the top_picks-based builder below
+        # (which would wrongly say "No standout picks this week").
+        next_matchday = strategy.get("next_matchday") or "TBC"
+        lookback_ready = strategy.get("lookback_ready", True)
+        lookback_summary = (strategy.get("lookback_summary") or "").strip()
+
+        if not lookback_ready:
+            message = (
+                "⚽ Results being confirmed — Pundit's review coming soon. "
+                f"Next predictions: {next_matchday}"
+            )
+        elif lookback_summary:
+            if len(lookback_summary) > 500:
+                lookback_summary = lookback_summary[:497].rstrip() + "..."
+            message = (
+                "<b>Pundit's Gameweek Review</b>\n\n"
+                f"{lookback_summary}\n\n"
+                f"⚽ Next predictions: {next_matchday}\n"
+                "Full analysis: shab00.github.io/football"
+            )
+        else:
+            message = (
+                "⚽ No fixtures this gameweek. Pundit's review and next "
+                "predictions on the website: shab00.github.io/football"
+            )
+    else:
+        lines = ["<b>EPL AI Pundit Strategy</b>"]
+        top_picks = strategy.get("top_picks", [])
+        if not top_picks:
+            lines.append("")
+            lines.append("No standout picks this week.")
+        for pick in top_picks:
+            home = pick.get("home_team", "")
+            away = pick.get("away_team", "")
+            signal = pick.get("signal", "")
+            confidence = pick.get("confidence", "")
+            bet_type = pick.get("bet_type", "")
+            stake = pick.get("stake_advice", "")
+            lines.append(
+                f"<b>{home} vs {away}</b>  |  {signal} ({confidence})  |  "
+                f"{bet_type}  |  Stake: {stake}"
+            )
+        model_form = strategy.get("model_form")
+        if model_form:
+            lines.append("")
+            lines.append(model_form)
         lines.append("")
-        lines.append("No standout picks this week.")
-    for pick in top_picks:
-        home = pick.get("home_team", "")
-        away = pick.get("away_team", "")
-        signal = pick.get("signal", "")
-        confidence = pick.get("confidence", "")
-        bet_type = pick.get("bet_type", "")
-        stake = pick.get("stake_advice", "")
-        lines.append(
-            f"<b>{home} vs {away}</b>  |  {signal} ({confidence})  |  "
-            f"{bet_type}  |  Stake: {stake}"
-        )
-    model_form = strategy.get("model_form")
-    if model_form:
-        lines.append("")
-        lines.append(model_form)
-    lines.append("")
-    lines.append("Full analysis: shab00.github.io/football")
-    message = "\n".join(lines)
+        lines.append("Full analysis: shab00.github.io/football")
+        message = "\n".join(lines)
+
+# Last-resort safety net: never send a garbled or empty message, no matter
+# what shape strategy_latest.json turned out to be in.
+if not message or not message.strip():
+    message = (
+        "⚽ EPL AI Pundit Strategy — see the latest analysis at "
+        "shab00.github.io/football"
+    )
 
 message = sanitise_html(message)
 
