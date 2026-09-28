@@ -27,10 +27,12 @@ PREDICTIONS_CSV = Path("snapshots/predictions_latest.csv")
 COMBINED_CSV = Path("data/processed/combinedWithOdds.csv")
 RESULTS_CSV = Path("data/processed/results_merged.csv")
 NEWS_JSON = Path("data/processed/news_context.json")
+FIXTURES_WITH_ODDS_CSV = Path("data/processed/updated_fixtures_with_odds.csv")
 OUT_JSON = Path("artifacts/match_context.json")
 
 FORM_N = 5
 H2H_N = 5
+REFEREE_MIN_GAMES = 20  # below this a referee's career stats aren't meaningful
 SEASON_START = pd.Timestamp("2026-08-01")  # start of the 26/27 season
 
 # prediction-feed name -> variants that may appear as HomeTeam in combinedWithOdds
@@ -92,7 +94,10 @@ def build_norm_map(names, hometeams) -> dict:
 # Historical results helpers
 # --------------------------------------------------------------------------- #
 def load_history() -> pd.DataFrame:
-    wanted = {"HomeTeam", "AwayTeam", "FTR", "FTHG", "FTAG", "Date", "DateParsed"}
+    wanted = {
+        "HomeTeam", "AwayTeam", "FTR", "FTHG", "FTAG", "Date", "DateParsed",
+        "Referee", "HY", "AY", "HR", "AR",
+    }
     hist = pd.read_csv(
         COMBINED_CSV, low_memory=False, usecols=lambda c: c in wanted
     )
@@ -210,6 +215,55 @@ def team_form(hist: pd.DataFrame, team_canon: str | None) -> dict:
     return out
 
 
+def team_form_split(hist: pd.DataFrame, team_canon: str | None) -> dict:
+    """Last-5 form computed separately for home games and away games -
+    unlike team_form(), which blends both together. A team's home form and
+    away form are genuinely different signals, so this keeps them apart."""
+    out = {
+        "home_pts_last5": 0, "home_wins_last5": 0,
+        "home_gf_last5": 0, "home_ga_last5": 0, "home_form_string": "",
+        "away_pts_last5": 0, "away_wins_last5": 0,
+        "away_gf_last5": 0, "away_ga_last5": 0, "away_form_string": "",
+    }
+    if not team_canon:
+        return out
+
+    home_games = (hist[hist["HomeTeam"] == team_canon]
+                  .sort_values("_date", ascending=False)
+                  .head(FORM_N)
+                  .iloc[::-1])  # chronological, most recent rightmost
+    away_games = (hist[hist["AwayTeam"] == team_canon]
+                  .sort_values("_date", ascending=False)
+                  .head(FORM_N)
+                  .iloc[::-1])
+
+    home_results, home_gf, home_ga = [], 0.0, 0.0
+    for _, row in home_games.iterrows():
+        res, gf, ga = _perspective(row, team_canon)
+        home_results.append(res)
+        home_gf += gf
+        home_ga += ga
+    out["home_pts_last5"] = int(sum(_points(r) for r in home_results))
+    out["home_wins_last5"] = int(sum(1 for r in home_results if r == "W"))
+    out["home_gf_last5"] = int(round(home_gf))
+    out["home_ga_last5"] = int(round(home_ga))
+    out["home_form_string"] = " ".join(home_results)
+
+    away_results, away_gf, away_ga = [], 0.0, 0.0
+    for _, row in away_games.iterrows():
+        res, gf, ga = _perspective(row, team_canon)
+        away_results.append(res)
+        away_gf += gf
+        away_ga += ga
+    out["away_pts_last5"] = int(sum(_points(r) for r in away_results))
+    out["away_wins_last5"] = int(sum(1 for r in away_results if r == "W"))
+    out["away_gf_last5"] = int(round(away_gf))
+    out["away_ga_last5"] = int(round(away_ga))
+    out["away_form_string"] = " ".join(away_results)
+
+    return out
+
+
 def head_to_head(hist: pd.DataFrame, home_canon: str | None, away_canon: str | None) -> dict:
     if not home_canon or not away_canon:
         return {"home_wins": 0, "away_wins": 0, "draws": 0,
@@ -244,6 +298,76 @@ def head_to_head(hist: pd.DataFrame, home_canon: str | None, away_canon: str | N
 
     return {"home_wins": home_wins, "away_wins": away_wins, "draws": draws,
             "home_gf_avg": home_gf_avg, "summary": summary}
+
+
+# --------------------------------------------------------------------------- #
+# Referee context
+# --------------------------------------------------------------------------- #
+def compute_referee_stats(hist: pd.DataFrame) -> dict[str, dict]:
+    """Per-referee career stats from combinedWithOdds.csv, keyed by exact
+    Referee string. A referee with fewer than REFEREE_MIN_GAMES recorded
+    games is excluded entirely - not meaningful from a tiny sample, rather
+    than reported with a shaky percentage."""
+    stats: dict[str, dict] = {}
+    if "Referee" not in hist.columns:
+        return stats
+
+    ref_rows = hist[hist["Referee"].notna() & (hist["Referee"].astype(str).str.strip() != "")]
+
+    def _avg(group: pd.DataFrame, col: str) -> float:
+        if col not in group.columns:
+            return 0.0
+        return round(float(pd.to_numeric(group[col], errors="coerce").fillna(0).mean()), 2)
+
+    for referee, group in ref_rows.groupby("Referee"):
+        games = int(len(group))
+        if games < REFEREE_MIN_GAMES:
+            continue
+
+        home_win_pct = round(float((group["FTR"] == "H").sum()) / games * 100, 1)
+        if home_win_pct > 50:
+            home_bias = "favours_home"
+        elif home_win_pct < 43:
+            home_bias = "favours_away"
+        else:
+            home_bias = "neutral"
+
+        stats[str(referee)] = {
+            "name": str(referee),
+            "games": games,
+            "home_win_pct": home_win_pct,
+            "avg_yellow_home": _avg(group, "HY"),
+            "avg_yellow_away": _avg(group, "AY"),
+            "avg_red_home": _avg(group, "HR"),
+            "avg_red_away": _avg(group, "AR"),
+            "home_bias": home_bias,
+        }
+    return stats
+
+
+def load_fixture_referees() -> dict[tuple[str, str], str]:
+    """(normalized home, normalized away) -> assigned Referee name, read
+    from updated_fixtures_with_odds.csv. Only rows with a real, non-empty
+    Referee value are included - most upcoming fixtures have no referee
+    assigned yet, and those are simply absent from this lookup."""
+    lookup: dict[tuple[str, str], str] = {}
+    if not FIXTURES_WITH_ODDS_CSV.exists():
+        return lookup
+    try:
+        fx = pd.read_csv(FIXTURES_WITH_ODDS_CSV, low_memory=False,
+                          usecols=lambda c: c in {"HomeTeam", "AwayTeam", "Referee"})
+    except Exception:
+        return lookup
+    if not {"HomeTeam", "AwayTeam", "Referee"}.issubset(fx.columns):
+        return lookup
+
+    for _, row in fx.iterrows():
+        referee = row.get("Referee")
+        if pd.isna(referee) or not str(referee).strip():
+            continue
+        key = (_norm(row.get("HomeTeam", "")), _norm(row.get("AwayTeam", "")))
+        lookup[key] = str(referee).strip()
+    return lookup
 
 
 # --------------------------------------------------------------------------- #
@@ -639,6 +763,9 @@ def main() -> None:
     league_table = compute_league_table(hist)
     league_position_by_team = {row["team"]: row["position"] for row in league_table}
 
+    referee_stats = compute_referee_stats(hist)
+    fixture_referees = load_fixture_referees()
+
     news_index = load_news_index()
 
     fixtures_out = []
@@ -680,6 +807,26 @@ def main() -> None:
 
         cat = betting_category(prob)
 
+        referee_name = fixture_referees.get((_norm(home), _norm(away)))
+        referee_block = referee_stats.get(referee_name) if referee_name else None
+
+        home_split = team_form_split(hist, home_canon)
+        away_split = team_form_split(hist, away_canon)
+        home_team_home_form = {
+            "pts_last5": home_split["home_pts_last5"],
+            "wins_last5": home_split["home_wins_last5"],
+            "gf_last5": home_split["home_gf_last5"],
+            "ga_last5": home_split["home_ga_last5"],
+            "form_string": home_split["home_form_string"],
+        }
+        away_team_away_form = {
+            "pts_last5": away_split["away_pts_last5"],
+            "wins_last5": away_split["away_wins_last5"],
+            "gf_last5": away_split["away_gf_last5"],
+            "ga_last5": away_split["away_ga_last5"],
+            "form_string": away_split["away_form_string"],
+        }
+
         fixtures_out.append({
             "home_team": home,
             "away_team": away,
@@ -697,9 +844,12 @@ def main() -> None:
             "is_strong_fade": bool(prob < 0.20),
             "home_team_form": team_form(hist, home_canon),
             "away_team_form": team_form(hist, away_canon),
+            "home_team_home_form": home_team_home_form,
+            "away_team_away_form": away_team_away_form,
             "h2h": head_to_head(hist, home_canon, away_canon),
             "home_league_position": league_position_by_team.get(home_canon),
             "away_league_position": league_position_by_team.get(away_canon),
+            "referee": referee_block,
             "home_news": home_news,
             "away_news": away_news,
         })

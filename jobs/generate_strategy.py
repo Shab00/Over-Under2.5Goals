@@ -180,6 +180,20 @@ SYSTEM_PROMPT = (
     "team hosting a relegation-threatened side). Do NOT invent or estimate "
     "league positions - only use the league_table data provided in the "
     "context.\n\n"
+    "REFEREE CONTEXT\n"
+    "Each fixture includes referee context where available - home_win_pct, "
+    "card tendencies, home_bias label. Reference the referee when "
+    "home_bias is 'favours_home' or 'favours_away' and it's relevant to "
+    "the pick - e.g. 'M Oliver tends to favour the home side' or 'expect a "
+    "card-heavy game with this referee'. Do NOT mention the referee if "
+    "home_bias is neutral or referee data is null.\n\n"
+    "HOME/AWAY SPLIT FORM\n"
+    "Each fixture now includes home_team_home_form (how the home team "
+    "performs specifically at home) and away_team_away_form (how the away "
+    "team performs specifically away). Use these in preference to the "
+    "combined form when analysing home advantage. If a team has strong "
+    "home form but weak away form for their opponent, this is a "
+    "significant signal - reference it in pundit_take.\n\n"
     "GAMEWEEK SUMMARY\n"
     "gameweek_summary must name specific teams and facts. Mention: the "
     "standout value bet by name, and one specific named injury if any "
@@ -403,6 +417,8 @@ def build_rag_context(cur: dict, past_fixtures: list[dict], pool_filter) -> tupl
 def fixture_block(fx: dict, rag_context: str) -> str:
     hf = fx.get("home_team_form", {})
     af = fx.get("away_team_form", {})
+    hhf = fx.get("home_team_home_form", {})
+    aaf = fx.get("away_team_away_form", {})
     h2h = fx.get("h2h", {})
     home_news = fx.get("home_news") or []
     away_news = fx.get("away_news") or []
@@ -411,6 +427,17 @@ def fixture_block(fx: dict, rag_context: str) -> str:
     implied = float(implied) if implied is not None else 0.0
     gap = fx.get("value_gap")
     gap = float(gap) if gap is not None else 0.0
+    ref = fx.get("referee")
+    if ref:
+        referee_line = (
+            f"Referee: {ref.get('name')} | {ref.get('games')} games | "
+            f"home win rate {ref.get('home_win_pct')}% | "
+            f"cards Y:{ref.get('avg_yellow_home')}/{ref.get('avg_yellow_away')} "
+            f"R:{ref.get('avg_red_home')}/{ref.get('avg_red_away')} | "
+            f"bias: {ref.get('home_bias')}\n"
+        )
+    else:
+        referee_line = "Referee: not yet assigned / insufficient data\n"
     return (
         "---\n"
         f"FIXTURE: {fx.get('home_team')} vs {fx.get('away_team')}\n"
@@ -430,7 +457,12 @@ def fixture_block(fx: dict, rag_context: str) -> str:
         f"{af.get('current_season_games', 0)} games\n"
         f"Away form last 5: {af.get('form_string', '')} "
         f"({af.get('pts_last5', 0)} pts, {af.get('gf_last5', 0)} GF, {af.get('ga_last5', 0)} GA)\n"
+        f"Home team's HOME form last 5: {hhf.get('form_string', '')} "
+        f"({hhf.get('pts_last5', 0)} pts, {hhf.get('gf_last5', 0)} GF, {hhf.get('ga_last5', 0)} GA)\n"
+        f"Away team's AWAY form last 5: {aaf.get('form_string', '')} "
+        f"({aaf.get('pts_last5', 0)} pts, {aaf.get('gf_last5', 0)} GF, {aaf.get('ga_last5', 0)} GA)\n"
         f"H2H: {h2h.get('summary', '')}\n"
+        f"{referee_line}"
         f"Home news: {' | '.join(home_news) if home_news else 'None'}\n"
         f"Away news: {' | '.join(away_news) if away_news else 'None'}\n"
         f"Historical context: {rag_context}\n"
