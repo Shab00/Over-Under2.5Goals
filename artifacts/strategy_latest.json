@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-28T10:11:14.151295+00:00",
+  "generated_at": "2026-09-29T09:09:40.024446+00:00",
   "mode": "no_fixtures",
   "next_matchday": "2026-10-10",
   "lookback_ready": true,
-  "lookback_summary": "Well, it was a mixed bag for the model this weekend! It correctly predicted a draw in the Fulham vs. Man United clash, which was a solid call considering it ended 1-1. However, it had to eat humble pie on the Leeds vs. Crystal Palace match, where it went for a home win and ended up with a 0-0 draw. The model nailed the banker with Newcastle's win over Hull City, but it got caught out with Everton, and didn't see Aston Villa's away victory over Tottenham coming either. Overall, some hits and misses, but definitely a few surprises to keep us on our toes!",
+  "lookback_summary": "What a weekend we had in the Premier League! The model nailed the prediction for Fulham vs Man United, calling it as Not Home perfectly as the match ended in a draw. However, I had to eat humble pie on Leeds vs Crystal Palace, where the model predicted a Home win that went nowhere. On the other hand, it was spot on with Man City, who delivered a solid performance against Sunderland. It also got Bournemouth vs Liverpool right, predicting Not Home, as Liverpool took the points away from home. \n\nIn the end, the model had a mixed bag, with strong calls for Newcastle, who won at home against Hull City, but it whiffed on Everton vs Ipswich Town and Brighton vs Arsenal. The model definitely needs to tighten up its predictions for those fixtures!",
   "gameweek_summary": "",
   "rest_of_card_paragraph": "",
   "top_picks": [],
