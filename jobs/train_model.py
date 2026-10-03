@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from dotenv import load_dotenv
+load_dotenv()
+
 import json
 import re
 import sys
@@ -9,6 +12,12 @@ from typing import List, Optional, Tuple
 
 from pathlib import Path
 import shutil
+
+import os
+import dagshub
+
+import mlflow
+import mlflow.lightgbm
 
 import joblib
 import numpy as np
@@ -218,6 +227,15 @@ def sanitize_feature_names(cols: List[str]) -> List[str]:
 
 
 def main():
+    # Dagshub/MLflow setup
+    dagshub_token = os.getenv("DAGSHUB_TOKEN")
+    if dagshub_token:
+        os.environ["MLFLOW_TRACKING_USERNAME"] = "Shab00"
+        os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+        dagshub.init(repo_owner='Shab00', repo_name='Over-Under2.5Goals', mlflow=True)
+    else:
+        print("[train] No DAGSHUB_TOKEN found — logging to local MLflow only")
+
     print("[train_homewin_weekly] settings:")
     print(json.dumps({k: v for k, v in vars(args).items()}, indent=2))
 
@@ -226,11 +244,6 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
 
     df_raw = pd.read_csv(train_path, low_memory=False)
-    #print("\n[DEBUG] RAW DATA CHECK")
-    #print("raw shape:", df_raw.shape)
-    #print("raw max date:", pd.to_datetime(df_raw["Date"], errors="coerce").max())
-    #print("raw FTR non-null:", df_raw["FTR"].notna().sum())
-    #print(df_raw[["Date", "FTR", "HomeTeam", "AwayTeam"]].tail(20))
     df_clean, teams = clean_and_engineer_features(
         df_raw, COLUMNS_TO_KEEP, fit_teams=True, n_matches=args.n_matches_form
     )
@@ -238,6 +251,7 @@ def main():
     engineered_path.parent.mkdir(parents=True, exist_ok=True)
     df_clean.to_csv(engineered_path, index=False)
     print(f"saved engineered features -> {engineered_path}")
+
     target = "HomeWin"
     X = df_clean.drop(columns=COLS_TO_DROP_FOR_X, errors="ignore")
     y = df_clean[target].astype(int)
@@ -250,53 +264,67 @@ def main():
         X, y, test_size=args.test_size, random_state=args.random_state
     )
 
-    model = LGBMClassifier(random_state=args.random_state)
-    model.fit(X_train, y_train)
-
-    y_pred = model.predict(X_test)
-    acc = accuracy_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred)
-
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    model_path = out_dir / f"lightgbm_homewin_{ts}.pkl"
-    feat_path  = out_dir / f"feature_list_{ts}.pkl"
-    meta_path  = out_dir / f"metadata_{ts}.json"
+    mlflow.set_experiment("epl_homewin_prediction")
 
-    joblib.dump(model, model_path)
-    joblib.dump(list(X.columns), feat_path)
+    with mlflow.start_run(run_name=f"lgbm_{ts}"):
 
-    meta = {
-        "created_at_utc":    ts,
-        "train_csv":         str(train_path),
-        "rows_used":         int(len(df_clean)),
-        "features":          int(X.shape[1]),
-        "test_size":         args.test_size,
-        "random_state":      args.random_state,
-        "n_matches_form":    args.n_matches_form,
-        "metrics":           {"accuracy": float(acc), "f1": float(f1)},
-        "model_path":        str(model_path),
-        "feature_list_path": str(feat_path),
-        "teams_count":       len(teams),
-        "python":            sys.version.splitlines()[0],
-        "numpy":             np.__version__,
-        "pandas":            pd.__version__,
-    }
-    meta_path.write_text(json.dumps(meta, indent=2))
+        mlflow.log_param("test_size", args.test_size)
+        mlflow.log_param("random_state", args.random_state)
+        mlflow.log_param("n_matches_form", args.n_matches_form)
+        mlflow.log_param("rows_used", len(df_clean))
+        mlflow.log_param("features", X.shape[1])
 
-    print(f"[train_homewin_weekly] rows={len(df_clean)} features={X.shape[1]}")
-    print(f"[train_homewin_weekly] accuracy={acc:.4f} f1={f1:.4f}")
-    print(f"[train_homewin_weekly] saved model         -> {model_path}")
-    print(f"[train_homewin_weekly] saved feature list  -> {feat_path}")
-    print(f"[train_homewin_weekly] saved metadata      -> {meta_path}")
+        model = LGBMClassifier(random_state=args.random_state)
+        model.fit(X_train, y_train)
 
-    Path("artifacts").mkdir(parents=True, exist_ok=True)
-    shutil.copy2(meta_path, Path("artifacts/train_report.json"))
-    print(f"[train_homewin_weekly] copied metadata      -> artifacts/train_report.json")
+        y_pred = model.predict(X_test)
+        acc = accuracy_score(y_test, y_pred)
+        f1 = f1_score(y_test, y_pred)
 
+        mlflow.log_metric("accuracy", float(acc))
+        mlflow.log_metric("f1", float(f1))
+        mlflow.lightgbm.log_model(model, "model")
 
-    #print("\n[train_homewin_weekly] Feature columns used for training (in order):")
-    #for col in X.columns:
-        #print(col)
+        model_path = out_dir / f"lightgbm_homewin_{ts}.pkl"
+        feat_path  = out_dir / f"feature_list_{ts}.pkl"
+        meta_path  = out_dir / f"metadata_{ts}.json"
+
+        joblib.dump(model, model_path)
+        joblib.dump(list(X.columns), feat_path)
+
+        meta = {
+            "created_at_utc":    ts,
+            "train_csv":         str(train_path),
+            "rows_used":         int(len(df_clean)),
+            "features":          int(X.shape[1]),
+            "test_size":         args.test_size,
+            "random_state":      args.random_state,
+            "n_matches_form":    args.n_matches_form,
+            "metrics":           {"accuracy": float(acc), "f1": float(f1)},
+            "model_path":        str(model_path),
+            "feature_list_path": str(feat_path),
+            "teams_count":       len(teams),
+            "python":            sys.version.splitlines()[0],
+            "numpy":             np.__version__,
+            "pandas":            pd.__version__,
+        }
+        meta_path.write_text(json.dumps(meta, indent=2))
+
+        mlflow.log_artifact(str(meta_path))
+        mlflow.log_artifact(str(feat_path))
+
+        Path("artifacts").mkdir(parents=True, exist_ok=True)
+        shutil.copy2(meta_path, Path("artifacts/train_report.json"))
+
+        print(f"[train_homewin_weekly] rows={len(df_clean)} features={X.shape[1]}")
+        print(f"[train_homewin_weekly] accuracy={acc:.4f} f1={f1:.4f}")
+        print(f"[train_homewin_weekly] saved model         -> {model_path}")
+        print(f"[train_homewin_weekly] saved feature list  -> {feat_path}")
+        print(f"[train_homewin_weekly] saved metadata      -> {meta_path}")
+        print(f"[train_homewin_weekly] copied metadata      -> artifacts/train_report.json")
+        print(f"[train_homewin_weekly] mlflow run logged")
+
 
 if __name__ == "__main__":
     main()

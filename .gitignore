@@ -59,3 +59,7 @@ pip-log.txt
 # Logs
 *.log
 data/processed/news_context.json
+mlruns/
+mlflow.db
+models/weekly/homewin/*.pkl
+models/weekly/homewin/*.json

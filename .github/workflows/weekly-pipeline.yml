@@ -41,6 +41,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN  }}
         run: bash jobs/run_weekly_pipeline.sh
 
       - name: Archive snapshot
