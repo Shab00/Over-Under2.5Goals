@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from dotenv import load_dotenv
+load_dotenv()
+
 import json
 import re
 import sys
@@ -9,6 +12,9 @@ from typing import List, Optional, Tuple
 
 from pathlib import Path
 import shutil
+
+import os
+import dagshub
 
 import mlflow
 import mlflow.lightgbm
@@ -221,6 +227,15 @@ def sanitize_feature_names(cols: List[str]) -> List[str]:
 
 
 def main():
+    # Dagshub/MLflow setup
+    dagshub_token = os.getenv("DAGSHUB_TOKEN")
+    if dagshub_token:
+        os.environ["MLFLOW_TRACKING_USERNAME"] = "Shab00"
+        os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+        dagshub.init(repo_owner='Shab00', repo_name='Over-Under2.5Goals', mlflow=True)
+    else:
+        print("[train] No DAGSHUB_TOKEN found — logging to local MLflow only")
+
     print("[train_homewin_weekly] settings:")
     print(json.dumps({k: v for k, v in vars(args).items()}, indent=2))
 

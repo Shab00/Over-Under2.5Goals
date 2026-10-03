@@ -21,3 +21,4 @@ python-dotenv
 json5
 pydantic
 mlflow
+dagshub
