@@ -20,3 +20,4 @@ faiss-cpu
 python-dotenv
 json5
 pydantic
+mlflow
