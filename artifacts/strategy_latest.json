@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-10-03T09:08:10.866353+00:00",
+  "generated_at": "2026-10-04T10:54:23.271230+00:00",
   "mode": "no_fixtures",
   "next_matchday": "2026-10-10",
   "lookback_ready": true,
-  "lookback_summary": "Well, it was a mixed bag for the model this weekend! It did nail the prediction for Fulham vs Man United, calling the draw correctly, and also got it right with Man City’s home win over Sunderland. But it had to eat humble pie on the Leeds vs Crystal Palace match, where it thought Leeds would take the points at home, only for it to end in a stalemate. The model also missed the mark with Everton, predicting a loss when they actually managed to secure a home win against Ipswich. On the flip side, it correctly anticipated Liverpool's away victory at Bournemouth and Newcastle's solid performance against Hull City, which was a nice touch given the banker status. Overall, a decent weekend but definitely some surprises that left us scratching our heads!",
+  "lookback_summary": "What a weekend it was in the Premier League! The model had a mixed bag, but let's break it down. It correctly predicted a draw in the Fulham vs. Man United clash, so props for that one! However, it had to eat humble pie on Leeds vs. Crystal Palace, as a draw was not what we expected from that fixture. \n\nOn the brighter side, the model nailed the prediction for Man City, who overwhelmed Sunderland at home, and also got it right for Liverpool's solid away win against Bournemouth. It also correctly called Coventry City's win over Nott'm Forest, but unfortunately, it faltered with Everton, who managed to edge past Ipswich Town when the model predicted otherwise. Newcastle’s home success over Hull was another highlight for the model, but it misjudged Brighton’s impressive victory against Arsenal. And finally, the model whiffed on Tottenham vs. Aston Villa, suggesting we avoid it altogether. Overall, a mixed performance, but some strong calls to celebrate!",
   "gameweek_summary": "",
   "rest_of_card_paragraph": "",
   "top_picks": [],
