@@ -6,8 +6,11 @@ The system is fully automated and currently running for the **2026–27 season**
 [![CI](https://github.com/Shab00/Over-Under2.5Goals/actions/workflows/ci.yml/badge.svg)](https://github.com/Shab00/Over-Under2.5Goals/actions)
 
 **Live predictions:** [https://shab00.github.io/football/](https://shab00.github.io/football/)  
+
 **Telegram channel:** [https://t.me/HomeWinPrediction](https://t.me/HomeWinPrediction)
+
 **ML Experiments:** [https://dagshub.com/Shab00/Over-Under2.5Goals/experiments](https://dagshub.com/Shab00/Over-Under2.5Goals/experiments)  
+
 **Inference API:** [https://epl-predictor.happymushroom-b2d256ff.uksouth.azurecontainerapps.io](https://epl-predictor.happymushroom-b2d256ff.uksouth.azurecontainerapps.io)
 
 ---
