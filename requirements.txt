@@ -22,3 +22,4 @@ json5
 pydantic
 mlflow
 dagshub
+psycopg2-binary

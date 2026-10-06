@@ -63,3 +63,7 @@ mlruns/
 mlflow.db
 models/weekly/homewin/*.pkl
 models/weekly/homewin/*.json
+.env
+
+task_postgres_phase*.txt
+nudge.txt

@@ -45,3 +45,6 @@ python jobs/generate_strategy.py
 
 echo "[pipeline] Delivering strategy to Telegram..."
 python jobs/deliver_strategy_telegram.py
+
+echo "[pipeline] Saving database..."
+python jobs/save_to_db.py
