@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-10-06T09:09:52.550613+00:00",
+  "scraped_at": "2026-10-07T09:10:27.119396+00:00",
   "fixtures": [
     {
       "home_team": "arsenal",
@@ -284,6 +284,96 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
           "first_seen": "2026-10-06T09:09:52.550613+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Arsenal injury update: Konsa, Tzolis and Havertz latest return dates",
+          "source": "",
+          "time_ago": "20h",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Arsenal handed Ezri Konsa injury update ahead of Leeds clash",
+          "source": "",
+          "time_ago": "1d",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Arsenal injury news: Max Dowman withdraws from England squad to add to Mikel Arteta's fitness concerns",
+          "source": "",
+          "time_ago": "1d",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Arsenal injury nightmare continues ahead of Leeds United - fresh report leaves Mikel Arteta 'sweating'",
+          "source": "",
+          "time_ago": "06:04",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Mikel Merino gives Mikel Arteta exactly what he wanted after Arsenal injury blow",
+          "source": "",
+          "time_ago": "22:56",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "How serious is Max Dowman’s injury after leaving England U19 camp?",
+          "source": "",
+          "time_ago": "21:07",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "£51m Arsenal star joins growing injury list ahead of Leeds United – Multiple stars may miss out",
+          "source": "",
+          "time_ago": "51m",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Arsenal learn chances of Konsa facing Leeds as Arteta handed triple injury boost",
+          "source": "",
+          "time_ago": "19:03",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Ezri Konsa injury update ahead of Arsenal vs Leeds United",
+          "source": "",
+          "time_ago": "16:35",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Latest on Dowman injury after England u19 withdrawal",
+          "source": "",
+          "time_ago": "14:04",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
         }
       ],
       "away_news": [
@@ -547,6 +637,69 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
           "first_seen": "2026-10-06T09:09:52.550613+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Arsenal receive triple injury boost ahead of Leeds fixture",
+          "source": "",
+          "time_ago": "19h",
+          "team": "leeds",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Leeds United latest news: Four in international action as Arsenal injury nightmare continues",
+          "source": "",
+          "time_ago": "08:26",
+          "team": "leeds",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Leeds v Brentford confirmed team news: Anthony and Damsgaard start, Diouf on bench",
+          "source": "",
+          "time_ago": "08:10",
+          "team": "leeds",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Jean-Matteo Bahoya, Joe Rodon, Harry Wilson - Leeds United injury news and return dates",
+          "source": "",
+          "time_ago": "07:36",
+          "team": "leeds",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Daniel Farke relieved as Leeds United star avoids pre-Arsenal fitness worry: View",
+          "source": "",
+          "time_ago": "22:51",
+          "team": "leeds",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Official update issued as Leeds United gem sustains injury on international duty",
+          "source": "",
+          "time_ago": "18:57",
+          "team": "leeds",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Leeds United learn state of play vs Arsenal as injury update drops - report",
+          "source": "",
+          "time_ago": "17:29",
+          "team": "leeds",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
         }
       ]
     },
@@ -662,6 +815,60 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Aston+Villa/Injuries+and+Suspensions",
           "first_seen": "2026-10-06T09:09:52.550613+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Cash, Goretzka & Torres: Latest Aston Villa injury news and return dates ahead of Brentford clash",
+          "source": "",
+          "time_ago": "1d",
+          "team": "aston villa",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Aston+Villa/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Aston Villa star returns to Birmingham with injury after four starts in 10 days",
+          "source": "",
+          "time_ago": "1d",
+          "team": "aston villa",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Aston+Villa/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "‘Severe pain’ – Injury blow for Aston Villa player, to undergo tests to determine damage",
+          "source": "",
+          "time_ago": "1d",
+          "team": "aston villa",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Aston+Villa/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Matty Cash injury update as Aston Villa handed boost for Brentford clash",
+          "source": "",
+          "time_ago": "09:40",
+          "team": "aston villa",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Aston+Villa/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Aston Villa injury news: Key player left in 'severe pain' on international duty, doubt for Brentford game",
+          "source": "",
+          "time_ago": "16:00",
+          "team": "aston villa",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Aston+Villa/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Aston Villa hopeful after defender forced off with injury",
+          "source": "",
+          "time_ago": "13:17",
+          "team": "aston villa",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Aston+Villa/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
         }
       ],
       "away_news": [
@@ -763,6 +970,24 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Brentford/Injuries+and+Suspensions",
           "first_seen": "2026-10-06T09:09:52.550613+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Leeds v Brentford confirmed Team News: Anthony and Damsgaard start, Diouf on bench",
+          "source": "",
+          "time_ago": "2h",
+          "team": "brentford",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Brentford/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "PL2 POTM Furo misses out on full Brentford debut against Reading after undergoing surgery",
+          "source": "",
+          "time_ago": "08:10",
+          "team": "brentford",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Brentford/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
         }
       ]
     },
@@ -860,6 +1085,51 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
           "first_seen": "2026-10-05T09:16:23.001619+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Chelsea injury latest: Cole Palmer, Moises Caicedo and more",
+          "source": "",
+          "time_ago": "14h",
+          "team": "chelsea",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Chelsea injury update: Caicedo, Joao Pedro, Palmer latest return dates",
+          "source": "",
+          "time_ago": "21h",
+          "team": "chelsea",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Palmer, Pedro and Caicedo: Chelsea injury list and return dates ahead of Bournemouth clash",
+          "source": "",
+          "time_ago": "09:19",
+          "team": "chelsea",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "‘Like losing John Terry or Gianfranco Zola’ - Moises Caicedo’s importance to Chelsea talked up as Frank Leboeuf wonders if replacement for £125m Enzo Fernandez is required",
+          "source": "",
+          "time_ago": "125m",
+          "team": "chelsea",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Chelsea star Moises Caicedo handed eight-point penalty for driving £160k supercar without valid licence",
+          "source": "",
+          "time_ago": "18:54",
+          "team": "chelsea",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
         }
       ],
       "away_news": [
@@ -933,6 +1203,24 @@
           "team": "bournemouth",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Bournemouth/Injuries+and+Suspensions",
           "first_seen": "2026-10-06T09:09:52.550613+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Liverpool Are Facing Tough Competition For This Bournemouth Midfielder: Decent Fit For Iraola?",
+          "source": "",
+          "time_ago": "20:51",
+          "team": "bournemouth",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Bournemouth/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "View: Forget Alex Scott, Bournemouth can get £100m for player Liverpool want to sign",
+          "source": "",
+          "time_ago": "100m",
+          "team": "bournemouth",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Bournemouth/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
           "is_injury_concern": false
         }
       ]
@@ -1139,6 +1427,15 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Sunderland/Injuries+and+Suspensions",
           "first_seen": "2026-10-06T09:09:52.550613+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Brobbey, Ballard, Diarra - Sunderland injury news and return dates ahead of Brighton",
+          "source": "",
+          "time_ago": "18h",
+          "team": "sunderland",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Sunderland/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
         }
       ],
       "away_news": [
@@ -1257,6 +1554,15 @@
           "team": "brighton",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Brighton/Injuries+and+Suspensions",
           "first_seen": "2026-10-05T09:16:23.001619+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Minteh, Hinshelwood, Mitoma - Brighton injury news and return dates ahead of Sunderland",
+          "source": "",
+          "time_ago": "2m",
+          "team": "brighton",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Brighton/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
           "is_injury_concern": false
         }
       ]
@@ -1426,6 +1732,33 @@
           "team": "man united",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
           "first_seen": "2026-10-06T09:09:52.550613+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Man Utd star reveals surprise training methods as speedy injury return targeted",
+          "source": "",
+          "time_ago": "18h",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Man Utd player’s injury ‘of particular concern’: Carrick dealt seismic double fitness blow days before Spurs clash",
+          "source": "",
+          "time_ago": "07:06",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Manuel Ugarte reveals psychological work behind the scenes as he targets Man United return",
+          "source": "",
+          "time_ago": "14:34",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
           "is_injury_concern": false
         }
       ],
@@ -1717,6 +2050,42 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Tottenham+Hotspur/Injuries+and+Suspensions",
           "first_seen": "2026-10-06T09:09:52.550613+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Ledley King backs ‘this’ ‘tremendous footballer’ to come good for Tottenham amidst a rocky start at the club",
+          "source": "",
+          "time_ago": "14h",
+          "team": "tottenham",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Tottenham+Hotspur/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Tottenham make January exit decision and tell player’s camp – Extension now ruled out",
+          "source": "",
+          "time_ago": "17h",
+          "team": "tottenham",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Tottenham+Hotspur/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Tottenham Hotspur receive injury boost ahead of Man United clash",
+          "source": "",
+          "time_ago": "21h",
+          "team": "tottenham",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Tottenham+Hotspur/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Tottenham Star Not Yet Ruled Out Of Old Trafford Visit",
+          "source": "",
+          "time_ago": "05:46",
+          "team": "tottenham",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Tottenham+Hotspur/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
         }
       ]
     },
@@ -2003,6 +2372,15 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Hull+City/Injuries+and+Suspensions",
           "first_seen": "2026-10-05T09:16:23.001619+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Hull City hit by injury blow with hopes of Everton reunion scuppered as Ansah update emerges",
+          "source": "",
+          "time_ago": "12:30",
+          "team": "hull city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Hull+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
         }
       ],
       "away_news": [
@@ -2076,6 +2454,15 @@
           "team": "everton",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Everton/Injuries+and+Suspensions",
           "first_seen": "2026-10-05T09:16:23.001619+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Mykolenko ruled out of Ukraine’s Nations League clash with Northern Ireland",
+          "source": "",
+          "time_ago": "13:45",
+          "team": "everton",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Everton/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
           "is_injury_concern": false
         }
       ]
@@ -2273,6 +2660,96 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
           "first_seen": "2026-10-06T09:09:52.550613+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Liverpool have two options to replace Jeremy Jacquet as transfer possibility emerges",
+          "source": "",
+          "time_ago": "4h",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Liverpool injury latest and possible return dates including Jeremy Jacquet and Cody Gakpo",
+          "source": "",
+          "time_ago": "18h",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Isak, Gakpo, Jacquet, Leoni - Liverpool injury news and return dates ahead of Man City",
+          "source": "",
+          "time_ago": "17h",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Defender returns to Liverpool after latest injury blow",
+          "source": "",
+          "time_ago": "19h",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Liverpool cancel loan transfer as starlet ruled out by injury",
+          "source": "",
+          "time_ago": "1d",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "What Zidane said about Jeremy Jacquet injury as Liverpool defender to face further assessment",
+          "source": "",
+          "time_ago": "19h",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Liverpool Waiting on Jacquet Fitness",
+          "source": "",
+          "time_ago": "09:11",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Liverpool told they already have ‘brilliant’ transfer solution that can save them millions",
+          "source": "",
+          "time_ago": "20:38",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "3 potential Jeremy Jacquet replacements for Liverpool vs Man City amid fresh injury worry",
+          "source": "",
+          "time_ago": "18:13",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Liverpool dealt another injury worry following Gakpo and Isak withdrawals",
+          "source": "",
+          "time_ago": "17:11",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
         }
       ],
       "away_news": [
@@ -2419,6 +2896,24 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+City/Injuries+and+Suspensions",
           "first_seen": "2026-10-06T09:09:52.550613+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Man City grant Erling Haaland special request as as concerns mount following 114-count guilty verdict",
+          "source": "",
+          "time_ago": "08:19",
+          "team": "man city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Norway boss provides update on Man City striker Haaland’s fitness",
+          "source": "",
+          "time_ago": "19:04",
+          "team": "man city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
         }
       ]
     },
@@ -2561,6 +3056,114 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
           "first_seen": "2026-10-06T09:09:52.550613+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Bayern Munich ramps back up to face FC Augsburg",
+          "source": "",
+          "time_ago": "8h",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Nico Schlotterbeck could return for Borussia Dortmund’s Champions League game",
+          "source": "",
+          "time_ago": "36m",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Ryerson remains doubtful for Dortmund’s clash with Werder due to rib injury",
+          "source": "",
+          "time_ago": "2d",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Cardiff City defender Krystian Bielik handed a two-match suspension following a touchline altercation with a Portsmouth supporter",
+          "source": "",
+          "time_ago": "18h",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Cardiff City's Krystian Bielik banned and fined after Portsmouth fan incident",
+          "source": "",
+          "time_ago": "20h",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Championship defender given £10,000 fine and two-match ban for grabbing Portsmouth fan by the throat",
+          "source": "",
+          "time_ago": "20h",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Championship defender given two-match ban by FA for grabbing teenage supporter's neck",
+          "source": "",
+          "time_ago": "19h",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Norwich City injury problems mounting with another blow confirmed",
+          "source": "",
+          "time_ago": "10:29",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Norwich City face another injury concern as youngster withdraws from international duty",
+          "source": "",
+          "time_ago": "12:39",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "West Ham vs. QPR Team News: FIFA complaint emerges as national team says London club broke regulations",
+          "source": "",
+          "time_ago": "1d",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Finland taking QPR to FIFA and Kamara could face club suspension",
+          "source": "",
+          "time_ago": "1d",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "'It’s gone from bad to worse' - QPR, Richard Kone verdict made after 'disgusting' incident (Fan view)",
+          "source": "",
+          "time_ago": "07:45",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
         }
       ],
       "away_news": [
@@ -2598,6 +3201,33 @@
           "team": "newcastle",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Newcastle+United/Injuries+and+Suspensions",
           "first_seen": "2026-10-06T09:09:52.550613+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Ewen Jaouen injury worse than first feared in fresh blow to Newcastle",
+          "source": "",
+          "time_ago": "09:31",
+          "team": "newcastle",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Newcastle+United/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Exclusive: Newcastle United star requires surgery after scan result worse than expected",
+          "source": "",
+          "time_ago": "16:31",
+          "team": "newcastle",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Newcastle+United/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Newcastle United monitor 6ft 6in Ajax star after teenage ace recovers from horror injury",
+          "source": "",
+          "time_ago": "10:45",
+          "team": "newcastle",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Newcastle+United/Injuries+and+Suspensions",
+          "first_seen": "2026-10-07T09:10:27.119396+00:00",
           "is_injury_concern": false
         }
       ]
