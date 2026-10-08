@@ -1,0 +1,51 @@
+STRICT SCOPE:
+- Work ONLY inside ~/Documents/GitHub/Over-Under2.5Goals/dashboard/
+- Do NOT touch ../football/ (pipeline-owned, live site)
+- Do NOT run git commands
+- Do NOT run npm run build
+- Do NOT add dependencies
+- Do NOT stop and ask — execute all steps and show output at the end
+
+GOAL: Add a "Live Predict" section to the existing React dashboard.
+
+CONTEXT:
+- App already renders AccuracyWidget and FixtureTable
+- Azure API is CORS-enabled and responds to POST
+- Endpoint: https://epl-predictor.happymushroom-b2d256ff.uksouth.azurecontainerapps.io/predict
+- Request body: {"home_team": string, "away_team": string, "odds_home": number, "odds_draw": number, "odds_away": number}
+- Response: {"home_team": string, "away_team": string, "prob_homewin": number (0-1), "signal": string, "betting_category": string}
+- betting_category values match the SignalBadge component already in use: back_home | avoid | double_chance | strong_fade
+- ConfidenceBar component accepts a `value` prop in 0-1 range
+- Design language: dark theme, CSS variables (--panel, --panel-border, --accent, --muted, --text, --red). Match existing components.
+
+BUILD:
+
+1. Append to src/lib/types.ts:
+   interface PredictRequest { home_team, away_team, odds_home, odds_draw, odds_away }
+   interface PredictResponse { home_team, away_team, prob_homewin, signal, betting_category }
+
+2. Create src/lib/api.ts:
+   - Export async function predict(req: PredictRequest): Promise<PredictResponse>
+   - POST to the Azure endpoint, Content-Type application/json
+   - Throw Error with status + body text on non-2xx
+
+3. Create src/components/LivePredictSection.tsx:
+   - Form with 5 inputs: home team, away team, odds home, odds draw, odds away
+   - Prefill: Arsenal / Leeds / 1.38 / 5.0 / 8.0
+   - Submit button labeled "Predict"
+   - On submit: call predict(), show loading state on button
+   - On success: render prob as percentage, ConfidenceBar, SignalBadge
+   - On error: render error message in red panel
+   - Add a small note above form: "First request after idle may take ~30 seconds."
+   - Use inline styles matching existing components
+
+4. Update src/App.tsx:
+   - Import LivePredictSection
+   - Render <LivePredictSection /> after <FixtureTable>
+
+After writing files:
+1. Show file tree of src/
+2. Show full content of LivePredictSection.tsx
+3. Show full content of App.tsx
+
+Then STOP.

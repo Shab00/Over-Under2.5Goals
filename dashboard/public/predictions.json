@@ -1,0 +1,46 @@
+[
+  {
+    "match_key": "2026-10-10|Arsenal|Leeds",
+    "kickoff_time_utc": "2026-10-10T11:30:00Z",
+    "home_team": "Arsenal",
+    "away_team": "Leeds",
+    "prob_homewin": 0.5314,
+    "pred_label": 1,
+    "odds_B365H": 1.38,
+    "signal": "Home",
+    "betting_category": "avoid"
+  },
+  {
+    "match_key": "2026-10-10|Aston Villa|Brentford",
+    "kickoff_time_utc": "2026-10-10T14:00:00Z",
+    "home_team": "Aston Villa",
+    "away_team": "Brentford",
+    "prob_homewin": 0.2627,
+    "pred_label": 0,
+    "odds_B365H": 2.69,
+    "signal": "Not Home",
+    "betting_category": "strong_fade"
+  },
+  {
+    "match_key": "2026-10-10|Chelsea|Bournemouth",
+    "kickoff_time_utc": "2026-10-10T14:00:00Z",
+    "home_team": "Chelsea",
+    "away_team": "Bournemouth",
+    "prob_homewin": 0.2206,
+    "pred_label": 0,
+    "odds_B365H": 1.75,
+    "signal": "Not Home",
+    "betting_category": "double_chance"
+  },
+  {
+    "match_key": "2026-10-11|Liverpool|Man City",
+    "kickoff_time_utc": "2026-10-11T15:30:00Z",
+    "home_team": "Liverpool",
+    "away_team": "Man City",
+    "prob_homewin": 0.1438,
+    "pred_label": 0,
+    "odds_B365H": 2.62,
+    "signal": "Not Home",
+    "betting_category": "strong_fade"
+  }
+]

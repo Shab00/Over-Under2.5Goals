@@ -1,0 +1,153 @@
+STRICT SCOPE:
+- Work ONLY inside ~/Documents/GitHub/Over-Under2.5Goals/dashboard/
+- Do NOT touch ../football/ (pipeline-owned, live site)
+- Do NOT run git commands
+- Do NOT run npm commands (no build, no install)
+- Do NOT add dependencies
+- Do NOT stop and ask — execute all steps
+
+GOAL: Expand the React dashboard into a full replacement for the static
+football/index.html page. Same information, same visual style, same data —
+but pulled from Supabase and local JSON instead of baked HTML.
+
+DATA SOURCES AVAILABLE:
+
+From Supabase (already configured in src/lib/supabase.ts):
+- Table `predictions`: match_key, kickoff_time, home_team, away_team,
+  prob_homewin, pred_label, odds_B365H, signal, betting_category, generated_at
+- Table `results`: match_key, kickoff_time, home_team, away_team, ftr, fthg,
+  ftag, home_win, prediction, correct, implied_prob, is_edge, edge_correct,
+  is_fade, fade_correct, profit
+- View `public_accuracy`: total_count, correct_count, accuracy_pct
+- View `public_accuracy_by_category`: category, n, correct_n, accuracy_pct
+- View `public_rolling_accuracy`: n, correct_n, accuracy_pct
+- View `public_calibration`: bucket, n, avg_predicted_pct, actual_accuracy_pct
+- View `public_signal_performance`: signal_type, n, correct_n, accuracy_pct, total_profit
+
+From local public/ folder (fetched via relative path, no leading slash):
+- predictions.json — upcoming fixtures
+- pundit.json — pundit narrative + top picks + strong fades + double chances
+- match_context.json — form, H2H, referee, league position per fixture
+- train_report.json — model accuracy, F1, features, training timestamp
+
+From Azure API (already configured in src/lib/api.ts):
+- POST /predict — live prediction form (already built, keep as-is)
+
+DESIGN LANGUAGE:
+- Dark theme, CSS variables already in src/index.css: --bg, --panel,
+  --panel-border, --text, --muted, --accent, --green, --amber, --red
+- Match the layout of the static page: sections stacked vertically,
+  uppercase small eyebrow labels, dark cards with rounded corners
+- Reference the old static page at ../football/index.html for structure
+- Use inline styles matching the existing components (SignalBadge,
+  ConfidenceBar, FixtureTable, AccuracyWidget)
+
+BUILD IN THIS ORDER:
+
+1. src/lib/types.ts — append these interfaces:
+   Result {
+     match_key: string;
+     kickoff_time: string;
+     home_team: string;
+     away_team: string;
+     ftr: string | null;
+     fthg: number | null;
+     ftag: number | null;
+     home_win: boolean | null;
+     prediction: string | null;
+     correct: boolean | null;
+     implied_prob: number | null;
+     is_edge: boolean | null;
+     edge_correct: boolean | null;
+     is_fade: boolean | null;
+     fade_correct: boolean | null;
+     profit: number | null;
+   }
+   CategoryStats { category: string; n: number; correct_n: number; accuracy_pct: number }
+   RollingStats { n: number; correct_n: number; accuracy_pct: number }
+   CalibrationBucket { bucket: string; n: number; avg_predicted_pct: number; actual_accuracy_pct: number }
+   SignalPerformance { signal_type: string; n: number; correct_n: number; accuracy_pct: number; total_profit: number | null }
+   Pundit { summary?: string; top_picks?: any[]; strong_fades?: any[]; double_chances?: any[]; pundit_view?: string; [key: string]: any }
+   TrainReport { accuracy?: number; f1?: number; features?: number; trained_at?: string; [key: string]: any }
+
+2. src/lib/queries.ts — new file with these async functions:
+   - fetchFixtures(): Promise<Prediction[] | null>
+   - fetchRecentResults(limit=10): Promise<Result[] | null>
+   - fetchCategoryStats(): Promise<CategoryStats[] | null>
+   - fetchRolling(): Promise<RollingStats | null>
+   - fetchCalibration(): Promise<CalibrationBucket[] | null>
+   - fetchSignals(): Promise<SignalPerformance[] | null>
+   - fetchPundit(): Promise<Pundit | null>
+   - fetchMatchContext(): Promise<Record<string, any> | null>
+   - fetchTrainReport(): Promise<TrainReport | null>
+
+   Each function: wrap in try/catch, log errors to console, return null on failure.
+   For JSON files use fetch('filename.json') — no leading slash.
+
+3. Components to create in src/components/:
+
+   a. Section.tsx
+      Props: { title: string; eyebrow?: string; children: React.ReactNode }
+      Renders: <section> with optional eyebrow (small uppercase accent colour),
+      <h2> title, then children. Consistent margin bottom.
+
+   b. RecentResultsTable.tsx
+      Fetches fetchRecentResults(10) on mount.
+      Table columns: Date, Home, Away, Score, Predicted, Actual, Correct?
+      Colour the Correct? cell green when true, red when false, muted when null.
+      If no data, show "No recent results yet."
+
+   c. PerformanceTracker.tsx
+      Fetches fetchRolling() and fetchSignals() on mount.
+      Grid of stat cards (2x3 or responsive):
+        - Overall accuracy (from public_accuracy — reuse AccuracyWidget or fetch it)
+        - Rolling (last 10)
+        - Edge accuracy + P&L
+        - Fade accuracy
+      Each card: small uppercase label, big number, subtext.
+
+   d. AccuracyByCategory.tsx
+      Fetches fetchCategoryStats().
+      Small table: Category, Count, Accuracy %.
+
+   e. CalibrationTable.tsx
+      Fetches fetchCalibration().
+      Table: Bucket, Count, Predicted %, Actual %.
+      Optional: show a bar comparing predicted vs actual.
+
+   f. PunditSection.tsx
+      Fetches fetchPundit().
+      Renders: narrative paragraph, then lists for top_picks,
+      strong_fades, double_chances if present in the JSON.
+      Match the visual style of the old static page's pundit section.
+
+   g. TrainReport.tsx
+      Fetches fetchTrainReport().
+      Small footer strip: "Model accuracy: X% · F1: Y · Features: Z · Trained: date"
+
+4. Update src/App.tsx:
+   - Keep existing: AccuracyWidget, FixtureTable, LivePredictSection
+   - Add imports for all new components
+   - Render in this order inside <main>:
+       1. Header (title, subtitle, "Last updated" if available)
+       2. AccuracyWidget
+       3. FixtureTable
+       4. PunditSection
+       5. RecentResultsTable
+       6. PerformanceTracker
+       7. AccuracyByCategory
+       8. CalibrationTable
+       9. LivePredictSection
+       10. TrainReport
+       11. Footer link back to portfolio
+   - Wrap each in the Section component for consistent spacing
+
+5. Do NOT hardcode any data. Everything must come from queries or fetch.
+
+AFTER BUILDING:
+1. Show the file tree of src/
+2. Show the full src/lib/queries.ts
+3. Show the full src/App.tsx
+4. List every file created or modified
+
+Then STOP. Do not build. Do not commit. Do not run npm.
