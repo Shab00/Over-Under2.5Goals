@@ -2,17 +2,17 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This week features some intriguing matchups, particularly Sunderland against Brighton where the away side looks poised to dominate. Arsenal's clash with Leeds is too close to call, but keep an eye on Brentford's visit to Aston Villa for potential double chance value.
+Sunderland facing Brighton stands out as a strong fade this gameweek, with the away team in much better form. Keep an eye on the double chance for Aston Villa against Brentford, where the home side is struggling but not without hope.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-Sunderland against Brighton is a strong fade; the away team is in excellent form compared to Sunderland's struggles, making this a good opportunity to back Brighton. For double chances, Aston Villa hosting Brentford offers a decent chance for a draw or away win given both teams' recent form. Similarly, Chelsea versus Bournemouth and Ipswich Town against Fulham are also worth considering for double chance bets, with the home teams lacking the confidence to secure wins. Arsenal's matchup with Leeds is simply too close to call. The model is currently HOT over its last 46 confident predictions.
+In the strong fade category, Sunderland should be backed to win against Brighton, given their poor home form and the away team's solid recent performances. For double chances, Aston Villa against Brentford is interesting, though Villa's recent struggles raise concerns. Chelsea also faces Bournemouth with a similar outlook; both teams are underwhelming, making a draw or away win a safer bet. Lastly, Arsenal against Leeds is too close to call, so it's best to skip this one altogether. The model is currently HOT over its last 46 confident predictions.
 
 ## Value Bets (EDGE)
 
 ## Avoid This Week
-- **Arsenal vs Leeds** - This match is simply too close to call. Both teams have shown flashes of good form, making it a difficult one to predict.
+- **Arsenal vs Leeds** - Arsenal's form has been inconsistent, and with Leeds showing resilience, this match is too close to call.
 
 ## Model Form
 Model is HOT — 67.4% accuracy over last 46 confident predictions. EDGE profit: -0.57 units.
