@@ -1,18 +1,18 @@
-# EPL AI Pundit Strategy - 2026-10-08
+# EPL AI Pundit Strategy - 2026-10-09
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This week features some intriguing matchups, notably Sunderland against Brighton, where the away side is in great form. Keep an eye on the double chance picks, especially as Chelsea face Bournemouth, who are both struggling for form.
+This week features some intriguing matchups, particularly Sunderland against Brighton where the away side looks poised to dominate. Arsenal's clash with Leeds is too close to call, but keep an eye on Brentford's visit to Aston Villa for potential double chance value.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-Sunderland versus Brighton is a clear strong fade as Sunderland's home struggles are evident, while Brighton's recent away form has been solid. For double chances, Aston Villa against Brentford offers a decent opportunity, but Villa's inconsistent home form raises concerns. Similarly, Chelsea hosting Bournemouth suggests backing away or a draw as the home team struggles to find consistency. Arsenal versus Leeds is too close to call, making it best to skip for now. The model is currently HOT over its last 46 confident predictions.
+Sunderland against Brighton is a strong fade; the away team is in excellent form compared to Sunderland's struggles, making this a good opportunity to back Brighton. For double chances, Aston Villa hosting Brentford offers a decent chance for a draw or away win given both teams' recent form. Similarly, Chelsea versus Bournemouth and Ipswich Town against Fulham are also worth considering for double chance bets, with the home teams lacking the confidence to secure wins. Arsenal's matchup with Leeds is simply too close to call. The model is currently HOT over its last 46 confident predictions.
 
 ## Value Bets (EDGE)
 
 ## Avoid This Week
-- **Arsenal vs Leeds** - This fixture is too close to call as both teams have their strengths and weaknesses. Recent form suggests that it could go either way, making it best to skip.
+- **Arsenal vs Leeds** - This match is simply too close to call. Both teams have shown flashes of good form, making it a difficult one to predict.
 
 ## Model Form
 Model is HOT — 67.4% accuracy over last 46 confident predictions. EDGE profit: -0.57 units.
