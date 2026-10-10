@@ -232,6 +232,7 @@ def main():
     if dagshub_token:
         os.environ["MLFLOW_TRACKING_USERNAME"] = "Shab00"
         os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+        os.environ["DAGSHUB_USER_TOKEN"] = dagshub_token
         dagshub.init(repo_owner='Shab00', repo_name='Over-Under2.5Goals', mlflow=True)
     else:
         print("[train] No DAGSHUB_TOKEN found — logging to local MLflow only")
