@@ -2,17 +2,16 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This weekend features some intriguing matchups, particularly the strong fade on Aston Villa against Brentford, who are in much better form. Watch out for Liverpool's clash with Man City, where the home side is struggling but has a chance to upset the visitors.
+This gameweek features some intriguing matchups, with Chelsea against Bournemouth standing out as a double chance opportunity. Additionally, keep an eye on the Liverpool vs Man City clash, where the home side is struggling against a dominant City team.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-Starting with strong fades, Aston Villa are in deep trouble and facing a Brentford side that has been solid away, making it a prime opportunity to back the visitors. In double chance bets, Chelsea against Bournemouth presents a favorable situation to back the away team or a draw, while Ipswich Town versus Fulham also fits this mold, with both struggling but the home side notably having defensive issues. As for Arsenal against Leeds, this one is simply too close to call given their recent forms. The model is currently HOT over its last 46 confident predictions.
+Starting with strong fades, Aston Villa, Ipswich Town, Sunderland, Crystal Palace, Hull City, and Liverpool all face tough battles against better opponents, making it wise to back the away sides. In the double chance market, Chelsea vs Bournemouth offers a chance to back the draw or Bournemouth, while Man United vs Tottenham also looks shaky for the home side. With the model performing well, these bets are the safest options this gameweek. The model is currently HOT over its last 46 confident predictions.
 
 ## Value Bets (EDGE)
 
 ## Avoid This Week
-- **Arsenal vs Leeds** - Arsenal have the upper hand in recent h2h meetings with Leeds, but their current form and lack of home advantage makes this fixture too close to call. It's a pass for bettors looking for clearer edges.
 
 ## Model Form
 Model is HOT — 67.4% accuracy over last 46 confident predictions. EDGE profit: -0.57 units.
