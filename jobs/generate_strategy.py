@@ -1935,6 +1935,8 @@ def main() -> None:
                     "pundit_action": fx["bet_description"],
                     "rag_informed": False
                 }
+                if "fixtures_full" not in data:
+                    data["fixtures_full"] = []
                 data["fixtures_full"].append(fallback)
                 print(f"[strategy] injected: {key}")
 
