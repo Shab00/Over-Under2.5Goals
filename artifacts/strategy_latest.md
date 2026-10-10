@@ -2,17 +2,17 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Sunderland against Brighton stands out as a strong fade, given Brighton's excellent away form and Sunderland's struggles. The standout value bet this week is in the double chance market, particularly Aston Villa hosting Brentford.
+This weekend features some intriguing matchups, particularly the strong fade on Aston Villa against Brentford, who are in much better form. Watch out for Liverpool's clash with Man City, where the home side is struggling but has a chance to upset the visitors.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-Starting with strong fades, Sunderland hosting Brighton is a clear call, as Sunderland's recent form is dire. In double chance bets, Aston Villa against Brentford presents an opportunity, given Villa's inconsistent home form and Brentford's solid away performances. Chelsea versus Bournemouth also falls into the double chance category, with Chelsea's vulnerabilities at home making it too risky to back them outright. Arsenal versus Leeds is a skip, as it's too close to call with both teams showing mixed form. The model is currently HOT over its last 46 confident predictions.
+Starting with strong fades, Aston Villa are in deep trouble and facing a Brentford side that has been solid away, making it a prime opportunity to back the visitors. In double chance bets, Chelsea against Bournemouth presents a favorable situation to back the away team or a draw, while Ipswich Town versus Fulham also fits this mold, with both struggling but the home side notably having defensive issues. As for Arsenal against Leeds, this one is simply too close to call given their recent forms. The model is currently HOT over its last 46 confident predictions.
 
 ## Value Bets (EDGE)
 
 ## Avoid This Week
-- **Arsenal vs Leeds** - Arsenal versus Leeds is too close to call, with both teams having shown inconsistency in their recent performances.
+- **Arsenal vs Leeds** - Arsenal have the upper hand in recent h2h meetings with Leeds, but their current form and lack of home advantage makes this fixture too close to call. It's a pass for bettors looking for clearer edges.
 
 ## Model Form
 Model is HOT — 67.4% accuracy over last 46 confident predictions. EDGE profit: -0.57 units.
