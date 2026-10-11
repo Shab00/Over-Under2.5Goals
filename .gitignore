@@ -67,3 +67,7 @@ models/weekly/homewin/*.json
 
 task_postgres_phase*.txt
 nudge.txt
+
+# Model backups (local safety net)
+models/weekly/homewin.backup/
+*.orig

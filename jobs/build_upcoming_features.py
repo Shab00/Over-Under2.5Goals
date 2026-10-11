@@ -9,13 +9,14 @@ import datetime
 import re
 from pathlib import Path
 import sys
+from jobs.train_model import sanitize_feature_names
 
 # --------- CONFIG ---------
 BASE = Path(".").resolve()
 output_all = BASE / "data/raw/football_data/premier_league_2025_26_fixtures.csv"
 output_upcoming = BASE / "data/processed/premier_league_2025_26_upcoming_prediction_template.csv"
 output_annotated = BASE / "data/processed/premier_league_2025_26_upcoming_with_teams_and_date.csv"
-feature_path = BASE / "models/weekly/homewin/feature_list_20260327T205139Z.pkl"
+feature_path = sorted(BASE.glob("models/weekly/homewin/feature_list_*.pkl"))[-1]
 engineered_history_path = BASE / "data/processed/engineered_train_features.csv"
 
 API_KEY = os.environ.get("ODDS_API_KEY", "")
@@ -491,10 +492,12 @@ def main():
 
     # Save model-ready template
     feature_list = joblib.load(feature_path)
+    final_df.columns = sanitize_feature_names(list(final_df.columns))
     for col in feature_list:
         if col not in final_df.columns:
             final_df[col] = np.nan
     df_model_ready = final_df[feature_list].copy()
+    assert list(df_model_ready.columns) == list(feature_list), f"Feature mismatch: prediction {len(df_model_ready.columns)} columns vs expected {len(feature_list)} features"
     output_upcoming.parent.mkdir(parents=True, exist_ok=True)
     df_model_ready.to_csv(output_upcoming, index=False)
 
