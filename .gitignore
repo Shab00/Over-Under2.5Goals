@@ -67,3 +67,4 @@ models/weekly/homewin/*.json
 
 task_postgres_phase*.txt
 nudge.txt
+models/weekly/homewin.backup/
