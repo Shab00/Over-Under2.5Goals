@@ -85,21 +85,18 @@ export default function CalibrationTable() {
         </thead>
         <tbody>
           {buckets.map((bucket, idx) => {
-            const calibrationColor = getCalibrationColor(
-              bucket.predicted_probability * 100,
-              bucket.actual_accuracy * 100
-            );
+            const predicted = bucket.avg_predicted_pct ?? 0;
+            const actual = bucket.actual_accuracy_pct ?? 0;
+            const calibrationColor = getCalibrationColor(predicted, actual);
             return (
               <tr key={idx}>
                 <td style={td}>
-                  <strong>{bucket.confidence_range}</strong>
+                  <strong>{bucket.bucket ?? '—'}</strong>
                 </td>
-                <td style={td}>{bucket.count}</td>
-                <td style={td}>
-                  {(bucket.predicted_probability * 100).toFixed(1)}%
-                </td>
+                <td style={td}>{bucket.n ?? '—'}</td>
+                <td style={td}>{predicted.toFixed(1)}%</td>
                 <td style={{ ...td, color: calibrationColor, fontWeight: 600 }}>
-                  {(bucket.actual_accuracy * 100).toFixed(1)}%
+                  {actual.toFixed(1)}%
                 </td>
               </tr>
             );

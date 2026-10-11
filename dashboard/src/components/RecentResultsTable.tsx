@@ -28,7 +28,7 @@ export default function RecentResultsTable() {
         setError(null);
       })
       .catch((err) => {
-        setError(err?.message || 'Failed to fetch results');
+        setError(err?.message || 'Failed to fetch recent results');
         setResults(null);
       })
       .finally(() => setLoading(false));
@@ -80,35 +80,45 @@ export default function RecentResultsTable() {
           </tr>
         </thead>
         <tbody>
-          {results.map((result) => (
-            <tr key={result.id}>
-              <td style={td}>
-                {new Date(result.kickoff_time).toLocaleDateString('en-GB', {
-                  weekday: 'short',
-                  day: 'numeric',
-                  month: 'short',
-                })}
-              </td>
-              <td style={td}>{result.home_team}</td>
-              <td style={td}>{result.away_team}</td>
-              <td style={td}>
-                {result.home_goals} - {result.away_goals}
-              </td>
-              <td style={td}>{result.prediction}</td>
-              <td style={td}>
-                {result.home_goals + result.away_goals > 2.5 ? 'Over 2.5' : 'Under 2.5'}
-              </td>
-              <td
-                style={{
-                  ...td,
-                  color: result.correct ? 'var(--green)' : 'var(--red)',
-                  fontWeight: 600,
-                }}
-              >
-                {result.correct ? '✓' : '✗'}
-              </td>
-            </tr>
-          ))}
+          {results.map((r) => {
+            const score =
+              r.fthg !== null && r.ftag !== null ? `${r.fthg}-${r.ftag}` : '—';
+
+            const predicted = (() => {
+              const p = r.prediction as unknown;
+              if (p === true || p === 'true') return 'Home';
+              if (p === false || p === 'false') return 'Not Home';
+              if (typeof p === 'string' && p.length > 0) return p;
+              return '—';
+            })();
+
+            const colour =
+              r.correct === true
+                ? 'var(--green)'
+                : r.correct === false
+                ? 'var(--red)'
+                : 'var(--muted)';
+
+            return (
+              <tr key={r.match_key} style={{ borderTop: '1px solid var(--panel-border)' }}>
+                <td style={td}>
+                  {new Date(r.kickoff_time).toLocaleDateString('en-GB', {
+                    weekday: 'short',
+                    day: 'numeric',
+                    month: 'short',
+                  })}
+                </td>
+                <td style={td}>{r.home_team}</td>
+                <td style={td}>{r.away_team}</td>
+                <td style={td}>{score}</td>
+                <td style={td}>{predicted}</td>
+                <td style={td}>{r.ftr ?? '—'}</td>
+                <td style={{ ...td, color: colour, fontWeight: 600 }}>
+                  {r.correct === true ? '✓' : r.correct === false ? '✗' : '—'}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

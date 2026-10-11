@@ -2,6 +2,19 @@ import { useEffect, useState } from 'react';
 import { fetchTrainReport } from '../lib/queries';
 import type { TrainReport } from '../lib/types';
 
+function parseCompactIso(raw: string | undefined): string {
+  if (!raw) return 'Unknown';
+  const match = raw.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$/);
+  if (!match) return raw;
+  const [, y, mo, d, h, mi] = match;
+  const dt = new Date(Date.UTC(+y, +mo - 1, +d, +h, +mi));
+  return dt.toLocaleDateString('en-GB', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
 export default function TrainReportComponent() {
   const [report, setReport] = useState<TrainReport | null>(null);
   const [loading, setLoading] = useState(true);
@@ -44,11 +57,7 @@ export default function TrainReportComponent() {
     );
   }
 
-  const trainingDate = new Date(report.created_at_utc).toLocaleDateString('en-GB', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  const trainingDate = parseCompactIso(report.created_at_utc);
 
   const accuracyPercent = (report.metrics.accuracy * 100).toFixed(1);
   const f1Score = report.metrics.f1.toFixed(4);
