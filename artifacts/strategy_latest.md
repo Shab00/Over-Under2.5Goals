@@ -1,13 +1,13 @@
-# EPL AI Pundit Strategy - 2026-10-10
+# EPL AI Pundit Strategy - 2026-10-11
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-In this week’s matches, the standout value bet is the double chance on Manchester United facing Tottenham, as they look to capitalize on Tottenham's struggles. Meanwhile, Liverpool are up against a formidable Manchester City side, making it a tough outing for the home team.
+Expect a tough outing for Crystal Palace against Nott'm Forest, making it a standout strong fade. Liverpool faces a daunting challenge against the inform Man City, with their home form being less than convincing. Keep an eye on Hull City as they host Everton in what looks like a tough contest.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-Starting with the strong fades, Crystal Palace hosting Nottingham Forest looks bleak for the home side, who are struggling to find form, while Forest has shown signs of resilience. Hull City against Everton is another strong fade; Hull's home record is underwhelming, and Everton are in better shape. For double chances, backing Tottenham to either win or draw against Manchester United is wise given the poor home form of United. The model is HOT and in strong form, making these signals worth trusting this gameweek.
+Starting with strong fades, Crystal Palace is in dire straits, struggling at home and facing a Nott'm Forest side that can capitalize. Similarly, Hull City is up against an Everton team that has shown resilience away from home. For double chances, Liverpool's odds against Man City seem risky given their recent form, making a draw or away win a safer option. The model is currently HOT over its last 46 confident predictions.
 
 ## Value Bets (EDGE)
 
