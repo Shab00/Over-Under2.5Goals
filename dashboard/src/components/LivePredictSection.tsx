@@ -40,6 +40,19 @@ export default function LivePredictSection() {
     <div style={{ marginBottom: '2rem' }}>
       <h2 style={{ margin: '0 0 1rem 0', fontSize: '1.5rem' }}>Live Predict</h2>
 
+      <p style={{
+        color: 'var(--muted)',
+        fontSize: '0.9rem',
+        marginBottom: '1rem',
+        lineHeight: 1.5,
+      }}>
+        Enter a fixture and odds to get a prediction from the deployed model.
+        <br />
+        <strong style={{ color: 'var(--text)' }}>Note:</strong> this preview runs on
+        odds alone — team names are labels only. The fixture table above uses full
+        context (form, H2H, league position).
+      </p>
+
       <div style={{
         background: 'var(--panel)',
         border: '1px solid var(--panel-border)',

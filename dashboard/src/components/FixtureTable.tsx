@@ -17,6 +17,7 @@ export default function FixtureTable({ fixtures }: Props) {
       border: '1px solid var(--panel-border)',
       borderRadius: '16px',
       overflow: 'hidden',
+      overflowX: 'auto',
     }}>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
@@ -29,29 +30,38 @@ export default function FixtureTable({ fixtures }: Props) {
           </tr>
         </thead>
         <tbody>
-          {fixtures.map((f) => (
-            <tr key={f.match_key} style={{ borderTop: '1px solid var(--panel-border)' }}>
-              <td style={td}>
-                {new Date(f.kickoff_time_utc).toLocaleString('en-GB', {
+          {fixtures.map((f: any) => {
+            const kickoff = f.kickoff_time ?? f.kickoff_time_utc;
+            const oddsRaw = f.odds_B365H ?? f.odds_b365h ?? null;
+            const odds = oddsRaw !== null && oddsRaw !== undefined ? Number(oddsRaw) : null;
+            const prob = Number(f.prob_homewin) || 0;
+
+            const dateText = kickoff
+              ? new Date(kickoff).toLocaleString('en-GB', {
                   weekday: 'short',
                   day: 'numeric',
                   month: 'short',
                   hour: '2-digit',
                   minute: '2-digit',
-                })}
-              </td>
-              <td style={td}>
-                <strong>{f.home_team}</strong> vs {f.away_team}
-              </td>
-              <td style={{ ...td, minWidth: '140px' }}>
-                <ConfidenceBar value={f.prob_homewin} />
-              </td>
-              <td style={td}>{f.odds_B365H.toFixed(2)}</td>
-              <td style={td}>
-                <SignalBadge category={f.betting_category} />
-              </td>
-            </tr>
-          ))}
+                })
+              : '—';
+
+            return (
+              <tr key={f.match_key ?? `${f.home_team}-${f.away_team}`} style={{ borderTop: '1px solid var(--panel-border)' }}>
+                <td style={td}>{dateText}</td>
+                <td style={td}>
+                  <strong>{f.home_team}</strong> vs {f.away_team}
+                </td>
+                <td style={{ ...td, minWidth: '140px' }}>
+                  <ConfidenceBar value={prob} />
+                </td>
+                <td style={td}>{odds !== null && !isNaN(odds) ? odds.toFixed(2) : '—'}</td>
+                <td style={td}>
+                  {f.betting_category ? <SignalBadge category={f.betting_category} /> : '—'}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

@@ -2,25 +2,25 @@ import { useEffect, useState } from 'react';
 import FixtureTable from './components/FixtureTable';
 import AccuracyWidget from './components/AccuracyWidget';
 import LivePredictSection from './components/LivePredictSection';
-import Section from './components/Section';
+import PunditSection from './components/PunditSection';
 import RecentResultsTable from './components/RecentResultsTable';
 import PerformanceTracker from './components/PerformanceTracker';
 import AccuracyByCategory from './components/AccuracyByCategory';
 import CalibrationTable from './components/CalibrationTable';
-import PunditSection from './components/PunditSection';
-import TrainReport from './components/TrainReport';
+import TrainReportComponent from './components/TrainReport';
+import { fetchFixtures } from './lib/queries';
 import type { Prediction } from './lib/types';
 
 export default function App() {
   const [fixtures, setFixtures] = useState<Prediction[]>([]);
 
   useEffect(() => {
-    fetch('/football/predictions.json')
-      .then((r) => r.json())
-      .then(setFixtures)
-      .catch(() => {
-        fetch('/predictions.json').then((r) => r.json()).then(setFixtures);
-      });
+    fetchFixtures()
+      .then((data) => {
+        console.log('FIXTURES RECEIVED:', data?.length, data);
+        setFixtures(data ?? []);
+      })
+      .catch((err) => console.error('FIXTURES FAILED:', err));
   }, []);
 
   return (
@@ -39,62 +39,54 @@ export default function App() {
         <h1 style={{ margin: 0, fontSize: '2rem' }}>Home-Win Predictions</h1>
       </header>
 
-      <Section title="Model Accuracy">
+      <section style={{ marginBottom: '2rem' }}>
         <AccuracyWidget />
-      </Section>
+      </section>
 
-      <Section title="Upcoming Fixtures">
+      <section style={{ marginBottom: '2rem' }}>
+        <h2 style={{ marginBottom: '1rem', fontSize: '1.4rem' }}>Upcoming Fixtures</h2>
         <FixtureTable fixtures={fixtures} />
-      </Section>
+      </section>
 
-      <Section title="Analysis & Insights">
+      <section style={{ marginBottom: '2rem' }}>
         <PunditSection />
-      </Section>
+      </section>
 
-      <Section title="Recent Results">
+      <section style={{ marginBottom: '2rem' }}>
+        <h2 style={{ marginBottom: '1rem', fontSize: '1.4rem' }}>Recent Results</h2>
         <RecentResultsTable />
-      </Section>
+      </section>
 
-      <Section title="Recent Performance">
+      <section style={{ marginBottom: '2rem' }}>
+        <h2 style={{ marginBottom: '1rem', fontSize: '1.4rem' }}>Recent Performance</h2>
         <PerformanceTracker />
-      </Section>
+      </section>
 
-      <Section title="Accuracy by Category">
+      <section style={{ marginBottom: '2rem' }}>
+        <h2 style={{ marginBottom: '1rem', fontSize: '1.4rem' }}>Accuracy by Category</h2>
         <AccuracyByCategory />
-      </Section>
+      </section>
 
-      <Section title="Calibration Analysis">
+      <section style={{ marginBottom: '2rem' }}>
+        <h2 style={{ marginBottom: '1rem', fontSize: '1.4rem' }}>Calibration Analysis</h2>
         <CalibrationTable />
-      </Section>
+      </section>
 
-      <Section title="Live Prediction">
+      <section style={{ marginBottom: '2rem' }}>
         <LivePredictSection />
-      </Section>
+      </section>
 
-      <Section title="Model Training Report">
-        <TrainReport />
-      </Section>
+      <section style={{ marginBottom: '2rem' }}>
+        <TrainReportComponent />
+      </section>
 
-      <footer style={{
-        marginTop: '3rem',
-        paddingTop: '2rem',
-        borderTop: '1px solid var(--panel-border)',
-        textAlign: 'center',
-        fontSize: '0.875rem',
-      }}>
-        <p style={{ margin: 0, color: 'var(--muted)' }}>
-          Back to{' '}
-          <a
-            href="https://bashaar.me"
-            style={{
-              color: 'var(--accent)',
-              textDecoration: 'none',
-              borderBottom: '1px solid var(--accent)',
-            }}
-          >
-            portfolio
-          </a>
-        </p>
+      <footer style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--panel-border)' }}>
+        <a
+          href="https://shab00.github.io/"
+          style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.9rem' }}
+        >
+          ← Back to portfolio
+        </a>
       </footer>
     </main>
   );
