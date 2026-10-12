@@ -134,13 +134,11 @@ export default function PunditSection() {
       >
         <h4
           style={{
-            fontSize: '1rem',
+            fontSize: '0.875rem',
             fontWeight: 700,
-            color: 'var(--text)',
+            color: 'var(--accent)',
             margin: '0 0 0.75rem 0',
             textTransform: 'uppercase',
-            fontSize: '0.875rem',
-            color: 'var(--accent)',
             letterSpacing: '0.08em',
           }}
         >
@@ -202,7 +200,7 @@ export default function PunditSection() {
             Top Picks
           </h4>
           {pundit.top_picks.map((pick, idx) => (
-            <FixtureItem key={idx} {...pick} />
+            <FixtureItem key={idx} {...(pick as FixtureItemProps)} />
           ))}
         </div>
       )}
@@ -230,7 +228,7 @@ export default function PunditSection() {
             Strong Fades
           </h4>
           {pundit.strong_fades.map((fade, idx) => (
-            <FixtureItem key={idx} {...fade} />
+            <FixtureItem key={idx} {...(fade as FixtureItemProps)} />
           ))}
         </div>
       )}

@@ -59,8 +59,13 @@ export default function TrainReportComponent() {
 
   const trainingDate = parseCompactIso(report.created_at_utc);
 
-  const accuracyPercent = (report.metrics.accuracy * 100).toFixed(1);
-  const f1Score = report.metrics.f1.toFixed(4);
+  const accuracyPercent = report.metrics?.accuracy
+    ? (report.metrics.accuracy * 100).toFixed(1)
+    : '—';
+  const f1Score = report.metrics?.f1 ? report.metrics.f1.toFixed(4) : '—';
+  const testSizePct = typeof report.test_size === 'number'
+    ? `${(report.test_size * 100).toFixed(0)}%`
+    : '—';
 
   return (
     <div
@@ -120,7 +125,7 @@ export default function TrainReportComponent() {
               marginLeft: '0.5rem',
             }}
           >
-            {report.features}
+            {report.features ?? '—'}
           </span>
         </div>
 
@@ -149,8 +154,12 @@ export default function TrainReportComponent() {
           color: 'var(--muted)',
         }}
       >
-        <div>Data: {report.rows_used} rows | Test size: {(report.test_size * 100).toFixed(0)}%</div>
-        <div>Teams: {report.teams_count} | Form window: {report.n_matches_form} matches</div>
+        <div>
+          Data: {report.rows_used ?? '—'} rows | Test size: {testSizePct}
+        </div>
+        <div>
+          Teams: {report.teams_count ?? '—'} | Form window: {report.n_matches_form ?? '—'} matches
+        </div>
       </div>
     </div>
   );
