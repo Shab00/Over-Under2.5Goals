@@ -2,7 +2,7 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Coventry City is struggling significantly at home, and Newcastle United is in much better form, making this a clear signal to back the away side. The model's current streak underlines the confidence in this selection.
+Coventry City are in a tough spot against Newcastle, who are showing better form and league position. Backing Newcastle as the away side is the clear play here.
 
 ## Top Picks
 

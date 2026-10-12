@@ -1,5 +1,5 @@
 {
-  "computed_at": "2026-10-12T09:21:32.632816+00:00",
+  "computed_at": "2026-10-12T18:06:59.814201+00:00",
   "gameweek_start": "2026-10-09T00:00:00+00:00",
   "gameweek_end": "2026-10-12T23:59:00+00:00",
   "model_performance": {
@@ -268,11 +268,11 @@
       "home_team": "Coventry City",
       "away_team": "Newcastle",
       "kickoff": "2026-10-12T20:00:00",
-      "prob_homewin": 0.076,
+      "prob_homewin": 0.1,
       "signal": "Not Home",
-      "odds": 3.51,
-      "implied_prob": 0.285,
-      "value_gap": -0.209,
+      "odds": 3.73,
+      "implied_prob": 0.268,
+      "value_gap": -0.168,
       "edge_label": "N/A",
       "betting_category": "strong_fade",
       "confidence": "High",

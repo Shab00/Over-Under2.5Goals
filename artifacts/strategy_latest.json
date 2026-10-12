@@ -1,7 +1,7 @@
 {
-  "generated_at": "2023-10-12T20:00:00Z",
+  "generated_at": "2026-10-12T20:00:00",
   "model_form": "Model is HOT — 67.4% accuracy over last 46 confident predictions. EDGE profit: -0.57 units.",
-  "gameweek_summary": "Coventry City is struggling significantly at home, and Newcastle United is in much better form, making this a clear signal to back the away side. The model's current streak underlines the confidence in this selection.",
+  "gameweek_summary": "Coventry City are in a tough spot against Newcastle, who are showing better form and league position. Backing Newcastle as the away side is the clear play here.",
   "rest_of_card_paragraph": "",
   "top_picks": [],
   "fixtures_full": [
@@ -12,10 +12,10 @@
       "signal": "Not Home",
       "confidence": "High",
       "edge_label": "N/A",
-      "prob_homewin": 0.076,
-      "odds": 3.51,
-      "value_gap": -0.2089,
-      "pundit_take": "Coventry City is really struggling this season, sitting in the relegation zone with only three points from five matches. Newcastle, on the other hand, is finding their footing with decent away performances. This matchup screams to back the away side.",
+      "prob_homewin": 0.1,
+      "odds": 3.73,
+      "value_gap": -0.1681,
+      "pundit_take": "Coventry City are struggling at home and have only picked up three points from their last five matches. Newcastle, on the other hand, have shown decent form with eight points from their recent outings, making them the clear favorites in this matchup. Backing the away side is the smart move here.",
       "bet_type": "Back Away Win",
       "stake_advice": "Small",
       "pundit_action": "Strong Fade — Back Away Win",
@@ -34,10 +34,10 @@
       "signal": "Not Home",
       "confidence": "High",
       "edge_label": "N/A",
-      "prob_homewin": 0.076,
-      "odds": 3.51,
-      "value_gap": -0.2089,
-      "pundit_take": "Coventry City is really struggling this season, sitting in the relegation zone with only three points from five matches. Newcastle, on the other hand, is finding their footing with decent away performances. This matchup screams to back the away side.",
+      "prob_homewin": 0.1,
+      "odds": 3.73,
+      "value_gap": -0.1681,
+      "pundit_take": "Coventry City are struggling at home and have only picked up three points from their last five matches. Newcastle, on the other hand, have shown decent form with eight points from their recent outings, making them the clear favorites in this matchup. Backing the away side is the smart move here.",
       "bet_type": "Back Away Win",
       "stake_advice": "Small",
       "pundit_action": "Strong Fade — Back Away Win",
@@ -51,5 +51,5 @@
   "double_chances": [],
   "avoid_list": [],
   "value_bets": [],
-  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nCoventry City is struggling significantly at home, and Newcastle United is in much better form, making this a clear signal to back the away side.\n\n<b>Strong Fades:</b>\n<b>Coventry City vs Newcastle</b> — Strong Fade — Back Away Win\n\n<b>Injury News:</b>\nNone reported.\n\nFull analysis: shab00.github.io/football"
+  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nCoventry City are in a tough spot against Newcastle, who are showing better form and league position.\n\n<b>Strong Fades:</b>\n<b>Coventry City vs Newcastle</b> — Strong Fade — Back Away Win\n\n<b>Injury News:</b>\nNone reported.\n\nFull analysis: shab00.github.io/football"
 }
