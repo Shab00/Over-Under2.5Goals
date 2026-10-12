@@ -1,13 +1,10 @@
-# EPL AI Pundit Strategy - 2026-10-11
+# EPL AI Pundit Strategy - 2026-10-12
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This week, we have a standout strong fade with Liverpool hosting Manchester City, where the home side is struggling against a dominant City. In another fixture, Coventry City faces Newcastle, which looks like a challenging match for the home side given their poor recent form.
+Coventry City is struggling significantly at home, and Newcastle United is in much better form, making this a clear signal to back the away side. The model's current streak underlines the confidence in this selection.
 
 ## Top Picks
-
-## Pundit's View on the Rest of the Card
-Liverpool's clash with Man City is a clear strong fade as Liverpool's recent home form leaves much to be desired, and they're facing a City side that's in impeccable shape. Meanwhile, Coventry City hosts Newcastle, but with Coventry's dismal record and Newcastle's mixed away form, it’s wise to consider backing the away win here. The model is HOT and showing strong signals, making these picks particularly compelling.
 
 ## Value Bets (EDGE)
 

@@ -1,5 +1,5 @@
 {
-  "computed_at": "2026-10-11T14:43:24.405322+00:00",
+  "computed_at": "2026-10-12T09:21:32.632816+00:00",
   "gameweek_start": "2026-10-09T00:00:00+00:00",
   "gameweek_end": "2026-10-12T23:59:00+00:00",
   "model_performance": {
@@ -265,74 +265,14 @@
   ],
   "fixtures": [
     {
-      "home_team": "Liverpool",
-      "away_team": "Man City",
-      "kickoff": "2026-10-11T16:30:00",
-      "prob_homewin": 0.047,
-      "signal": "Not Home",
-      "odds": 3.36,
-      "implied_prob": 0.298,
-      "value_gap": -0.251,
-      "edge_label": "N/A",
-      "betting_category": "strong_fade",
-      "confidence": "High",
-      "double_chance_direction": "",
-      "bet_description": "Back Away Win",
-      "is_strong_fade": true,
-      "home_team_form": {
-        "current_season_pts": 9,
-        "current_season_games": 5,
-        "pts_last5": 9,
-        "gf_last5": 7,
-        "ga_last5": 4,
-        "wins_last5": 2,
-        "form_string": "D D W D W"
-      },
-      "away_team_form": {
-        "current_season_pts": 15,
-        "current_season_games": 5,
-        "pts_last5": 15,
-        "gf_last5": 13,
-        "ga_last5": 5,
-        "wins_last5": 5,
-        "form_string": "W W W W W"
-      },
-      "home_team_home_form": {
-        "pts_last5": 8,
-        "wins_last5": 2,
-        "gf_last5": 12,
-        "ga_last5": 7,
-        "form_string": "W L W D D"
-      },
-      "away_team_away_form": {
-        "pts_last5": 13,
-        "wins_last5": 4,
-        "gf_last5": 10,
-        "ga_last5": 4,
-        "form_string": "D W W W W"
-      },
-      "h2h": {
-        "home_wins": 2,
-        "away_wins": 2,
-        "draws": 1,
-        "home_gf_avg": 1.3,
-        "summary": "Home 2W 1D 2L in last 5 meetings"
-      },
-      "home_league_position": 6,
-      "away_league_position": 1,
-      "referee": null,
-      "home_news": [],
-      "away_news": []
-    },
-    {
       "home_team": "Coventry City",
       "away_team": "Newcastle",
       "kickoff": "2026-10-12T20:00:00",
-      "prob_homewin": 0.124,
+      "prob_homewin": 0.076,
       "signal": "Not Home",
-      "odds": 3.22,
-      "implied_prob": 0.311,
-      "value_gap": -0.187,
+      "odds": 3.51,
+      "implied_prob": 0.285,
+      "value_gap": -0.209,
       "edge_label": "N/A",
       "betting_category": "strong_fade",
       "confidence": "High",
