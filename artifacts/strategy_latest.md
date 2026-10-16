@@ -1,18 +1,18 @@
-# EPL AI Pundit Strategy - 2026-10-15
+# EPL AI Pundit Strategy - 2026-10-16
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This gameweek features a standout bet with Manchester City heavily favoured against Ipswich Town, showcasing their dominance at home. Arsenal also looks strong against Nott'm Forest, who are struggling for form.
+This week, the standout value bet is Manchester City against Ipswich Town, as they are in phenomenal form. Meanwhile, Nott'm Forest face a tough challenge against Arsenal, who are riding high in the league.
 
 ## Top Picks
 ### Man City vs Ipswich Town - Home (Medium)
 FADE | Prob: 69% | Odds: 1.23 | Value: -12.7%
-> Manchester City are in sensational form, boasting five consecutive wins, and they'll be looking to add another against an Ipswich side struggling away. Expect City to dominate this match.
+> Manchester City is in outstanding form, having won all of their last five matches. With Ipswich struggling away, City should secure a comfortable victory at home.
 **Action:** Back Home (Banker) | **Bet:** Back Home | **Stake:** Banker
 
 
 ## Pundit's View on the Rest of the Card
-In the strong fades, Everton and Brentford face tough challenges against Chelsea and Liverpool, respectively, both of whom have shown better recent form. For double chances, Fulham against Hull City and Newcastle versus Aston Villa present opportunities to back the away sides. The model is currently mixed in form, indicating caution with these predictions.
+In the strong fades, Everton against Chelsea presents a clear signal to back the away side, given Chelsea's superior away form compared to Everton's struggles. Similarly, backing Liverpool to win against Brentford looks appealing, as Liverpool is finding their rhythm away. For double chances, Fulham versus Hull City and Newcastle against Aston Villa are worth considering, as both home sides are struggling, making the away team or draw a solid choice. The model is currently MIXED over its last 55 confident predictions.
 
 ## Value Bets (EDGE)
 
