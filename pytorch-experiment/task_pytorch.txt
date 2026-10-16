@@ -1,0 +1,124 @@
+STRICT SCOPE:
+- Work ONLY inside ~/Documents/GitHub/Over-Under2.5Goals/pytorch-experiment/
+- You MAY read files in ../jobs/, ../data/processed/, ../models/ for reference — READ ONLY
+- Do NOT modify ANY file outside pytorch-experiment/
+- Do NOT run git commands
+- Do NOT run the pipeline
+- Do NOT touch ../api/, ../dashboard/, ../football/, ../.github/
+- Do NOT modify ../models/weekly/homewin/ (the live model)
+- Do NOT stop and ask — build everything and report at the end
+
+GOAL:
+Build a PyTorch neural network classifier for football match outcome prediction
+and compare it head-to-head against the existing LightGBM model. Isolated in
+this folder. Do not integrate into the live pipeline yet.
+
+EXISTING PIPELINE (read for reference):
+- ../jobs/train_model.py — how LightGBM is currently trained
+  (feature engineering, split strategy, calibration approach)
+- ../data/processed/engineered_train_features.csv — the training data
+  (244 columns, includes all features; look at column names for Date,
+  FTHG, FTAG, FTR, and the odds features)
+- ../models/weekly/homewin/feature_list_*.pkl — the 218 features the
+  current LightGBM model uses
+- ../models/weekly/homewin/lightgbm_homewin_*.pkl — the trained LightGBM
+  (do NOT load this; we build our own comparison in a fresh MLflow run)
+
+MLFLOW:
+- The existing pipeline logs to DagsHub. DO NOT log there — I want clean
+  separation.
+- Use a LOCAL MLflow tracking URI for now: mlflow.set_tracking_uri("file:./mlruns")
+- Experiment name: "pytorch_vs_lightgbm"
+
+WHAT TO BUILD:
+
+1. src/dataset.py
+   - FootballDataset(torch.utils.data.Dataset)
+   - Loads ../data/processed/engineered_train_features.csv
+   - Target: FTR == 'H' (home win) → 1, else 0
+   - Uses the SAME 218 feature list as the LightGBM model
+     (load from ../models/weekly/homewin/feature_list_*.pkl, take the latest)
+   - Handle NaN in features (LightGBM handles them natively; PyTorch doesn't —
+     fill with column means OR use torch.nan_to_num; pick whichever keeps
+     training stable)
+   - TIME-BASED split: sort by Date, use first 70% for train, next 15% for
+     val, last 15% for test. No random shuffling across time.
+
+2. src/model.py
+   - HomeWinNet(nn.Module): 3-layer MLP
+     * input → Linear(218, 128) → BatchNorm1d(128) → ReLU → Dropout(0.3)
+     * 128 → Linear(128, 64) → BatchNorm1d(64) → ReLU → Dropout(0.3)
+     * 64 → Linear(64, 1) → Sigmoid (return logits before sigmoid; use
+       BCEWithLogitsLoss for numerical stability)
+   - Forward method returns raw logits
+
+3. src/train.py
+   - Loads dataset, creates DataLoaders (batch_size=64)
+   - Trains HomeWinNet for up to 100 epochs
+   - Loss: BCEWithLogitsLoss
+   - Optimiser: Adam, lr=1e-3
+   - Scheduler: ReduceLROnPlateau(patience=5, factor=0.5)
+   - Early stopping: patience=10 on val loss, restore best weights
+   - Logs to MLflow:
+     * Hyperparameters (lr, batch_size, dropout, layers, epochs_trained)
+     * Per-epoch train_loss and val_loss as metrics (with step)
+     * Final test metrics: Brier score, log-loss, ROC-AUC, accuracy
+     * Saves model with mlflow.pytorch.log_model
+   - Saves a training curve plot (loss vs epoch) to ../pytorch-experiment/artifacts/loss_curve.png
+
+4. src/train_lgbm_baseline.py
+   - Trains a fresh LightGBM on the SAME train split and SAME 218 features
+     (do NOT load the production model; train a clean baseline on the same
+     split so the comparison is apples-to-apples)
+   - Uses default LightGBM hyperparameters close to what
+     ../jobs/train_model.py uses (read that file to match)
+   - Logs to MLflow under the same experiment, run name "lightgbm_baseline"
+   - Logs the same metrics: Brier, log-loss, ROC-AUC, accuracy
+
+5. src/compare.py
+   - Loads both runs from local MLflow
+   - Evaluates both on the SAME held-out test set (last 15% by date)
+   - Produces:
+     * Comparison table printed to stdout: model | Brier | LogLoss | AUC | Accuracy
+     * Calibration comparison plot (reliability diagram) saved to
+       ../pytorch-experiment/artifacts/calibration_comparison.png
+     * Saves the table as ../pytorch-experiment/artifacts/comparison.csv
+
+CONSTRAINTS:
+- Python 3.11 (matches the existing pipeline)
+- Dependencies: torch, scikit-learn, lightgbm, pandas, numpy, mlflow,
+  matplotlib, joblib
+- Create a requirements.txt in pytorch-experiment/ listing what you use
+- Do NOT install packages system-wide. If new packages are needed, list them
+  in requirements.txt and print a message at the top of each script if
+  imports fail.
+- Follow code style from ../jobs/train_model.py (type hints, docstrings,
+  logging style)
+
+DELIVERABLES (files inside pytorch-experiment/):
+- requirements.txt
+- src/dataset.py
+- src/model.py
+- src/train.py
+- src/train_lgbm_baseline.py
+- src/compare.py
+- README.md — brief explanation of the experiment, how to run each script,
+  and (once trained) the results table from compare.py
+
+DO NOT:
+- Modify anything outside pytorch-experiment/
+- Update the FastAPI endpoint (deferred to a later session)
+- Push to git
+- Run the pipeline
+- Trigger any GitHub Action
+
+AFTER BUILDING:
+1. Print the folder tree
+2. Print the contents of dataset.py and model.py
+3. Print a summary of the training script structure (epochs, early stopping,
+   MLflow logging calls)
+4. Confirm the split is time-based and print the date ranges for train/val/test
+5. Do NOT actually run training (I want to review the code first)
+6. List every file created
+
+Then STOP.
