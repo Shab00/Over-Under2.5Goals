@@ -2,21 +2,22 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Manchester City look set to dominate Ipswich Town, a clear standout this gameweek, while Arsenal's visit to Nottingham Forest should be a straightforward task, given Forest's poor form. Expect a tight battle when Leeds take on Manchester United, but the odds suggest a strong fade on the home side.
+This gameweek features a standout value bet with Manchester City, who should dominate against Ipswich Town. Bournemouth's struggles put them at risk against Sunderland, making for a compelling fade opportunity.
 
 ## Top Picks
-### Man City vs Ipswich Town - Home (Medium)
-FADE | Prob: 69% | Odds: 1.23 | Value: -12.7%
-> Manchester City are in sensational form and face a weakened Ipswich Town. With their attacking prowess and solid defense, City should have no trouble securing a comfortable victory at home.
+### Man City vs Ipswich Town - Home (High)
+EDGE | Prob: 85% | Odds: 1.24 | Value: +4.5%
+> Manchester City are in magnificent form, winning all their last five games. They face Ipswich, who are struggling defensively away from home, making this a strong home banker.
 **Action:** Back Home (Banker) | **Bet:** Back Home | **Stake:** Banker
 
 
 ## Pundit's View on the Rest of the Card
-Starting with the strong fades, both Everton and Brentford are in dire straits, and Chelsea should exploit that vulnerability, while Liverpool will have the upper hand against a struggling Brentford side. For double chances, Fulham against Hull City offers an intriguing scenario, as Hull’s away form isn’t overly impressive. Newcastle's clash with Aston Villa also suggests a tight encounter, leaning towards an away win or draw. The model is currently mixed, which raises some caution.
+Starting with strong fades, Bournemouth is in dire form and should be backed against Sunderland, who have shown some resilience. For double chances, Everton's home clash with Chelsea is close, but the model leans towards a draw or away win, making this a solid bet. Similarly, Newcastle hosting Aston Villa is tricky, but the model suggests backing the away side. Brighton versus Crystal Palace is simply too close to call, so it's best to avoid that fixture altogether. The model is currently MIXED over its last 55 confident predictions.
 
 ## Value Bets (EDGE)
 
 ## Avoid This Week
+- **Brighton vs Crystal Palace** - This fixture is far too close to call with both teams showing inconsistencies. It's best to skip this one altogether.
 
 ## Model Form
 Model is MIXED — 65.5% accuracy over last 55 confident predictions. EDGE profit: -0.57 units.

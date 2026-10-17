@@ -23,7 +23,10 @@
       "rag_informed": true,
       "bet_description": "Back Away Win",
       "double_chance_direction": "",
-      "is_strong_fade": true
+      "is_strong_fade": true,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Coventry City",
@@ -43,7 +46,10 @@
       "rag_informed": true,
       "bet_description": "Back Away Win",
       "double_chance_direction": "",
-      "is_strong_fade": true
+      "is_strong_fade": true,
+      "correct": false,
+      "FTR": "H",
+      "profit": 0.0
     }
   ],
   "strong_fades": [
@@ -92,5 +98,13 @@
   "avoid_list": [],
   "value_bets": [],
   "telegram_message": "<b>EPL AI Pundit Strategy</b>\nThis week, we have a standout strong fade with Liverpool hosting Manchester City, where the home side is struggling against a dominant City.\n\n<b>Strong Fades:</b>\n<b>Liverpool vs Man City</b> — Strong Fade — Back Away Win\n<b>Coventry City vs Newcastle</b> — Strong Fade — Back Away Win\n\n<b>Injury News:</b>\nNone reported.\n\nFull analysis: shab00.github.io/football",
-  "scored": false
+  "scored": true,
+  "score_summary": {
+    "total": 2,
+    "correct": 1,
+    "accuracy_pct": 50.0,
+    "total_profit": 0.0,
+    "edge_correct": 0,
+    "edge_profit": 0
+  }
 }
