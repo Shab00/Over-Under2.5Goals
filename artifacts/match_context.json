@@ -1,5 +1,5 @@
 {
-  "computed_at": "2026-10-18T12:09:09.532997+00:00",
+  "computed_at": "2026-10-18T14:38:34.593430+00:00",
   "gameweek_start": "2026-10-16T00:00:00+00:00",
   "gameweek_end": "2026-10-19T23:59:00+00:00",
   "model_performance": {
@@ -12,11 +12,11 @@
     "fade_count": 44,
     "fade_accuracy_pct": 65.9,
     "streak_label": "MIXED",
-    "streak_string": "W L W W L",
+    "streak_string": "W W L W L",
     "streak_last5": [
       true,
-      false,
       true,
+      false,
       true,
       false
     ]
@@ -265,197 +265,17 @@
   ],
   "fixtures": [
     {
-      "home_team": "Bournemouth",
-      "away_team": "Sunderland",
-      "kickoff": "2026-10-18T14:00:00",
-      "prob_homewin": 0.242,
-      "signal": "Not Home",
-      "odds": 2.03,
-      "implied_prob": 0.493,
-      "value_gap": -0.25,
-      "edge_label": "N/A",
-      "betting_category": "double_chance",
-      "confidence": "Medium",
-      "double_chance_direction": "Back Away Win or Draw (X2)",
-      "bet_description": "Back Away Win or Draw (X2)",
-      "is_strong_fade": false,
-      "home_team_form": {
-        "current_season_pts": 3,
-        "current_season_games": 6,
-        "pts_last5": 3,
-        "gf_last5": 6,
-        "ga_last5": 11,
-        "wins_last5": 0,
-        "form_string": "D D D L L"
-      },
-      "away_team_form": {
-        "current_season_pts": 4,
-        "current_season_games": 6,
-        "pts_last5": 4,
-        "gf_last5": 5,
-        "ga_last5": 10,
-        "wins_last5": 1,
-        "form_string": "W D L L L"
-      },
-      "home_team_home_form": {
-        "pts_last5": 4,
-        "wins_last5": 0,
-        "gf_last5": 4,
-        "ga_last5": 5,
-        "form_string": "D D D D L"
-      },
-      "away_team_away_form": {
-        "pts_last5": 5,
-        "wins_last5": 1,
-        "gf_last5": 7,
-        "ga_last5": 9,
-        "form_string": "D W L D L"
-      },
-      "h2h": {
-        "home_wins": 1,
-        "away_wins": 2,
-        "draws": 2,
-        "home_gf_avg": 1.0,
-        "summary": "Home 1W 2D 2L in last 5 meetings"
-      },
-      "home_league_position": 18,
-      "away_league_position": 17,
-      "referee": null,
-      "home_news": [],
-      "away_news": []
-    },
-    {
-      "home_team": "Brighton",
-      "away_team": "Crystal Palace",
-      "kickoff": "2026-10-18T14:00:00",
-      "prob_homewin": 0.575,
-      "signal": "Home",
-      "odds": 1.44,
-      "implied_prob": 0.694,
-      "value_gap": -0.119,
-      "edge_label": "FADE",
-      "betting_category": "back_home",
-      "confidence": "Medium",
-      "double_chance_direction": "",
-      "bet_description": "Back Home to Win",
-      "is_strong_fade": false,
-      "home_team_form": {
-        "current_season_pts": 13,
-        "current_season_games": 6,
-        "pts_last5": 10,
-        "gf_last5": 14,
-        "ga_last5": 5,
-        "wins_last5": 3,
-        "form_string": "L D W W W"
-      },
-      "away_team_form": {
-        "current_season_pts": 7,
-        "current_season_games": 6,
-        "pts_last5": 7,
-        "gf_last5": 9,
-        "ga_last5": 10,
-        "wins_last5": 2,
-        "form_string": "L W L D W"
-      },
-      "home_team_home_form": {
-        "pts_last5": 10,
-        "wins_last5": 3,
-        "gf_last5": 10,
-        "ga_last5": 3,
-        "form_string": "W L W D W"
-      },
-      "away_team_away_form": {
-        "pts_last5": 7,
-        "wins_last5": 2,
-        "gf_last5": 7,
-        "ga_last5": 7,
-        "form_string": "L W L W D"
-      },
-      "h2h": {
-        "home_wins": 1,
-        "away_wins": 3,
-        "draws": 1,
-        "home_gf_avg": 1.7,
-        "summary": "Home 1W 1D 3L in last 5 meetings"
-      },
-      "home_league_position": 3,
-      "away_league_position": 12,
-      "referee": null,
-      "home_news": [],
-      "away_news": []
-    },
-    {
-      "home_team": "Leeds",
-      "away_team": "Man United",
-      "kickoff": "2026-10-18T14:00:00",
-      "prob_homewin": 0.16,
-      "signal": "Not Home",
-      "odds": 2.59,
-      "implied_prob": 0.386,
-      "value_gap": -0.226,
-      "edge_label": "N/A",
-      "betting_category": "strong_fade",
-      "confidence": "Low",
-      "double_chance_direction": "",
-      "bet_description": "Back Away Win",
-      "is_strong_fade": true,
-      "home_team_form": {
-        "current_season_pts": 9,
-        "current_season_games": 6,
-        "pts_last5": 6,
-        "gf_last5": 7,
-        "ga_last5": 5,
-        "wins_last5": 1,
-        "form_string": "D D W D L"
-      },
-      "away_team_form": {
-        "current_season_pts": 6,
-        "current_season_games": 6,
-        "pts_last5": 6,
-        "gf_last5": 9,
-        "ga_last5": 7,
-        "wins_last5": 1,
-        "form_string": "W D L D D"
-      },
-      "home_team_home_form": {
-        "pts_last5": 5,
-        "wins_last5": 1,
-        "gf_last5": 5,
-        "ga_last5": 4,
-        "form_string": "L L D W D"
-      },
-      "away_team_away_form": {
-        "pts_last5": 5,
-        "wins_last5": 1,
-        "gf_last5": 5,
-        "ga_last5": 7,
-        "form_string": "W L L D D"
-      },
-      "h2h": {
-        "home_wins": 0,
-        "away_wins": 3,
-        "draws": 2,
-        "home_gf_avg": 1.0,
-        "summary": "Home 0W 2D 3L in last 5 meetings"
-      },
-      "home_league_position": 7,
-      "away_league_position": 13,
-      "referee": null,
-      "home_news": [],
-      "away_news": []
-    },
-    {
       "home_team": "Nott'm Forest",
       "away_team": "Arsenal",
       "kickoff": "2026-10-18T16:30:00",
-      "prob_homewin": 0.114,
+      "prob_homewin": 0.161,
       "signal": "Not Home",
-      "odds": 5.96,
-      "implied_prob": 0.168,
-      "value_gap": -0.053,
+      "odds": 6.65,
+      "implied_prob": 0.15,
+      "value_gap": 0.01,
       "edge_label": "N/A",
       "betting_category": "strong_fade",
-      "confidence": "High",
+      "confidence": "Low",
       "double_chance_direction": "",
       "bet_description": "Back Away Win",
       "is_strong_fade": true,
@@ -510,9 +330,9 @@
       "kickoff": "2026-10-19T20:00:00",
       "prob_homewin": 0.402,
       "signal": "Not Home",
-      "odds": 1.5,
-      "implied_prob": 0.667,
-      "value_gap": -0.265,
+      "odds": 1.51,
+      "implied_prob": 0.662,
+      "value_gap": -0.261,
       "edge_label": "N/A",
       "betting_category": "double_chance",
       "confidence": "Medium",

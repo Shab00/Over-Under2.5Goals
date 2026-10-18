@@ -2,17 +2,12 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This week's standout value bet is Brighton against Crystal Palace, where the model sees a solid home advantage. Leeds are facing a tough battle against Manchester United, who are struggling but may still edge this one.
+The standout value bet this week is the strong fade on Nott'm Forest against Arsenal. With both teams having solid form, the biggest mismatch lies in Tottenham's struggles facing Coventry City, which presents a risk for the home side.
 
 ## Top Picks
-### Brighton vs Crystal Palace - Home (Medium)
-FADE | Prob: 57% | Odds: 1.44 | Value: -11.9%
-> Brighton are in strong form, sitting near the top and showing a solid home record. Crystal Palace has struggled in previous encounters, making this a clear opportunity for Brighton to capitalize.
-**Action:** Back Home (Banker) | **Bet:** Back Home | **Stake:** Banker
-
 
 ## Pundit's View on the Rest of the Card
-For double chance bets, Bournemouth hosting Sunderland is worth considering; both teams are struggling but backing Sunderland for a win or draw could pay off. Tottenham against Coventry City is another double chance fixture, with the home side's poor form making this too risky to back outright. The model is currently MIXED, so vigilance is key this week.
+Starting with the strong fade, Nott'm Forest is struggling at home and faces a confident Arsenal team, making backing the away win a smart move. In the double chance fixture, Tottenham's form is concerning, and while Coventry City has had its challenges, taking the away win or draw is a sensible approach given Tottenham's poor home record. Overall, the model's current MIXED performance reflects the complexities of these matchups.
 
 ## Value Bets (EDGE)
 
