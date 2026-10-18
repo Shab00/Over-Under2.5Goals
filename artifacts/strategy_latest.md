@@ -2,12 +2,17 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This gameweek presents a standout double chance on Bournemouth against Sunderland, given their struggles and form. Leeds face an uphill battle against Manchester United, which is shaping up as a significant mismatch.
+This week's standout value bet is Brighton against Crystal Palace, where the model sees a solid home advantage. Leeds are facing a tough battle against Manchester United, who are struggling but may still edge this one.
 
 ## Top Picks
+### Brighton vs Crystal Palace - Home (Medium)
+FADE | Prob: 57% | Odds: 1.44 | Value: -11.9%
+> Brighton are in strong form, sitting near the top and showing a solid home record. Crystal Palace has struggled in previous encounters, making this a clear opportunity for Brighton to capitalize.
+**Action:** Back Home (Banker) | **Bet:** Back Home | **Stake:** Banker
+
 
 ## Pundit's View on the Rest of the Card
-Leeds vs Manchester United is a strong fade, as Leeds have been underwhelming at home while United are looking to capitalize on their momentum. In double chance matches, Bournemouth hosting Sunderland is interesting, considering both teams are struggling but Sunderland’s away form is slightly better, making a draw or away win possible. Brighton against Crystal Palace also falls in the double chance category, with Palace's inconsistent form suggesting it could be a tight contest. The model is currently in a MIXED form, so be cautious with these picks.
+For double chance bets, Bournemouth hosting Sunderland is worth considering; both teams are struggling but backing Sunderland for a win or draw could pay off. Tottenham against Coventry City is another double chance fixture, with the home side's poor form making this too risky to back outright. The model is currently MIXED, so vigilance is key this week.
 
 ## Value Bets (EDGE)
 
