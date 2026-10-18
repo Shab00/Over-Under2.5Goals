@@ -1,18 +1,13 @@
-# EPL AI Pundit Strategy - 2026-10-17
+# EPL AI Pundit Strategy - 2026-10-18
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Bournemouth's struggles continue, making them a standout fade against Sunderland. Brighton looks strong at home against Crystal Palace, and injuries are not a concern for either side, enhancing their chances.
+This gameweek presents a standout double chance on Bournemouth against Sunderland, given their struggles and form. Leeds face an uphill battle against Manchester United, which is shaping up as a significant mismatch.
 
 ## Top Picks
-### Brighton vs Crystal Palace - Home (Medium)
-FADE | Prob: 60% | Odds: 1.52 | Value: -6.1%
-> Brighton is in solid form and has home advantage against Crystal Palace, who have struggled away from home. This match-up points strongly in favor of the home side, making them a confident pick.
-**Action:** Back Home (Banker) | **Bet:** Back Home | **Stake:** Banker
-
 
 ## Pundit's View on the Rest of the Card
-The model suggests a strong fade on Bournemouth as they face Sunderland, both teams struggling but the away side may find value here. For double chances, Newcastle against Aston Villa is intriguing, but neither team has shown great form, making it a cautious play for backing the away side. Leeds' matchup against Manchester United also leans towards a fade, with Leeds showing poor home form. Nott'm Forest's battle with Arsenal looks tough as well, as Arsenal is in much better shape. Expect these matches to be tight, but the model's mixed streak suggests caution.
+Leeds vs Manchester United is a strong fade, as Leeds have been underwhelming at home while United are looking to capitalize on their momentum. In double chance matches, Bournemouth hosting Sunderland is interesting, considering both teams are struggling but Sunderland’s away form is slightly better, making a draw or away win possible. Brighton against Crystal Palace also falls in the double chance category, with Palace's inconsistent form suggesting it could be a tight contest. The model is currently in a MIXED form, so be cautious with these picks.
 
 ## Value Bets (EDGE)
 
