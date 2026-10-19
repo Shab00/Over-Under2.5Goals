@@ -1,30 +1,10 @@
 {
-  "generated_at": "2023-10-18T12:00:00Z",
+  "generated_at": "2026-10-19T12:00:00",
   "model_form": "Model is MIXED — 65.5% accuracy over last 55 confident predictions. EDGE profit: -0.57 units.",
-  "gameweek_summary": "The standout value bet this week is the strong fade on Nott'm Forest against Arsenal. With both teams having solid form, the biggest mismatch lies in Tottenham's struggles facing Coventry City, which presents a risk for the home side.",
-  "rest_of_card_paragraph": "Starting with the strong fade, Nott'm Forest is struggling at home and faces a confident Arsenal team, making backing the away win a smart move. In the double chance fixture, Tottenham's form is concerning, and while Coventry City has had its challenges, taking the away win or draw is a sensible approach given Tottenham's poor home record. Overall, the model's current MIXED performance reflects the complexities of these matchups.",
+  "gameweek_summary": "Tottenham's struggles continue as they sit near the bottom of the table, making their clash against Coventry a tricky one. Backing Coventry to either win or draw is the way to go given Tottenham's poor home record. Expect a tough match.",
+  "rest_of_card_paragraph": "",
   "top_picks": [],
   "fixtures_full": [
-    {
-      "home_team": "Nott'm Forest",
-      "away_team": "Arsenal",
-      "kickoff": "2026-10-18T16:30:00",
-      "signal": "Not Home",
-      "confidence": "Low",
-      "edge_label": "N/A",
-      "prob_homewin": 0.161,
-      "odds": 6.65,
-      "value_gap": 0.0106,
-      "pundit_take": "Nott'm Forest is in a tough spot, having only managed a few points in their last games, while Arsenal is riding high with strong away form. Backing Arsenal for the win is the play here.",
-      "bet_type": "Back Away Win",
-      "stake_advice": "Small",
-      "pundit_action": "Strong Fade — Back Away Win",
-      "betting_category": "strong_fade",
-      "rag_informed": true,
-      "bet_description": "Back Away Win",
-      "double_chance_direction": "",
-      "is_strong_fade": true
-    },
     {
       "home_team": "Tottenham",
       "away_team": "Coventry City",
@@ -32,10 +12,10 @@
       "signal": "Not Home",
       "confidence": "Medium",
       "edge_label": "N/A",
-      "prob_homewin": 0.402,
+      "prob_homewin": 0.336,
       "odds": 1.51,
-      "value_gap": -0.2603,
-      "pundit_take": "Tottenham's home form has been abysmal, making this a risky match for them. Coventry City may be inconsistent, but backing them for an away win or draw is a sensible choice given Tottenham's struggles.",
+      "value_gap": -0.3263,
+      "pundit_take": "Tottenham's home form has been dismal, and with only one point from their last five home games, backing Coventry for a win or draw makes sense. The away side is coming off a couple of wins and can exploit Spurs' vulnerabilities.",
       "bet_type": "Back Double Chance (X2)",
       "stake_advice": "Small",
       "pundit_action": "Back Double Chance (X2)",
@@ -46,28 +26,7 @@
       "is_strong_fade": false
     }
   ],
-  "strong_fades": [
-    {
-      "home_team": "Nott'm Forest",
-      "away_team": "Arsenal",
-      "kickoff": "2026-10-18T16:30:00",
-      "signal": "Not Home",
-      "confidence": "Low",
-      "edge_label": "N/A",
-      "prob_homewin": 0.161,
-      "odds": 6.65,
-      "value_gap": 0.0106,
-      "pundit_take": "Nott'm Forest is in a tough spot, having only managed a few points in their last games, while Arsenal is riding high with strong away form. Backing Arsenal for the win is the play here.",
-      "bet_type": "Back Away Win",
-      "stake_advice": "Small",
-      "pundit_action": "Strong Fade — Back Away Win",
-      "betting_category": "strong_fade",
-      "rag_informed": true,
-      "bet_description": "Back Away Win",
-      "double_chance_direction": "",
-      "is_strong_fade": true
-    }
-  ],
+  "strong_fades": [],
   "double_chances": [
     {
       "home_team": "Tottenham",
@@ -76,10 +35,10 @@
       "signal": "Not Home",
       "confidence": "Medium",
       "edge_label": "N/A",
-      "prob_homewin": 0.402,
+      "prob_homewin": 0.336,
       "odds": 1.51,
-      "value_gap": -0.2603,
-      "pundit_take": "Tottenham's home form has been abysmal, making this a risky match for them. Coventry City may be inconsistent, but backing them for an away win or draw is a sensible choice given Tottenham's struggles.",
+      "value_gap": -0.3263,
+      "pundit_take": "Tottenham's home form has been dismal, and with only one point from their last five home games, backing Coventry for a win or draw makes sense. The away side is coming off a couple of wins and can exploit Spurs' vulnerabilities.",
       "bet_type": "Back Double Chance (X2)",
       "stake_advice": "Small",
       "pundit_action": "Back Double Chance (X2)",
@@ -92,5 +51,5 @@
   ],
   "avoid_list": [],
   "value_bets": [],
-  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nThe standout value bet this week is the strong fade on Nott'm Forest against Arsenal.\n\n<b>Strong Fades:</b>\n<b>Nott'm Forest vs Arsenal</b> — Strong Fade — Back Away Win\n\n<b>Double Chance:</b>\n<b>Tottenham vs Coventry City</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nNone reported.\n\nFull analysis: shab00.github.io/football"
+  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nTottenham's struggles continue as they sit near the bottom of the table, making their clash against Coventry a tricky one.\n\n<b>Double Chance:</b>\n<b>Tottenham vs Coventry City</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nNone reported.\n\nFull analysis: shab00.github.io/football"
 }

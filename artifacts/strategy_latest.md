@@ -1,13 +1,10 @@
-# EPL AI Pundit Strategy - 2026-10-18
+# EPL AI Pundit Strategy - 2026-10-19
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-The standout value bet this week is the strong fade on Nott'm Forest against Arsenal. With both teams having solid form, the biggest mismatch lies in Tottenham's struggles facing Coventry City, which presents a risk for the home side.
+Tottenham's struggles continue as they sit near the bottom of the table, making their clash against Coventry a tricky one. Backing Coventry to either win or draw is the way to go given Tottenham's poor home record. Expect a tough match.
 
 ## Top Picks
-
-## Pundit's View on the Rest of the Card
-Starting with the strong fade, Nott'm Forest is struggling at home and faces a confident Arsenal team, making backing the away win a smart move. In the double chance fixture, Tottenham's form is concerning, and while Coventry City has had its challenges, taking the away win or draw is a sensible approach given Tottenham's poor home record. Overall, the model's current MIXED performance reflects the complexities of these matchups.
 
 ## Value Bets (EDGE)
 
