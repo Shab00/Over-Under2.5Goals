@@ -2,7 +2,7 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Tottenham's struggles continue as they sit near the bottom of the table, making their clash against Coventry a tricky one. Backing Coventry to either win or draw is the way to go given Tottenham's poor home record. Expect a tough match.
+The standout double chance bet this week is the fixture between Tottenham and Coventry City, where the home side's struggles continue to be a concern. Expect an intriguing match-up as both teams look to gain momentum, especially with Tottenham's recent form being a significant factor to consider.
 
 ## Top Picks
 

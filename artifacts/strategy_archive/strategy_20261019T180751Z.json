@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-10-19T15:00:00",
+  "model_form": "Model is MIXED — 65.5% accuracy over last 55 confident predictions. EDGE profit: -0.57 units.",
+  "gameweek_summary": "The standout double chance bet this week is the fixture between Tottenham and Coventry City, where the home side's struggles continue to be a concern. Expect an intriguing match-up as both teams look to gain momentum, especially with Tottenham's recent form being a significant factor to consider.",
+  "rest_of_card_paragraph": "",
+  "top_picks": [],
+  "fixtures_full": [
+    {
+      "home_team": "Tottenham",
+      "away_team": "Coventry City",
+      "kickoff": "2026-10-19T20:00:00",
+      "signal": "Not Home",
+      "confidence": "Medium",
+      "edge_label": "N/A",
+      "prob_homewin": 0.443,
+      "odds": 1.57,
+      "value_gap": -0.1939,
+      "pundit_take": "Tottenham's poor home form leaves them vulnerable against Coventry City, who are looking to build on their recent away performance. Backing Coventry for a win or draw seems wise given the shaky confidence of the home side right now.",
+      "bet_type": "Back Double Chance (X2)",
+      "stake_advice": "Small",
+      "pundit_action": "Back Double Chance (X2)",
+      "betting_category": "double_chance",
+      "rag_informed": true,
+      "bet_description": "Back Away Win or Draw (X2)",
+      "double_chance_direction": "Back Away Win or Draw (X2)",
+      "is_strong_fade": false
+    }
+  ],
+  "strong_fades": [],
+  "double_chances": [
+    {
+      "home_team": "Tottenham",
+      "away_team": "Coventry City",
+      "kickoff": "2026-10-19T20:00:00",
+      "signal": "Not Home",
+      "confidence": "Medium",
+      "edge_label": "N/A",
+      "prob_homewin": 0.443,
+      "odds": 1.57,
+      "value_gap": -0.1939,
+      "pundit_take": "Tottenham's poor home form leaves them vulnerable against Coventry City, who are looking to build on their recent away performance. Backing Coventry for a win or draw seems wise given the shaky confidence of the home side right now.",
+      "bet_type": "Back Double Chance (X2)",
+      "stake_advice": "Small",
+      "pundit_action": "Back Double Chance (X2)",
+      "betting_category": "double_chance",
+      "rag_informed": true,
+      "bet_description": "Back Away Win or Draw (X2)",
+      "double_chance_direction": "Back Away Win or Draw (X2)",
+      "is_strong_fade": false
+    }
+  ],
+  "avoid_list": [],
+  "value_bets": [],
+  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nThe standout double chance bet this week is the fixture between Tottenham and Coventry City, where the home side's struggles continue to be a concern.\n\n<b>Double Chance:</b>\n<b>Tottenham vs Coventry City</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nNone reported.\n\nFull analysis: shab00.github.io/football",
+  "scored": false
+}
