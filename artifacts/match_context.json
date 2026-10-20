@@ -1,7 +1,7 @@
 {
-  "computed_at": "2026-10-19T18:07:42.586471+00:00",
-  "gameweek_start": "2026-10-16T00:00:00+00:00",
-  "gameweek_end": "2026-10-19T23:59:00+00:00",
+  "computed_at": "2026-10-20T09:09:33.848975+00:00",
+  "gameweek_start": "2026-10-23T00:00:00+00:00",
+  "gameweek_end": "2026-10-26T23:59:00+00:00",
   "model_performance": {
     "total_predictions": 55,
     "avoid_count": 5,
@@ -265,14 +265,134 @@
   ],
   "fixtures": [
     {
-      "home_team": "Tottenham",
-      "away_team": "Coventry City",
-      "kickoff": "2026-10-19T20:00:00",
-      "prob_homewin": 0.443,
+      "home_team": "Ipswich Town",
+      "away_team": "Nott'm Forest",
+      "kickoff": "2026-10-23T20:00:00",
+      "prob_homewin": 0.483,
       "signal": "Not Home",
-      "odds": 1.57,
-      "implied_prob": 0.637,
-      "value_gap": -0.194,
+      "odds": NaN,
+      "implied_prob": null,
+      "value_gap": null,
+      "edge_label": "N/A",
+      "betting_category": "avoid",
+      "confidence": "Low",
+      "double_chance_direction": "",
+      "bet_description": "Skip — too close to call",
+      "is_strong_fade": false,
+      "home_team_form": {
+        "current_season_pts": 9,
+        "current_season_games": 6,
+        "pts_last5": 6,
+        "gf_last5": 7,
+        "ga_last5": 11,
+        "wins_last5": 2,
+        "form_string": "L L W L W"
+      },
+      "away_team_form": {
+        "current_season_pts": 5,
+        "current_season_games": 6,
+        "pts_last5": 5,
+        "gf_last5": 5,
+        "ga_last5": 7,
+        "wins_last5": 1,
+        "form_string": "D D W L L"
+      },
+      "home_team_home_form": {
+        "pts_last5": 6,
+        "wins_last5": 2,
+        "gf_last5": 5,
+        "ga_last5": 8,
+        "form_string": "L L W L W"
+      },
+      "away_team_away_form": {
+        "pts_last5": 5,
+        "wins_last5": 1,
+        "gf_last5": 8,
+        "ga_last5": 10,
+        "form_string": "L D D W L"
+      },
+      "h2h": {
+        "home_wins": 0,
+        "away_wins": 4,
+        "draws": 0,
+        "home_gf_avg": 1.0,
+        "summary": "Home 0W 0D 4L in last 4 meetings"
+      },
+      "home_league_position": 10,
+      "away_league_position": 15,
+      "referee": null,
+      "home_news": [],
+      "away_news": []
+    },
+    {
+      "home_team": "Aston Villa",
+      "away_team": "Man City",
+      "kickoff": "2026-10-24T12:30:00",
+      "prob_homewin": 0.497,
+      "signal": "Not Home",
+      "odds": NaN,
+      "implied_prob": null,
+      "value_gap": null,
+      "edge_label": "N/A",
+      "betting_category": "avoid",
+      "confidence": "Low",
+      "double_chance_direction": "",
+      "bet_description": "Skip — too close to call",
+      "is_strong_fade": false,
+      "home_team_form": {
+        "current_season_pts": 5,
+        "current_season_games": 6,
+        "pts_last5": 5,
+        "gf_last5": 6,
+        "ga_last5": 7,
+        "wins_last5": 1,
+        "form_string": "L D L W D"
+      },
+      "away_team_form": {
+        "current_season_pts": 18,
+        "current_season_games": 6,
+        "pts_last5": 15,
+        "gf_last5": 14,
+        "ga_last5": 4,
+        "wins_last5": 5,
+        "form_string": "W W W W W"
+      },
+      "home_team_home_form": {
+        "pts_last5": 2,
+        "wins_last5": 0,
+        "gf_last5": 5,
+        "ga_last5": 10,
+        "form_string": "D L L L D"
+      },
+      "away_team_away_form": {
+        "pts_last5": 15,
+        "wins_last5": 5,
+        "gf_last5": 11,
+        "ga_last5": 2,
+        "form_string": "W W W W W"
+      },
+      "h2h": {
+        "home_wins": 3,
+        "away_wins": 2,
+        "draws": 0,
+        "home_gf_avg": 1.3,
+        "summary": "Home 3W 0D 2L in last 5 meetings"
+      },
+      "home_league_position": 16,
+      "away_league_position": 1,
+      "referee": null,
+      "home_news": [],
+      "away_news": []
+    },
+    {
+      "home_team": "Arsenal",
+      "away_team": "Everton",
+      "kickoff": "2026-10-24T15:00:00",
+      "prob_homewin": 0.309,
+      "signal": "Not Home",
+      "odds": NaN,
+      "implied_prob": null,
+      "value_gap": null,
       "edge_label": "N/A",
       "betting_category": "double_chance",
       "confidence": "Medium",
@@ -280,15 +400,66 @@
       "bet_description": "Back Away Win or Draw (X2)",
       "is_strong_fade": false,
       "home_team_form": {
-        "current_season_pts": 3,
+        "current_season_pts": 15,
         "current_season_games": 6,
-        "pts_last5": 3,
-        "gf_last5": 3,
-        "ga_last5": 6,
-        "wins_last5": 0,
-        "form_string": "L D D L D"
+        "pts_last5": 12,
+        "gf_last5": 7,
+        "ga_last5": 5,
+        "wins_last5": 4,
+        "form_string": "W W W L W"
       },
       "away_team_form": {
+        "current_season_pts": 10,
+        "current_season_games": 6,
+        "pts_last5": 7,
+        "gf_last5": 6,
+        "ga_last5": 5,
+        "wins_last5": 1,
+        "form_string": "D D D W D"
+      },
+      "home_team_home_form": {
+        "pts_last5": 15,
+        "wins_last5": 5,
+        "gf_last5": 12,
+        "ga_last5": 3,
+        "form_string": "W W W W W"
+      },
+      "away_team_away_form": {
+        "pts_last5": 9,
+        "wins_last5": 2,
+        "gf_last5": 8,
+        "ga_last5": 6,
+        "form_string": "W W D D D"
+      },
+      "h2h": {
+        "home_wins": 3,
+        "away_wins": 0,
+        "draws": 2,
+        "home_gf_avg": 1.0,
+        "summary": "Home 3W 2D 0L in last 5 meetings"
+      },
+      "home_league_position": 2,
+      "away_league_position": 5,
+      "referee": null,
+      "home_news": [],
+      "away_news": []
+    },
+    {
+      "home_team": "Coventry City",
+      "away_team": "Fulham",
+      "kickoff": "2026-10-24T15:00:00",
+      "prob_homewin": 0.574,
+      "signal": "Home",
+      "odds": NaN,
+      "implied_prob": null,
+      "value_gap": null,
+      "edge_label": "N/A",
+      "betting_category": "back_home",
+      "confidence": "Medium",
+      "double_chance_direction": "",
+      "bet_description": "Back Home to Win",
+      "is_strong_fade": false,
+      "home_team_form": {
         "current_season_pts": 6,
         "current_season_games": 6,
         "pts_last5": 6,
@@ -297,19 +468,268 @@
         "wins_last5": 2,
         "form_string": "L L L W W"
       },
-      "home_team_home_form": {
-        "pts_last5": 1,
-        "wins_last5": 0,
+      "away_team_form": {
+        "current_season_pts": 2,
+        "current_season_games": 6,
+        "pts_last5": 2,
         "gf_last5": 4,
-        "ga_last5": 12,
-        "form_string": "L L L D L"
+        "ga_last5": 7,
+        "wins_last5": 0,
+        "form_string": "L L D D L"
+      },
+      "home_team_home_form": {
+        "pts_last5": 4,
+        "wins_last5": 1,
+        "gf_last5": 4,
+        "ga_last5": 9,
+        "form_string": "L D L L W"
       },
       "away_team_away_form": {
-        "pts_last5": 3,
+        "pts_last5": 4,
         "wins_last5": 1,
+        "gf_last5": 4,
+        "ga_last5": 7,
+        "form_string": "L W L D L"
+      },
+      "h2h": {
+        "home_wins": 0,
+        "away_wins": 0,
+        "draws": 0,
+        "home_gf_avg": 0.0,
+        "summary": "Limited h2h data (0 matches found)"
+      },
+      "home_league_position": 14,
+      "away_league_position": 20,
+      "referee": null,
+      "home_news": [],
+      "away_news": []
+    },
+    {
+      "home_team": "Chelsea",
+      "away_team": "Tottenham",
+      "kickoff": "2026-10-24T17:30:00",
+      "prob_homewin": 0.35,
+      "signal": "Not Home",
+      "odds": NaN,
+      "implied_prob": null,
+      "value_gap": null,
+      "edge_label": "N/A",
+      "betting_category": "double_chance",
+      "confidence": "Medium",
+      "double_chance_direction": "Back Away Win or Draw (X2)",
+      "bet_description": "Back Away Win or Draw (X2)",
+      "is_strong_fade": false,
+      "home_team_form": {
+        "current_season_pts": 10,
+        "current_season_games": 6,
+        "pts_last5": 7,
+        "gf_last5": 12,
+        "ga_last5": 11,
+        "wins_last5": 2,
+        "form_string": "W L D L W"
+      },
+      "away_team_form": {
+        "current_season_pts": 3,
+        "current_season_games": 6,
+        "pts_last5": 3,
         "gf_last5": 3,
+        "ga_last5": 6,
+        "wins_last5": 0,
+        "form_string": "L D D L D"
+      },
+      "home_team_home_form": {
+        "pts_last5": 9,
+        "wins_last5": 2,
+        "gf_last5": 14,
         "ga_last5": 9,
-        "form_string": "L L L L W"
+        "form_string": "D D W D W"
+      },
+      "away_team_away_form": {
+        "pts_last5": 2,
+        "wins_last5": 0,
+        "gf_last5": 2,
+        "ga_last5": 8,
+        "form_string": "L L L D D"
+      },
+      "h2h": {
+        "home_wins": 5,
+        "away_wins": 0,
+        "draws": 0,
+        "home_gf_avg": 1.5,
+        "summary": "Home 5W 0D 0L in last 5 meetings"
+      },
+      "home_league_position": 6,
+      "away_league_position": 19,
+      "referee": null,
+      "home_news": [],
+      "away_news": []
+    },
+    {
+      "home_team": "Crystal Palace",
+      "away_team": "Newcastle",
+      "kickoff": "2026-10-25T14:00:00",
+      "prob_homewin": 0.482,
+      "signal": "Not Home",
+      "odds": NaN,
+      "implied_prob": null,
+      "value_gap": null,
+      "edge_label": "N/A",
+      "betting_category": "avoid",
+      "confidence": "Low",
+      "double_chance_direction": "",
+      "bet_description": "Skip — too close to call",
+      "is_strong_fade": false,
+      "home_team_form": {
+        "current_season_pts": 7,
+        "current_season_games": 6,
+        "pts_last5": 7,
+        "gf_last5": 9,
+        "ga_last5": 10,
+        "wins_last5": 2,
+        "form_string": "L W L D W"
+      },
+      "away_team_form": {
+        "current_season_pts": 8,
+        "current_season_games": 6,
+        "pts_last5": 7,
+        "gf_last5": 8,
+        "ga_last5": 11,
+        "wins_last5": 2,
+        "form_string": "W D L W L"
+      },
+      "home_team_home_form": {
+        "pts_last5": 6,
+        "wins_last5": 2,
+        "gf_last5": 9,
+        "ga_last5": 11,
+        "form_string": "L W L L W"
+      },
+      "away_team_away_form": {
+        "pts_last5": 6,
+        "wins_last5": 2,
+        "gf_last5": 7,
+        "ga_last5": 11,
+        "form_string": "W L W L L"
+      },
+      "h2h": {
+        "home_wins": 1,
+        "away_wins": 3,
+        "draws": 1,
+        "home_gf_avg": 1.5,
+        "summary": "Home 1W 1D 3L in last 5 meetings"
+      },
+      "home_league_position": 12,
+      "away_league_position": 11,
+      "referee": null,
+      "home_news": [],
+      "away_news": []
+    },
+    {
+      "home_team": "Hull City",
+      "away_team": "Brentford",
+      "kickoff": "2026-10-25T14:00:00",
+      "prob_homewin": 0.549,
+      "signal": "Home",
+      "odds": NaN,
+      "implied_prob": null,
+      "value_gap": null,
+      "edge_label": "N/A",
+      "betting_category": "avoid",
+      "confidence": "Low",
+      "double_chance_direction": "",
+      "bet_description": "Skip — too close to call",
+      "is_strong_fade": false,
+      "home_team_form": {
+        "current_season_pts": 9,
+        "current_season_games": 6,
+        "pts_last5": 6,
+        "gf_last5": 6,
+        "ga_last5": 6,
+        "wins_last5": 1,
+        "form_string": "W D D L D"
+      },
+      "away_team_form": {
+        "current_season_pts": 10,
+        "current_season_games": 6,
+        "pts_last5": 7,
+        "gf_last5": 9,
+        "ga_last5": 6,
+        "wins_last5": 1,
+        "form_string": "D D D W D"
+      },
+      "home_team_home_form": {
+        "pts_last5": 5,
+        "wins_last5": 1,
+        "gf_last5": 5,
+        "ga_last5": 11,
+        "form_string": "L L W D D"
+      },
+      "away_team_away_form": {
+        "pts_last5": 7,
+        "wins_last5": 1,
+        "gf_last5": 9,
+        "ga_last5": 8,
+        "form_string": "W D D D D"
+      },
+      "h2h": {
+        "home_wins": 0,
+        "away_wins": 0,
+        "draws": 0,
+        "home_gf_avg": 0.0,
+        "summary": "Limited h2h data (0 matches found)"
+      },
+      "home_league_position": 8,
+      "away_league_position": 4,
+      "referee": null,
+      "home_news": [],
+      "away_news": []
+    },
+    {
+      "home_team": "Liverpool",
+      "away_team": "Brighton",
+      "kickoff": "2026-10-25T14:00:00",
+      "prob_homewin": 0.358,
+      "signal": "Not Home",
+      "odds": NaN,
+      "implied_prob": null,
+      "value_gap": null,
+      "edge_label": "N/A",
+      "betting_category": "double_chance",
+      "confidence": "Medium",
+      "double_chance_direction": "Back Away Win or Draw (X2)",
+      "bet_description": "Back Away Win or Draw (X2)",
+      "is_strong_fade": false,
+      "home_team_form": {
+        "current_season_pts": 9,
+        "current_season_games": 6,
+        "pts_last5": 8,
+        "gf_last5": 5,
+        "ga_last5": 5,
+        "wins_last5": 2,
+        "form_string": "D W D W L"
+      },
+      "away_team_form": {
+        "current_season_pts": 13,
+        "current_season_games": 6,
+        "pts_last5": 10,
+        "gf_last5": 14,
+        "ga_last5": 5,
+        "wins_last5": 3,
+        "form_string": "L D W W W"
+      },
+      "home_team_home_form": {
+        "pts_last5": 5,
+        "wins_last5": 1,
+        "gf_last5": 8,
+        "ga_last5": 9,
+        "form_string": "L W D D L"
+      },
+      "away_team_away_form": {
+        "pts_last5": 9,
+        "wins_last5": 3,
+        "gf_last5": 12,
+        "ga_last5": 5,
+        "form_string": "L W L W W"
       },
       "h2h": {
         "home_wins": 3,
@@ -318,8 +738,128 @@
         "home_gf_avg": 2.0,
         "summary": "Home 3W 1D 1L in last 5 meetings"
       },
-      "home_league_position": 19,
-      "away_league_position": 14,
+      "home_league_position": 9,
+      "away_league_position": 3,
+      "referee": null,
+      "home_news": [],
+      "away_news": []
+    },
+    {
+      "home_team": "Man United",
+      "away_team": "Bournemouth",
+      "kickoff": "2026-10-25T14:00:00",
+      "prob_homewin": 0.331,
+      "signal": "Not Home",
+      "odds": NaN,
+      "implied_prob": null,
+      "value_gap": null,
+      "edge_label": "N/A",
+      "betting_category": "double_chance",
+      "confidence": "Medium",
+      "double_chance_direction": "Back Away Win or Draw (X2)",
+      "bet_description": "Back Away Win or Draw (X2)",
+      "is_strong_fade": false,
+      "home_team_form": {
+        "current_season_pts": 6,
+        "current_season_games": 6,
+        "pts_last5": 6,
+        "gf_last5": 9,
+        "ga_last5": 7,
+        "wins_last5": 1,
+        "form_string": "W D L D D"
+      },
+      "away_team_form": {
+        "current_season_pts": 3,
+        "current_season_games": 6,
+        "pts_last5": 3,
+        "gf_last5": 6,
+        "ga_last5": 11,
+        "wins_last5": 0,
+        "form_string": "D D D L L"
+      },
+      "home_team_home_form": {
+        "pts_last5": 10,
+        "wins_last5": 3,
+        "gf_last5": 10,
+        "ga_last5": 5,
+        "form_string": "W W W L D"
+      },
+      "away_team_away_form": {
+        "pts_last5": 5,
+        "wins_last5": 1,
+        "gf_last5": 6,
+        "ga_last5": 10,
+        "form_string": "W D L D L"
+      },
+      "h2h": {
+        "home_wins": 0,
+        "away_wins": 2,
+        "draws": 3,
+        "home_gf_avg": 1.3,
+        "summary": "Home 0W 3D 2L in last 5 meetings"
+      },
+      "home_league_position": 13,
+      "away_league_position": 18,
+      "referee": null,
+      "home_news": [],
+      "away_news": []
+    },
+    {
+      "home_team": "Sunderland",
+      "away_team": "Leeds",
+      "kickoff": "2026-10-25T16:30:00",
+      "prob_homewin": 0.425,
+      "signal": "Not Home",
+      "odds": NaN,
+      "implied_prob": null,
+      "value_gap": null,
+      "edge_label": "N/A",
+      "betting_category": "double_chance",
+      "confidence": "Medium",
+      "double_chance_direction": "Back Away Win or Draw (X2)",
+      "bet_description": "Back Away Win or Draw (X2)",
+      "is_strong_fade": false,
+      "home_team_form": {
+        "current_season_pts": 4,
+        "current_season_games": 6,
+        "pts_last5": 4,
+        "gf_last5": 5,
+        "ga_last5": 10,
+        "wins_last5": 1,
+        "form_string": "W D L L L"
+      },
+      "away_team_form": {
+        "current_season_pts": 9,
+        "current_season_games": 6,
+        "pts_last5": 6,
+        "gf_last5": 7,
+        "ga_last5": 5,
+        "wins_last5": 1,
+        "form_string": "D D W D L"
+      },
+      "home_team_home_form": {
+        "pts_last5": 3,
+        "wins_last5": 1,
+        "gf_last5": 2,
+        "ga_last5": 8,
+        "form_string": "L L W L L"
+      },
+      "away_team_away_form": {
+        "pts_last5": 6,
+        "wins_last5": 1,
+        "gf_last5": 6,
+        "ga_last5": 6,
+        "form_string": "D D W D L"
+      },
+      "h2h": {
+        "home_wins": 2,
+        "away_wins": 2,
+        "draws": 1,
+        "home_gf_avg": 1.0,
+        "summary": "Home 2W 1D 2L in last 5 meetings"
+      },
+      "home_league_position": 17,
+      "away_league_position": 7,
       "referee": null,
       "home_news": [],
       "away_news": []
