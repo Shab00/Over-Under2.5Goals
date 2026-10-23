@@ -23,7 +23,10 @@
       "rag_informed": true,
       "bet_description": "Back Away Win",
       "double_chance_direction": "",
-      "is_strong_fade": true
+      "is_strong_fade": true,
+      "correct": true,
+      "FTR": "A",
+      "profit": 0.0
     },
     {
       "home_team": "Tottenham",
@@ -43,7 +46,10 @@
       "rag_informed": true,
       "bet_description": "Back Away Win or Draw (X2)",
       "double_chance_direction": "Back Away Win or Draw (X2)",
-      "is_strong_fade": false
+      "is_strong_fade": false,
+      "correct": false,
+      "FTR": "H",
+      "profit": 0.0
     }
   ],
   "strong_fades": [
@@ -93,5 +99,13 @@
   "avoid_list": [],
   "value_bets": [],
   "telegram_message": "<b>EPL AI Pundit Strategy</b>\nThe standout value bet this week is the strong fade on Nott'm Forest against Arsenal.\n\n<b>Strong Fades:</b>\n<b>Nott'm Forest vs Arsenal</b> — Strong Fade — Back Away Win\n\n<b>Double Chance:</b>\n<b>Tottenham vs Coventry City</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nNone reported.\n\nFull analysis: shab00.github.io/football",
-  "scored": false
+  "scored": true,
+  "score_summary": {
+    "total": 2,
+    "correct": 1,
+    "accuracy_pct": 50.0,
+    "total_profit": 0.0,
+    "edge_correct": 0,
+    "edge_profit": 0
+  }
 }

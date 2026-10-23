@@ -1,19 +1,19 @@
 {
-  "created_at_utc": "20261019T180609Z",
+  "created_at_utc": "20261023T180521Z",
   "train_csv": "data/processed/combinedWithOdds.upserted.csv",
-  "rows_used": 9689,
+  "rows_used": 9699,
   "features": 218,
   "test_size": 0.2,
   "random_state": 42,
   "n_matches_form": 5,
   "metrics": {
-    "accuracy": 0.6434468524251806,
-    "f1": 0.5899109792284867
+    "accuracy": 0.634020618556701,
+    "f1": 0.5783847980997625
   },
-  "model_path": "models/weekly/homewin/lightgbm_homewin_20261019T180609Z.pkl",
-  "feature_list_path": "models/weekly/homewin/feature_list_20261019T180609Z.pkl",
+  "model_path": "models/weekly/homewin/lightgbm_homewin_20261023T180521Z.pkl",
+  "feature_list_path": "models/weekly/homewin/feature_list_20261023T180521Z.pkl",
   "teams_count": 46,
   "python": "3.11.17 (main, Oct  1 2026, 14:32:31) [GCC 13.3.0]",
   "numpy": "2.4.6",
-  "pandas": "3.0.6"
+  "pandas": "3.1.0"
 }
