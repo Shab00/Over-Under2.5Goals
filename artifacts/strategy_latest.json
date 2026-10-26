@@ -1,55 +1,15 @@
 {
-  "generated_at": "2026-10-25T16:30:00",
-  "model_form": "Model is MIXED — 64.6% accuracy over last 65 confident predictions. EDGE profit: -1.57 units.",
-  "gameweek_summary": "Sunderland's struggles continue, making the double chance bet against Leeds an intriguing pick. Expect a competitive match given Sunderland's low win probability and Leeds' better form.",
+  "generated_at": "2026-10-26T09:15:53.000220+00:00",
+  "mode": "no_fixtures",
+  "next_matchday": "TBC",
+  "lookback_ready": true,
+  "lookback_summary": "Well, what a weekend it was! The model really nailed the Nott'm Forest vs Arsenal clash, correctly predicting that Arsenal would come away with the win. That match ended with Arsenal taking the victory 1-0, a tidy little result for those who backed them. However, I had to eat humble pie on the Tottenham vs Coventry City fixture, where the model called for a Not Home win but Tottenham proved their home strength with a solid 3-1 victory. Sometimes, you just can't predict the heart of a home side!",
+  "gameweek_summary": "",
   "rest_of_card_paragraph": "",
   "top_picks": [],
-  "fixtures_full": [
-    {
-      "home_team": "Sunderland",
-      "away_team": "Leeds",
-      "kickoff": "2026-10-25T16:30:00",
-      "signal": "Not Home",
-      "confidence": "Medium",
-      "edge_label": "N/A",
-      "prob_homewin": 0.385,
-      "odds": 2.83,
-      "value_gap": 0.0316,
-      "pundit_take": "With Sunderland sitting bottom of the table and struggling at home, backing Leeds to either win or draw makes sense. Their recent away form has been more reliable, and Sunderland's poor record only strengthens the case for this double chance bet.",
-      "bet_type": "Back Double Chance (X2)",
-      "stake_advice": "Small",
-      "pundit_action": "Back Double Chance (X2)",
-      "betting_category": "double_chance",
-      "rag_informed": false,
-      "bet_description": "Back Away Win or Draw (X2)",
-      "double_chance_direction": "Back Away Win or Draw (X2)",
-      "is_strong_fade": false
-    }
-  ],
   "strong_fades": [],
-  "double_chances": [
-    {
-      "home_team": "Sunderland",
-      "away_team": "Leeds",
-      "kickoff": "2026-10-25T16:30:00",
-      "signal": "Not Home",
-      "confidence": "Medium",
-      "edge_label": "N/A",
-      "prob_homewin": 0.385,
-      "odds": 2.83,
-      "value_gap": 0.0316,
-      "pundit_take": "With Sunderland sitting bottom of the table and struggling at home, backing Leeds to either win or draw makes sense. Their recent away form has been more reliable, and Sunderland's poor record only strengthens the case for this double chance bet.",
-      "bet_type": "Back Double Chance (X2)",
-      "stake_advice": "Small",
-      "pundit_action": "Back Double Chance (X2)",
-      "betting_category": "double_chance",
-      "rag_informed": false,
-      "bet_description": "Back Away Win or Draw (X2)",
-      "double_chance_direction": "Back Away Win or Draw (X2)",
-      "is_strong_fade": false
-    }
-  ],
+  "double_chances": [],
   "avoid_list": [],
-  "value_bets": [],
-  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nSunderland's struggles continue, making the double chance bet against Leeds an intriguing pick.\n\n<b>Double Chance:</b>\n<b>Sunderland vs Leeds</b> — Back Double Chance (X2)\n\n<b>Injury News:</b>\nNone reported.\n\nFull analysis: shab00.github.io/football"
+  "fixtures_full": [],
+  "value_bets": []
 }
