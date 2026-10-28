@@ -1,13 +1,13 @@
-# EPL AI Pundit Strategy - 2026-10-27
+# EPL AI Pundit Strategy - 2026-10-28
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Expect a tight contest between Liverpool and Arsenal with both teams showing strong form lately. The standout value bet is Hull City to secure a win against Ipswich Town, given their strong home advantage despite recent shaky performances. Keep an eye on injuries as they could impact the final outcomes.
+This week, we see Hull City as a standout banker pick against Ipswich Town, given their solid home advantage. A notable injury to Goretzka could impact Aston Villa's chances against Fulham. The biggest mismatch is definitely between Chelsea and Man United, with both teams struggling for form.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-In a close call, Chelsea against Manchester United is a double chance bet where backing United could be wise given their recent struggles. Bournemouth vs Leeds also presents a double chance scenario; Leeds may just edge it. Brentford vs Nott'm Forest is similar, with both teams struggling, making it hard to call. Coventry City versus Sunderland is a match to skip, as both teams are in dire straits. Hull City looks solid to back at home against Ipswich, while Tottenham against Crystal Palace also poses a challenge for the home side. Aston Villa versus Fulham is too close to call, making it another match to avoid. The model is currently HOT and in strong form - trust the signals this week.
+In the strong fade category, Chelsea against Man United is a closely contested affair, but the home side's form gives the edge to the away side, so back United. For double chances, Bournemouth vs Leeds is an interesting matchup; while both teams are inconsistent, Leeds has a chance to secure points. Brentford vs Nott'm Forest also suggests a double chance for the away side. Finally, Coventry City vs Sunderland is too close to call, making it a skip this time around. The model is in strong form, so trust these signals. The model is currently HOT over its last 74 confident predictions.
 
 ## Value Bets (EDGE)
 
