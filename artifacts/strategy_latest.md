@@ -1,13 +1,13 @@
-# EPL AI Pundit Strategy - 2026-10-28
+# EPL AI Pundit Strategy - 2026-10-29
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This week, we see Hull City as a standout banker pick against Ipswich Town, given their solid home advantage. A notable injury to Goretzka could impact Aston Villa's chances against Fulham. The biggest mismatch is definitely between Chelsea and Man United, with both teams struggling for form.
+This gameweek features a standout value bet with Hull City against Ipswich Town, where Hull should capitalize on their home advantage. Notably, Aston Villa face Fulham, where both sides are in shaky form but Villa holds a slight edge in recent history. Expect a closely contested match between Liverpool and Arsenal as well.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-In the strong fade category, Chelsea against Man United is a closely contested affair, but the home side's form gives the edge to the away side, so back United. For double chances, Bournemouth vs Leeds is an interesting matchup; while both teams are inconsistent, Leeds has a chance to secure points. Brentford vs Nott'm Forest also suggests a double chance for the away side. Finally, Coventry City vs Sunderland is too close to call, making it a skip this time around. The model is in strong form, so trust these signals. The model is currently HOT over its last 74 confident predictions.
+In the strong fade category, Chelsea vs Man United is a tricky one as Chelsea's inconsistent form makes backing United appealing. The double chance bets on Bournemouth vs Leeds and Brentford vs Nott'm Forest indicate a potential for away draws, given both home teams' struggles. Coventry City vs Sunderland is too close to call, making it a skip for now, with both teams low on points and form. The model is currently HOT over its last 74 confident predictions.
 
 ## Value Bets (EDGE)
 
