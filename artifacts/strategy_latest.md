@@ -1,13 +1,13 @@
-# EPL AI Pundit Strategy - 2026-10-31
+# EPL AI Pundit Strategy - 2026-11-01
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This round features a close double chance between Liverpool and Arsenal, where both teams are in strong form. Also, keep an eye on Aston Villa's match against Fulham, as their struggles at home could create a tight contest.
+This gameweek features Liverpool against Arsenal, a standout double chance where the value lies in backing Arsenal to either win or draw. With no injury concerns on either side, expect a competitive match. Newcastle's clash with Everton also offers a double chance, with both teams struggling for form.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-In the double chance fixtures, Aston Villa against Fulham presents a tricky matchup with Villa's inconsistent home form and Fulham's recent away successes. Liverpool facing Arsenal seems equally balanced, with both teams showing resilience, making a double chance on the away side appealing. The model is currently HOT over its last 74 confident predictions.
+In the double chance fixtures, Liverpool hosts Arsenal, and given the home side's shaky form, backing Arsenal to win or draw is the smart play. Newcastle facing Everton also fits this category; both teams have been inconsistent, making a double chance bet worthwhile. Overall, the model is HOT and in strong form, suggesting trust in these signals for the upcoming matches.
 
 ## Value Bets (EDGE)
 
