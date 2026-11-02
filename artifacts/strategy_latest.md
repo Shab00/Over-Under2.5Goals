@@ -1,13 +1,10 @@
-# EPL AI Pundit Strategy - 2026-11-01
+# EPL AI Pundit Strategy - 2026-11-02
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This gameweek features an intriguing double chance bet with Arsenal visiting Liverpool, where the odds favor the away side. Newcastle against Everton also offers a chance to back the away team due to their recent form.
+Newcastle facing Everton is a prime opportunity for a double chance bet, as the model sees value in backing the away side or the draw with both teams struggling for consistency. Keep an eye on how this match unfolds, especially considering the recent form of both clubs.
 
 ## Top Picks
-
-## Pundit's View on the Rest of the Card
-In the double chance fixtures, both Liverpool and Newcastle face tough opponents, but the model suggests backing Arsenal and Everton for value. Liverpool has shown vulnerability at home, while Arsenal's away form has been solid. Newcastle's inconsistent home form makes it a tricky matchup, but Everton could snatch a point or more. The model is HOT and producing reliable signals this week.
 
 ## Value Bets (EDGE)
 
