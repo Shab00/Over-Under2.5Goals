@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-11-02T09:07:39.108298+00:00",
+  "scraped_at": "2026-11-03T09:06:46.611932+00:00",
   "fixtures": [
     {
       "home_team": "arsenal",
@@ -17751,7 +17751,35 @@
       "home_team": "everton",
       "away_team": "coventry city",
       "kickoff": "2026-11-06T20:00:00+00:00",
-      "home_news": [],
+      "home_news": [
+        {
+          "headline": "Kiernan Dewsbury-Hall runs rings around £48m man as Thierno Barry bounces back for Everton again",
+          "source": "",
+          "time_ago": "48m",
+          "team": "everton",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Everton/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Everton team news: Jack Grealish omission explained before Newcastle Premier League clash",
+          "source": "",
+          "time_ago": "16:07",
+          "team": "everton",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Everton/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Newcastle United v Everton team news bombshell emerges just hours before kick off",
+          "source": "",
+          "time_ago": "15:12",
+          "team": "everton",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Everton/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        }
+      ],
       "away_news": [
         {
           "headline": "Fresh Burnley injury update ahead of Wolves as Ahmedhodzic sidelined",
@@ -17760,6 +17788,51 @@
           "team": "coventry city",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
           "first_seen": "2026-11-01T09:05:44.365316+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "'Things are looking good,' – Aaron Danks delivers major double injury boost for Bayern Munich",
+          "source": "",
+          "time_ago": "4h",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Bayern await fitness test after Olise injury scare",
+          "source": "",
+          "time_ago": "1d",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Celestini reveals Burnley boost as he gives updates on attacking trio",
+          "source": "",
+          "time_ago": "16h",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Burnley handed Zeki Amdouni fitness boost as injury update provided",
+          "source": "",
+          "time_ago": "18h",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Cardiff City squad decimated as eight players could miss West Ham amid crisis",
+          "source": "",
+          "time_ago": "2d",
+          "team": "coventry city",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Coventry+City/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
           "is_injury_concern": false
         }
       ]
@@ -17848,6 +17921,42 @@
           "team": "leeds",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
           "first_seen": "2026-11-02T09:07:39.108298+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Leeds United face worrying new suspension concern after Saturday",
+          "source": "",
+          "time_ago": "15h",
+          "team": "leeds",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Leeds fan dies after medical emergency at Man Utd clash as club pay tribute",
+          "source": "",
+          "time_ago": "17:56",
+          "team": "leeds",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Leeds United & Tottenham Hotspur early injury news as blows leave 5 out and 5 others doubtful but key men now back",
+          "source": "",
+          "time_ago": "14:49",
+          "team": "leeds",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Injury expert shares 'two to watch' as Leeds set for possible new double blow vs Tottenham",
+          "source": "",
+          "time_ago": "13:47",
+          "team": "leeds",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Leeds+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
           "is_injury_concern": false
         }
       ],
@@ -17968,6 +18077,33 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Tottenham+Hotspur/Injuries+and+Suspensions",
           "first_seen": "2026-11-02T09:07:39.108298+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Roberto De Zerbi has earned Tottenham's trust on Mykhaylo Mudryk",
+          "source": "",
+          "time_ago": "20h",
+          "team": "tottenham",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Tottenham+Hotspur/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Tottenham, Crystal Palace recently scouted ‘this’ Cruzeiro goalkeeper vs. Atletico-MG",
+          "source": "",
+          "time_ago": "20:50",
+          "team": "tottenham",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Tottenham+Hotspur/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Injury boost: Roberto De Zerbi confirms training return timeline for Wilson Odobert",
+          "source": "",
+          "time_ago": "20:10",
+          "team": "tottenham",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Tottenham+Hotspur/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
         }
       ]
     },
@@ -18056,6 +18192,69 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
           "first_seen": "2026-11-02T09:07:39.108298+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Arsenal Team News at slavia Praha: Bukayo Saka, Eberechi Eze",
+          "source": "",
+          "time_ago": "15h",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Predicted Arsenal XI at slavia Praha: Likely starts for Eze, Dowman, gyokeres",
+          "source": "",
+          "time_ago": "14h",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Arsenal suffered another injury issue pre-Liverpool",
+          "source": "",
+          "time_ago": "21h",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "'Great News': William Saliba training update emerges ahead of Arsenal's trip to Slavia Prague",
+          "source": "",
+          "time_ago": "06:44",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "William Saliba back in Arsenal training after 'absolutely smashing' injury recovery",
+          "source": "",
+          "time_ago": "21:03",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Arteta reveals new injury concern for Arsenal after Tzolis started",
+          "source": "",
+          "time_ago": "17:01",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Max Dowman set for Arsenal start chance despite three-match suspension",
+          "source": "",
+          "time_ago": "16:11",
+          "team": "arsenal",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Arsenal/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
         }
       ],
       "away_news": [
@@ -18075,13 +18274,69 @@
       "away_team": "newcastle",
       "kickoff": "2026-11-07T15:00:00+00:00",
       "home_news": [],
-      "away_news": []
+      "away_news": [
+        {
+          "headline": "Newcastle United issue official Matias Fernandez-Pardo update as striker ruled out for three matches",
+          "source": "",
+          "time_ago": "06:06",
+          "team": "newcastle",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Newcastle+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Newcastle injury boost for weekend as Matthias Jaissle addresses Sean Steur issue",
+          "source": "",
+          "time_ago": "05:49",
+          "team": "newcastle",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Newcastle+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Newcastle v Everton team news: Osula fit, Elanga starts",
+          "source": "",
+          "time_ago": "19:48",
+          "team": "newcastle",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Newcastle+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "The official reason why Matias Fernandez-Pardo ruled out for Newcastle United vs Everton",
+          "source": "",
+          "time_ago": "18:49",
+          "team": "newcastle",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Newcastle+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Will Osula major Newcastle United injury update issued hours before Everton clash",
+          "source": "",
+          "time_ago": "18:05",
+          "team": "newcastle",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Newcastle+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        }
+      ]
     },
     {
       "home_team": "nott'm forest",
       "away_team": "man city",
       "kickoff": "2026-11-07T17:30:00+00:00",
-      "home_news": [],
+      "home_news": [
+        {
+          "headline": "Tottenham Hotspur Are Keeping A Keen Eye On This Nottingham Forest Ace: Good Fit For De Zerbi?",
+          "source": "",
+          "time_ago": "20:40",
+          "team": "nott'm forest",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Nottingham+Forest/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        }
+      ],
       "away_news": [
         {
           "headline": "What Erling Haaland did in injury time vs Brighton speaks volumes as Man City errors cost them",
@@ -18116,8 +18371,28 @@
       "home_team": "brighton",
       "away_team": "brentford",
       "kickoff": "2026-11-08T14:00:00+00:00",
-      "home_news": [],
-      "away_news": []
+      "home_news": [
+        {
+          "headline": "Kadioglu, Azeez, Struijk - Brighton injury list in full and return dates ahead of Getafe and Brentford",
+          "source": "",
+          "time_ago": "19h",
+          "team": "brighton",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Brighton/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        }
+      ],
+      "away_news": [
+        {
+          "headline": "Confirmed Hull City v Brentford Team News: Andrews makes three changes",
+          "source": "",
+          "time_ago": "13:09",
+          "team": "brentford",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Brentford/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        }
+      ]
     },
     {
       "home_team": "crystal palace",
@@ -18223,6 +18498,42 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
           "first_seen": "2026-11-02T09:07:39.108298+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Liverpool injury latest: Hugo Ekitike, Conor Bradley and more",
+          "source": "",
+          "time_ago": "14h",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Dominik Szoboszlai provides injury update ahead of Fenerbahce vs Liverpool",
+          "source": "",
+          "time_ago": "09:05",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Liverpool injury latest and return dates for Fenerbahce clash including Jeremie Frimpong",
+          "source": "",
+          "time_ago": "06:10",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Liverpool predicted lineup vs. Fenerbahce: Andoni Iraola faces midfield choice after Dominik Szoboszlai returns from injury",
+          "source": "",
+          "time_ago": "01:06",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
         }
       ]
     },
@@ -18238,6 +18549,15 @@
           "team": "ipswich town",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Ipswich+Town/Injuries+and+Suspensions",
           "first_seen": "2026-11-02T09:07:39.108298+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Ipswich keeper faces Valencia loan doubt",
+          "source": "",
+          "time_ago": "17h",
+          "team": "ipswich town",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Ipswich+Town/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
           "is_injury_concern": false
         }
       ],
@@ -18274,6 +18594,15 @@
           "team": "sunderland",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Sunderland/Injuries+and+Suspensions",
           "first_seen": "2026-11-02T09:07:39.108298+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Blow for Sunderland man after injury setback – Player out for ‘at least 3 weeks’",
+          "source": "",
+          "time_ago": "08:55",
+          "team": "sunderland",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Sunderland/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
           "is_injury_concern": false
         }
       ],
@@ -18340,6 +18669,33 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
           "first_seen": "2026-11-02T09:07:39.108298+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "The matches Maxence Lacroix will miss as Chelsea handed injury blow",
+          "source": "",
+          "time_ago": "13h",
+          "team": "chelsea",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Xabi Alonso hails 'top form' Romeo Lavia as Chelsea star finally overcomes injury nightmare to sink Manchester United",
+          "source": "",
+          "time_ago": "08:16",
+          "team": "chelsea",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Chelsea handed crucial injury boost after Man Utd as Alonso makes admission",
+          "source": "",
+          "time_ago": "14:05",
+          "team": "chelsea",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
         }
       ]
     },
@@ -18400,6 +18756,114 @@
           "team": "man united",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
           "first_seen": "2026-11-02T09:07:39.108298+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Man Utd name 23-man squad to face Roma as Lisandro Martinez decision made",
+          "source": "",
+          "time_ago": "19h",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Just in: Man Utd welcome exciting star back to training as 4 absent ahead of Roma",
+          "source": "",
+          "time_ago": "1d",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Man United predicted line-up vs Roma: three key changes made as Carrick sweats over Amad and Rashford fitness",
+          "source": "",
+          "time_ago": "1d",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Amad, Dorgu, Rashford: Latest FPL Team News pre-Gameweek 10",
+          "source": "",
+          "time_ago": "18h",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Man Utd get big injury boost in training squad vs Roma after Michael Carrick sack decision",
+          "source": "",
+          "time_ago": "19h",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Man Utd handed huge injury boost as 24-man training squad for Roma clash revealed",
+          "source": "",
+          "time_ago": "20h",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Nine players set to miss Man United vs Roma after Marcus Rashford injury update",
+          "source": "",
+          "time_ago": "06:35",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Manchester United issue injury update on four players as Leny Yoro issue explained",
+          "source": "",
+          "time_ago": "14:30",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Carrick reveals Man Utd injury latest after surprise return",
+          "source": "",
+          "time_ago": "14:01",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Man Utd star desperate for January transfer exit, leaves new agent after 2 months to engineer OT departure",
+          "source": "",
+          "time_ago": "13:22",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Dorgu hands Man United injury boost",
+          "source": "",
+          "time_ago": "12:53",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "New Man Utd injury concern as star spotted strapped in training",
+          "source": "",
+          "time_ago": "12:42",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-03T09:06:46.611932+00:00",
           "is_injury_concern": false
         }
       ],
@@ -19072,6 +19536,33 @@
       "team": "Premier League",
       "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
       "first_seen": "2026-11-01T09:05:44.365316+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "Everton Team News: Jack Grealish omission explained before Newcastle Premier League clash",
+      "source": "",
+      "time_ago": "17h",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-03T09:06:46.611932+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "Newcastle United v Everton Team News bombshell emerges just hours before kick off",
+      "source": "",
+      "time_ago": "18h",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-03T09:06:46.611932+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "Man Utd duo train ahead of Roma clash but several miss out",
+      "source": "",
+      "time_ago": "21h",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-03T09:06:46.611932+00:00",
       "is_injury_concern": false
     }
   ]
