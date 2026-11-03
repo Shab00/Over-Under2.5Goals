@@ -1,55 +1,13 @@
 {
-  "generated_at": "2026-11-02T15:30:00Z",
-  "model_form": "Model is HOT — 67.6% accuracy over last 74 confident predictions. EDGE profit: -0.06 units.",
-  "gameweek_summary": "Newcastle are struggling with just one win in their last five matches, making them vulnerable against Everton, who have shown more resilience lately. The standout bet this week is to strongly fade Newcastle against Everton, who are well positioned to capitalize on their opponent's poor form.",
-  "rest_of_card_paragraph": "",
+  "generated_at": "2026-11-06T12:00:00",
+  "model_form": "Model is MIXED — 66.3% accuracy over last 83 confident predictions. EDGE profit: +0.74 units.",
+  "gameweek_summary": "This week, Everton against Coventry City stands out as a solid pick with a clear edge for the home side. Look out for Leeds facing Tottenham, though it's a tight call with both teams struggling for form.",
+  "rest_of_card_paragraph": "Starting with the strong fades, Leeds hosting Tottenham is too close to call, with both teams struggling lately, making it a no-bet situation. For double chances, Brighton against Brentford looks promising; the home side has good form, but the away side is no pushover. Crystal Palace versus Liverpool also suggests backing the away side, as Palace's recent form has been dismal. The remaining fixtures, including Arsenal against Hull and Nott'm Forest facing Man City, are too close to call, given their mixed performances and lack of clear edges. The model has been mixed, reflecting the uncertainty in these matchups.",
   "top_picks": [],
-  "fixtures_full": [
-    {
-      "home_team": "Newcastle",
-      "away_team": "Everton",
-      "kickoff": "2026-11-02T20:00:00",
-      "signal": "Not Home",
-      "confidence": "Low",
-      "edge_label": "N/A",
-      "prob_homewin": 0.152,
-      "odds": 2.16,
-      "value_gap": -0.311,
-      "pundit_take": "Newcastle are in a poor run of form with just one win in their last five, while Everton have been more solid despite their own struggles. The model strongly suggests backing Everton to win here, given Newcastle's low home win probability and lack of recent momentum.",
-      "bet_type": "Back Away Win",
-      "stake_advice": "Small",
-      "pundit_action": "Strong Fade — Back Away Win",
-      "betting_category": "strong_fade",
-      "rag_informed": true,
-      "bet_description": "Back Away Win",
-      "double_chance_direction": "",
-      "is_strong_fade": true
-    }
-  ],
-  "strong_fades": [
-    {
-      "home_team": "Newcastle",
-      "away_team": "Everton",
-      "kickoff": "2026-11-02T20:00:00",
-      "signal": "Not Home",
-      "confidence": "Low",
-      "edge_label": "N/A",
-      "prob_homewin": 0.152,
-      "odds": 2.16,
-      "value_gap": -0.311,
-      "pundit_take": "Newcastle are in a poor run of form with just one win in their last five, while Everton have been more solid despite their own struggles. The model strongly suggests backing Everton to win here, given Newcastle's low home win probability and lack of recent momentum.",
-      "bet_type": "Back Away Win",
-      "stake_advice": "Small",
-      "pundit_action": "Strong Fade — Back Away Win",
-      "betting_category": "strong_fade",
-      "rag_informed": true,
-      "bet_description": "Back Away Win",
-      "double_chance_direction": "",
-      "is_strong_fade": true
-    }
-  ],
+  "fixtures_full": [],
+  "strong_fades": [],
   "double_chances": [],
   "avoid_list": [],
   "value_bets": [],
-  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nNewcastle are struggling with just one win in their last five matches, making them vulnerable against Everton, who have shown more resilience lately.\n\n<b>Strong Fades:</b>\n<b>Newcastle vs Everton</b> — Strong Fade — Back Away Win\n\n<b>Injury News:</b>\nNone reported.\n\nFull analysis: shab00.github.io/football"
+  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nThis week, Everton against Coventry City stands out as a solid pick with a clear edge for the home side.\n\n<b>Injury News:</b>\nNone reported.\n\nFull analysis: shab00.github.io/football"
 }
