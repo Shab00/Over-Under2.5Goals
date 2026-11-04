@@ -1,17 +1,17 @@
-# EPL AI Pundit Strategy - 2026-11-03
+# EPL AI Pundit Strategy - 2026-11-04
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This week, Everton against Coventry City stands out as a solid pick with a clear edge for the home side. Look out for Leeds facing Tottenham, though it's a tight call with both teams struggling for form.
+This gameweek sees Everton hosting Coventry City, where Everton has shown decent home form. Meanwhile, Leeds face a challenging matchup against Tottenham, which could be a tight encounter.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-Starting with the strong fades, Leeds hosting Tottenham is too close to call, with both teams struggling lately, making it a no-bet situation. For double chances, Brighton against Brentford looks promising; the home side has good form, but the away side is no pushover. Crystal Palace versus Liverpool also suggests backing the away side, as Palace's recent form has been dismal. The remaining fixtures, including Arsenal against Hull and Nott'm Forest facing Man City, are too close to call, given their mixed performances and lack of clear edges. The model has been mixed, reflecting the uncertainty in these matchups.
+Starting with strong fades, both Everton against Coventry and Arsenal hosting Hull City present interesting dynamics, but the odds don't support a strong home backing. In double chances, Brighton vs Brentford looks promising; the away team's recent form suggests they can either draw or secure a win. Leeds vs Tottenham, Fulham vs Newcastle, and others are too close to call, making them avoid fixtures for now. The model's accuracy has been impressive, so trust the signals this week. The model is currently HOT over its last 84 confident predictions.
 
 ## Value Bets (EDGE)
 
 ## Avoid This Week
 
 ## Model Form
-Model is MIXED — 66.3% accuracy over last 83 confident predictions. EDGE profit: +0.74 units.
+Model is HOT — 66.7% accuracy over last 84 confident predictions. EDGE profit: +0.74 units.
