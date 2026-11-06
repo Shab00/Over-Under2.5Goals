@@ -1,13 +1,13 @@
-# EPL AI Pundit Strategy - 2026-11-05
+# EPL AI Pundit Strategy - 2026-11-06
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Everton is a standout value bet against Coventry City as they look to leverage their solid home form. Meanwhile, the biggest mismatch is Manchester City visiting Nott'm Forest, where the home side is struggling significantly.
+This week, Everton are the standout value bet against Coventry City, given their strong home form. Meanwhile, Arsenal's clash with Hull City presents a tricky situation, especially with their inconsistent form.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-In terms of strong fades, Leeds against Tottenham looks precarious for the home side, who have failed to win in recent outings. The double chance bets on Brighton versus Brentford and Crystal Palace against Liverpool offer decent opportunities given the away sides' potential to secure at least a draw. As for the avoid fixtures, Arsenal hosting Hull City and Fulham facing Newcastle are too tight to call, with both home sides not in peak form despite their historical advantages. The model is currently HOT over its last 84 confident predictions.
+Expect Everton to take control against Coventry, especially with the away side struggling in their travels. The remaining fixtures are too close to call, with Leeds facing Tottenham and Arsenal up against Hull City both being skip-worthy due to their unpredictable recent forms. The model is currently HOT over its last 84 confident predictions.
 
 ## Value Bets (EDGE)
 
