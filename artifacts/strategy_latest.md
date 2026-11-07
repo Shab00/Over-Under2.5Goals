@@ -2,16 +2,17 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This week, keep an eye on Brighton against Brentford as a standout double chance opportunity. Meanwhile, Arsenal's strong home form faces a less imposing Hull City, but the odds don’t offer clear value.
+Look for double chance bets this gameweek, particularly in the Leeds versus Tottenham match where the home side has struggled. Nott'm Forest faces a daunting task against Man City, making this a clear fade opportunity.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-The model indicates a strong fade on Leeds hosting Tottenham, where recent form shows Leeds struggling against a confident Spurs side. For double chance bets, Brighton against Brentford looks appealing—Brighton is tough at home while Brentford has been solid away. Crystal Palace's matchup with Liverpool also calls for a double chance approach, as Palace needs to improve but has some historical success against them. The rest, including Arsenal versus Hull City and Nott'm Forest against Man City, are simply too close to call and warrant a skip. The model is currently HOT over its last 84 confident predictions.
+We start with strong fades, where Nott'm Forest's dismal form makes them ripe for a strong fade against a dominant Man City side. Brighton hosting Brentford is another fade as Brighton's form has dipped despite a decent league position. For double chance bets, Leeds against Tottenham presents a chance to back the away team or a draw, given Leeds' poor home form. Sunderland's match against Chelsea also falls into this category, but with both teams lacking form, it's less clear. Arsenal's clash with Hull City is too close to call, hence the model suggests to skip. The model is currently HOT over its last 84 confident predictions.
 
 ## Value Bets (EDGE)
 
 ## Avoid This Week
+- **Arsenal vs Hull City** - This match is too close to call given Arsenal's strong form at home against Hull, who are struggling. However, the odds skew too heavily towards the home side.
 
 ## Model Form
 Model is HOT — 66.7% accuracy over last 84 confident predictions. EDGE profit: +0.74 units.
