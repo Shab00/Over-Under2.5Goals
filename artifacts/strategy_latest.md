@@ -2,17 +2,16 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This week, Nott'm Forest face a daunting challenge against Manchester City, who are on a roll. The standout value bet is to back away win for Brighton against Brentford, who are struggling on the road.
+The standout value bet this week is backing Man City against Nott'm Forest, given the clear quality difference. Crystal Palace's struggles continue, facing a confident Liverpool side. Expect a tough match for Sunderland against Chelsea, who are looking to capitalize on their opponents' poor form.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-Starting with strong fades, Nott'm Forest is in dire form facing a high-flying Manchester City, making it a clear signal to back City for the win. Fulham against Newcastle offers an interesting double chance bet, as both teams have had mixed results, but Newcastle's away form is a concern. Arsenal's fixture against Hull is too close to call given Arsenal's slip in form, so it's best to skip that one. The model is currently HOT over its last 84 confident predictions.
+In the strong fades, Nott'm Forest is up against Man City, and with Forest's poor form and league position, backing City is the only sensible option. Crystal Palace faces Liverpool, where the home side's struggles should lead to a Liverpool win. Ipswich Town's recent form makes them vulnerable against a resurgent Bournemouth, so back away for a small stake. Sunderland's dire situation against Chelsea suggests another strong fade. The model is in HOT form, and these signals should be trusted.
 
 ## Value Bets (EDGE)
 
 ## Avoid This Week
-- **Arsenal vs Hull City** - Arsenal's form has slipped recently, making their matchup against Hull too close to call, so it's best to skip this one.
 
 ## Model Form
 Model is HOT — 66.7% accuracy over last 84 confident predictions. EDGE profit: +0.74 units.
