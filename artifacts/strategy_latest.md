@@ -1,18 +1,13 @@
-# EPL AI Pundit Strategy - 2026-11-06
+# EPL AI Pundit Strategy - 2026-11-07
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Arsenal are overwhelming favourites against Hull City, and with their solid home form, they should secure the points. Expect a tough outing for Leeds against Tottenham, who are poised to capitalize on their struggles.
+This week, keep an eye on Brighton against Brentford as a standout double chance opportunity. Meanwhile, Arsenal's strong home form faces a less imposing Hull City, but the odds don’t offer clear value.
 
 ## Top Picks
-### Arsenal vs Hull City - Home (Medium)
-FADE | Prob: 63% | Odds: 1.16 | Value: -23.0%
-> Model signal only — no AI analysis for this fixture.
-**Action:** Back Home to Win | **Bet:** Back Home to Win | **Stake:** Small
-
 
 ## Pundit's View on the Rest of the Card
-In the strong fades, Leeds face Tottenham in a game where the home side has struggled to find form, making it a prime opportunity to back the away win. Everton’s matchup with Coventry City offers a double chance bet, as the model suggests backing the away side given the home team's low win probability. Fulham against Newcastle is another double chance scenario worth considering, as both teams exhibit inconsistency. The remaining fixtures are too close to call, making them skips for prudent bettors. The model is currently HOT over its last 84 confident predictions.
+The model indicates a strong fade on Leeds hosting Tottenham, where recent form shows Leeds struggling against a confident Spurs side. For double chance bets, Brighton against Brentford looks appealing—Brighton is tough at home while Brentford has been solid away. Crystal Palace's matchup with Liverpool also calls for a double chance approach, as Palace needs to improve but has some historical success against them. The rest, including Arsenal versus Hull City and Nott'm Forest against Man City, are simply too close to call and warrant a skip. The model is currently HOT over its last 84 confident predictions.
 
 ## Value Bets (EDGE)
 
