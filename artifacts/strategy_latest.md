@@ -2,17 +2,17 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Look for double chance bets this gameweek, particularly in the Leeds versus Tottenham match where the home side has struggled. Nott'm Forest faces a daunting task against Man City, making this a clear fade opportunity.
+This gameweek features standout double chance bets like Fulham against Newcastle. Keep an eye on Sunderland's uphill battle against Chelsea as they struggle at the bottom of the table.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-We start with strong fades, where Nott'm Forest's dismal form makes them ripe for a strong fade against a dominant Man City side. Brighton hosting Brentford is another fade as Brighton's form has dipped despite a decent league position. For double chance bets, Leeds against Tottenham presents a chance to back the away team or a draw, given Leeds' poor home form. Sunderland's match against Chelsea also falls into this category, but with both teams lacking form, it's less clear. Arsenal's clash with Hull City is too close to call, hence the model suggests to skip. The model is currently HOT over its last 84 confident predictions.
+In the strong fade department, Nott'm Forest is in dire straits against a dominant Man City, while Brighton should not be underestimated, facing a Brentford side that has been inconsistent. For double chances, Leeds against Tottenham is a solid option to back the away win or draw given Spurs' recent resurgence. Similarly, Sunderland's match against Chelsea also calls for a double chance, as they look to claw back points against a strong opponent. Arsenal's fixture against Hull City is too close to call, making it one to skip entirely. The model is currently HOT over its last 84 confident predictions.
 
 ## Value Bets (EDGE)
 
 ## Avoid This Week
-- **Arsenal vs Hull City** - This match is too close to call given Arsenal's strong form at home against Hull, who are struggling. However, the odds skew too heavily towards the home side.
+- **Arsenal vs Hull City** - Arsenal is strong at home but Hull City, despite being lower in the table, might not be completely out of the picture, making this fixture too close to call.
 
 ## Model Form
 Model is HOT — 66.7% accuracy over last 84 confident predictions. EDGE profit: +0.74 units.
