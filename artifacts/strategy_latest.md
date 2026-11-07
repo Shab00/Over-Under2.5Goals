@@ -2,17 +2,17 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This gameweek features standout double chance bets like Fulham against Newcastle. Keep an eye on Sunderland's uphill battle against Chelsea as they struggle at the bottom of the table.
+This week, Nott'm Forest face a daunting challenge against Manchester City, who are on a roll. The standout value bet is to back away win for Brighton against Brentford, who are struggling on the road.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-In the strong fade department, Nott'm Forest is in dire straits against a dominant Man City, while Brighton should not be underestimated, facing a Brentford side that has been inconsistent. For double chances, Leeds against Tottenham is a solid option to back the away win or draw given Spurs' recent resurgence. Similarly, Sunderland's match against Chelsea also calls for a double chance, as they look to claw back points against a strong opponent. Arsenal's fixture against Hull City is too close to call, making it one to skip entirely. The model is currently HOT over its last 84 confident predictions.
+Starting with strong fades, Nott'm Forest is in dire form facing a high-flying Manchester City, making it a clear signal to back City for the win. Fulham against Newcastle offers an interesting double chance bet, as both teams have had mixed results, but Newcastle's away form is a concern. Arsenal's fixture against Hull is too close to call given Arsenal's slip in form, so it's best to skip that one. The model is currently HOT over its last 84 confident predictions.
 
 ## Value Bets (EDGE)
 
 ## Avoid This Week
-- **Arsenal vs Hull City** - Arsenal is strong at home but Hull City, despite being lower in the table, might not be completely out of the picture, making this fixture too close to call.
+- **Arsenal vs Hull City** - Arsenal's form has slipped recently, making their matchup against Hull too close to call, so it's best to skip this one.
 
 ## Model Form
 Model is HOT — 66.7% accuracy over last 84 confident predictions. EDGE profit: +0.74 units.
