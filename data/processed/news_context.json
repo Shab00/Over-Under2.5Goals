@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-11-07T09:06:01.009377+00:00",
+  "scraped_at": "2026-11-08T09:05:39.870992+00:00",
   "fixtures": [
     {
       "home_team": "arsenal",
@@ -20092,6 +20092,42 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
           "first_seen": "2026-11-07T09:06:01.009377+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Jeremie Frimpong handed poisoned chalice and is running out of lives as Liverpool exit talk heats up",
+          "source": "",
+          "time_ago": "16h",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-11-08T09:05:39.870992+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Nine players could miss Crystal Palace vs Liverpool as Andoni Iraola sweats over injured star",
+          "source": "",
+          "time_ago": "16:27",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-11-08T09:05:39.870992+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Liverpool offer player to Saudi Pro League after horrible injury record",
+          "source": "",
+          "time_ago": "10:37",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-11-08T09:05:39.870992+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "'They know it' - Newcastle United £121m forward message after striker ruled out for three matches",
+          "source": "",
+          "time_ago": "121m",
+          "team": "liverpool",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Liverpool/Injuries+and+Suspensions",
+          "first_seen": "2026-11-08T09:05:39.870992+00:00",
+          "is_injury_concern": false
         }
       ]
     },
@@ -20116,6 +20152,15 @@
           "team": "ipswich town",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Ipswich+Town/Injuries+and+Suspensions",
           "first_seen": "2026-11-03T09:06:46.611932+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Manchester City 3-2 Ipswich Town - Match Report",
+          "source": "",
+          "time_ago": "17:19",
+          "team": "ipswich town",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Ipswich+Town/Injuries+and+Suspensions",
+          "first_seen": "2026-11-08T09:05:39.870992+00:00",
           "is_injury_concern": false
         }
       ],
@@ -20632,6 +20677,24 @@
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
           "first_seen": "2026-11-07T09:06:01.009377+00:00",
           "is_injury_concern": false
+        },
+        {
+          "headline": "Emiliano Martinez - Mike Penders: Who should start in goal for Chelsea vs Sunderland?",
+          "source": "",
+          "time_ago": "14h",
+          "team": "chelsea",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
+          "first_seen": "2026-11-08T09:05:39.870992+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "“He could be in the squad” – Xabi Alonso has great injury news at the right moment for Chelsea",
+          "source": "",
+          "time_ago": "08:01",
+          "team": "chelsea",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Chelsea/Injuries+and+Suspensions",
+          "first_seen": "2026-11-08T09:05:39.870992+00:00",
+          "is_injury_concern": false
         }
       ]
     },
@@ -21106,6 +21169,42 @@
           "team": "man united",
           "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
           "first_seen": "2026-11-07T09:06:01.009377+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "'Will be a bit longer' - Man Utd dealt massive injury blow as Michael Carrick confirms £70m summer signing Carlos Baleba set for lengthy spell on sidelines",
+          "source": "",
+          "time_ago": "70m",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-08T09:05:39.870992+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Man United ready to step into the market in January to correct their summer mistake",
+          "source": "",
+          "time_ago": "07:02",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-08T09:05:39.870992+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Michael Carrick could give Matheus Cunha a new role after laying down Manchester United challenge",
+          "source": "",
+          "time_ago": "03:47",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-08T09:05:39.870992+00:00",
+          "is_injury_concern": false
+        },
+        {
+          "headline": "Ligue 1 star becomes serious option for United after leaving scouts hugely impressed - report",
+          "source": "",
+          "time_ago": "20:04",
+          "team": "man united",
+          "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Manchester+United/Injuries+and+Suspensions",
+          "first_seen": "2026-11-08T09:05:39.870992+00:00",
           "is_injury_concern": false
         }
       ],
@@ -21922,6 +22021,105 @@
       "team": "Premier League",
       "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
       "first_seen": "2026-11-07T09:06:01.009377+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "Maresca reveals Man City double injury blow after third successive defeat",
+      "source": "",
+      "time_ago": "12h",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-08T09:05:39.870992+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "Why Saliba is not in Arsenal squad against Hull despite injury return",
+      "source": "",
+      "time_ago": "18h",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-08T09:05:39.870992+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "FPL notes: Barry haul + Thomas injury latest",
+      "source": "",
+      "time_ago": "11h",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-08T09:05:39.870992+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "Arbeloa on King injury worry and Fulham’s draw with Newcastle",
+      "source": "",
+      "time_ago": "13h",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-08T09:05:39.870992+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "Tottenham summer signing branded a ‘fraud’ in Leeds loss as De Zerbi reveals extent of Tel injury",
+      "source": "",
+      "time_ago": "09:00",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-08T09:05:39.870992+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "Revealed: Leeds 27-yr-old could be cast aside after injury news",
+      "source": "",
+      "time_ago": "07:54",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-08T09:05:39.870992+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "Frank Lampard delivers injury update as Coventry City expect Crystal Palace boost",
+      "source": "",
+      "time_ago": "07:01",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-08T09:05:39.870992+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "Guehi, Gvardiol, Semenyo - Man City injury news and return dates after Nottingham Forest defeat",
+      "source": "",
+      "time_ago": "05:23",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-08T09:05:39.870992+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "Everything Daniel Farke said on 'butterfly' Jayden Bogle, VAR calls and Melvin Bard",
+      "source": "",
+      "time_ago": "05:13",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-08T09:05:39.870992+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "Tottenham to lodge 'formal complaint' over Jayden Bogle VAR decision after Mathys Tel injury update",
+      "source": "",
+      "time_ago": "23:04",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-08T09:05:39.870992+00:00",
+      "is_injury_concern": false
+    },
+    {
+      "headline": "BBC: Tottenham to appeal to Pro Ref after Tel injured by Bogle with no card",
+      "source": "",
+      "time_ago": "22:39",
+      "team": "Premier League",
+      "url": "https://www.newsnow.co.uk/h/Sport/Football/Premier+League/Injuries+and+Suspensions",
+      "first_seen": "2026-11-08T09:05:39.870992+00:00",
       "is_injury_concern": false
     }
   ]
