@@ -1,13 +1,13 @@
-# EPL AI Pundit Strategy - 2026-11-07
+# EPL AI Pundit Strategy - 2026-11-08
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-The standout value bet this week is backing Man City against Nott'm Forest, given the clear quality difference. Crystal Palace's struggles continue, facing a confident Liverpool side. Expect a tough match for Sunderland against Chelsea, who are looking to capitalize on their opponents' poor form.
+This gameweek sees intriguing battles, particularly the double chance bets on Brighton against Brentford and Crystal Palace facing Liverpool. Both home sides have potential but are looking at tough contests against solid opposition.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-In the strong fades, Nott'm Forest is up against Man City, and with Forest's poor form and league position, backing City is the only sensible option. Crystal Palace faces Liverpool, where the home side's struggles should lead to a Liverpool win. Ipswich Town's recent form makes them vulnerable against a resurgent Bournemouth, so back away for a small stake. Sunderland's dire situation against Chelsea suggests another strong fade. The model is in HOT form, and these signals should be trusted.
+In our strong fades, Ipswich Town is up against Bournemouth, but their recent form shows a struggle, making it a good spot to back the away side. For double chances, Brighton against Brentford and Crystal Palace hosting Liverpool are both compelling; the model points toward backing the away side in each case. Finally, the Sunderland vs Chelsea fixture is too close to call, marked as an avoid with both teams underperforming of late. The model is in strong form, so trust these signals this week. The model is currently HOT over its last 84 confident predictions.
 
 ## Value Bets (EDGE)
 
