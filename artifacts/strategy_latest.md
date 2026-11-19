@@ -1,13 +1,13 @@
-# EPL AI Pundit Strategy - 2026-11-18
+# EPL AI Pundit Strategy - 2026-11-19
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This week features some intriguing matchups, with Tottenham hosting Ipswich Town as a standout value bet. Look out for Aston Villa, who are struggling and face Sunderland amid their own woes. Liverpool's clash with Manchester United also shapes up as a closely contested affair.
+This week’s standout value bet is Tottenham, who have a solid chance against Ipswich Town. Expect a competitive match as Liverpool faces Manchester United, both teams struggling with form and consistency.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-In the strong fade category, Bournemouth against Nott'm Forest presents a good opportunity to back the away side, as Bournemouth's form has been shaky while Forest has shown signs of improvement lately. For double chances, Chelsea versus Leeds is worth considering, with both teams struggling for consistency. Similarly, Newcastle against Arsenal offers a double chance bet as Newcastle's home form has been underwhelming against a dominant Arsenal side. Lastly, the Coventry versus Crystal Palace fixture is too close to call, making it wise to skip that one entirely. The model is currently MIXED over its last 93 confident predictions.
+In terms of strong fades, Man City vs Fulham isn't quite the mismatch it seems, so take the double chance on Fulham instead. Aston Villa's match against Sunderland also calls for backing the away side, as Villa has struggled at home. Bournemouth against Nott'm Forest and Chelsea vs Leeds both offer double chances due to lackluster form from the home teams. Lastly, Coventry vs Crystal Palace is too close to call and should be skipped, as both teams are finding their footing in the league. The model is currently mixed and should be approached cautiously.
 
 ## Value Bets (EDGE)
 
