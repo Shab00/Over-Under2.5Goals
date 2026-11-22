@@ -1,18 +1,17 @@
-# EPL AI Pundit Strategy - 2026-11-21
+# EPL AI Pundit Strategy - 2026-11-22
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-The standout value bet comes from the strong fade on Newcastle against Arsenal, with the Gunners in exceptional form. Liverpool's clash with Manchester United is a tight match, but both teams are struggling to find their best form.
+Liverpool facing Manchester United is a significant clash, with a notable double chance bet available. Keep an eye on injuries as both teams are struggling for consistency. Brentford versus Everton also presents an interesting double chance scenario.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-Newcastle's matchup against Arsenal is a classic strong fade; the home side has been struggling while Arsenal is flying high. Hull City faces Brighton in a similar situation, where Hull's poor run of form suggests backing the away team is the way to go. Liverpool and Manchester United is too close to call, given their fluctuating form, making it best to avoid a bet here. Lastly, Brentford's encounter with Everton also leans towards a strong fade, with the home side lacking the necessary firepower. The model is currently MIXED over its last 93 confident predictions.
+In the fixture between Hull City and Brighton, it's too close to call, making it a skip as both teams have shown inconsistent form. For Liverpool against Manchester United, consider a double chance bet, as the home side's recent performance has been shaky, while United is fighting for survival. Brentford versus Everton also falls into the double chance category, with both sides exhibiting mixed results, though neither side looks particularly strong at the moment. The model's recent performance has been mixed, so tread carefully.
 
 ## Value Bets (EDGE)
 
 ## Avoid This Week
-- **Liverpool vs Man United** - Liverpool and Manchester United are both struggling with inconsistent form, making this fixture too close to call. The rivalry adds unpredictability, and with both teams looking to regain their footing, it's best to skip this one.
 
 ## Model Form
 Model is MIXED — 64.5% accuracy over last 93 confident predictions. EDGE profit: +0.74 units.
