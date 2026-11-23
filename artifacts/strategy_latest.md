@@ -2,7 +2,7 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Brentford versus Everton is shaping up as an interesting encounter, with both teams having their struggles lately. Backing Everton for a draw or win seems promising given their slightly better away form.
+This fixture between Brentford and Everton is a clear signal to back Everton. The home side has struggled recently, and with no significant injury news affecting either team, the away side appears to have the upper hand. The model indicates strong fading potential here.
 
 ## Top Picks
 
