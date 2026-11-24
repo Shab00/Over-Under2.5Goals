@@ -1,55 +1,13 @@
 {
-  "generated_at": "2026-11-23T15:00:00",
-  "model_form": "Model is MIXED — 64.5% accuracy over last 93 confident predictions. EDGE profit: +0.74 units.",
-  "gameweek_summary": "This fixture between Brentford and Everton is a clear signal to back Everton. The home side has struggled recently, and with no significant injury news affecting either team, the away side appears to have the upper hand. The model indicates strong fading potential here.",
-  "rest_of_card_paragraph": "",
+  "generated_at": "2026-11-27T12:00:00",
+  "model_form": "Model is COLD — 61.4% accuracy over last 101 confident predictions. EDGE profit: -1.26 units.",
+  "gameweek_summary": "Leeds against Coventry City stands out as a solid pick given their strong home form. Expect a tight double chance match between Manchester United and Brentford, where the away side looks likely to secure at least a draw.",
+  "rest_of_card_paragraph": "The match between Nott'm Forest and Chelsea is too close to call, making it a skip this time. Ipswich Town's clash with Aston Villa also doesn't inspire confidence, landing it in the avoid category. Everton and Liverpool in another double chance match should see the away side hold firm, and the same goes for Brighton against Newcastle. Fulham versus Bournemouth and Sunderland hosting Tottenham are both too tight to call, rounding out the avoid list. The model is currently COLD over its last 101 confident predictions.",
   "top_picks": [],
-  "fixtures_full": [
-    {
-      "home_team": "Brentford",
-      "away_team": "Everton",
-      "kickoff": "2026-11-23T20:00:00",
-      "signal": "Not Home",
-      "confidence": "Low",
-      "edge_label": "N/A",
-      "prob_homewin": 0.161,
-      "odds": 2.24,
-      "value_gap": -0.2854,
-      "pundit_take": "Brentford's home form has been decent, but their overall performance is not convincing enough to back them here. Everton comes into this match looking to capitalize on Brentford's inconsistent showings, making it a strong fade opportunity for the away win.",
-      "bet_type": "Back Away Win",
-      "stake_advice": "Small",
-      "pundit_action": "Strong Fade — Back Away Win",
-      "betting_category": "strong_fade",
-      "rag_informed": true,
-      "bet_description": "Back Away Win",
-      "double_chance_direction": "",
-      "is_strong_fade": true
-    }
-  ],
-  "strong_fades": [
-    {
-      "home_team": "Brentford",
-      "away_team": "Everton",
-      "kickoff": "2026-11-23T20:00:00",
-      "signal": "Not Home",
-      "confidence": "Low",
-      "edge_label": "N/A",
-      "prob_homewin": 0.161,
-      "odds": 2.24,
-      "value_gap": -0.2854,
-      "pundit_take": "Brentford's home form has been decent, but their overall performance is not convincing enough to back them here. Everton comes into this match looking to capitalize on Brentford's inconsistent showings, making it a strong fade opportunity for the away win.",
-      "bet_type": "Back Away Win",
-      "stake_advice": "Small",
-      "pundit_action": "Strong Fade — Back Away Win",
-      "betting_category": "strong_fade",
-      "rag_informed": true,
-      "bet_description": "Back Away Win",
-      "double_chance_direction": "",
-      "is_strong_fade": true
-    }
-  ],
+  "fixtures_full": [],
+  "strong_fades": [],
   "double_chances": [],
   "avoid_list": [],
   "value_bets": [],
-  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nThis fixture between Brentford and Everton is a clear signal to back Everton.\n\n<b>Strong Fades:</b>\n<b>Brentford vs Everton</b> — Strong Fade — Back Away Win\n\n<b>Injury News:</b>\nNone reported.\n\nFull analysis: shab00.github.io/football"
+  "telegram_message": "<b>EPL AI Pundit Strategy</b>\nLeeds against Coventry City stands out as a solid pick given their strong home form.\n\n<b>Injury News:</b>\nNone reported.\n\nFull analysis: shab00.github.io/football"
 }
