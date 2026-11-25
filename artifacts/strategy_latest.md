@@ -1,13 +1,13 @@
-# EPL AI Pundit Strategy - 2026-11-24
+# EPL AI Pundit Strategy - 2026-11-25
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-Leeds against Coventry City stands out as a solid pick given their strong home form. Expect a tight double chance match between Manchester United and Brentford, where the away side looks likely to secure at least a draw.
+Expect Leeds to put up a strong fight against Coventry City, with their home advantage looking promising. Meanwhile, the double chance for Man United against Brentford is intriguing given both teams' inconsistent form.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-The match between Nott'm Forest and Chelsea is too close to call, making it a skip this time. Ipswich Town's clash with Aston Villa also doesn't inspire confidence, landing it in the avoid category. Everton and Liverpool in another double chance match should see the away side hold firm, and the same goes for Brighton against Newcastle. Fulham versus Bournemouth and Sunderland hosting Tottenham are both too tight to call, rounding out the avoid list. The model is currently COLD over its last 101 confident predictions.
+It's tough to call the match between Nott'm Forest and Chelsea, making it a skip for bettors. Leeds vs Coventry is a clearer picture, leaning towards backing Leeds at home. The double chance on Man United against Brentford offers some value, as the home side's struggles have been evident. The model is currently COLD over its last 101 confident predictions.
 
 ## Value Bets (EDGE)
 
