@@ -2,17 +2,17 @@
 *GPT-4o-mini | Not financial advice*
 
 ## Weekend Overview
-This week's standout value bet is Leeds against Coventry, where the home side's form offers a decent chance despite low win probabilities. Keep an eye on the strong fades, particularly Manchester United against Brentford, as the home side continues to falter.
+This week features some tough matchups, particularly with Everton facing Liverpool, where the away side looks strong. The standout value bet is backing Hull City in their clash with Crystal Palace, who are struggling with form.
 
 ## Top Picks
 
 ## Pundit's View on the Rest of the Card
-In the strong fades, Manchester United are in dire straits and should be backed to lose against Brentford, who are in better form. Ipswich Town also face a tough task against Aston Villa, making a fade bet wise. For double chances, Leeds hosting Coventry is appealing, as the home side's recent form gives them a fighting chance. Crystal Palace against Hull City presents another double chance scenario, with both teams showing mixed form. The Brighton vs Newcastle game is too close to call, making it an avoid for savvy bettors. The model is currently COLD over its last 101 confident predictions.
+In the strong fades, Ipswich Town is facing a tough time against Aston Villa, who are in better form and should take advantage of Ipswich's struggles. Everton's odds against Liverpool suggest a clear away advantage, making a strong fade there as well. For double chances, consider Hull City against Crystal Palace; the home side is in dire form with five consecutive losses. Sunderland against Tottenham also fits the double chance model as both teams have their challenges, yet Sunderland's home form could surprise. The model's COLD streak should raise caution in these bets.
 
 ## Value Bets (EDGE)
 
 ## Avoid This Week
-- **Brighton vs Newcastle** - Brighton and Newcastle are both unpredictable, making this matchup too close to call. With both teams showing mixed recent performances, it's best to avoid this fixture.
+- **Brighton vs Newcastle** - This matchup is too close to call, with both teams showing inconsistent form.
 
 ## Model Form
 Model is COLD — 61.4% accuracy over last 101 confident predictions. EDGE profit: -1.26 units.
